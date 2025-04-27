@@ -47,49 +47,42 @@ function ReportUploader() {
       if (isValidImg) {
         compressImage(file, (compressedFile: File) => {
           const reader = new FileReader();
-          reader.readAsDataURL(compressedFile);
           reader.onloadend = () => {
             const base64string = reader.result as string;
             setBase64String(base64string);
             console.log(base64string);
           };
+          reader.readAsDataURL(compressedFile);
         });
       }
     }
   }
   function compressImage(file: File, callback: (compressedFile: File) => void) {
     const reader = new FileReader();
-    
+
     reader.onload = (e) => {
       const img = new Image();
-      
+
       img.onload = () => {
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
 
         canvas.width = img.width;
         canvas.height = img.height;
-        
+
         ctx?.drawImage(img, 0, 0);
 
         const quality = 0.1;
 
-        const dataURL = canvas.toDataURL("image/jpeg", quality);
-
-        const byteString = atob(dataURL.split(",")[1]);
-
-        const ab = new ArrayBuffer(byteString.length);
-        const ia = new Uint8Array(ab);
-
-        for (let i = 0; i < byteString.length; i++) {
-          ia[i] = byteString.charCodeAt(i);
-        }
-        const compressedFile = new File([ab], file.name, {
-          type: "image/jpeg",
-        });
-
-        callback(compressedFile);
+        canvas.toBlob((blob) => {
+          if (blob) {
+            const compressedFile = new File([blob], file.name, {type: "image/jpeg"});
+            callback(compressedFile)
+          }
+        }, "image/jpeg", quality);
       };
+
+      img.src = e.target?.result as string;
     };
 
     reader.readAsDataURL(file);
@@ -104,8 +97,8 @@ function ReportUploader() {
   }
 
   return (
-    <div className="grid w-full items-start gap-6 overflow-auto p-4 pt-8">
-      <fieldset className="relative grid gap-6 rounded-lg border p-4">
+    <div className="grid w-full  justify-center gap-6 overflow-auto p-4 pt-8">
+      <fieldset className="relative grid gap-6 rounded-lg border p-4 max-w-[800px] ">
         <legend className="text-sm font-medium">Report Uploader</legend>
         <input
           type="file"
