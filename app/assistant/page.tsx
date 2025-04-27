@@ -21,6 +21,7 @@ export default function AssistantPage() {
                     </Drawer>
                 </div>
             </header>
+            <ReportUploader/>
         </div>
     </div>
   )
