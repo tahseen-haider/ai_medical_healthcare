@@ -4,18 +4,18 @@ import React, { ChangeEvent, useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import { toast } from "sonner";
-import {
-  Camera,
-  CameraIcon,
-  CameraOff,
-  Loader,
-  LoaderCircleIcon,
-} from "lucide-react";
+import { LoaderCircleIcon } from "lucide-react";
 
-function ReportUploader() {
+type Props = {
+  onReportUpload: (data: string) => void;
+};
+
+function ReportUploader({ onReportUpload }: Props) {
   const [base64String, setBase64String] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [reportText, setReportText] = useState("");
+  const [userPrompt, setUserPrompt] = useState("");
+  const [isReportUploaded, setIsReportUploaded] = useState(false);
 
   function handleReportSelection(event: ChangeEvent<HTMLInputElement>): void {
     if (!event.target.files) return;
@@ -87,7 +87,7 @@ function ReportUploader() {
 
         ctx?.drawImage(img, 0, 0);
 
-        const quality = 0.2;
+        const quality = 0.1;
 
         canvas.toBlob(
           (blob) => {
@@ -110,7 +110,10 @@ function ReportUploader() {
   }
 
   async function extractDetails(): Promise<void> {
-    if (base64String === "") return;
+    if (base64String === "") {
+      toast.error("Provide a valid Image");
+      return;
+    }
     setIsLoading(true);
 
     const response = await fetch("api/extractreportgemini", {
@@ -126,13 +129,26 @@ function ReportUploader() {
     if (response.ok) {
       const resText = await response.text();
       setReportText(resText);
+      setIsReportUploaded(true);
     }
 
     setIsLoading(false);
   }
 
   function handleReportUpload(): void {
-    throw new Error("Function not implemented.");
+    if (!isReportUploaded) {
+      toast.error("Upload a Report Image with the button at top");
+      return;
+    }
+    onReportUpload(reportText +"\n"+ userPrompt);
+  }
+
+  function handleUserPromptChange(input: string): void {
+    if (!base64String) {
+      toast.error("Upload a Report Image first");
+      return;
+    }
+    setUserPrompt((prev) => (prev = input));
   }
 
   return (
@@ -155,14 +171,27 @@ function ReportUploader() {
         </Button>
         {isLoading && <LoaderCircleIcon className="animate-spin" />}
 
-        <label htmlFor="">Report Summary</label>
+        <label htmlFor="report-summary">Your Report:</label>
         <Textarea
           value={reportText}
-          onChange={() => {}}
-          placeholder="Extracted data will appear here..."
-          className="min-h-60 resize-none border-1 p-3 shadow-none focus-visible:ring-2"
+          id="report-summary"
+          readOnly
+          placeholder="Upload your image and extract details to see the summary here..."
+          className="min-h-20 bg-amber-200 resize-none border-1 p-3 shadow-none focus-visible:ring-0 pointer-events-none select-none"
         ></Textarea>
-        <Button variant={"destructive"} className=" text-white">
+        <label htmlFor="user-prompt">Enter your personal prompt here:</label>
+        <Textarea
+          value={userPrompt}
+          id="user-prompt"
+          onChange={(e) => handleUserPromptChange(e.target.value)}
+          placeholder="Provide additional information or commands here..."
+          className="min-h-20 resize-none border-1 p-3 shadow-none focus-visible:ring-2"
+        ></Textarea>
+        <Button
+          onClick={handleReportUpload}
+          variant={"destructive"}
+          className=" text-white"
+        >
           Upload Report
         </Button>
       </fieldset>

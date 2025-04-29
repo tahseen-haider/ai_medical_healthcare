@@ -1,5 +1,3 @@
-import { NextApiRequest, NextApiResponse } from "next";
-
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
@@ -10,9 +8,10 @@ const model = genAI.getGenerativeModel({
 const prompt = `Attached is an image of a clinical report. 
 Go over the the clinical report and identify biomarkers that show slight or large abnormalities. 
 Then summarize in 100 words. You may increase the word limit if the report has multiple pages. 
-Do not output patient name, date etc. Make sure to include numerical values and key details from the report, 
+Do not output patient's personal information or companies information except pateients age and gender or anything that is related to the report. 
+Make sure to include numerical values and key details from the report, 
 including report title. organize it in easily readable format.
-## Summary: `;
+also style it with numbers and headers`;
 
 export async function POST(req: Request, res: Response) {
     const { base64 } = await req.json();
