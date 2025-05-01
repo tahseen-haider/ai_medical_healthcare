@@ -152,7 +152,7 @@ function ReportUploader({ onReportUpload }: Props) {
   }
 
   return (
-    <div className="relative flex flex-col items-center w-full justify-center gap-6 overflow-auto p-4 pt-8">
+    <div className="relative flex flex-col w-full gap-6 overflow-auto p-4 pt-8">
       <fieldset className="relative flex flex-col w-full gap-6 rounded-lg border p-4  max-w-[800px] ">
         <legend className="text-sm font-medium">Report Uploader</legend>
         <input

@@ -9,6 +9,7 @@ import { DialogTitle } from "@radix-ui/react-dialog";
 import { useState } from "react";
 import { toast } from "sonner";
 import ChatComponent from "@/components/chat";
+
 export default function AssistantPage() {
   const [reportData, setReportData] = useState("");
   const onReportUpload = (data: string) => {
@@ -17,9 +18,8 @@ export default function AssistantPage() {
     console.log(reportData);
   };
   return (
-    <div className="h-screen w-full grid">
-      <div className="flex flex-col">
-        <header className="sticky top-0 z-10 flex h-14 bg-background items-center gap-1 border-b px-4">
+      <div className="relative h-screen">
+        <header className="sticky top-0 z-10 flex h-14 bg-background items-center gap-1 border-b px-6">
           <h1 className="text-xl font-semibold text-red-200 whitespace-nowrap">
             Medical Ai Assistant
           </h1>
@@ -40,15 +40,14 @@ export default function AssistantPage() {
             </Drawer>
           </div>
         </header>
-        <main className="grid flex-1 gap-4 overflow-auto p-4 md:grid-cols-2 lg:grid-cols-3">
-          <div className="hidden md:flex flex-col">
+        <main className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 ">
+          <div className="hidden md:flex flex-col h-[calc(100vh-56px)] overflow-auto">
             <ReportUploader onReportUpload={onReportUpload} />
           </div>
-          <div className="lg:col-span-2">
+          <div className="lg:col-span-2 p-4">
             <ChatComponent reportData={reportData}/>
           </div>
         </main>
       </div>
-    </div>
   );
 }
