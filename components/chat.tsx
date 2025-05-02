@@ -43,11 +43,13 @@ export default function ChatComponent({ reportData }: Props) {
       <form
         onSubmit={(event) => {
           event.preventDefault();
+          if(!input) return;
           handleSubmit(event, {
             data: {
               reportData: reportData as string,
             },
           });
+          console.log('Submitted')
         }}
         className="relative overflow-hidden rounded-lg border bg-background"
       >

@@ -8,7 +8,7 @@ type Props = {
 
 export default function MessageBox({ role, content }: Props) {
   return (
-    <Card className="overflow-hidden">
+    <Card className={`overflow-hidden w-[80%] ${role==="user"?"self-end": "self-start"}`}>
       <CardContent className="p-6 text-sm">
         <Markdown text={content} />
       </CardContent>

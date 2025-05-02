@@ -133,11 +133,10 @@ async function processOneBatch(
 import { HfInference } from "@huggingface/inference";
 
 const hf = new HfInference(process.env.HUGGING_FACE_TOKEN);
-
+const client = new Pinecone({
+  apiKey: process.env.PINECONE_API_KEY!
+})
 export async function queryPineconeVectorStore(
-  client: Pinecone,
-  indexName: string,
-  namespace: string,
   query: string
 ): Promise<string> {
   const apiOutput = await hf.featureExtraction({
@@ -148,8 +147,8 @@ export async function queryPineconeVectorStore(
 
   const queryEmbedding = Array.from(apiOutput);
 
-  const index = client.Index(indexName);
-  const queryResponse = await index.namespace(namespace).query({
+  const index = client.Index("index-1");
+  const queryResponse = await index.namespace("ENCYCLOPEDIA_OF_MEDICINE_GALE").query({
     topK: 5,
     vector: queryEmbedding as any,
     includeMetadata: true,
