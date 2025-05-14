@@ -1,3 +1,4 @@
+"use client"
 import { signup } from '@/actions/auth'
 import { useActionState } from 'react'
 
