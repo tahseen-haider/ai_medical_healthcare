@@ -5,6 +5,7 @@ import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import { toast } from "sonner";
 import { LoaderCircleIcon } from "lucide-react";
+import Markdown from "./markdown";
 
 type Props = {
   onReportUpload: (data: string) => void;
@@ -14,7 +15,6 @@ function ReportUploader({ onReportUpload }: Props) {
   const [base64String, setBase64String] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [reportText, setReportText] = useState("");
-  const [userPrompt, setUserPrompt] = useState("");
   const [isReportUploaded, setIsReportUploaded] = useState(false);
 
   function handleReportSelection(event: ChangeEvent<HTMLInputElement>): void {
@@ -140,15 +140,14 @@ function ReportUploader({ onReportUpload }: Props) {
       toast.error("Upload a Report Image with the button at top");
       return;
     }
-    onReportUpload(reportText +"\n"+ userPrompt);
+    onReportUpload(reportText + "\n");
+    setReportText("");
+    setBase64String("");
   }
 
-  function handleUserPromptChange(input: string): void {
-    if (!base64String) {
-      toast.error("Upload a Report Image first");
-      return;
-    }
-    setUserPrompt((prev) => (prev = input));
+
+  function handleReportChange(event: ChangeEvent<HTMLTextAreaElement>): void {
+    setReportText(state=> event.target.value);
   }
 
   return (
@@ -171,22 +170,17 @@ function ReportUploader({ onReportUpload }: Props) {
         </Button>
         {isLoading && <LoaderCircleIcon className="animate-spin" />}
 
-        <label htmlFor="report-summary">Your Report:</label>
-        <Textarea
-          value={reportText}
-          id="report-summary"
-          readOnly
-          placeholder="Upload your image and extract details to see the summary here..."
-          className="min-h-20 bg-amber-200 resize-none border-1 p-3 shadow-none focus-visible:ring-0 pointer-events-none select-none"
-        ></Textarea>
-        <label htmlFor="user-prompt">Enter your personal prompt here:</label>
-        <Textarea
-          value={userPrompt}
-          id="user-prompt"
-          onChange={(e) => handleUserPromptChange(e.target.value)}
-          placeholder="Provide additional information or commands here..."
-          className="min-h-20 resize-none border-1 p-3 shadow-none focus-visible:ring-2"
-        ></Textarea>
+        {reportText && (
+          <div className="p-2 ">
+            <h3 className="font-bold text-xl pb-3 underline underline-offset-auto">
+              Your Report:
+            </h3>
+            <Textarea
+              value={reportText}
+              onChange={handleReportChange}
+            >{reportText}</Textarea>
+          </div>
+        )}
         <Button
           onClick={handleReportUpload}
           variant={"destructive"}

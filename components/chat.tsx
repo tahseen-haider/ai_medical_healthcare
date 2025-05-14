@@ -5,7 +5,7 @@ import { Badge } from "./ui/badge";
 import { useChat } from "@ai-sdk/react";
 import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
-import { CornerDownLeft, TextSearch } from "lucide-react";
+import { CornerDownLeft } from "lucide-react";
 
 type Props = {
   reportData: string;

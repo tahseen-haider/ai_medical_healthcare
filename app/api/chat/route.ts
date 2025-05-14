@@ -1,5 +1,4 @@
 import { queryPineconeVectorStore } from "@/utils";
-import { Pinecone } from "@pinecone-database/pinecone";
 import { createGoogleGenerativeAI } from '@ai-sdk/google';
 import { Message, StreamData, streamText } from "ai";
 
