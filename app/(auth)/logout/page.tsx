@@ -1,8 +1,9 @@
+"use client"
 import { logout } from "@/actions/auth";
 import { Button } from "@/components/ui/button";
 import { useActionState } from "react";
 
-export function LogOutPage() {
+export default function LogOutPage() {
   const [state, action, pending] = useActionState(logout, undefined)
 
   return (

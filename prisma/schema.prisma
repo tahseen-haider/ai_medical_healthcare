@@ -6,19 +6,23 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
-model Patient {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  email     String   @unique
-  birthDate DateTime
-  reports   Report[]
+
+enum UserRole {
+  admin
+  user
 }
 
-model Report {
+model User {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  title      String
-  content    String
+  email      String   @unique
+  phone      String?
+  name       String
+  dob        String?
+  gender     String?
+  password   String
+  pfp        String?
   createdAt  DateTime @default(now())
-  patientId  String   @db.ObjectId
-  patient    Patient  @relation(fields: [patientId], references: [id])
+  role       UserRole @default(user)
+  is_verified Boolean @default(false)
+  token      String?
 }

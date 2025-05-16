@@ -1,7 +1,6 @@
 "use server";
 
-import { connectToDB } from "@/lib/db";
-import { User } from "@/lib/db/models/userModel";
+import { getUserCredentialsByEmail, insertUserToDB } from "@/lib/dal/user.dal";
 import {
   SignupFormSchema,
   FormState,
@@ -9,10 +8,9 @@ import {
 } from "@/lib/definitions";
 import { createSession, deleteSession } from "@/lib/session";
 import bcrypt from "bcryptjs";
+import { redirect } from "next/navigation";
 
 export async function signup(state: FormState, formData: FormData) {
-  await connectToDB();
-
   const validatedFields = SignupFormSchema.safeParse({
     name: formData.get("name"),
     email: formData.get("email"),
@@ -28,26 +26,19 @@ export async function signup(state: FormState, formData: FormData) {
   const { name, email, password } = validatedFields.data;
   const hashedPassword = await bcrypt.hash(password, 10);
 
-  const user = new User({
-    name: name,
-    email: email,
-    password: hashedPassword,
-  });
+  const user = await insertUserToDB(name, email, hashedPassword);
 
-  const userData = await user.save();
-
-  if (!userData) {
+  if (!user) {
     return {
       message: "An error occurred while creating your account.",
     };
   }
 
-  await createSession(userData._id.toString(), userData.role);
+  await createSession(user.id, user.role);
+  return redirect("/");
 }
 
 export async function login(state: FormState, formData: FormData) {
-  await connectToDB();
-  console.log('first')
   const validatedFields = LoginFormSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
@@ -62,19 +53,21 @@ export async function login(state: FormState, formData: FormData) {
 
   const { email, password } = validatedFields.data;
 
-  const user = await User.findOne({ email });
+  const user = await getUserCredentialsByEmail(email);
 
   if (!user)
     return { success: false, message: "Email or password is incorrect." };
 
-  const isPasswordMatched = await bcrypt.compare(password, user?.password);
+  const isPasswordMatched = await bcrypt.compare(password, user.password);
 
   if (!isPasswordMatched)
-    return { success: false, messsage: "Email or password is incorrect" };
+    return { success: false, message: "Email or password is incorrect" };
 
-  await createSession(user._id.toString(), user.role)
+  await createSession(user.id, user.role);
+  return redirect("/");
 }
 
 export async function logout() {
   await deleteSession();
+  redirect("/")
 }

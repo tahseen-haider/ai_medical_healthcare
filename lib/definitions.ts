@@ -9,11 +9,11 @@ export const SignupFormSchema = z.object({
   password: z
     .string()
     .min(8, { message: "Be at least 8 characters long" })
-    .regex(/[a-zA-Z]/, { message: "Contain at least one letter." })
-    .regex(/[0-9]/, { message: "Contain at least one number." })
-    .regex(/[^a-zA-Z0-9]/, {
-      message: "Contain at least one special character.",
-    })
+    // .regex(/[a-zA-Z]/, { message: "Contain at least one letter." })
+    // .regex(/[0-9]/, { message: "Contain at least one number." })
+    // .regex(/[^a-zA-Z0-9]/, {
+    //   message: "Contain at least one special character.",
+    // })
     .trim(),
 });
 
@@ -47,12 +47,4 @@ export type SessionPayload = {
   expiresAt: Date;
 };
 
-export type UserType = {
-  _id: string;
-  name: string | null;
-  age: number | null;
-  gender: string | null;
-  email: string | null;
-  phone: string | null;
-  role: string;
-};
+export type UserRole = "user" | "admin"
