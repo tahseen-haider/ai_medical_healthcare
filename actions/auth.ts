@@ -55,8 +55,7 @@ export async function login(state: FormState, formData: FormData) {
 
   const user = await getUserCredentialsByEmail(email);
 
-  if (!user)
-    return { success: false, message: "Email or password is incorrect." };
+  if (!user) return { success: false, message: "Email is incorrect." };
 
   const isPasswordMatched = await bcrypt.compare(password, user.password);
 
@@ -69,5 +68,5 @@ export async function login(state: FormState, formData: FormData) {
 
 export async function logout() {
   await deleteSession();
-  redirect("/")
+  redirect("/");
 }

@@ -11,6 +11,7 @@ export default function LoginPage() {
       <input type="password" name="password" placeholder="Password" required />
       <button type="submit">Login</button>
       {(state?.errors?.email || state?.errors?.password) && <p>{state.errors.email}</p>}
+      {(state?.message && <p>{state.message}</p>)}
     </form>
   )
 }
