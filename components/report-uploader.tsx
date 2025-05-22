@@ -5,7 +5,6 @@ import { Button } from "./ui/button";
 import { Textarea } from "./ui/textarea";
 import { toast } from "sonner";
 import { LoaderCircleIcon } from "lucide-react";
-import Markdown from "./markdown";
 
 type Props = {
   onReportUpload: (data: string) => void;

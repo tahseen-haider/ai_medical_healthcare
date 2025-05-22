@@ -18,13 +18,15 @@ export async function encrypt(payload: SessionPayload) {
 }
 
 export async function decrypt(session: string | undefined = "") {
+  if (typeof session !== "string" || !session) return;
   try {
     const { payload } = await jwtVerify(session, encodedKey, {
       algorithms: ["HS256"],
     });
-    return payload as { userId : string, role: string};
+    return payload as { userId: string; role: string };
   } catch (error) {
-    console.log(error);
+    console.error("JWT verification failed:", error);
+    return null;
   }
 }
 
@@ -74,9 +76,9 @@ export const getAuthenticateUser = cache(async () => {
 
     const user = await prisma.user.findUnique({
       where: {
-        id: session.userId
-      }
-    })
+        id: session.userId,
+      },
+    });
     if (user) {
       return { isAuth: true, userId: session.userId };
     } else {
@@ -84,10 +86,15 @@ export const getAuthenticateUser = cache(async () => {
       redirect("/login");
     }
   } catch {
-    redirect("/login")
+    redirect("/login");
   }
 });
 
 export async function deleteSession() {
   (await cookies()).delete("session");
 }
+
+export const isUserAuthenticated = async (sessionToken: any) => {
+  const session = await decrypt(sessionToken);
+  return Boolean(session?.userId);
+};

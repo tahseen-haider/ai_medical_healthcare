@@ -18,7 +18,7 @@ export async function middleware(req: NextRequest) {
     if (isRestrictedRoute || isRoot) return NextResponse.next();
 
     // Block access to all other routes
-    return NextResponse.redirect(new URL("/", req.url));
+    return NextResponse.redirect(new URL("/login", req.url));
   }
 
   // If authenticated
@@ -29,7 +29,7 @@ export async function middleware(req: NextRequest) {
     if (isAuth) {
       // Prevent access to login and signup
       if (isRestrictedRoute) {
-        return NextResponse.redirect(new URL("/", req.url));
+        return NextResponse.redirect(new URL("/login", req.url));
       }
 
       // Allow access to root and all other routes
@@ -41,7 +41,7 @@ export async function middleware(req: NextRequest) {
   }
 
   // Session token exists but no valid user → redirect to root
-  return NextResponse.redirect(new URL("/", req.url));
+  return NextResponse.redirect(new URL("/login", req.url));
 }
 
 export const config = {

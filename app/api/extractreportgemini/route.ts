@@ -1,6 +1,6 @@
-const { GoogleGenerativeAI } = require("@google/generative-ai");
+import { GoogleGenerativeAI } from "@google/generative-ai"
 
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
+const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 const model = genAI.getGenerativeModel({
   model: "gemini-1.5-pro",
 });
@@ -14,15 +14,20 @@ including report title. organize it in easily readable format.
 also style it with numbers and headers`;
 
 export async function POST(req: Request, res: Response) {
-    const { base64 } = await req.json();
-    const filePart = fileToGenerativePart(base64)
+    // const { base64 } = await req.json();
+    // const filePart = fileToGenerativePart(base64)
 
-    console.log(filePart);
-    const generatedContent = await model.generateContent([prompt, filePart]);
+    // console.log(filePart);
+    // const generatedContent = await model.generateContent([prompt, filePart]);
 
-    console.log(generatedContent);
-    const textResponse = generatedContent.response.candidates![0].content.parts[0].text;
-    return new Response(textResponse, { status: 200 })
+    // console.log(generatedContent);
+    // const textResponse = generatedContent.response.candidates![0].content.parts[0].text;
+    // return new Response(textResponse, { status: 200 })
+
+    // this is a dummy response for avoiding the gemini quota error 
+    // Remeber to change this code after getting paid gemini api
+    const dummyResponse = `This is a dummy image extraction details, not actual. Time is ${Date.now().toLocaleString()}`
+    return new Response(dummyResponse, { status: 200 })
 }
 
 function fileToGenerativePart(imageData: string) {
