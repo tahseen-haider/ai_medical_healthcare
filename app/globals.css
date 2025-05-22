@@ -4,6 +4,14 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+  --color-light-1: #FFFFFF;
+  --color-light-2: #AFD5FF;
+  --color-light-3: #6EB9FF;
+  --color-light-4: #3CA4FF;
+  --color-dark-1: #317BC4;
+  --color-dark-2: #205295;
+  --color-dark-3: #144272;
+  --color-dark-4: #061A31;
   --font-roboto: var(--font-roboto), sans-serif;
   --font-ubuntu: var(--font-ubuntu), sans-serif;
   --color-background: var(--background);
