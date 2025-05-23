@@ -6,6 +6,7 @@ import { Toaster } from "sonner";
 import Navbar from "@/components/Navbar";
 import { cookies } from "next/headers";
 import { isUserAuthenticated } from "@/lib/session";
+import Footer from "@/components/Footer";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -45,6 +46,7 @@ export default async function RootLayout({
           <Navbar isAuthenticated={isAuthenticated}/>
           <div className="h-16" />
           {children}
+          <Footer/>
         </ThemeProvider>
       </body>
     </html>
