@@ -6,7 +6,6 @@ import Twitter from "@/public/icons/x.svg";
 import Image from "next/image";
 import Link from "next/link";
 import { Home, Mail, Phone } from "lucide-react";
-import Btn from "./Button";
 import FooterForm from "./FooterForm";
 
 const FollowLinks = [
@@ -74,7 +73,7 @@ const links = [
 ];
 export default function Footer() {
   return (
-    <footer className="relative z-0 w-screen bg-light-2 dark:bg-dark-3 dark:text-white flex flex-col items-center">
+    <footer className="relative z-0 bg-light-2 dark:bg-dark-3 dark:text-white flex flex-col items-center">
       <div className="max-w-[1920px] w-full">
         {/* Top Section */}
         <div className=" px-6 flex flex-wrap justify-between py-10">
@@ -130,7 +129,7 @@ export default function Footer() {
         </div>
         {/* Bottom Section */}
       </div>
-        <div className="w-screen bg-light-4 dark:bg-dark-1 flex justify-center">
+        <div className="w-full bg-light-4 dark:bg-dark-1 flex justify-center">
           <div className="max-w-[1920px] w-full flex md:gap-0 gap-2 items-center py-3 justify-between px-6 md:flex-row flex-col">
             <div className="flex gap-5 items-center justify-center py-0">
               <p className="text-lg text-white">Follow Us</p>

@@ -26,6 +26,12 @@ importers:
       '@pinecone-database/pinecone':
         specifier: ^5.1.1
         version: 5.1.2
+      '@prisma/client':
+        specifier: ^6.8.0
+        version: 6.8.2(prisma@6.8.0(typescript@5.8.3))(typescript@5.8.3)
+      '@prisma/extension-accelerate':
+        specifier: ^1.3.0
+        version: 1.3.0(@prisma/client@6.8.2(prisma@6.8.0(typescript@5.8.3))(typescript@5.8.3))
       '@radix-ui/react-accordion':
         specifier: ^1.2.8
         version: 1.2.10(@types/react-dom@19.1.3(@types/react@19.1.3))(@types/react@19.1.3)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -805,6 +811,18 @@ packages:
     engines: {node: '>=18'}
     hasBin: true
 
+  '@prisma/client@6.8.2':
+    resolution: {integrity: sha512-5II+vbyzv4si6Yunwgkj0qT/iY0zyspttoDrL3R4BYgLdp42/d2C8xdi9vqkrYtKt9H32oFIukvyw3Koz5JoDg==}
+    engines: {node: '>=18.18'}
+    peerDependencies:
+      prisma: '*'
+      typescript: '>=5.1.0'
+    peerDependenciesMeta:
+      prisma:
+        optional: true
+      typescript:
+        optional: true
+
   '@prisma/config@6.8.0':
     resolution: {integrity: sha512-Bl1SCz6XGa7InatzFBLpY2Ni3anJhPbDHz5RPmmdjaVVnK9Fo1oA4T1FInKLsabn0qjQE6iwCUe6OMu5Up1iGw==}
 
@@ -816,6 +834,12 @@ packages:
 
   '@prisma/engines@6.8.0':
     resolution: {integrity: sha512-F1L6EbM4QsC84KzNk2gBiulmWvj4QRe+9QqHIAgKMPSOPnJhjeNSdcOrc2qkctJxew8F18tyzZOrcgHVg76IxQ==}
+
+  '@prisma/extension-accelerate@1.3.0':
+    resolution: {integrity: sha512-W41D+kWejVJvMFEh45oYIU0VY+lIE3hh5vyHLHxgpyOfF+EHzSr8EIPT9kPRJg1FTYR7WGutXi64nyaNFUJ06A==}
+    engines: {node: '>=16'}
+    peerDependencies:
+      '@prisma/client': '>=4.16.1'
 
   '@prisma/fetch-engine@6.8.0':
     resolution: {integrity: sha512-3mXaUxyqA2IHWGw4uHsA7yXyN2F6KVJ8Re7JgUwsHsYS4rgXXC7N4YIFfuStFw2y937RHgJfxzYBt2djkIbZXw==}
@@ -3102,6 +3126,11 @@ snapshots:
     dependencies:
       playwright: 1.52.0
 
+  '@prisma/client@6.8.2(prisma@6.8.0(typescript@5.8.3))(typescript@5.8.3)':
+    optionalDependencies:
+      prisma: 6.8.0(typescript@5.8.3)
+      typescript: 5.8.3
+
   '@prisma/config@6.8.0':
     dependencies:
       jiti: 2.4.2
@@ -3116,6 +3145,10 @@ snapshots:
       '@prisma/engines-version': 6.8.0-43.2060c79ba17c6bb9f5823312b6f6b7f4a845738e
       '@prisma/fetch-engine': 6.8.0
       '@prisma/get-platform': 6.8.0
+
+  '@prisma/extension-accelerate@1.3.0(@prisma/client@6.8.2(prisma@6.8.0(typescript@5.8.3))(typescript@5.8.3))':
+    dependencies:
+      '@prisma/client': 6.8.2(prisma@6.8.0(typescript@5.8.3))(typescript@5.8.3)
 
   '@prisma/fetch-engine@6.8.0':
     dependencies:

@@ -4,10 +4,10 @@ import logo from "@/public/images/LOGO.png";
 import { ThemeToggler } from "./theme-toggler";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import PFP from "@/public/images/PFP.png";
 import { useState } from "react";
 import { Menu, X } from "lucide-react";
-import Btn from "./Button";
+import Btn from "../Button";
+import ProfileButton from "./ProfileButton";
 
 function Navbar({ isAuthenticated }: { isAuthenticated: boolean }) {
   const NavLinks = [
@@ -70,7 +70,7 @@ function Navbar({ isAuthenticated }: { isAuthenticated: boolean }) {
 
         <div className="flex gap-4 lg:w-37 w-48 justify-end items-center">
           <div className="lg:hidden">
-            <Btn onClick={() => setIsNavbarDown(!isNavbarDown)}>
+            <Btn onClick={() => setIsNavbarDown(!isNavbarDown)} className="text-black hover:text-white bg-white">
               {!isNavbarDown ? <Menu /> : <X />}
             </Btn>
           </div>
@@ -79,16 +79,11 @@ function Navbar({ isAuthenticated }: { isAuthenticated: boolean }) {
               href="/login"
               className={`${pathname === "/login" ? "hidden" : "block"}`}
             >
-              <Btn onClick={() => {}}>Login</Btn>
+              <Btn onClick={() => {}} className="bg-light-1 hover:text-white text-black">Login</Btn>
             </Link>
           )}
           {isAuthenticated && (
-            <Link
-              href="/profile"
-              className={`rounded-full w-8 h-8 overflow-hidden shadow-[0_0_6px_rgba(0,0,0,0.4)]`}
-            >
-              <Image src={PFP} width={32} height={32} alt="profile picture" />
-            </Link>
+            <ProfileButton/>
           )}
           <ThemeToggler />
         </div>

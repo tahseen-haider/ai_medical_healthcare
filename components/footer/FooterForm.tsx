@@ -1,5 +1,7 @@
 "use client";
-import Btn from "./Button";
+
+import Btn from "../Button";
+
 
 export default function FooterForm() {
   return (

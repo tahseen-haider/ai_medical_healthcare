@@ -16,7 +16,7 @@ export default function Btn({
     <Button
       onClick={onClick}
       className={clsx(
-        "bg-white hover:bg-gray-100 text-black shadow-[0_0_6px_rgba(0,0,0,0.4)]",
+        " text-black shadow-[0_0_7px_1.7px_rgba(0,0,0,0.5)] dark:shadow-dark",
         className
       )}
     >

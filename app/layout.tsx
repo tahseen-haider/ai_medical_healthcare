@@ -3,10 +3,10 @@ import { Geist, Geist_Mono, Roboto, Ubuntu } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "sonner";
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/header/Navbar";
 import { cookies } from "next/headers";
 import { isUserAuthenticated } from "@/lib/session";
-import Footer from "@/components/Footer";
+import Footer from "@/components/footer/Footer";
 
 const roboto = Roboto({
   variable: "--font-roboto",

@@ -1,7 +1,7 @@
 "use client";
 
 import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
-import { ThemeToggler } from "@/components/theme-toggler";
+import { ThemeToggler } from "@/components/header/theme-toggler";
 import { Button } from "@/components/ui/button";
 import { Settings } from "lucide-react";
 import ReportUploader from "@/components/report-uploader";
