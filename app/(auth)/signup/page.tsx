@@ -1,34 +1,119 @@
-"use client"
-import { signup } from '@/actions/auth'
-import { useActionState } from 'react'
+"use client";
+import { signup } from "@/actions/auth";
+import Btn from "@/components/Button";
+import FindUsHereSection from "@/components/FindUsHereSection";
+import { redirect } from "next/navigation";
+import { useActionState } from "react";
 
 export default function SignupPage() {
-  const [state, action, pending] = useActionState(signup, undefined)
+  const [state, action, pending] = useActionState(signup, undefined);
+
   return (
-    <form action={action}>
-      <div>
-        <label htmlFor="name">Name</label>
-        <input id="name" name="name" placeholder="Name" />
-      </div>
-      {state?.errors?.name && <p>{state.errors.name}</p>}
-      <div>
-        <label htmlFor="email">Email</label>
-        <input id="email" name="email" type="email" placeholder="Email" />
-      </div>
-      {state?.errors?.email && <p>{state.errors.email}</p>}
-      <div>
-        <label htmlFor="password">Password</label>
-        <input id="password" name="password" type="password" />
-      </div>
-      {state?.errors?.password && (
-        <div>
-          <p>Password must:</p>
-          <ul>
-            {state.errors.password.map(error=><li key={error}>- {error}</li>)}
-          </ul>
+    <main className="bg-light-1 dark:bg-dark-4 flex flex-col items-center">
+      {/* Login Section */}
+      <section className="px-6 py-10 flex items-center flex-col  gap-12 w-full max-w-[1920px]">
+        <div className="flex justify-between w-full">
+          <div className="flex flex-col gap-3">
+            <h1 className="font-ubuntu font-bold text-4xl text-dark-4 dark:text-white -tracking-[0.5px] ">
+              Sign Up
+            </h1>
+            <h5 className="font-bold font-ubuntu text-xl text-gray-600 dark:text-gray-400">
+              Make an account to save your chats
+            </h5>
+          </div>
+          <div className="flex flex-col gap-3 justify-between">
+            <h5 className="font-bold font-ubuntu text-xl text-gray-600 dark:text-gray-400">
+              Already have an account?
+            </h5>
+            <Btn
+              onClick={(e) => {
+                redirect("/login");
+              }}
+              className="bg-light-4 text-white font-bold font-ubuntu text-xl p-6"
+            >
+              Log into your Account
+            </Btn>
+          </div>
         </div>
-      )}
-      <button type="submit">Sign Up</button>
-    </form>
-  )
+        {/* Form */}
+        <form
+          action={action}
+          className="w-5/6 rounded-4xl shadow-light dark:shadow-dark py-16 px-5 lg:px-6 flex flex-col items-center gap-12"
+        >
+          <div className="flex lg:flex-row flex-col gap-6 w-full">
+            <div className="w-full lg:w-1/3">
+              <label
+                htmlFor="username"
+                className="font-ubuntu font-bold text-lg"
+              >
+                Username
+              </label>
+              <input
+                id="username"
+                type="username"
+                name="username"
+                placeholder="John Doe"
+                required
+                className="block border-2 border-gray-200 h-14 w-full p-4 rounded-2xl mt-2 "
+              />
+            </div>
+            <div className="w-full lg:w-1/3">
+              <label htmlFor="email" className="font-ubuntu font-bold text-lg">
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                name="email"
+                placeholder="example@mail.com"
+                required
+                className="block border-2 border-gray-200 h-14 w-full p-4 rounded-2xl mt-2 "
+              />
+            </div>
+            {state?.errors?.email && <p>{state.errors.email}</p>}
+            <div className="w-full lg:w-1/3">
+              <label
+                htmlFor="password"
+                className="font-ubuntu font-bold text-lg"
+              >
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                name="password"
+                placeholder="********"
+                required
+                minLength={8}
+                className="block border-2 border-gray-200 h-14 w-full p-4 rounded-2xl mt-2 "
+              />
+            </div>
+            {state?.errors?.password && (
+              <div>
+                <p>Password must:</p>
+                <ul>
+                  {state.errors.password.map((error) => (
+                    <li key={error}>- {error}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
+          </div>
+          <button
+            type="submit"
+            className="px-6 py-3 bg-light-4 rounded-lg font-bold font-ubuntu text-2xl text-white shadow-light cursor-pointer hover:bg-black hover:text-white"
+          >
+            SignUp
+          </button>
+        </form>
+
+        {(state?.errors?.email || state?.errors?.password) && (
+          <p>{state.errors.email}</p>
+        )}
+        {state?.message && <p>{state.message}</p>}
+      </section>
+      {/* Find Us */}
+      <div className="w-full max-w-[1920px]"><FindUsHereSection /></div>
+    </main>
+  );
 }

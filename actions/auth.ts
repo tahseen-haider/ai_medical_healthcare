@@ -12,7 +12,7 @@ import { redirect } from "next/navigation";
 
 export async function signup(state: FormState, formData: FormData) {
   const validatedFields = SignupFormSchema.safeParse({
-    name: formData.get("name"),
+    name: formData.get("username"),
     email: formData.get("email"),
     password: formData.get("password"),
   });
