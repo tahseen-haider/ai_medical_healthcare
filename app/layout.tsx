@@ -7,6 +7,7 @@ import Navbar from "@/components/header/Navbar";
 import { cookies } from "next/headers";
 import { isUserAuthenticated } from "@/lib/session";
 import Footer from "@/components/footer/Footer";
+import LayoutWrapper from "@/components/LayoutWrapper";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -32,21 +33,23 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const cookieStore = await cookies();
-  const isAuthenticated = await isUserAuthenticated(cookieStore.get("session")?.value);
+  const isAuthenticated = await isUserAuthenticated(
+    cookieStore.get("session")?.value
+  );
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${roboto.variable} ${ubuntu.variable} antialiased`}>
+      <body
+        className={`${roboto.variable} ${ubuntu.variable} antialiased bg-light-1 dark:bg-dark-4`}
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          <Toaster richColors position="top-center" />
-          <Navbar isAuthenticated={isAuthenticated}/>
-          <div className="h-16" />
-          {children}
-          <Footer/>
+          <LayoutWrapper isAuthenticated={isAuthenticated}>
+            {children}
+          </LayoutWrapper>
         </ThemeProvider>
       </body>
     </html>
