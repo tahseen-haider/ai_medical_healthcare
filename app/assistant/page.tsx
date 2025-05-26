@@ -1,24 +1,12 @@
-"use client";
-
-import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
-import { ThemeToggler } from "@/components/header/theme-toggler";
-import { Button } from "@/components/ui/button";
-import { Settings } from "lucide-react";
-import ReportUploader from "@/components/report-uploader";
-import { DialogTitle } from "@radix-ui/react-dialog";
-import { useState } from "react";
-import { toast } from "sonner";
-import ChatComponent from "@/components/chat";
+import ChatComponent from "@/components/chat/Chat";
 
 export default function AssistantPage() {
-  const [reportData, setReportData] = useState("");
-  const onReportUpload = (data: string) => {
-    setReportData(data);
-    toast("Report Uploaded Successfully");
-    console.log(reportData);
-  };
+  
   return (
-    <main></main>
+    <main className="flex flex-col items-center">
+      {/* Chat Section */}
+      <ChatComponent/>
+    </main>
   );
 }
 
