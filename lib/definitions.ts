@@ -17,6 +17,18 @@ export const SignupFormSchema = z.object({
     .trim(),
 });
 
+export const AppointmentFormSchema = z.object({
+  fullname: z
+    .string()
+    .min(2, { message: "Name must be least 2 characters" })
+    .trim(),
+  email: z.string().email({ message: "Please input a valid email" }),
+  phone: z.string(),
+  reasonForVisit: z.string(),
+  preferredDate: z.string(),
+  preferredTime: z.string(),
+});
+
 export const LoginFormSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }).trim(),
   password: z
@@ -29,6 +41,30 @@ export const LoginFormSchema = z.object({
     // })
     .trim(),
 });
+
+export type AppointmentFormType =
+  | {
+      appointment?: {
+        email: string;
+        fullname: string;
+        phone: string | null;
+        reasonForVisit: string;
+        preferredDate: string;
+        preferredTime: string;
+        id: string;
+      };
+      message?: string;
+      errors: {
+        general?: string[];
+        fullname?: string[];
+        email?: string[];
+        phone?: string[];
+        reasonForVisit?: string[];
+        preferredDate?: string[];
+        preferredTime?: string[];
+      };
+    }
+  | undefined;
 
 export type FormState =
   | {
@@ -47,4 +83,4 @@ export type SessionPayload = {
   expiresAt: Date;
 };
 
-export type UserRole = "user" | "admin"
+export type UserRole = "user" | "admin";

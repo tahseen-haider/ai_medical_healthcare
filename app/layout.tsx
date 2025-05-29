@@ -1,12 +1,9 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono, Roboto, Ubuntu } from "next/font/google";
+import { Roboto, Ubuntu } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { Toaster } from "sonner";
-import Navbar from "@/components/header/Navbar";
 import { cookies } from "next/headers";
 import { isUserAuthenticated } from "@/lib/session";
-import Footer from "@/components/footer/Footer";
 import LayoutWrapper from "@/components/LayoutWrapper";
 
 const roboto = Roboto({
@@ -41,16 +38,16 @@ export default async function RootLayout({
       <body
         className={`${roboto.variable} ${ubuntu.variable} font-roboto antialiased bg-light-1 dark:bg-dark-4`}
       >
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <LayoutWrapper isAuthenticated={isAuthenticated}>
-            {children}
-          </LayoutWrapper>
-        </ThemeProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <LayoutWrapper isAuthenticated={isAuthenticated}>
+              {children}
+            </LayoutWrapper>
+          </ThemeProvider>
       </body>
     </html>
   );

@@ -29,7 +29,7 @@ export async function middleware(req: NextRequest) {
     if (isAuth) {
       // Prevent access to login and signup
       if (isRestrictedRoute) {
-        return NextResponse.redirect(new URL("/login", req.url));
+        return NextResponse.redirect(new URL("/", req.url));
       }
 
       // Allow access to root and all other routes

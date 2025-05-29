@@ -70,6 +70,7 @@ export function DatePickerWithPresets({
               today.setHours(0, 0, 0, 0);
               return date < today;
             }}
+            
           />
         </div>
       </PopoverContent>

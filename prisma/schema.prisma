@@ -26,3 +26,13 @@ model User {
   is_verified Boolean @default(false)
   token      String?
 }
+
+model Appointments {
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  fullname        String
+  email           String
+  phone           String? // safer for formatting
+  reasonForVisit  String
+  preferredDate   String
+  preferredTime   String
+}
