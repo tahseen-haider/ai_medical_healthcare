@@ -1,6 +1,7 @@
 import { cache } from "react";
 import "server-only";
 import { prisma } from "../db/prisma";
+import { ContactFormType } from "../definitions";
 
 export const setAppointmentToDB = cache(
   async (data: {
@@ -29,6 +30,17 @@ export const setAppointmentToDB = cache(
         preferredTime,
       },
     });
-    return appointment
+    return appointment;
   }
 );
+
+export const uploadMessage = cache(async (data: ContactFormType) => {
+  const submitted = await prisma.inquiries.create({
+    data: {
+      fullname: data.fullname,
+      email: data.email,
+      message: data.message
+    }
+  })
+  return submitted
+});

@@ -1,10 +1,20 @@
 "use client";
 import { contactUs } from "@/actions";
+import Btn from "@/components/Button";
 import FindUsHereSection from "@/components/FindUsHereSection";
-import { useActionState } from "react";
+import LoadingScreen from "@/components/LoadingScreen";
+import PopUpCard from "@/components/PopUpCard";
+import { useActionState, useEffect, useState } from "react";
 
 export default function ContactUsPage() {
   const [state, action, pending] = useActionState(contactUs, undefined);
+  const [submitted, setSubmitted] = useState(false);
+
+  useEffect(() => {
+    const responseSucess = state?.message;
+
+    if (responseSucess) setSubmitted(true);
+  }, [state]);
   return (
     <main className="flex flex-col items-center">
       <div className="max-w-[1920px] w-full">
@@ -60,7 +70,10 @@ export default function ContactUsPage() {
               </div>
             </div>
             <div className="w-full">
-              <label htmlFor="message" className="font-ubuntu font-bold text-lg">
+              <label
+                htmlFor="message"
+                className="font-ubuntu font-bold text-lg"
+              >
                 Message
               </label>
               <textarea
@@ -78,6 +91,37 @@ export default function ContactUsPage() {
               Submit
             </button>
           </form>
+          {pending && <LoadingScreen message={"Uploading Your Message..."} />}
+          {/* Sucess Pop Up */}
+          {submitted && (
+            <PopUpCard>
+              <h1 className="font-bold font-ubuntu text-2xl">
+                {state?.message || "Submitted"}
+              </h1>
+
+              <div className="grid grid-cols-2 gap-y-3 text-base">
+                <div className="font-semibold">Full Name:</div>
+                <div>{state?.submitted?.fullname}</div>
+
+                <div className="font-semibold">Email:</div>
+                <div>{state?.submitted?.email}</div>
+
+                <div className="font-semibold">Message:</div>
+                <div className="w-[200px] h-[150px] overflow-scroll">
+                  {state?.submitted?.message}
+                </div>
+              </div>
+
+              <Btn
+                className="bg-light-4 dark:bg-dark-4 text-white w-2/4 text-lg"
+                onClick={() => {
+                  setSubmitted(false);
+                }}
+              >
+                Close
+              </Btn>
+            </PopUpCard>
+          )}
         </section>
         <FindUsHereSection />
       </div>

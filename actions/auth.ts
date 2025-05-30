@@ -1,16 +1,51 @@
 "use server";
 
-import { getUserCredentialsByEmail, insertUserToDB } from "@/lib/dal/user.dal";
+import {
+  getUserCredentialsByEmail,
+  insertUserToDB,
+  isUserVerified,
+  verifyEmailfromDB,
+} from "@/lib/dal/user.dal";
 import {
   SignupFormSchema,
-  FormState,
+  SignUpFormState,
   LoginFormSchema,
+  VerifyEmailFormState,
+  LoginFormState,
+  VerifyEmailFormSchema,
 } from "@/lib/definitions";
 import { createSession, deleteSession } from "@/lib/session";
 import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
 
-export async function signup(state: FormState, formData: FormData) {
+export async function verifyEmail(
+  state: VerifyEmailFormState,
+  formData: FormData
+): Promise<VerifyEmailFormState> {
+  const validatedFields = VerifyEmailFormSchema.safeParse({
+    email: formData.get("email"),
+    verifyToken: formData.get("verifyToken"),
+  });
+  try {
+    if (!validatedFields.success)
+      return { errors: validatedFields.error.flatten().fieldErrors };
+
+    const { email, verifyToken } = validatedFields.data;
+
+    const verified = await verifyEmailfromDB({ email, verifyToken });
+
+    if (verified) {
+      await createSession(verified.id, verified.role);
+      return { message: "Email verified Successfully!" };
+    }
+
+    return { errors: { verifyToken: ["Token is wrong"] } };
+  } catch {
+    return { errors: { verifyToken: ["Something went wrong"] } };
+  }
+}
+
+export async function signup(state: SignUpFormState, formData: FormData) {
   const validatedFields = SignupFormSchema.safeParse({
     name: formData.get("username"),
     email: formData.get("email"),
@@ -34,11 +69,10 @@ export async function signup(state: FormState, formData: FormData) {
     };
   }
 
-  await createSession(user.id, user.role);
-  return redirect("/");
+  return redirect("/verify-email");
 }
 
-export async function login(state: FormState, formData: FormData) {
+export async function login(state: LoginFormState, formData: FormData) {
   const validatedFields = LoginFormSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
@@ -56,6 +90,10 @@ export async function login(state: FormState, formData: FormData) {
   const user = await getUserCredentialsByEmail(email);
 
   if (!user) return { success: false, message: "Email is incorrect." };
+
+  const isVerified = await isUserVerified(user.email);
+
+  if(!isVerified) return { success: false, message: "Email is not verified." };
 
   const isPasswordMatched = await bcrypt.compare(password, user.password);
 

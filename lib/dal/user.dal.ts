@@ -5,7 +5,11 @@ import "server-only";
 import { cache } from "react";
 import { getAuthenticateUser } from "../session";
 import { prisma } from "../db/prisma";
-import { UserCredentialDTO, UserIDandRoleForSessionDTO, UserProfileDTO } from "../dto/user.dto";
+import {
+  UserCredentialDTO,
+  UserIDandRoleForSessionDTO,
+  UserProfileDTO,
+} from "../dto/user.dto";
 
 export const getUser = cache(async (): Promise<UserProfileDTO | null> => {
   const session = await getAuthenticateUser();
@@ -51,17 +55,58 @@ export const insertUserToDB = async (
   name: string,
   email: string,
   hashedPassword: string
-): Promise<UserIDandRoleForSessionDTO | undefined> => {
+): Promise<number | undefined> => {
   try {
+    const existingUser = await prisma.user.findUnique({
+      where: { email },
+    });
+
+    if (existingUser) return undefined;
     const user = await prisma.user.create({
       data: {
         name,
         email,
         password: hashedPassword,
+        token: Math.floor(1000 + Math.random() * 900000).toString(),
       },
     });
-    return {id: user.id, role: user.role}
+    return 1;
   } catch (error) {
     console.log(error);
+    return undefined;
   }
+};
+
+export const verifyEmailfromDB = async ({
+  email,
+  verifyToken,
+}: {
+  email: string | undefined;
+  verifyToken: string | undefined;
+}): Promise<UserIDandRoleForSessionDTO | undefined> => {
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
+
+  if (!user || user.token != verifyToken) return undefined;
+
+  await prisma.user.update({
+    where: { email },
+    data: {
+      token: null,
+      is_verified: true,
+    },
+  });
+  return { id: user.id, role: user.role };
+};
+
+export const isUserVerified = async (email : string) => {
+  const user = await prisma.user.findUnique({
+    where: {email}
+  });
+  const is_verified = user?.is_verified;
+
+  return is_verified
 };

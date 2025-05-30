@@ -36,3 +36,10 @@ model Appointments {
   preferredDate   String
   preferredTime   String
 }
+
+model Inquiries {
+  id              String  @id @default(auto()) @map("_id") @db.ObjectId
+  fullname        String
+  email           String
+  message         String
+}

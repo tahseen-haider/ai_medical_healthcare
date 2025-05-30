@@ -17,6 +17,11 @@ export const SignupFormSchema = z.object({
     .trim(),
 });
 
+export const VerifyEmailFormSchema = z.object({
+  email: z.string().email(),
+  verifyToken: z.string(),
+});
+
 export const AppointmentFormSchema = z.object({
   fullname: z
     .string()
@@ -42,6 +47,32 @@ export const LoginFormSchema = z.object({
     .trim(),
 });
 
+export type ContactFormType = {
+  fullname: string;
+  email: string;
+  message: string;
+};
+export const ContactFormSchema = z.object({
+  fullname: z.string().trim(),
+  email: z.string().email({ message: "Input a valid Email" }).trim(),
+  message: z.string().trim(),
+});
+export type ContactFormState =
+  | {
+      message?: string;
+      errors?: {
+        fullname?: string[];
+        email?: string[];
+        message?: string[];
+      };
+      submitted?: {
+        fullname: string;
+        email: string;
+        message: string;
+      };
+    }
+  | undefined;
+
 export type AppointmentFormType =
   | {
       appointment?: {
@@ -66,10 +97,30 @@ export type AppointmentFormType =
     }
   | undefined;
 
-export type FormState =
+export type VerifyEmailFormState =
+  | {
+      errors?: {
+        email?: string[];
+        verifyToken?: string[];
+      };
+      message?: string;
+    }
+  | undefined;
+
+export type SignUpFormState =
   | {
       errors?: {
         name?: string[];
+        email?: string[];
+        password?: string[];
+      };
+      message?: string;
+    }
+  | undefined;
+
+export type LoginFormState =
+  | {
+      errors?: {
         email?: string[];
         password?: string[];
       };

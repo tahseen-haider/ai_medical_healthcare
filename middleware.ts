@@ -1,8 +1,8 @@
-import { decrypt } from "@/lib/session";
+import { isUserAuthenticated } from "@/lib/session";
 import { NextRequest, NextResponse } from "next/server";
 
 // Routes that should not be accessible to authenticated users
-const authRestrictedRoutes = ["/login", "/signup"];
+const authRestrictedRoutes = ["/login", "/signup", "/verify-email"];
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
@@ -23,8 +23,7 @@ export async function middleware(req: NextRequest) {
 
   // If authenticated
   try {
-    const session = await decrypt(sessionToken);
-    const isAuth = session?.userId;
+    const isAuth = await isUserAuthenticated(sessionToken)
 
     if (isAuth) {
       // Prevent access to login and signup

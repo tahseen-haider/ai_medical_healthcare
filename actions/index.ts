@@ -1,9 +1,38 @@
 "use server";
 
-import { AppointmentFormSchema, AppointmentFormType } from "@/lib/definitions";
-import { setAppointmentToDB } from "@/lib/dal";
+import {
+  AppointmentFormSchema,
+  AppointmentFormType,
+  ContactFormSchema,
+  ContactFormState,
+} from "@/lib/definitions";
+import { setAppointmentToDB, uploadMessage } from "@/lib/dal";
 
-export const contactUs = async (_: void, formData: FormData) => {};
+export const contactUs = async (
+  state: ContactFormState,
+  formData: FormData
+): Promise<ContactFormState> => {
+  const validatedFields = ContactFormSchema.safeParse({
+    fullname: formData.get("fullname"),
+    email: formData.get("email"),
+    message: formData.get("message"),
+  });
+
+  if (!validatedFields.success)
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+
+  try {
+    const submitted = await uploadMessage({
+      ...validatedFields.data,
+    });
+
+    return { message: "Message sent Sucessfully", submitted };
+  } catch {
+    return { message: "Something went wrong" };
+  }
+};
 
 export const setAppointment = async (
   state: AppointmentFormType,
@@ -24,9 +53,9 @@ export const setAppointment = async (
         errors: validatedFields.error.flatten().fieldErrors,
       };
     }
-    
+
     const appointment = await setAppointmentToDB({
-      ...validatedFields.data
+      ...validatedFields.data,
     });
 
     return {
@@ -34,7 +63,6 @@ export const setAppointment = async (
       message: "Appointment successfully scheduled.",
       errors: {},
     };
-    
   } catch (err) {
     return {
       ...state,
