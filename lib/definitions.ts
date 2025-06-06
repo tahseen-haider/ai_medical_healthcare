@@ -47,6 +47,11 @@ export const LoginFormSchema = z.object({
     .trim(),
 });
 
+export const VerifyEmailFormSchema = z.object({
+  email: z.string().email({ message: "Please enter a valid email." }).trim(),
+  token: z.number()
+})
+
 export type ContactFormType = {
   fullname: string;
   email: string;

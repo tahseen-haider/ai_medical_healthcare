@@ -5,6 +5,7 @@ import {
   insertUserToDB,
   isUserVerified,
   setUserToken,
+  verifyEmailTokenfromDB,
   verifyUserCredentials,
 } from "@/lib/dal/user.dal";
 import {
@@ -14,6 +15,7 @@ import {
   VerifyEmailFormState,
   LoginFormState,
   SendVerifyEmailFormSchema,
+  VerifyEmailFormSchema,
 } from "@/lib/definitions";
 import { createSession, deleteSession } from "@/lib/session";
 import bcrypt from "bcryptjs";
@@ -221,4 +223,23 @@ export async function login(state: LoginFormState, formData: FormData) {
 export async function logout() {
   await deleteSession();
   redirect("/");
+}
+
+export async function verifyEmail(state: VerifyEmailFormState, formData: FormData) {
+  const validatedFields = VerifyEmailFormSchema.safeParse({
+    email: formData.get("email"),
+    token: Number(formData.get("token"))
+  })
+
+  if(!validatedFields.success) return {message: "EEnter a valid token"}
+
+  const { email, token } = validatedFields.data;
+
+  const res = await verifyEmailTokenfromDB({email, verifyToken:token})
+
+  if(!res) return {message: "Enter correct token"}
+
+  await createSession(res.id,res.role);
+
+  return redirect("/")
 }
