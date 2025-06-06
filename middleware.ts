@@ -2,12 +2,16 @@ import { isUserAuthenticated } from "@/lib/session";
 import { NextRequest, NextResponse } from "next/server";
 
 // Routes that should not be accessible to authenticated users
-const authRestrictedRoutes = ["/login", "/signup", "/verify-email"];
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  const isRestrictedRoute = authRestrictedRoutes.includes(pathname);
+  const authRestrictedRoutes = ["/login", "/signup", "/verify-email"];
+
+  const isRestrictedRoute = authRestrictedRoutes.some(
+    (route) => pathname === route || pathname.startsWith(`${route}/`)
+  );
+
   const isRoot = pathname === "/";
 
   const sessionToken = req.cookies.get("session")?.value;
@@ -23,7 +27,7 @@ export async function middleware(req: NextRequest) {
 
   // If authenticated
   try {
-    const isAuth = await isUserAuthenticated(sessionToken)
+    const isAuth = await isUserAuthenticated(sessionToken);
 
     if (isAuth) {
       // Prevent access to login and signup

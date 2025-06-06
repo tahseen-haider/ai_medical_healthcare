@@ -155,6 +155,7 @@ export default function AppointmentPage() {
             </div>
             <button
               type="submit"
+              disabled={pending}
               className="px-6 py-2 mt-5 bg-light-4 dark:bg-dark-1 rounded-lg font-bold font-ubuntu text-2xl text-white shadow-light dark:shadow-dark cursor-pointer hover:bg-black hover:text-white"
             >
               Submit
@@ -198,6 +199,7 @@ export default function AppointmentPage() {
                 className="bg-light-4 dark:bg-dark-4 text-white w-2/4 text-lg"
                 onClick={() => {
                   setSubmitted(false);
+                  window.location.reload()
                 }}
               >
                 Close

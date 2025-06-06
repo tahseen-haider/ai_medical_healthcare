@@ -32,7 +32,7 @@ export default function ContactUsPage() {
           {/* Form */}
           <form
             action={action}
-            className="w-5/6 rounded-4xl shadow-light dark:shadow-dark py-16 px-5 lg:px-6 flex flex-col items-center gap-12"
+            className="lg:w-5/6 w-full rounded-4xl shadow-light dark:shadow-dark py-16 px-5 lg:px-6 flex flex-col items-center gap-12"
           >
             <div className="flex flex-col lg:flex-row gap-6 w-full">
               <div className="w-full lg:w-1/2">
@@ -86,12 +86,16 @@ export default function ContactUsPage() {
             </div>
             <button
               type="submit"
+              disabled={pending}
               className="px-6 py-3 bg-light-4 rounded-lg font-bold font-ubuntu text-2xl text-white shadow-light cursor-pointer hover:bg-black hover:text-white"
             >
               Submit
             </button>
           </form>
+
+          {/* Loading while Uploading */}
           {pending && <LoadingScreen message={"Uploading Your Message..."} />}
+
           {/* Sucess Pop Up */}
           {submitted && (
             <PopUpCard>
@@ -107,7 +111,7 @@ export default function ContactUsPage() {
                 <div>{state?.submitted?.email}</div>
 
                 <div className="font-semibold">Message:</div>
-                <div className="w-[200px] h-[150px] overflow-scroll">
+                <div className="w-[200px] h-[150px] overflow-auto">
                   {state?.submitted?.message}
                 </div>
               </div>

@@ -10,6 +10,7 @@ import {
   UserIDandRoleForSessionDTO,
   UserProfileDTO,
 } from "../dto/user.dto";
+import bcrypt from "bcryptjs";
 
 export const getUser = cache(async (): Promise<UserProfileDTO | null> => {
   const session = await getAuthenticateUser();
@@ -55,34 +56,34 @@ export const insertUserToDB = async (
   name: string,
   email: string,
   hashedPassword: string
-): Promise<number | undefined> => {
+): Promise<number | null> => {
   try {
     const existingUser = await prisma.user.findUnique({
       where: { email },
     });
 
-    if (existingUser) return undefined;
+    if (existingUser) return null;
     const user = await prisma.user.create({
       data: {
         name,
         email,
         password: hashedPassword,
-        token: Math.floor(1000 + Math.random() * 900000).toString(),
+        token: Math.floor(1000 + Math.random() * 900000),
       },
     });
-    return 1;
+    return user.token;
   } catch (error) {
     console.log(error);
-    return undefined;
+    return null;
   }
 };
 
-export const verifyEmailfromDB = async ({
+export const verifyEmailTokenfromDB = async ({
   email,
   verifyToken,
 }: {
   email: string | undefined;
-  verifyToken: string | undefined;
+  verifyToken: number | undefined;
 }): Promise<UserIDandRoleForSessionDTO | undefined> => {
   const user = await prisma.user.findUnique({
     where: {
@@ -102,11 +103,47 @@ export const verifyEmailfromDB = async ({
   return { id: user.id, role: user.role };
 };
 
-export const isUserVerified = async (email : string) => {
+export const isUserVerified = async (email: string) => {
   const user = await prisma.user.findUnique({
-    where: {email}
+    where: { email },
   });
   const is_verified = user?.is_verified;
 
-  return is_verified
+  return is_verified;
+};
+
+export const verifyUserCredentials = async ({
+  email,
+  password,
+}: {
+  email: string;
+  password: string;
+}) => {
+  const user = await prisma.user.findUnique({
+    where: { email },
+  });
+  if (!user) return;
+
+  if (user.is_verified) return "alreadyVerified";
+
+  const isPasswordMatched = await bcrypt.compare(password, user.password);
+
+  if (!isPasswordMatched) return;
+
+  return user.email;
+};
+
+export const setUserToken = async ({
+  code,
+  email,
+}: {
+  code: number;
+  email: string;
+}) => {
+  const user = await prisma.user.update({
+    where: {email},
+    data: {
+      token: code
+    }
+  })
 };

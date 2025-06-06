@@ -2,6 +2,7 @@
 import { signup } from "@/actions/auth";
 import Btn from "@/components/Button";
 import FindUsHereSection from "@/components/FindUsHereSection";
+import LoadingScreen from "@/components/LoadingScreen";
 import { redirect } from "next/navigation";
 import { useActionState } from "react";
 
@@ -105,6 +106,7 @@ export default function SignupPage() {
           >
             SignUp
           </button>
+          {state?.message && <p className="text-red-600">{state.message}</p>}
         </form>
 
         {(state?.errors?.email || state?.errors?.password) && (
@@ -114,6 +116,8 @@ export default function SignupPage() {
       </section>
       {/* Find Us */}
       <div className="w-full max-w-[1920px]"><FindUsHereSection /></div>
+      {/* Uploading */}
+      {pending && <LoadingScreen message="Signing you Up..."/>}
     </main>
   );
 }

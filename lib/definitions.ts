@@ -17,9 +17,9 @@ export const SignupFormSchema = z.object({
     .trim(),
 });
 
-export const VerifyEmailFormSchema = z.object({
+export const SendVerifyEmailFormSchema = z.object({
   email: z.string().email(),
-  verifyToken: z.string(),
+  password: z.string(),
 });
 
 export const AppointmentFormSchema = z.object({
@@ -101,7 +101,7 @@ export type VerifyEmailFormState =
   | {
       errors?: {
         email?: string[];
-        verifyToken?: string[];
+        password?: string[];
       };
       message?: string;
     }
