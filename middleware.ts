@@ -1,8 +1,6 @@
 import { isUserAuthenticated } from "@/lib/session";
 import { NextRequest, NextResponse } from "next/server";
 
-// Routes that should not be accessible to authenticated users
-
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
@@ -19,10 +17,9 @@ export async function middleware(req: NextRequest) {
 
   // If not authenticated
   if (!sessionToken) {
-    // Allow access to login, signup, and root
+    
     if (isRestrictedRoute || isPublicRoutes) return NextResponse.next();
 
-    // Block access to all other routes
     return NextResponse.redirect(new URL("/login", req.url));
   }
 
@@ -31,23 +28,19 @@ export async function middleware(req: NextRequest) {
     const isAuth = await isUserAuthenticated(sessionToken);
 
     if (isAuth) {
-      // Prevent access to login and signup
       if (isRestrictedRoute) {
         return NextResponse.redirect(new URL("/", req.url));
       }
 
-      // Allow access to root and all other routes
       return NextResponse.next();
     }
   } catch {
-    // Invalid session → redirect to root
     return NextResponse.redirect(new URL("/", req.url));
   }
 
-  // Session token exists but no valid user → redirect to root
-  return NextResponse.redirect(new URL("/login", req.url));
+  return NextResponse.redirect(new URL("/", req.url));
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|.*\\.png$).*)"],
+  matcher: ['/((?!api|_next/static|_next/image|videos|favicon.ico).*)'],
 };
