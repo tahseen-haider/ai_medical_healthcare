@@ -24,7 +24,7 @@ model User {
   createdAt  DateTime @default(now())
   role       UserRole @default(user)
   is_verified Boolean @default(false)
-  token      Int?
+  token      Int? @unique
 }
 
 model Appointments {

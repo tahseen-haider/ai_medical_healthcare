@@ -6,20 +6,21 @@ import { NextRequest, NextResponse } from "next/server";
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  const authRestrictedRoutes = ["/login", "/signup", "/verify-email"];
+  const restrictedRoutes = /^\/(login|signup|verify-email(?:\/.*)?)$/;
+  const protectedRoutes = /^\/(assistant)$/;
+  const publicRoutes =
+    /^\/$|^\/(appointment|contact-us|about-us|reset-password(?:\/.*)?)$/;
 
-  const isRestrictedRoute = authRestrictedRoutes.some(
-    (route) => pathname === route || pathname.startsWith(`${route}/`)
-  );
-
-  const isRoot = pathname === "/";
+  const isRestrictedRoute = restrictedRoutes.test(pathname);
+  const isProtectedRoutes = publicRoutes.test(pathname);
+  const isPublicRoutes = publicRoutes.test(pathname);
 
   const sessionToken = req.cookies.get("session")?.value;
 
   // If not authenticated
   if (!sessionToken) {
     // Allow access to login, signup, and root
-    if (isRestrictedRoute || isRoot) return NextResponse.next();
+    if (isRestrictedRoute || isPublicRoutes) return NextResponse.next();
 
     // Block access to all other routes
     return NextResponse.redirect(new URL("/login", req.url));

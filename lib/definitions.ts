@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { number, z } from "zod";
 
 export const SignupFormSchema = z.object({
   name: z
@@ -47,10 +47,14 @@ export const LoginFormSchema = z.object({
     .trim(),
 });
 
+export const SendForgotPasswordLinkToEmailSchema = z.object({
+  email: z.string().email({ message: "Please enter a valid email." }).trim(),
+});
+
 export const VerifyEmailFormSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }).trim(),
-  token: z.number()
-})
+  token: z.number(),
+});
 
 export type ContactFormType = {
   fullname: string;
@@ -62,6 +66,19 @@ export const ContactFormSchema = z.object({
   email: z.string().email({ message: "Input a valid Email" }).trim(),
   message: z.string().trim(),
 });
+
+export const ResetPasswordFormSchema = z.object({
+  code: z.number(),
+  newPassword: z.string().trim(),
+  repeatNewPassword: z.string().trim()
+})
+
+export type ResetPasswordFormState =
+  | {
+      message?: string;
+    }
+  | undefined;
+
 export type ContactFormState =
   | {
       message?: string;
@@ -123,6 +140,11 @@ export type SignUpFormState =
     }
   | undefined;
 
+export type SendForgotPasswordLinkToEmailState =
+  | {
+      message?: string;
+    }
+  | undefined;
 export type LoginFormState =
   | {
       errors?: {

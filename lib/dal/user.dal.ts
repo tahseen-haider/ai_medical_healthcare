@@ -141,9 +141,34 @@ export const setUserToken = async ({
   email: string;
 }) => {
   const user = await prisma.user.update({
-    where: {email},
+    where: { email },
     data: {
-      token: code
+      token: code,
+    },
+  });
+};
+
+export const resetPasswordInDB = async ({
+  code,
+  newPassword
+}: {
+  code: number;
+  newPassword: string;
+}) => {
+  const user = await prisma.user.findUnique({
+    where: {token: code}
+  })
+
+  if(!user || !user.token) return;
+
+  const updatedUser = await prisma.user.update({
+    where: {token: user.token},
+    data: {
+      password: newPassword,
+      token: null
     }
   })
+
+  return updatedUser.email
+  
 };

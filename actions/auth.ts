@@ -4,6 +4,7 @@ import {
   getUserCredentialsByEmail,
   insertUserToDB,
   isUserVerified,
+  resetPasswordInDB,
   setUserToken,
   verifyEmailTokenfromDB,
   verifyUserCredentials,
@@ -16,13 +17,17 @@ import {
   LoginFormState,
   SendVerifyEmailFormSchema,
   VerifyEmailFormSchema,
+  SendForgotPasswordLinkToEmailState,
+  SendForgotPasswordLinkToEmailSchema,
+  ResetPasswordFormState,
+  ResetPasswordFormSchema,
 } from "@/lib/definitions";
 import { createSession, deleteSession } from "@/lib/session";
 import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
 import nodemailer from "nodemailer";
 
-function emailHTML(code: number) {
+function sendCodeHTML(code: number) {
   return `
         <!DOCTYPE html>
         <html>
@@ -92,11 +97,72 @@ function emailHTML(code: number) {
         `;
 }
 
-async function sendVerificationEmail(req: {
-  to: string;
-  subject: string;
-  html: string;
-}) {
+function sendResetLinkHTML(baseUrl: string, code: number) {
+  const resetLink = `${baseUrl}/reset-password/${code}`;
+
+  return `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="UTF-8" />
+        <title>Password Reset</title>
+      </head>
+      <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f6f9fc;">
+        <div style="max-width: 600px; margin: 40px auto; background-color: #fff; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05); padding: 40px;">
+          <h2 style="color: #333; text-align: center;">Password Reset Request</h2>
+          <p style="font-size: 16px; color: #555; line-height: 1.5; text-align: center;">
+            Click the button below to reset your password. This link is valid for a limited time:
+          </p>
+          <div style="text-align: center; margin: 30px 0;">
+            <a href="${resetLink}" target="_blank" style="
+              background-color: #2a4eff;
+              color: white;
+              padding: 14px 28px;
+              font-size: 16px;
+              border-radius: 6px;
+              text-decoration: none;
+              font-weight: bold;
+              display: inline-block;
+            ">Reset Password</a>
+          </div>
+          <p style="font-size: 16px; color: #555; line-height: 1.5; text-align: center;">
+            If you did not request a password reset, you can safely ignore this email.
+          </p>
+          <div style="font-size: 13px; color: #888; text-align: center; margin-top: 40px;">
+            &copy; ${new Date().getFullYear()} MediTech. All rights reserved.
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
+}
+
+export async function resetPassword(
+  state: ResetPasswordFormState,
+  formData: FormData
+) {
+  const validatedFields = ResetPasswordFormSchema.safeParse({
+    code: Number(formData.get("code")),
+    newPassword: formData.get("newPassword"),
+    repeatNewPassword: formData.get("repeatNewPassword"),
+  });
+
+  if(!validatedFields.success) return {message: "Input a valid Password"}
+
+  const {code, newPassword, repeatNewPassword} = validatedFields.data;
+
+  if(newPassword !== repeatNewPassword) return {message: "Passwords does not match"}
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  const res = await resetPasswordInDB({code, newPassword:hashedPassword})
+
+  if(!res) return {message: "Error while reseting password"}
+
+  return { message: "Password Reset" };
+}
+
+async function sendEmail(req: { to: string; subject: string; html: string }) {
   const { to, subject, html } = req;
 
   try {
@@ -144,14 +210,40 @@ export async function sendVerifyEmail(
 
   await setUserToken({ code, email });
 
-  const res = await sendVerificationEmail({
+  const res = await sendEmail({
     to: email,
     subject: "Email Verification for MediTech app",
-    html: emailHTML(code),
+    html: sendCodeHTML(code),
   });
 
   if (!res) return { message: "Error while sending the mail" };
   return redirect(`/verify-email/${encodeURIComponent(email)}`);
+}
+
+export async function SendForgotPasswordLinkToEmail(
+  state: SendForgotPasswordLinkToEmailState,
+  formData: FormData
+) {
+  const validatedFields = SendForgotPasswordLinkToEmailSchema.safeParse({
+    email: formData.get("email"),
+  });
+
+  if (!validatedFields.success) return { message: "Invalid email" };
+
+  const { email } = validatedFields.data;
+
+  const code = Math.floor(100000 + Math.random() * 900000);
+
+  await setUserToken({ code, email });
+
+  const res = await sendEmail({
+    to: email,
+    subject: "Reset Your MediTech Password",
+    html: sendResetLinkHTML("http://localhost:3000", code),
+  });
+
+  if (!res) return { message: "Failed to send Link" };
+  return { message: "Link Sent! Check Your email" };
 }
 
 export async function signup(state: SignUpFormState, formData: FormData) {
@@ -178,10 +270,10 @@ export async function signup(state: SignUpFormState, formData: FormData) {
     };
   }
 
-  const res = await sendVerificationEmail({
+  const res = await sendEmail({
     to: email,
     subject: "Email Verification for MediTech app",
-    html: emailHTML(userToken),
+    html: sendCodeHTML(userToken),
   });
 
   if (!res) return { message: "Error while sending the mail" };
@@ -225,21 +317,24 @@ export async function logout() {
   redirect("/");
 }
 
-export async function verifyEmail(state: VerifyEmailFormState, formData: FormData) {
+export async function verifyEmail(
+  state: VerifyEmailFormState,
+  formData: FormData
+) {
   const validatedFields = VerifyEmailFormSchema.safeParse({
     email: formData.get("email"),
-    token: Number(formData.get("token"))
-  })
+    token: Number(formData.get("token")),
+  });
 
-  if(!validatedFields.success) return {message: "EEnter a valid token"}
+  if (!validatedFields.success) return { message: "EEnter a valid token" };
 
   const { email, token } = validatedFields.data;
 
-  const res = await verifyEmailTokenfromDB({email, verifyToken:token})
+  const res = await verifyEmailTokenfromDB({ email, verifyToken: token });
 
-  if(!res) return {message: "Enter correct token"}
+  if (!res) return { message: "Enter correct token" };
 
-  await createSession(res.id,res.role);
+  await createSession(res.id, res.role);
 
-  return redirect("/")
+  return redirect("/");
 }

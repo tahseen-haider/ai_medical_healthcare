@@ -2,6 +2,8 @@
 import { login } from "@/actions/auth";
 import Btn from "@/components/Button";
 import FindUsHereSection from "@/components/FindUsHereSection";
+import LoadingScreen from "@/components/LoadingScreen";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { useActionState } from "react";
 
@@ -10,6 +12,10 @@ export default function LoginPage() {
 
   return (
     <main className="bg-light-1 dark:bg-dark-4 flex flex-col items-center">
+      
+      {/* Uploading */}
+      {pending && <LoadingScreen message="Logging In..."/>}
+
       {/* Login Section */}
       <section className="px-6 py-10 flex items-center flex-col  gap-12 max-w-[1920px] w-full">
         <div className="flex justify-between w-full">
@@ -38,7 +44,7 @@ export default function LoginPage() {
         {/* Form */}
         <form
           action={action}
-          className="w-5/6 rounded-4xl shadow-light dark:shadow-dark py-16 px-5 lg:px-6 flex flex-col items-center gap-12"
+          className="lg:w-5/6 w-full rounded-4xl shadow-light dark:shadow-dark py-16 px-5 lg:px-6 flex flex-col items-center gap-12"
         >
           <div className="flex flex-col lg:flex-row gap-6 w-full">
             <div className="lg:w-1/2 w-full">
@@ -83,6 +89,11 @@ export default function LoginPage() {
             Login
           </button>
         </form>
+        {/* Links */}
+        <div className="w-5/6 lg:w-4/6 flex justify-between font-bold text-white">
+          <Link href="/verify-email" className="bg-light-4 py-1 px-3 shadow-light dark:shadow-dark rounded-lg">Verify your email address</Link>
+          <Link href="/reset-password" className="bg-light-4 py-1 px-3 shadow-light dark:shadow-dark rounded-lg">Forgot Password?</Link>
+        </div>
       </section>
       {/* Find Us */}
       <div className="w-full max-w-[1920px]">
