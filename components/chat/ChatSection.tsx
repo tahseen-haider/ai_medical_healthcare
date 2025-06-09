@@ -10,15 +10,15 @@ export default function ChatSection() {
     const textarea = textareaRef.current;
     if (textarea) {
       textarea.style.height = "0px"; // reset first
-      textarea.style.height = Math.min(textarea.scrollHeight, 132) + "px"; // max 132px ≈ 6 lines
+      textarea.style.height = Math.min(textarea.scrollHeight, 88) + "px"; // max 132px ≈ 6 lines
     }
   }, [prompt]);
   return (
-    <div className="relative flex flex-col items-center bg-amber-600">
+    <div className="relative flex flex-col h-full items-center">
       {/* Messages Section */}
-      <section className=""></section>
+      <section className="flex-grow w-full"></section>
       {/* Input Box */}
-      <div className="fixed lg:w-2/4 w-5/6 bottom-0 bg-light-1 dark:bg-dark-4">
+      <div className="lg:w-4/6 w-5/6 bottom-0 bg-light-1 dark:bg-dark-4">
         <div className="border-[1px] border-gray-400 p-1 mb-4 w-full mx-auto rounded-2xl">
           <form action="">
             <div className="flex flex-col-reverse w-full">

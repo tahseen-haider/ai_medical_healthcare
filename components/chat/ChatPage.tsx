@@ -9,7 +9,6 @@ export default function ChatPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   return (
     <section className="w-full max-w-[1920px] h-[calc(100vh-64px)] min-h-52 flex">
-
       {/* For backdrop blur */}
       {isSidebarOpen && (
         <div
@@ -18,22 +17,17 @@ export default function ChatPage() {
         />
       )}
       {/* Sidebar */}
-      <div
-        className={`${
-          isSidebarOpen ? "w-80 border-r-2" : "w-0"
-        } absolute overflow-hidden z-20 bg-light-1 dark:bg-dark-4 transition-all`}
-      >
-        <ChatSidebar
-          isSidebarOpen={isSidebarOpen}
-          setIsSidebarOpen={setIsSidebarOpen}
-        />
-      </div>
+
+      <ChatSidebar
+        isSidebarOpen={isSidebarOpen}
+        setIsSidebarOpen={setIsSidebarOpen}
+      />
 
       {/* Menu Buttons */}
       <div
         className={`${
           isSidebarOpen ? "-left-42" : "left-0"
-        } absolute px-6  bg-light-1 dark:bg-dark-4 flex gap-6 justify-between h-10 items-center border-b-2 border-r-2 z-10 transition-all duration-300`}
+        } absolute p-2  bg-light-1 dark:bg-dark-4 flex flex-col gap-4 rounded-br-lg justify-between items-center border-b-2 border-r-2 z-10 transition-all duration-300`}
       >
         <button
           className="p-2"
