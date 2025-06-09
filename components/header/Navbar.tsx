@@ -35,7 +35,7 @@ function Navbar({ isAuthenticated }: { isAuthenticated: boolean }) {
   const pathname = usePathname();
   const [isNavbarDown, setIsNavbarDown] = useState(false);
   return (
-    <header className={`fixed z-10 w-screen h-16 dark:bg-dark-1 bg-light-4  flex justify-center`}>
+    <header className={`fixed z-30 w-screen h-16 dark:bg-dark-1 bg-light-4  flex justify-center`}>
       <div className="max-w-[1920px] w-full flex items-center justify-between h-full px-2 lg:px-6">
         <div className="absolute -z-10 w-screen h-full dark:bg-dark-1 bg-light-4" />
         {/* LOGO */}
