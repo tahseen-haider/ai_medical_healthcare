@@ -59,12 +59,12 @@ export const VerifyEmailFormSchema = z.object({
 export type ContactFormType = {
   fullname: string;
   email: string;
-  message: string;
+  inquiry: string;
 };
 export const ContactFormSchema = z.object({
   fullname: z.string().trim(),
   email: z.string().email({ message: "Input a valid Email" }).trim(),
-  message: z.string().trim(),
+  inquiry: z.string().trim(),
 });
 
 export const ResetPasswordFormSchema = z.object({

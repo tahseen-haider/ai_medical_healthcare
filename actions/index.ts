@@ -6,7 +6,7 @@ import {
   ContactFormSchema,
   ContactFormState,
 } from "@/lib/definitions";
-import { setAppointmentToDB, uploadMessage } from "@/lib/dal";
+import { setAppointmentToDB, uploadInquiry } from "@/lib/dal";
 
 export const contactUs = async (
   state: ContactFormState,
@@ -15,7 +15,7 @@ export const contactUs = async (
   const validatedFields = ContactFormSchema.safeParse({
     fullname: formData.get("fullname"),
     email: formData.get("email"),
-    message: formData.get("message"),
+    inquiry: formData.get("inquiry"),
   });
 
   if (!validatedFields.success)
@@ -24,11 +24,11 @@ export const contactUs = async (
     };
 
   try {
-    const submitted = await uploadMessage({
+    const submitted = await uploadInquiry({
       ...validatedFields.data,
     });
 
-    return { message: "Message sent Sucessfully", submitted };
+    return { message: "Message sent Sucessfully" };
   } catch {
     return { message: "Something went wrong" };
   }

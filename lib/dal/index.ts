@@ -34,13 +34,12 @@ export const setAppointmentToDB = cache(
   }
 );
 
-export const uploadMessage = cache(async (data: ContactFormType) => {
+export const uploadInquiry = cache(async (data: ContactFormType) => {
   const submitted = await prisma.inquiries.create({
     data: {
       fullname: data.fullname,
       email: data.email,
-      message: data.message
+      inquiry: data.inquiry
     }
   })
-  return submitted
 });

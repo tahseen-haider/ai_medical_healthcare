@@ -71,14 +71,14 @@ export default function ContactUsPage() {
             </div>
             <div className="w-full">
               <label
-                htmlFor="message"
+                htmlFor="inquiry"
                 className="font-ubuntu font-bold text-lg"
               >
                 Message
               </label>
               <textarea
-                id="message"
-                name="message"
+                id="inquiry"
+                name="inquiry"
                 placeholder="Enter your message here"
                 required
                 className="block border-2 h-40 border-gray-200 w-full p-4 rounded-2xl mt-2 "
