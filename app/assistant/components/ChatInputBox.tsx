@@ -1,7 +1,7 @@
 "use client"
 import { useEffect, useRef, useState } from "react";
-import ReportUploader from "./ReportUploader";
 import { ArrowUpFromLine } from "lucide-react";
+import ReportUploader from "./ReportUploader";
 
 export default function ChatInputBox({action}: {action: (payload: FormData)=>void}) {
   const [prompt, setPrompt] = useState('');

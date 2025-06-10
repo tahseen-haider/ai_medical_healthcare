@@ -3,7 +3,6 @@
 import "server-only";
 
 import { prisma } from "../db/prisma";
-import { getAuthenticateUser } from "../session";
 
 export const startNewChatInDB = async (userId: string, userPrompt: string) => {
   try {

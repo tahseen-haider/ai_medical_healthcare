@@ -1,4 +1,4 @@
-import NewChatSection from "@/components/chat/NewChatSection";
+import NewChatSection from "@/app/assistant/components/NewChatSection";
 
 export default function AssistantPage() {
   return (

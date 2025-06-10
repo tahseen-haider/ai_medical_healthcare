@@ -1,16 +1,15 @@
+"use client"
+
 import { FilePenLine, Menu } from "lucide-react";
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import React, { Suspense } from "react";
-import ChatsList from "./ChatsList";
+import React, { useEffect, useState } from "react";
 
-export default function ChatSidebar({
-  isSidebarOpen,
-  setIsSidebarOpen,
-}: {
-  isSidebarOpen: boolean;
-  setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}) {
+export default function ChatSidebarWrapper({children}: Readonly<{children: React.ReactNode}>) {
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  useEffect(() => {
+    const isSmallScreen = window.innerWidth < 1024;
+    setIsSidebarOpen(!isSmallScreen)
+  }, [])
   return (
     <>
       {/* For backdrop blur */}
@@ -69,9 +68,7 @@ export default function ChatSidebar({
         </div>
         {/* Chats List */}
         <div className="flex flex-col pl-6 py-2 pr-2 gap-2 h-[calc(100vh-104px)] overflow-auto">
-          <Suspense fallback={<p>Loading...</p>}>
-            <ChatsList />
-          </Suspense>
+          {children}
         </div>
       </div>
     </>

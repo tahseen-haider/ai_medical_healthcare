@@ -1,4 +1,4 @@
-import ChatSection from "@/components/chat/ChatSection";
+import ChatSection from "@/app/assistant/components/ChatSection";
 import React from "react";
 
 export default function SelectedChatPage({
