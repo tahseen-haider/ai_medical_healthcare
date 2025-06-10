@@ -1,15 +1,22 @@
 "use server";
 
-import { deleteChatFromDB, getChatListOfUser, startNewChatInDB } from "@/lib/dal/chat.dal";
-import { ChatInputSchema, ChatState, DeleteChatSchema } from "@/lib/definitions";
+import {
+  deleteChatFromDB,
+  getChatListOfUser,
+  sendPrompt,
+  startNewChatInDB,
+} from "@/lib/dal/chat.dal";
+import {
+  ChatInputSchema,
+  ChatState,
+  DeleteChatSchema,
+  NewChatInputSchema,
+} from "@/lib/definitions";
 import { getAuthenticateUser } from "@/lib/session";
 import { redirect } from "next/navigation";
 
-export async function startNewChat(
-  state: ChatState,
-  formData: FormData
-) {
-  const validatedFields = ChatInputSchema.safeParse({
+export async function startNewChat(state: ChatState, formData: FormData) {
+  const validatedFields = NewChatInputSchema.safeParse({
     userPrompt: formData.get("userPrompt"),
   });
 
@@ -26,16 +33,29 @@ export async function startNewChat(
   return redirect(`/assistant/${newChatSession?.id}`);
 }
 
-export async function insertNewMessage (state: ChatState, formData: FormData){return {message: ""}}
+export async function insertNewMessage(state: ChatState, formData: FormData) {
+  const validatedFields = ChatInputSchema.safeParse({
+    chatId: formData.get("chatId"),
+    userPrompt: formData.get("userPrompt"),
+  });
 
-export async function getChatList(){
-  const user = await getAuthenticateUser()
-  const chatList = await getChatListOfUser(user.userId)
+  if (!validatedFields.success) return { message: "Invalid Input" };
 
-  return chatList
+  const { userPrompt, chatId } = validatedFields.data;
+  const res = await sendPrompt(chatId, userPrompt);
+  
+
+  return { message: "" };
 }
 
-export async function deleteChat(state: ChatState, formData: FormData){
+export async function getChatList() {
+  const user = await getAuthenticateUser();
+  const chatList = await getChatListOfUser(user.userId);
+
+  return chatList;
+}
+
+export async function deleteChat(state: ChatState, formData: FormData) {
   const validatedFields = DeleteChatSchema.safeParse({
     chatId: formData.get("chatId"),
   });
@@ -44,7 +64,7 @@ export async function deleteChat(state: ChatState, formData: FormData){
 
   const { chatId } = validatedFields.data;
 
-  await deleteChatFromDB(chatId)
-  
-  redirect("/assistant")
+  await deleteChatFromDB(chatId);
+
+  redirect("/assistant");
 }

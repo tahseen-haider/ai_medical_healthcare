@@ -1,7 +1,8 @@
 "use client";
 import { useActionState } from "react";
-import ChatInputBox from "./ChatInputBox";
 import { startNewChat } from "@/actions/chat.action";
+import NewChatInputBox from "./ChatInputBox";
+import ChatInputBox from "./ChatInputBox";
 
 export default function NewChatSection() {
   const [state, action, pending] = useActionState(startNewChat, undefined);

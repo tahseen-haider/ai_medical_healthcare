@@ -15,7 +15,7 @@ type chatsListType =
 export default function ChatList({ chatsList }: { chatsList: chatsListType }) {
   const pathname = usePathname();
   const chatId = pathname.split('/assistant/')[1]
-  console.log(chatId)
+  
   return (
     <>
       {chatsList?.map((ele, index) => (

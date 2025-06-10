@@ -58,8 +58,14 @@ export const VerifyEmailFormSchema = z.object({
 
 // Chat Zod Validations
 
+export const NewChatInputSchema = z.object({
+  userPrompt: z.string(),
+  imageData: z.string().optional()
+})
+
 export const ChatInputSchema = z.object({
   userPrompt: z.string(),
+  chatId: z.string(),
   imageData: z.string().optional()
 })
 

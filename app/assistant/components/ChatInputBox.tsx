@@ -1,9 +1,9 @@
 "use client"
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ArrowUpFromLine } from "lucide-react";
 import ReportUploader from "./ReportUploader";
 
-export default function ChatInputBox({action}: {action: (payload: FormData)=>void}) {
+export default function ChatInputBox({action, aditionalInputElement}: {action: (payload: FormData)=>void, aditionalInputElement?: React.ReactNode}) {
   const [prompt, setPrompt] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -29,6 +29,7 @@ export default function ChatInputBox({action}: {action: (payload: FormData)=>voi
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
             />
+            {aditionalInputElement && aditionalInputElement}
           </div>
           {/* Buttons */}
           <div className="w-full flex gap-5 justify-end p-2">

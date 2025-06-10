@@ -29,6 +29,17 @@ export const startNewChatInDB = async (userId: string, userPrompt: string) => {
   }
 };
 
+export const sendPrompt = async (chatId: string, userPrompt: string) => {
+  const messages = await prisma.message.create({
+    data: {
+      chatId: chatId,
+      role: "user",
+      content: userPrompt,
+    },
+  });
+  return messages
+};
+
 export const insertNewMessageInDB = async (
   userId: string,
   userPrompt: string

@@ -1,7 +1,7 @@
-import ChatSidebarWrapper from "@/app/assistant/components/ChatSidebar";
-import ChatsListWrapper from "@/app/assistant/components/ChatsListWrapper";
+import ChatSidebarWrapper from "@/app/assistant/components/ChatSidebarWrapper";
 import { Suspense } from "react";
 import ChatListSuspenseFallback from "./components/ChatListSuspenseFallback";
+import ChatsList from "@/app/assistant/components/ChatsList";
 
 function AssistantLayout({
   children,
@@ -10,9 +10,10 @@ function AssistantLayout({
   return (
     <>
       <section className="w-full max-w-[1920px] h-[calc(100vh-64px)] min-h-52 flex">
+        {/* Sidebar */}
         <ChatSidebarWrapper>
           <Suspense fallback={<ChatListSuspenseFallback/>}>
-            <ChatsListWrapper/>
+            <ChatsList/>
           </Suspense>
         </ChatSidebarWrapper>
         {/* Chat */}

@@ -1,13 +1,21 @@
-import ChatSection from "@/app/assistant/components/ChatSection";
-import React from "react";
+import ChatSectionWrapper from "@/app/assistant/components/ChatSectionWrapper";
+import React, { Suspense } from "react";
+import Messages from "../components/Messages";
+import MessagesSuspenseFallback from "../components/MessagesSuspenseFallback";
 
 export default function SelectedChatPage({
   params,
 }: {
-  params: Promise<{ chatSessionId: string }>;
+  params: Promise<{ chatId: string }>;
 }) {
-  const { chatSessionId } = React.use(params);
+  const resolvedParams = React.use(params);
+  const chatId = resolvedParams.chatId;
+  console.log(chatId)
   return <>
-    <ChatSection/>
+    <ChatSectionWrapper>
+      <Suspense fallback={<MessagesSuspenseFallback/>}>
+        <Messages chatId={chatId}/>
+      </Suspense>
+    </ChatSectionWrapper>
   </>;
 }

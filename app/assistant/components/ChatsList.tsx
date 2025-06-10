@@ -1,10 +1,9 @@
 import { getChatList } from "@/actions/chat.action";
 import { headers } from "next/headers";
-import Link from "next/link";
 import React from "react";
 import ChatList from "./ChatList";
 
-export default async function ChatsListWrapper() {
+export default async function ChatsList() {
   const chatsList = await getChatList();
 
   const headersList = await headers();
