@@ -63,6 +63,9 @@ export const ChatInputSchema = z.object({
   imageData: z.string().optional()
 })
 
+export const DeleteChatSchema = z.object({
+  chatId: z.string()
+})
 
 
 

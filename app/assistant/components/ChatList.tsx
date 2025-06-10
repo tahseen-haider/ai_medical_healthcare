@@ -24,7 +24,7 @@ export default function ChatList({ chatsList }: { chatsList: chatsListType }) {
           key={index}
           className={`h-10 w-full border-2 ${
             ele.id === chatId
-              ? "bg-light-2 dark:bg-dark-2  font-bold"
+              ? "bg-light-2 dark:bg-dark-2 font-bold"
               : "bg-light-1 dark:bg-dark-4 font-normal"
           } text-black dark:text-white rounded-lg flex items-center p-3 font-ubuntu cursor-pointer`}
         >

@@ -1,7 +1,7 @@
 "use server";
 
-import { getChatListOfUser, startNewChatInDB } from "@/lib/dal/chat.dal";
-import { ChatInputSchema, ChatState } from "@/lib/definitions";
+import { deleteChatFromDB, getChatListOfUser, startNewChatInDB } from "@/lib/dal/chat.dal";
+import { ChatInputSchema, ChatState, DeleteChatSchema } from "@/lib/definitions";
 import { getAuthenticateUser } from "@/lib/session";
 import { redirect } from "next/navigation";
 
@@ -33,4 +33,18 @@ export async function getChatList(){
   const chatList = await getChatListOfUser(user.userId)
 
   return chatList
+}
+
+export async function deleteChat(state: ChatState, formData: FormData){
+  const validatedFields = DeleteChatSchema.safeParse({
+    chatId: formData.get("chatId"),
+  });
+
+  if (!validatedFields.success) return { message: "Something went wrong" };
+
+  const { chatId } = validatedFields.data;
+
+  await deleteChatFromDB(chatId)
+  
+  redirect("/assistant")
 }

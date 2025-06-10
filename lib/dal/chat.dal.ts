@@ -35,13 +35,23 @@ export const insertNewMessageInDB = async (
 ) => {};
 
 export const getChatListOfUser = async (userId: string) => {
-  
   const currentUser = await prisma.user.findUnique({
     where: {
-      id: userId
+      id: userId,
     },
-    include: {chats: true}
-  })
+    include: { chats: true },
+  });
 
-  return currentUser?.chats
+  return currentUser?.chats;
+};
+
+export const deleteChatFromDB = async (chatId: string) => {
+  await prisma.$transaction([
+    prisma.message.deleteMany({
+      where: { chatId },
+    }),
+    prisma.chatSession.delete({
+      where: { id: chatId },
+    }),
+  ]);
 };
