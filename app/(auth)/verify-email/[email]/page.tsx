@@ -1,5 +1,5 @@
 "use client";
-import { verifyEmail } from "@/actions/auth";
+import { verifyEmail } from "@/actions/auth.action";
 import LoadingScreen from "@/components/LoadingScreen";
 import React, { useActionState } from "react";
 

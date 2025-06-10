@@ -1,5 +1,5 @@
 "use client";
-import { signup } from "@/actions/auth";
+import { signup } from "@/actions/auth.action";
 import Btn from "@/components/Button";
 import FindUsHereSection from "@/components/FindUsHereSection";
 import LoadingScreen from "@/components/LoadingScreen";

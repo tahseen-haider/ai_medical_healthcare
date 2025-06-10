@@ -10,7 +10,7 @@ import {
 import Btn from "../Button";
 import { Button } from "../ui/button";
 import { useActionState } from "react";
-import { logout } from "@/actions/auth";
+import { logout } from "@/actions/auth.action";
 import ProfilePicture from "../ProfilePicture";
 
 export default function ProfileButton() {

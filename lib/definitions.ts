@@ -56,6 +56,18 @@ export const VerifyEmailFormSchema = z.object({
   token: z.number(),
 });
 
+// Chat Zod Validations
+
+export const ChatInputSchema = z.object({
+  userPrompt: z.string(),
+  imageData: z.string().optional()
+})
+
+
+
+
+/////////////////////////////////////////////////////////
+
 export type ContactFormType = {
   fullname: string;
   email: string;
@@ -70,8 +82,8 @@ export const ContactFormSchema = z.object({
 export const ResetPasswordFormSchema = z.object({
   code: z.number(),
   newPassword: z.string().trim(),
-  repeatNewPassword: z.string().trim()
-})
+  repeatNewPassword: z.string().trim(),
+});
 
 export type ResetPasswordFormState =
   | {
@@ -162,3 +174,9 @@ export type SessionPayload = {
 };
 
 export type UserRole = "user" | "admin";
+
+export type ChatState =
+  | {
+      message?: string;
+    }
+  | undefined;

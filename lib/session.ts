@@ -80,7 +80,7 @@ export const getAuthenticateUser = cache(async () => {
       },
     });
     if (user) {
-      return { isAuth: true, userId: session.userId };
+      return { role: session.role, userId: session.userId };
     } else {
       cookieStore.delete("session");
       redirect("/login");

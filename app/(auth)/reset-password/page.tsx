@@ -1,6 +1,6 @@
 "use client"
 
-import { SendForgotPasswordLinkToEmail } from "@/actions/auth";
+import { SendForgotPasswordLinkToEmail } from "@/actions/auth.action";
 import LoadingScreen from "@/components/LoadingScreen";
 import React, { useActionState } from "react";
 

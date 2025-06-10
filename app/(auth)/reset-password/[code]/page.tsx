@@ -1,5 +1,5 @@
 "use client";
-import { resetPassword } from "@/actions/auth";
+import { resetPassword } from "@/actions/auth.action";
 import Btn from "@/components/Button";
 import LoadingScreen from "@/components/LoadingScreen";
 import Link from "next/link";

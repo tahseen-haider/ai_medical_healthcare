@@ -1,11 +1,10 @@
-import ChatPage from "@/components/chat/ChatPage";
+import NewChatSection from "@/components/chat/NewChatSection";
 
 export default function AssistantPage() {
-  
   return (
     <main className="flex flex-col items-center">
-      {/* Chat Section */}
-      <ChatPage/>
+      {/* New Chat Section */}
+      <NewChatSection />
     </main>
   );
 }
