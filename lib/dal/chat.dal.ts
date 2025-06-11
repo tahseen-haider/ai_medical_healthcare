@@ -40,10 +40,6 @@ export const sendPrompt = async (chatId: string, userPrompt: string) => {
   return messages
 };
 
-export const insertNewMessageInDB = async (
-  userId: string,
-  userPrompt: string
-) => {};
 
 export const getChatListOfUser = async (userId: string) => {
   const currentUser = await prisma.user.findUnique({
@@ -66,3 +62,12 @@ export const deleteChatFromDB = async (chatId: string) => {
     }),
   ]);
 };
+
+export const getMessagesUsingChatId = async (chatId: string) => {
+  const messages = await prisma.message.findMany({
+    where: {
+      chatId
+    }
+  })
+  return messages
+}

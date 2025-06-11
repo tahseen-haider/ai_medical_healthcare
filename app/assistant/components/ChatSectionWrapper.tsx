@@ -4,12 +4,10 @@ import React, { useActionState } from "react";
 import ChatInputBox from "./ChatInputBox";
 import { Trash2 } from "lucide-react";
 import { usePathname } from "next/navigation";
-import Messages from "./Messages";
 
 export default function ChatSectionWrapper({children}: {children: React.ReactNode}) {
   const [state, action, pending] = useActionState(insertNewMessage, undefined);
-  const [stateOfDeleteChat, actionToDeleteChat, pendingOfDeleteChat] =
-    useActionState(deleteChat, undefined);
+  const [stateOfDeleteChat, actionToDeleteChat, pendingOfDeleteChat] = useActionState(deleteChat, undefined);
 
   const pathname = usePathname();
   const chatId = pathname.split('/assistant/')[1]
@@ -31,7 +29,7 @@ export default function ChatSectionWrapper({children}: {children: React.ReactNod
         {children}
       </section>
       {/* Input Box with chatId with every message*/}
-      <ChatInputBox action={action} aditionalInputElement={<input type="text" name="chatId" readOnly hidden value={chatId}/>}/>
+      <ChatInputBox action={action} additionalInputElement={<input type="text" name="chatId" readOnly hidden value={chatId}/>}/>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import ChatSidebarWrapper from "@/app/assistant/components/ChatSidebarWrapper";
 import { Suspense } from "react";
-import ChatListSuspenseFallback from "./components/ChatListSuspenseFallback";
+import ChatListSuspenseFallback from "./components/fallback/ChatListSuspenseFallback";
 import ChatsList from "@/app/assistant/components/ChatsList";
 
 function AssistantLayout({

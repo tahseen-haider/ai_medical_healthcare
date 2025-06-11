@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { ArrowUpFromLine } from "lucide-react";
 import ReportUploader from "./ReportUploader";
 
-export default function ChatInputBox({action, aditionalInputElement}: {action: (payload: FormData)=>void, aditionalInputElement?: React.ReactNode}) {
+export default function ChatInputBox({action, additionalInputElement}: {action: (payload: FormData)=>void, additionalInputElement?: React.ReactNode}) {
   const [prompt, setPrompt] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -17,7 +17,7 @@ export default function ChatInputBox({action, aditionalInputElement}: {action: (
   return (
     <div className="lg:w-4/6 w-5/6 bottom-0 bg-light-1 dark:bg-dark-4">
       <div className="border-[1px] border-gray-400 p-1 mb-4 w-full mx-auto rounded-2xl">
-        <form action={action}>
+        <form action={action} onSubmit={()=>setPrompt('')}>
           <div className="flex flex-col-reverse w-full">
             <textarea
               ref={textareaRef}
@@ -29,7 +29,7 @@ export default function ChatInputBox({action, aditionalInputElement}: {action: (
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
             />
-            {aditionalInputElement && aditionalInputElement}
+            {additionalInputElement && additionalInputElement}
           </div>
           {/* Buttons */}
           <div className="w-full flex gap-5 justify-end p-2">

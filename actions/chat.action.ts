@@ -3,6 +3,7 @@
 import {
   deleteChatFromDB,
   getChatListOfUser,
+  getMessagesUsingChatId,
   sendPrompt,
   startNewChatInDB,
 } from "@/lib/dal/chat.dal";
@@ -13,6 +14,7 @@ import {
   NewChatInputSchema,
 } from "@/lib/definitions";
 import { getAuthenticateUser } from "@/lib/session";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function startNewChat(state: ChatState, formData: FormData) {
@@ -43,6 +45,7 @@ export async function insertNewMessage(state: ChatState, formData: FormData) {
 
   const { userPrompt, chatId } = validatedFields.data;
   const res = await sendPrompt(chatId, userPrompt);
+  revalidatePath(`/assistant/${chatId}`)
   
 
   return { message: "" };
@@ -53,6 +56,11 @@ export async function getChatList() {
   const chatList = await getChatListOfUser(user.userId);
 
   return chatList;
+}
+
+export async function getMessages(chatId: string) {
+  const res = await getMessagesUsingChatId(chatId);
+  return res;
 }
 
 export async function deleteChat(state: ChatState, formData: FormData) {
