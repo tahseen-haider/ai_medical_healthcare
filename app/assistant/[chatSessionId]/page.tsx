@@ -10,12 +10,14 @@ export default function SelectedChatPage({
 }) {
   const resolvedParams = React.use(params);
   const chatId = resolvedParams.chatSessionId;
-  
-  return <>
-    <ChatSectionWrapper>
-      <Suspense fallback={<MessagesSuspenseFallback/>}>
-        <MessagesWrapper chatId={chatId}/>
-      </Suspense>
-    </ChatSectionWrapper>
-  </>;
+
+  return (
+    <>
+      <ChatSectionWrapper>
+          <Suspense fallback={<MessagesSuspenseFallback />}>
+            <MessagesWrapper chatId={chatId} />
+          </Suspense>
+      </ChatSectionWrapper>
+    </>
+  );
 }

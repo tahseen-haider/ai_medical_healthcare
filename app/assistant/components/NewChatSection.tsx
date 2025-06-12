@@ -11,7 +11,7 @@ export default function NewChatSection() {
       <h2 className="font-ubuntu text-4xl tracking-tight leading-12">
         What can I help with?
       </h2>
-      <ChatInputBox action={action} />
+      <ChatInputBox pending={pending} action={action} />
       {state?.message && <p className="text-red-400">{state?.message}</p>}
     </section>
   );

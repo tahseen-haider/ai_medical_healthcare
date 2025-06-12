@@ -1,9 +1,9 @@
 "use client"
 import React, { useEffect, useRef, useState } from "react";
-import { ArrowUpFromLine } from "lucide-react";
+import { ArrowUpFromLine, Loader2 } from "lucide-react";
 import ReportUploader from "./ReportUploader";
 
-export default function ChatInputBox({action, additionalInputElement}: {action: (payload: FormData)=>void, additionalInputElement?: React.ReactNode}) {
+export default function ChatInputBox({action, additionalInputElement, pending}: {action: (payload: FormData)=>void, additionalInputElement?: React.ReactNode, pending?: boolean}) {
   const [prompt, setPrompt] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -37,11 +37,13 @@ export default function ChatInputBox({action, additionalInputElement}: {action: 
             <ReportUploader />
             {/* Prompt Sender */}
             <button
+              disabled={pending}
               type="submit"
               aria-label="Send message"
               className="bg-light-4 text-white p-2 rounded-full relative shadow-light dark:shadow-dark"
+              style={pending ? { pointerEvents: 'none', cursor: 'not-allowed' } : {}}
             >
-              <ArrowUpFromLine size={24} />
+              {!pending? <ArrowUpFromLine size={24} />: <Loader2 className="animate-spin"/>}
             </button>
           </div>
         </form>

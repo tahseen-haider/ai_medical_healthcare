@@ -15,7 +15,7 @@ export default function ChatSectionWrapper({children}: {children: React.ReactNod
     <div className="relative flex flex-col h-full items-center">
       {/* Delete Current Chat Button */}
       <div
-        className={`absolute p-2 right-0 bg-light-1 dark:bg-dark-4 flex flex-col gap-4 rounded-bl-lg justify-between items-center border-b-2 border-l-2 z-10 transition-all duration-300`}
+        className={`absolute p-2 right-4 bg-light-1 dark:bg-dark-4 flex flex-col gap-4 rounded-bl-lg justify-between items-center border-b-2 border-l-2 z-10 transition-all duration-300`}
       >
         <form action={actionToDeleteChat}>
           <input type="text" name="chatId" value={chatId} readOnly hidden />
@@ -29,7 +29,7 @@ export default function ChatSectionWrapper({children}: {children: React.ReactNod
         {children}
       </section>
       {/* Input Box with chatId with every message*/}
-      <ChatInputBox action={action} additionalInputElement={<input type="text" name="chatId" readOnly hidden value={chatId}/>}/>
+      <ChatInputBox action={action} pending={pending} additionalInputElement={<input type="text" name="chatId" readOnly hidden value={chatId}/>}/>
     </div>
   );
 }

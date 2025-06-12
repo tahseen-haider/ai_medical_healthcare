@@ -13,7 +13,7 @@ type chatsListType =
   | undefined;
 
 export default function ChatList({ chatsList }: { chatsList: chatsListType }) {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? '';
   const chatId = pathname.split('/assistant/')[1]
   
   return (
