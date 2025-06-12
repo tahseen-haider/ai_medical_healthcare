@@ -2,7 +2,7 @@ import React from "react";
 
 const LoadingScreen = (props: { message?: string }) => {
   return (
-    <div className="fixed top-0 z-50 flex flex-col items-center justify-center h-screen w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-xs text-gray-800 dark:text-white">
+    <div className="fixed top-0 left-0 z-50 flex flex-col items-center justify-center h-screen w-full bg-white/40 dark:bg-gray-900/40 backdrop-blur-xs text-gray-800 dark:text-white">
       <video 
         autoPlay 
         loop 

@@ -4,6 +4,7 @@ import React, { useActionState } from "react";
 import ChatInputBox from "./ChatInputBox";
 import { Trash2 } from "lucide-react";
 import { usePathname } from "next/navigation";
+import LoadingScreen from "@/components/LoadingScreen";
 
 export default function ChatSectionWrapper({children}: {children: React.ReactNode}) {
   const [state, action, pending] = useActionState(insertNewMessage, undefined);
@@ -13,9 +14,10 @@ export default function ChatSectionWrapper({children}: {children: React.ReactNod
   const chatId = pathname.split('/assistant/')[1]
   return (
     <div className="relative flex flex-col h-full items-center">
+      {pendingOfDeleteChat && <LoadingScreen message="Deleting this chat..."/>}
       {/* Delete Current Chat Button */}
       <div
-        className={`absolute p-2 right-4 bg-light-1 dark:bg-dark-4 flex flex-col gap-4 rounded-bl-lg justify-between items-center border-b-2 border-l-2 z-10 transition-all duration-300`}
+        className={`absolute p-2 right-4 opacity-90 hover:opacity-100 backdrop-blur-md flex flex-col gap-4 rounded-bl-lg justify-between items-center border-b-2 border-l-2 z-0 transition-all duration-300`}
       >
         <form action={actionToDeleteChat}>
           <input type="text" name="chatId" value={chatId} readOnly hidden />
