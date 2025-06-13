@@ -5,9 +5,9 @@ import MessageBox from "./MessageBox";
 import { usePathname } from "next/navigation";
 import ChatInputBox from "./ChatInputBox";
 import { $Enums } from "@prisma/client/edge";
-import { io } from "socket.io-client";
+import { getSocket } from "@/lib/socket";
 
-const socket = io("http://localhost:8080");
+const socket = getSocket();
 
 export default function Messages({
   initialMessages,
@@ -20,38 +20,6 @@ export default function Messages({
     createdAt: Date;
   }[];
 }) {
-  const [streamingMessage, setStreamingMessage] = useState("");
-
-  useEffect(() => {
-    const handleBotMessage = (data: { message: string }) => {
-      setStreamingMessage((prev) => prev + data.message);
-    };
-    const handleStreamDone = () => {
-      if (streamingMessage) {
-        setMessages((prev) => [
-          ...prev,
-          {
-            content: streamingMessage,
-            role: "assistant",
-            createdAt: new Date(),
-          },
-        ]);
-        setStreamingMessage(""); // ✅ reset for next stream
-      }
-    };
-
-    socket.off("botMessage", handleBotMessage);
-    socket.on("botMessage", handleBotMessage);
-
-    socket.off("done", handleStreamDone);
-    socket.on("done", handleStreamDone);
-
-    return () => {
-      socket.off("botMessage", handleBotMessage);
-      socket.off("done", handleStreamDone);
-    };
-  }, [streamingMessage]);
-
   const [messages, setMessages] = useState(
     initialMessages.map(({ content, role, createdAt }) => ({
       content,
@@ -59,74 +27,94 @@ export default function Messages({
       createdAt,
     }))
   );
-  const [prompt, setPrompt] = useState("");
-  const bottomRef = useRef<HTMLDivElement>(null);
 
+  const [isGenerating, setIsGenerating] = useState(false);
+  const bottomRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const chatId = pathname.split("/assistant/")[1];
 
+  // Scroll to bottom on new messages
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+  }, [messages.length]); // ✅ only depends on number of messages
+
+  useEffect(() => {
+    const handleBotMessage = (data: { message: string }) => {
+      setIsGenerating(true);
+      setMessages((prev) => {
+        const last = prev[prev.length - 1];
+        // If last message is from assistant, append to it
+        if (last?.role === "assistant") {
+          const updatedLast = {
+            ...last,
+            content: last.content + data.message,
+          };
+          return [...prev.slice(0, -1), updatedLast];
+        }
+        // Otherwise, start a new assistant message
+        return [
+          ...prev,
+          {
+            content: data.message,
+            role: "assistant",
+            createdAt: new Date(),
+          },
+        ];
+      });
+    };
+
+    const handleStreamDone = () => {
+      setIsGenerating(false);
+      // Optional: If you want to trigger anything at end
+    };
+
+    socket.on("botMessage", handleBotMessage);
+    socket.on("done", handleStreamDone);
+
+    return () => {
+      socket.off("botMessage", handleBotMessage);
+      socket.off("done", handleStreamDone);
+    };
+  }, []);
+
+  const [prompt, setPrompt] = useState("");
 
   return (
     <section className="flex flex-col items-center">
       <div className="w-full h-[calc(100vh-65px-120px)] overflow-y-auto">
         <div className=" w-5/6 lg:w-4/6 mx-auto flex flex-col">
-          {/* Top of the chat */}
           <div className="w-full flex justify-center mt-4 gap-2 flex-col text-center pb-12">
-            <h1 className="font-bold font-ubuntu text-3xl ">MediTech</h1>
+            <h1 className="font-bold font-ubuntu text-3xl">MediTech</h1>
             <p className="text-gray-500 leading-4">
               Ask anything about medical or upload your medical report
             </p>
           </div>
-          {/* Messages */}
-          {[
-            ...messages,
-            ...(streamingMessage
-              ? [
-                  {
-                    content: streamingMessage,
-                    role: "assistant" as $Enums.MessageRole,
-                    createdAt: new Date(),
-                  },
-                ]
-              : []),
-          ]
-            .filter(Boolean)
-            .map((ele, i) => (
-              <MessageBox key={i} index={i} message={ele} />
-            ))}
-          {/* This ref ensures auto-scroll to bottom */}
+
+          {messages.map((ele, i) => (
+            <MessageBox key={i} index={i} message={ele} />
+          ))}
           <div ref={bottomRef} />
         </div>
       </div>
-      {/* Input Box with chatId with every message*/}
+
       <ChatInputBox
         onSubmit={(e) => {
           e.preventDefault();
           socket.emit("userMessage", { chatId, message: prompt });
-            setMessages((prev) => [
-              ...prev,
-              {
-                content: prompt,
-                role: "user",
-                createdAt: new Date(Date.now()),
-              },
-            ]);
-            setMessages((prev) => [
-              ...prev,
-              {
-                content: streamingMessage,
-                role: "assistant",
-                createdAt: new Date(Date.now()),
-              },
-            ]);
+          setMessages((prev) => [
+            ...prev,
+            {
+              content: prompt,
+              role: "user",
+              createdAt: new Date(),
+            },
+          ]);
           setPrompt("");
         }}
         prompt={prompt}
         setPrompt={setPrompt}
         setMessages={setMessages}
+        pending={isGenerating}
         additionalInputElement={
           <input type="text" name="chatId" readOnly hidden value={chatId} />
         }

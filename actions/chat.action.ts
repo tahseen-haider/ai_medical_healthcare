@@ -43,6 +43,7 @@ export async function getChatList() {
 
 export async function getMessages(chatId: string) {
   const res = await getMessagesUsingChatId(chatId);
+  if(!res) { console.log("first"); return null};
   return res;
 }
 

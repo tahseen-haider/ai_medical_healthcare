@@ -19,7 +19,6 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 io.on("connection", (socket) => {
   socket.on("userMessage", async ({ message, chatId }) => {
     try {
-
       const completion = await openai.chat.completions.create({
         model: "gpt-4o-mini",
         stream: true,
@@ -28,14 +27,14 @@ io.on("connection", (socket) => {
           { role: "user", content: message },
         ],
       });
-      
+
       await prisma.message.create({
         data: {
           chatId,
-          role: 'user',
-          content: message
-        }
-      })
+          role: "user",
+          content: message,
+        },
+      });
 
       let fullResponse = "";
 
@@ -44,9 +43,9 @@ io.on("connection", (socket) => {
         fullResponse += token;
         socket.emit("botMessage", { message: token });
       }
-
+      
       socket.emit("done");
-
+      
       await prisma.message.create({
         data: {
           chatId,
@@ -61,4 +60,6 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(8080, () => console.log("Socket.IO server on http://localhost:8080"));
+server.listen(8080, () =>
+  console.log("Socket.IO server on http://localhost:8080")
+);

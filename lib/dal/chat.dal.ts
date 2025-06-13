@@ -69,5 +69,6 @@ export const getMessagesUsingChatId = async (chatId: string) => {
       chatId
     }
   })
+  if(!messages || messages.length===0) return null;
   return messages
 }
