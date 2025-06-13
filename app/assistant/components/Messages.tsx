@@ -1,14 +1,16 @@
 "use client";
 
 import { $Enums } from "@prisma/client/edge";
-import React, { useEffect, useRef } from "react";
+import React, { useActionState, useEffect, useRef, useState } from "react";
 import MessageBox from "./MessageBox";
-import AssistantPicture from "@/components/AssistantPicture";
+import { insertNewMessage } from "@/actions/chat.action";
+import { usePathname } from "next/navigation";
+import ChatInputBox from "./ChatInputBox";
 
 export default function Messages({
-  messages,
+  initialMessages,
 }: {
-  messages: {
+  initialMessages: {
     content: string;
     chatId: string;
     id: string;
@@ -16,27 +18,51 @@ export default function Messages({
     createdAt: Date;
   }[];
 }) {
+  const [messages, setMessages] = useState(
+    initialMessages.map(({ content, role, createdAt }) => ({
+      content,
+      role,
+      createdAt,
+    }))
+  );
   const bottomRef = useRef<HTMLDivElement>(null);
+  const [state, action, pending] = useActionState(insertNewMessage, undefined);
+
+  const pathname = usePathname();
+  const chatId = pathname.split("/assistant/")[1];
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   return (
-    <div className="w-full h-[calc(100vh-65px-120px)] overflow-y-scroll ">
-      <div className=" w-5/6 lg:w-4/6 mx-auto flex flex-col">
-        {/* Top of the chat */}
-        <div className="w-full flex justify-center mt-4 gap-2 flex-col text-center pb-12">
-          <h1 className="font-bold font-ubuntu text-3xl ">MediTech</h1>
-          <p className="text-gray-500 leading-4">Ask anything about medical or upload your medical report</p>
+    <section className="flex flex-col items-center">
+      <div className="w-full h-[calc(100vh-65px-120px)] overflow-y-auto">
+        <div className=" w-5/6 lg:w-4/6 mx-auto flex flex-col">
+          {/* Top of the chat */}
+          <div className="w-full flex justify-center mt-4 gap-2 flex-col text-center pb-12">
+            <h1 className="font-bold font-ubuntu text-3xl ">MediTech</h1>
+            <p className="text-gray-500 leading-4">
+              Ask anything about medical or upload your medical report
+            </p>
+          </div>
+          {/* Messages */}
+          {messages.slice().map((ele, i) => (
+            <MessageBox key={i} index={i} message={ele} />
+          ))}
+          {/* This ref ensures auto-scroll to bottom */}
+          <div ref={bottomRef} />
         </div>
-        {/* Messages */}
-        {messages.slice().map((ele, i) => (
-          <MessageBox key={ele.id} index={i} message={ele} />
-        ))}
-        {/* This ref ensures auto-scroll to bottom */}
-        <div ref={bottomRef} />
       </div>
-    </div>
+      {/* Input Box with chatId with every message*/}
+      <ChatInputBox
+        setMessages={setMessages}
+        action={action}
+        pending={pending}
+        additionalInputElement={
+          <input type="text" name="chatId" readOnly hidden value={chatId} />
+        }
+      />
+    </section>
   );
 }

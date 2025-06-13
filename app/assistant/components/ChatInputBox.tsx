@@ -1,23 +1,47 @@
-"use client"
+"use client";
 import React, { useEffect, useRef, useState } from "react";
 import { ArrowUpFromLine, Loader2 } from "lucide-react";
 import ReportUploader from "./ReportUploader";
+import { $Enums } from "@prisma/client/edge";
 
-export default function ChatInputBox({action, additionalInputElement, pending}: {action: (payload: FormData)=>void, additionalInputElement?: React.ReactNode, pending?: boolean}) {
-  const [prompt, setPrompt] = useState('');
+export default function ChatInputBox({
+  action,
+  additionalInputElement,
+  pending,
+  setMessages,
+}: {
+  action: (payload: FormData) => void;
+  additionalInputElement?: React.ReactNode;
+  pending?: boolean;
+  setMessages?: React.Dispatch<
+    React.SetStateAction<
+      {
+        content: string;
+        role: $Enums.MessageRole;
+        createdAt: Date;
+      }[]
+    >
+  >;
+}) {
+  const [prompt, setPrompt] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
     const textarea = textareaRef.current;
     if (textarea) {
       textarea.style.height = "0px"; // reset first
-      textarea.style.height = Math.min(textarea.scrollHeight, 88) + "px"; 
+      textarea.style.height = Math.min(textarea.scrollHeight, 88) + "px";
     }
   }, [prompt]);
   return (
     <div className="lg:w-4/6 w-5/6 bottom-0 bg-light-1 dark:bg-dark-4">
       <div className="border-[1px] border-gray-400 p-1 mb-4 w-full mx-auto rounded-2xl">
-        <form action={action} onSubmit={()=>setPrompt('')}>
+        <form
+          action={action}
+          onSubmit={(e) => {
+            setPrompt("");
+          }}
+        >
           <div className="flex flex-col-reverse w-full">
             <textarea
               ref={textareaRef}
@@ -41,9 +65,26 @@ export default function ChatInputBox({action, additionalInputElement, pending}: 
               type="submit"
               aria-label="Send message"
               className="bg-light-4 text-white p-2 rounded-full relative shadow-light dark:shadow-dark"
-              style={pending ? { pointerEvents: 'none', cursor: 'not-allowed' } : {}}
+              style={
+                pending ? { pointerEvents: "none", cursor: "not-allowed" } : {}
+              }
+              onClick={() => {
+                if (setMessages)
+                  setMessages((prev) => [
+                    ...prev,
+                    {
+                      content: prompt,
+                      role: "user",
+                      createdAt: new Date(Date.now()),
+                    },
+                  ]);
+              }}
             >
-              {!pending? <ArrowUpFromLine size={24} />: <Loader2 className="animate-spin"/>}
+              {!pending ? (
+                <ArrowUpFromLine size={24} />
+              ) : (
+                <Loader2 className="animate-spin" />
+              )}
             </button>
           </div>
         </form>

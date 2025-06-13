@@ -1,13 +1,11 @@
 "use client";
-import { deleteChat, insertNewMessage } from "@/actions/chat.action";
+import { deleteChat } from "@/actions/chat.action";
 import React, { useActionState } from "react";
-import ChatInputBox from "./ChatInputBox";
 import { Trash2 } from "lucide-react";
 import { usePathname } from "next/navigation";
 import LoadingScreen from "@/components/LoadingScreen";
 
 export default function ChatSectionWrapper({children}: {children: React.ReactNode}) {
-  const [state, action, pending] = useActionState(insertNewMessage, undefined);
   const [stateOfDeleteChat, actionToDeleteChat, pendingOfDeleteChat] = useActionState(deleteChat, undefined);
 
   const pathname = usePathname();
@@ -30,8 +28,6 @@ export default function ChatSectionWrapper({children}: {children: React.ReactNod
       <section className="flex-grow w-full">
         {children}
       </section>
-      {/* Input Box with chatId with every message*/}
-      <ChatInputBox action={action} pending={pending} additionalInputElement={<input type="text" name="chatId" readOnly hidden value={chatId}/>}/>
     </div>
   );
 }
