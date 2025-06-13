@@ -9,13 +9,14 @@ export default function ChatSectionWrapper({children}: {children: React.ReactNod
   const [stateOfDeleteChat, actionToDeleteChat, pendingOfDeleteChat] = useActionState(deleteChat, undefined);
 
   const pathname = usePathname();
-  const chatId = pathname.split('/assistant/')[1]
+  const chatId = pathname.split('/assistant/')[1];
+  
   return (
     <div className="relative flex flex-col h-full items-center">
       {pendingOfDeleteChat && <LoadingScreen message="Deleting this chat..."/>}
       {/* Delete Current Chat Button */}
       <div
-        className={`absolute p-2 right-4 opacity-90 hover:opacity-100 backdrop-blur-md flex flex-col gap-4 rounded-bl-lg justify-between items-center border-b-2 border-l-2 z-0 transition-all duration-300`}
+        className={`absolute p-2 right-4 opacity-90 hover:opacity-100 backdrop-blur-md flex flex-col gap-4 rounded-b-lg justify-between items-center border-b-2 border-l-2 border-r-2 z-0 transition-all duration-300`}
       >
         <form action={actionToDeleteChat}>
           <input type="text" name="chatId" value={chatId} readOnly hidden />

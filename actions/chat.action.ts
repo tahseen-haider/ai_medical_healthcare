@@ -4,7 +4,6 @@ import {
   deleteChatFromDB,
   getChatListOfUser,
   getMessagesUsingChatId,
-  sendPrompt,
   startNewChatInDB,
 } from "@/lib/dal/chat.dal";
 import {
@@ -33,22 +32,6 @@ export async function startNewChat(state: ChatState, formData: FormData) {
   );
 
   return redirect(`/assistant/${newChatSession?.id}`);
-}
-
-export async function insertNewMessage(state: ChatState, formData: FormData) {
-  const validatedFields = ChatInputSchema.safeParse({
-    chatId: formData.get("chatId"),
-    userPrompt: formData.get("userPrompt"),
-  });
-
-  if (!validatedFields.success) return { message: "Invalid Input" };
-
-  const { userPrompt, chatId } = validatedFields.data;
-  const res = await sendPrompt(chatId, userPrompt);
-  revalidatePath(`/assistant/${chatId}`)
-  
-
-  return { message: "" };
 }
 
 export async function getChatList() {

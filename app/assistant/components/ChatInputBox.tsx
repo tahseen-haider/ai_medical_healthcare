@@ -5,14 +5,12 @@ import ReportUploader from "./ReportUploader";
 import { $Enums } from "@prisma/client/edge";
 
 export default function ChatInputBox({
-  action,
   additionalInputElement,
-  pending,
-  setMessages,
+  onSubmit,
+  setPrompt,
+  prompt,
 }: {
-  action: (payload: FormData) => void;
   additionalInputElement?: React.ReactNode;
-  pending?: boolean;
   setMessages?: React.Dispatch<
     React.SetStateAction<
       {
@@ -22,8 +20,10 @@ export default function ChatInputBox({
       }[]
     >
   >;
+  onSubmit?: React.FormEventHandler<HTMLFormElement>;
+  setPrompt: React.Dispatch<React.SetStateAction<string>>;
+  prompt: string;
 }) {
-  const [prompt, setPrompt] = useState("");
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
@@ -36,12 +36,7 @@ export default function ChatInputBox({
   return (
     <div className="lg:w-4/6 w-5/6 bottom-0 bg-light-1 dark:bg-dark-4">
       <div className="border-[1px] border-gray-400 p-1 mb-4 w-full mx-auto rounded-2xl">
-        <form
-          action={action}
-          onSubmit={(e) => {
-            setPrompt("");
-          }}
-        >
+        <form onSubmit={onSubmit}>
           <div className="flex flex-col-reverse w-full">
             <textarea
               ref={textareaRef}
@@ -61,26 +56,15 @@ export default function ChatInputBox({
             <ReportUploader />
             {/* Prompt Sender */}
             <button
-              disabled={pending}
+              disabled={false}
               type="submit"
               aria-label="Send message"
               className="bg-light-4 text-white p-2 rounded-full relative shadow-light dark:shadow-dark"
               style={
-                pending ? { pointerEvents: "none", cursor: "not-allowed" } : {}
+                false ? { pointerEvents: "none", cursor: "not-allowed" } : {}
               }
-              onClick={() => {
-                if (setMessages)
-                  setMessages((prev) => [
-                    ...prev,
-                    {
-                      content: prompt,
-                      role: "user",
-                      createdAt: new Date(Date.now()),
-                    },
-                  ]);
-              }}
             >
-              {!pending ? (
+              {!false ? (
                 <ArrowUpFromLine size={24} />
               ) : (
                 <Loader2 className="animate-spin" />
