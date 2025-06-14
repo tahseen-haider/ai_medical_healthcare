@@ -82,8 +82,8 @@ useLayoutEffect(() => {
       // Optional: If you want to trigger anything at end
     };
 
-    socket.on("botMessage", handleBotMessage);
-    socket.on("done", handleStreamDone);
+    socket.off("botMessage").on("botMessage", handleBotMessage);
+    socket.off("done").on("done", handleStreamDone);
 
     return () => {
       socket.off("botMessage", handleBotMessage);

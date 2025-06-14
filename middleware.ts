@@ -5,19 +5,16 @@ export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
   const restrictedRoutes = /^\/(login|signup|verify-email(?:\/.*)?)$/;
-  const protectedRoutes = /^\/(assistant)$/;
   const publicRoutes =
     /^\/$|^\/(appointment|contact-us|about-us|reset-password(?:\/.*)?)$/;
 
   const isRestrictedRoute = restrictedRoutes.test(pathname);
-  const isProtectedRoutes = publicRoutes.test(pathname);
   const isPublicRoutes = publicRoutes.test(pathname);
 
   const sessionToken = req.cookies.get("session")?.value;
 
   // If not authenticated
   if (!sessionToken) {
-    
     if (isRestrictedRoute || isPublicRoutes) return NextResponse.next();
 
     return NextResponse.redirect(new URL("/login", req.url));
@@ -42,5 +39,5 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/((?!api|_next/static|_next/image|videos|favicon.ico).*)'],
+  matcher: ["/login", "/signup", "/verify-email(:/.*)?", "/assistant(:/.*)?"],
 };

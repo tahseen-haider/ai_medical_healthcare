@@ -13,7 +13,6 @@ import {
   NewChatInputSchema,
 } from "@/lib/definitions";
 import { getAuthenticateUser } from "@/lib/session";
-import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function startNewChat(state: ChatState, formData: FormData) {
