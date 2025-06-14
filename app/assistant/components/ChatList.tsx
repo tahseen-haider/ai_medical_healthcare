@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
@@ -13,9 +13,9 @@ type chatsListType =
   | undefined;
 
 export default function ChatList({ chatsList }: { chatsList: chatsListType }) {
-  const pathname = usePathname() ?? '';
-  const chatId = pathname.split('/assistant/')[1]
-  
+  const pathname = usePathname() ?? "";
+  const chatId = pathname.length > 0 ? pathname.split("/assistant/")[1] : "";
+
   return (
     <>
       {chatsList?.map((ele, index) => (
@@ -28,7 +28,7 @@ export default function ChatList({ chatsList }: { chatsList: chatsListType }) {
               : "bg-light-1 dark:bg-dark-4 font-normal"
           } text-black dark:text-white rounded-lg flex items-center p-3 font-ubuntu cursor-pointer`}
         >
-          {(ele.title)?.slice(0,30)}
+          {ele.title?.slice(0, 30)}
         </Link>
       ))}
     </>

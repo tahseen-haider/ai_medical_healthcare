@@ -37,7 +37,7 @@ function Navbar({ isAuthenticated }: { isAuthenticated: boolean }) {
   return (
     <header className={`fixed z-30 w-screen h-16 dark:bg-dark-1 bg-light-4  flex justify-center`}>
       <div className="max-w-[1920px] w-full flex items-center justify-between h-full px-2 lg:px-6">
-        <div className="absolute -z-10 w-screen h-full dark:bg-dark-1 bg-light-4" />
+        <div className="absolute -z-10 w-screen h-full left-0 dark:bg-dark-1 bg-light-4" />
         {/* LOGO */}
         <Link href="/" className="flex items-center">
           <Image src={logo} width={52} height={52} alt="Logo of MediTech" />
@@ -74,10 +74,11 @@ function Navbar({ isAuthenticated }: { isAuthenticated: boolean }) {
               {!isNavbarDown ? <Menu /> : <X />}
             </Btn>
           </div>
+          {isNavbarDown && <div className="absolute top-0 left-0 w-full h-screen backdrop-blur-sm -z-30" onClick={()=>setIsNavbarDown(false)}/>}
           {!isAuthenticated && (
             <Link
               href="/login"
-              className={`${pathname === "/login" ? "hidden" : "block"}`}
+              className={`${pathname === "/login" || pathname === "/signup" ? "hidden" : "block"}`}
             >
               <Btn onClick={() => {}} className="bg-light-1 hover:text-white text-black">Login</Btn>
             </Link>

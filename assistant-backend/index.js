@@ -17,8 +17,9 @@ const prisma = new PrismaClient();
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 io.on("connection", (socket) => {
-  socket.on("userMessage", async ({ message, chatId }) => {
+  socket.on("userMessage", async ({ message, chatId, isNew }) => {
     try {
+      console.log(message, chatId);
       const completion = await openai.chat.completions.create({
         model: "gpt-4o-mini",
         stream: true,
@@ -28,14 +29,6 @@ io.on("connection", (socket) => {
         ],
       });
 
-      await prisma.message.create({
-        data: {
-          chatId,
-          role: "user",
-          content: message,
-        },
-      });
-
       let fullResponse = "";
 
       for await (const chunk of completion) {
@@ -43,9 +36,19 @@ io.on("connection", (socket) => {
         fullResponse += token;
         socket.emit("botMessage", { message: token });
       }
-      
+
       socket.emit("done");
-      
+
+      if (!isNew) {
+        await prisma.message.create({
+          data: {
+            chatId,
+            role: "user",
+            content: message,
+          },
+        });
+      }
+
       await prisma.message.create({
         data: {
           chatId,

@@ -23,19 +23,19 @@ export default function LoginPage() {
             <h1 className="font-ubuntu font-bold text-4xl text-dark-4 dark:text-white -tracking-[0.5px] ">
               Login
             </h1>
-            <h5 className="font-bold font-ubuntu text-xl text-gray-600 dark:text-gray-400">
+            <h5 className="font-bold font-ubuntu text-base lg:text-xl text-gray-600 dark:text-gray-400">
               Login to see your chats
             </h5>
           </div>
           <div className="flex flex-col gap-3 justify-between">
-            <h5 className="font-bold font-ubuntu text-xl text-gray-600 dark:text-gray-400">
+            <h5 className="font-bold font-ubuntu text-base lg:text-xl text-gray-600 dark:text-gray-400">
               Don't have an account?
             </h5>
             <Btn
               onClick={(e) => {
                 redirect("/signup");
               }}
-              className="bg-light-4 text-white font-bold font-ubuntu text-xl p-6"
+              className="bg-light-4 text-white font-bold font-ubuntu text-base lg:text-xl p-3 lg:p-6"
             >
               Create an account
             </Btn>
@@ -90,7 +90,7 @@ export default function LoginPage() {
           </button>
         </form>
         {/* Links */}
-        <div className="w-5/6 lg:w-4/6 flex justify-between font-bold text-white">
+        <div className="w-5/6 lg:w-4/6 flex lg:flex-row flex-col gap-5 text-center justify-between font-bold text-white">
           <Link href="/verify-email" className="bg-light-4 py-1 px-3 shadow-light dark:shadow-dark rounded-lg">Verify your email address</Link>
           <Link href="/reset-password" className="bg-light-4 py-1 px-3 shadow-light dark:shadow-dark rounded-lg">Forgot Password?</Link>
         </div>

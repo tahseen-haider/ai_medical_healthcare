@@ -13,33 +13,33 @@ export default function SignupPage() {
     <main className="bg-light-1 dark:bg-dark-4 flex flex-col items-center">
       {/* Login Section */}
       <section className="px-6 py-10 flex items-center flex-col  gap-12 w-full max-w-[1920px]">
-        <div className="flex justify-between w-full">
+        <div className="flex justify-between gap-8 w-full">
           <div className="flex flex-col gap-3">
             <h1 className="font-ubuntu font-bold text-4xl text-dark-4 dark:text-white -tracking-[0.5px] ">
               Sign Up
             </h1>
-            <h5 className="font-bold font-ubuntu text-xl text-gray-600 dark:text-gray-400">
+            <h5 className="font-bold font-ubuntu text-base lg:text-xl text-gray-600 dark:text-gray-400">
               Make an account to save your chats
             </h5>
           </div>
           <div className="flex flex-col gap-3 justify-between">
-            <h5 className="font-bold font-ubuntu text-xl text-gray-600 dark:text-gray-400">
+            <h5 className="font-bold font-ubuntu text-base lg:text-xl text-gray-600 dark:text-gray-400">
               Already have an account?
             </h5>
             <Btn
               onClick={(e) => {
                 redirect("/login");
               }}
-              className="bg-light-4 text-white font-bold font-ubuntu text-xl p-6"
+              className="bg-light-4 text-white font-bold font-ubuntu text-base lg:text-xl p-3 lg:p-6"
             >
-              Log into your Account
+              Log in
             </Btn>
           </div>
         </div>
         {/* Form */}
         <form
           action={action}
-          className="w-5/6 rounded-4xl shadow-light dark:shadow-dark py-16 px-5 lg:px-6 flex flex-col items-center gap-12"
+          className="w-full lg:w-5/6 rounded-4xl shadow-light dark:shadow-dark py-16 px-5 lg:px-6 flex flex-col items-center gap-12"
         >
           <div className="flex lg:flex-row flex-col gap-6 w-full">
             <div className="w-full lg:w-1/3">

@@ -39,6 +39,14 @@ export default function Messages({
   }, [messages.length]); // ✅ only depends on number of messages
 
   useEffect(() => {
+    const lastMessage = messages[messages.length-1];
+    if(lastMessage.role==="user")
+    {
+      socket.emit("userMessage", {message: lastMessage.content, chatId, isNew: true})
+    }
+  },[])
+
+  useEffect(() => {
     const handleBotMessage = (data: { message: string }) => {
       setIsGenerating(true);
       setMessages((prev) => {
@@ -100,7 +108,7 @@ export default function Messages({
       <ChatInputBox
         onSubmit={(e) => {
           e.preventDefault();
-          socket.emit("userMessage", { chatId, message: prompt });
+          socket.emit("userMessage", { chatId, message: prompt, isNew: false });
           setMessages((prev) => [
             ...prev,
             {
