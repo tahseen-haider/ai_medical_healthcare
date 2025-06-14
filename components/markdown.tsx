@@ -1,14 +1,20 @@
 "use client";
 
-import MarkDown from "react-markdown";
+import { marked } from "marked";
 import DOMPurify from "dompurify";
-import { useMemo } from "react";
-import { renderToString } from "react-dom/server";
+import { useEffect, useMemo, useState } from "react";
 
 export default function Markdown({ text }: { text: string }) {
-  const secureHTML = useMemo(() => {
-    const unsecure = renderToString(<MarkDown>{text}</MarkDown>);
-    return DOMPurify.sanitize(unsecure);
+  const [secureHTML, setSecureHTML] = useState("");
+
+  useEffect(() => {
+    async function parseAndSanitize() {
+      const rawHTML = await marked.parse(text); // Await the async markdown parsing
+      const cleanHTML = DOMPurify.sanitize(rawHTML); // Sanitize the HTML string
+      setSecureHTML(cleanHTML); // Store in state
+    }
+
+    parseAndSanitize();
   }, [text]);
 
   return (

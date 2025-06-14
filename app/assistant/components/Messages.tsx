@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import MessageBox from "./MessageBox";
 import { usePathname } from "next/navigation";
 import ChatInputBox from "./ChatInputBox";
@@ -34,17 +34,23 @@ export default function Messages({
   const chatId = pathname.split("/assistant/")[1];
 
   // Scroll to bottom on new messages
-  useEffect(() => {
+useLayoutEffect(() => {
+  const timeout = setTimeout(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages.length]); // ✅ only depends on number of messages
+  }, 100);
+  return () => clearTimeout(timeout);
+}, [messages]);
 
   useEffect(() => {
-    const lastMessage = messages[messages.length-1];
-    if(lastMessage.role==="user")
-    {
-      socket.emit("userMessage", {message: lastMessage.content, chatId, isNew: true})
+    const lastMessage = messages[messages.length - 1];
+    if (lastMessage.role === "user") {
+      socket.emit("userMessage", {
+        message: lastMessage.content,
+        chatId,
+        isNew: true,
+      });
     }
-  },[])
+  }, []);
 
   useEffect(() => {
     const handleBotMessage = (data: { message: string }) => {
@@ -101,8 +107,8 @@ export default function Messages({
           {messages.map((ele, i) => (
             <MessageBox key={i} index={i} message={ele} />
           ))}
-          <div ref={bottomRef} />
         </div>
+        <div ref={bottomRef} />
       </div>
 
       <ChatInputBox

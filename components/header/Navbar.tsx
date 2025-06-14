@@ -32,10 +32,20 @@ function Navbar({ isAuthenticated }: { isAuthenticated: boolean }) {
       link: "/contact-us",
     },
   ];
+  const isActiveLink = (pathname: string, link: string) => {
+    if (link === "/") {
+      return pathname === "/"; // Only match Home on exact "/"
+    }
+    return pathname === link || pathname.startsWith(`${link}/`);
+  };
+
   const pathname = usePathname();
   const [isNavbarDown, setIsNavbarDown] = useState(false);
+
   return (
-    <header className={`fixed z-30 w-screen h-16 dark:bg-dark-1 bg-light-4  flex justify-center`}>
+    <header
+      className={`fixed z-30 w-screen h-16 dark:bg-dark-1 bg-light-4  flex justify-center`}
+    >
       <div className="max-w-[1920px] w-full flex items-center justify-between h-full px-2 lg:px-6">
         <div className="absolute -z-10 w-screen h-full left-0 dark:bg-dark-1 bg-light-4" />
         {/* LOGO */}
@@ -58,7 +68,9 @@ function Navbar({ isAuthenticated }: { isAuthenticated: boolean }) {
                 <Link
                   href={ele.link}
                   className={`text-[18px] ${
-                    pathname === ele.link ? "text-black" : "text-white"
+                    isActiveLink(pathname, ele.link)
+                      ? "text-black"
+                      : "text-white"
                   } font-roboto font-bold leading-[22px] -tracking-[0.5px]`}
                 >
                   {ele.title}
@@ -70,22 +82,37 @@ function Navbar({ isAuthenticated }: { isAuthenticated: boolean }) {
 
         <div className="flex gap-4 lg:w-37 w-48 justify-end items-center">
           <div className="lg:hidden">
-            <Btn onClick={() => setIsNavbarDown(!isNavbarDown)} className="text-black hover:text-white bg-white">
+            <Btn
+              onClick={() => setIsNavbarDown(!isNavbarDown)}
+              className="text-black hover:text-white bg-white"
+            >
               {!isNavbarDown ? <Menu /> : <X />}
             </Btn>
           </div>
-          {isNavbarDown && <div className="absolute top-0 left-0 w-full h-screen backdrop-blur-sm -z-30" onClick={()=>setIsNavbarDown(false)}/>}
+          {isNavbarDown && (
+            <div
+              className="absolute top-0 left-0 w-full h-screen backdrop-blur-sm -z-30"
+              onClick={() => setIsNavbarDown(false)}
+            />
+          )}
           {!isAuthenticated && (
             <Link
               href="/login"
-              className={`${pathname === "/login" || pathname === "/signup" ? "hidden" : "block"}`}
+              className={`${
+                pathname === "/login" || pathname === "/signup"
+                  ? "hidden"
+                  : "block"
+              }`}
             >
-              <Btn onClick={() => {}} className="bg-light-1 hover:text-white text-black">Login</Btn>
+              <Btn
+                onClick={() => {}}
+                className="bg-light-1 hover:text-white text-black"
+              >
+                Login
+              </Btn>
             </Link>
           )}
-          {isAuthenticated && (
-            <ProfileButton/>
-          )}
+          {isAuthenticated && <ProfileButton />}
           <ThemeToggler />
         </div>
       </div>

@@ -38,6 +38,7 @@ export async function getChatList() {
   const user = await getAuthenticateUser();
   const chatList = await getChatListOfUser(user.userId);
 
+  if(chatList?.length===0) return []
   return chatList;
 }
 
