@@ -96,7 +96,7 @@ export const verifyEmailTokenfromDB = async ({
   await prisma.user.update({
     where: { email },
     data: {
-      token: null,
+      token: 0,
       is_verified: true,
     },
   });
@@ -155,7 +155,7 @@ export const resetPasswordInDB = async ({
   code: number;
   newPassword: string;
 }) => {
-  const user = await prisma.user.findUnique({
+  const user = await prisma.user.findFirst({
     where: {token: code}
   })
 
