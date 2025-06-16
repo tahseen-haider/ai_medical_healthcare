@@ -207,14 +207,14 @@ export const resetPasswordInDB = async ({
 
   if (!user || !user.token) return;
 
-  const updatedUser = await prisma.user.update({
-    where: { token: user.token },
-    data: {
-      password: newPassword,
-      token: null,
-    },
-  });
-  if(!updatedUser) return;
+  // const updatedUser = await prisma.user.update({
+  //   where: { token: user.token },
+  //   data: {
+  //     password: newPassword,
+  //     token: null,
+  //   },
+  // });
+  // if(!updatedUser) return;
 
-  return updatedUser.email;
+  // return updatedUser.email;
 };

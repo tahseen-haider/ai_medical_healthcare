@@ -159,7 +159,7 @@ export async function resetPassword(
 
   const res = await resetPasswordInDB({ code, newPassword: hashedPassword });
 
-  if (!res) return { message: "Error while reseting password" };
+  // if (!res) return { message: "Error while reseting password" };
 
   return { message: "Password Reset" };
 }
