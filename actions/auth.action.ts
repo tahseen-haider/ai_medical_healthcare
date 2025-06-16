@@ -1,6 +1,7 @@
 "use server";
 
 import {
+  getUser,
   getUserCredentialsByEmail,
   insertUserToDB,
   isUserVerified,
@@ -337,4 +338,9 @@ export async function verifyEmail(
   await createSession(res.id, res.role);
 
   return redirect("/");
+}
+
+export async function getCurrentlyAuthenticatedUser (){
+  const user = await getUser();
+  return user;
 }

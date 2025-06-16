@@ -1,4 +1,3 @@
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -7,28 +6,62 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Btn from "../Button";
 import { Button } from "../ui/button";
-import { useActionState } from "react";
-import { logout } from "@/actions/auth.action";
+import { useActionState, useEffect, useState } from "react";
+import { getCurrentlyAuthenticatedUser, logout } from "@/actions/auth.action";
 import ProfilePicture from "../ProfilePicture";
+import LoadingScreen from "../LoadingScreen";
+import { UserProfileDTO } from "@/lib/dto/user.dto";
+import Link from "next/link";
 
 export default function ProfileButton() {
-  const [state, action, pending] = useActionState(logout, undefined)
+  const [state, action, pending] = useActionState(logout, undefined);
+  const [user, setUser] = useState<UserProfileDTO | undefined>();
+  useEffect(() => {
+    (async function getUser() {
+      const user = await getCurrentlyAuthenticatedUser();
+      setUser(user);
+    })();
+  }, []);
+
+  const navLinks = [
+    {
+      title: "Your Profile",
+      link: "/your-profile",
+    },
+    {
+      title: "Settings",
+      link: "/settings",
+    },
+  ];
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger>
-        <ProfilePicture/>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent>
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <form action={action}>
-            <Button type="submit" className="bg-red-500">Logout</Button>
-          </form>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <>
+      {pending && <LoadingScreen message="Logging you out..." />}
+      <DropdownMenu>
+        <DropdownMenuTrigger>
+          <ProfilePicture />
+        </DropdownMenuTrigger>
+        <DropdownMenuContent className="bg-light-1 dark:bg-dark-2 mt-2">
+          <DropdownMenuLabel><Link href='/your-profile'>{user?.name}</Link></DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem className="flex flex-col w-full items-start text-bold text-base pb-3">
+            {navLinks.map((ele) => (
+              <Link href={ele.link} key={ele.title} className=" w-full">
+                {ele.title}
+              </Link>
+            ))}
+          </DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem>
+            <form action={action}>
+              <Button type="submit" className="bg-red-500">
+                Logout
+              </Button>
+            </form>
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
   );
 }

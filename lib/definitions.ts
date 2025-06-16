@@ -56,24 +56,31 @@ export const VerifyEmailFormSchema = z.object({
   token: z.number(),
 });
 
+export const SaveProfileChangesState = z.object({
+  email: z.string().email().trim(),
+  name: z.string().trim(),
+  phone: z.string().trim(),
+  dob: z.string().trim(),
+  gender: z.string().trim(),
+  password: z.string().trim()
+}) 
+
 // Chat Zod Validations
 
 export const NewChatInputSchema = z.object({
   userPrompt: z.string(),
-  imageData: z.string().optional()
-})
+  imageData: z.string().optional(),
+});
 
 export const ChatInputSchema = z.object({
   userPrompt: z.string(),
   chatId: z.string(),
-  imageData: z.string().optional()
-})
+  imageData: z.string().optional(),
+});
 
 export const DeleteChatSchema = z.object({
-  chatId: z.string()
-})
-
-
+  chatId: z.string(),
+});
 
 /////////////////////////////////////////////////////////
 
@@ -113,6 +120,12 @@ export type ContactFormState =
         email: string;
         message: string;
       };
+    }
+  | undefined;
+
+export type SaveProfileChangesState =
+  | {
+      message?: string;
     }
   | undefined;
 

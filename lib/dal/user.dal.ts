@@ -3,7 +3,7 @@
 import "server-only";
 
 import { cache } from "react";
-import { getAuthenticateUser } from "../session";
+import { getAuthenticateUserIdnRole } from "../session";
 import { prisma } from "../db/prisma";
 import {
   UserCredentialDTO,
@@ -12,9 +12,9 @@ import {
 } from "../dto/user.dto";
 import bcrypt from "bcryptjs";
 
-export const getUser = cache(async (): Promise<UserProfileDTO | null> => {
-  const session = await getAuthenticateUser();
-  if (!session) return null;
+export const getUser = cache(async (): Promise<UserProfileDTO | undefined> => {
+  const session = await getAuthenticateUserIdnRole();
+  if (!session) return;
 
   try {
     const user = await prisma.user.findUnique({
@@ -26,14 +26,59 @@ export const getUser = cache(async (): Promise<UserProfileDTO | null> => {
         phone: true,
         gender: true,
         role: true,
+        pfp: true,
       },
     });
-    return user;
+    if (!user) return;
+
+    return {
+      name: user.name,
+      dob: user.dob ? user.dob : undefined,
+      email: user.email,
+      phone: user.phone ? user.phone : undefined,
+      gender: user.gender ? user.gender : undefined,
+      role: user.role,
+      pfp: user.pfp ? user.pfp : undefined,
+    };
   } catch (error) {
     console.log(error);
-    return null;
+    return;
   }
 });
+
+export const getUserByEmailPassword = cache(
+  async (email: string, password: string) => {
+    const user = await prisma.user.findUnique({
+      where: { email },
+      select: {
+        name: true,
+        dob: true,
+        email: true,
+        phone: true,
+        gender: true,
+        role: true,
+        password: true,
+        pfp: true,
+        id: true,
+      },
+    });
+    if (!user) return;
+
+    const correctPassword = await bcrypt.compare(password, user?.password);
+    if (!correctPassword) return;
+
+    return {
+      name: user.name,
+      dob: user.dob ? user.dob : undefined,
+      email: user.email,
+      phone: user.phone ? user.phone : undefined,
+      gender: user.gender ? user.gender : undefined,
+      role: user.role,
+      pfp: user.pfp ? user.pfp : undefined,
+      id: user.id,
+    };
+  }
+);
 
 export const getUserCredentialsByEmail = cache(
   async (email: string): Promise<UserCredentialDTO | null> => {
@@ -150,25 +195,24 @@ export const setUserToken = async ({
 
 export const resetPasswordInDB = async ({
   code,
-  newPassword
+  newPassword,
 }: {
   code: number;
   newPassword: string;
 }) => {
   const user = await prisma.user.findFirst({
-    where: {token: code}
-  })
+    where: { token: code },
+  });
 
-  if(!user || !user.token) return;
+  if (!user || !user.token) return;
 
   const updatedUser = await prisma.user.update({
-    where: {token: user.token},
+    where: { token: user.token },
     data: {
       password: newPassword,
-      token: null
-    }
-  })
+      token: null,
+    },
+  });
 
-  return updatedUser.email
-  
+  return updatedUser.email;
 };

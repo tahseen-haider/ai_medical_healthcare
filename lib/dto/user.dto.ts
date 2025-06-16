@@ -3,11 +3,12 @@ import { UserRole } from "../definitions";
 
 export type UserProfileDTO = {
   name: string | null;
-  dob: string | null;
-  gender: string | null;
+  dob: string | undefined;
+  gender: string | undefined;
   email: string | null;
-  phone: string | null;
+  phone: string | undefined;
   role: UserRole;
+  pfp: string | undefined
 };
 
 export type UserCredentialDTO = {

@@ -12,7 +12,7 @@ import {
   DeleteChatSchema,
   NewChatInputSchema,
 } from "@/lib/definitions";
-import { getAuthenticateUser } from "@/lib/session";
+import { getAuthenticateUserIdnRole } from "@/lib/session";
 import { redirect } from "next/navigation";
 
 export async function startNewChat(state: ChatState, formData: FormData) {
@@ -24,7 +24,7 @@ export async function startNewChat(state: ChatState, formData: FormData) {
 
   const { userPrompt } = validatedFields.data;
 
-  const authenticateUser = await getAuthenticateUser();
+  const authenticateUser = await getAuthenticateUserIdnRole();
   const newChatSession = await startNewChatInDB(
     authenticateUser.userId,
     userPrompt
@@ -34,7 +34,7 @@ export async function startNewChat(state: ChatState, formData: FormData) {
 }
 
 export async function getChatList() {
-  const user = await getAuthenticateUser();
+  const user = await getAuthenticateUserIdnRole();
   const chatList = await getChatListOfUser(user.userId);
 
   if(chatList?.length===0) return []

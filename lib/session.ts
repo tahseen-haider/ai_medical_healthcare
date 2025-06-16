@@ -62,7 +62,7 @@ export async function updateSession() {
   });
 }
 
-export const getAuthenticateUser = cache(async () => {
+export const getAuthenticateUserIdnRole = cache(async () => {
   try {
     const cookieStore = await cookies();
     const sessionToken = cookieStore.get("session")?.value;

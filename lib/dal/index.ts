@@ -39,7 +39,39 @@ export const uploadInquiry = cache(async (data: ContactFormType) => {
     data: {
       fullname: data.fullname,
       email: data.email,
-      inquiry: data.inquiry
-    }
-  })
+      inquiry: data.inquiry,
+    },
+  });
 });
+
+export const uploadProfileChanges = cache(
+  async (data: {
+    name: string;
+    email: string;
+    phone: string;
+    dob: string;
+    gender: string;
+    imageUploadUrl: string;
+  }) => {
+    const { email, ...rest } = data;
+
+    // Filter out empty string fields
+    const filteredData = Object.fromEntries(
+      Object.entries(rest).filter(([_, value]) => value !== "")
+    );
+
+    try {
+      const updatedUser = await prisma.user.update({
+        where: { email },
+        data: {
+          ...filteredData,
+          pfp: filteredData.imageUploadUrl,
+        },
+      });
+
+      return 1;
+    } catch {
+      return 0;
+    }
+  }
+);
