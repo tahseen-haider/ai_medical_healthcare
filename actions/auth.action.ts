@@ -148,17 +148,18 @@ export async function resetPassword(
     repeatNewPassword: formData.get("repeatNewPassword"),
   });
 
-  if(!validatedFields.success) return {message: "Input a valid Password"}
+  if (!validatedFields.success) return { message: "Input a valid Password" };
 
-  const {code, newPassword, repeatNewPassword} = validatedFields.data;
+  const { code, newPassword, repeatNewPassword } = validatedFields.data;
 
-  if(newPassword !== repeatNewPassword) return {message: "Passwords does not match"}
+  if (newPassword !== repeatNewPassword)
+    return { message: "Passwords does not match" };
 
   const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-  const res = await resetPasswordInDB({code, newPassword:hashedPassword})
+  const res = await resetPasswordInDB({ code, newPassword: hashedPassword });
 
-  if(!res) return {message: "Error while reseting password"}
+  if (!res) return { message: "Error while reseting password" };
 
   return { message: "Password Reset" };
 }
@@ -327,24 +328,28 @@ export async function verifyEmail(
     token: Number(formData.get("token")),
   });
 
-  if (!validatedFields.success) return { message: "EEnter a valid token" };
+  if (!validatedFields.success) return { message: "Enter a valid token" };
 
   const { email, token } = validatedFields.data;
 
-  const res = await verifyEmailTokenfromDB({ email, verifyToken: token });
+  try {
+    const res = await verifyEmailTokenfromDB({ email, verifyToken: token });
 
-  if (!res) return { message: "Enter correct token" };
+    if (!res) return { message: "Enter correct token" };
 
-  await createSession(res.id, res.role);
-
-  return redirect("/");
+    await createSession(res.id, res.role);
+    return redirect("/");
+  } catch (err) {
+    console.error("Verification Error:", err);
+    return { message: "Something went wrong during verification" };
+  }
 }
 
-export async function getCurrentlyAuthenticatedUser (){
+export async function getCurrentlyAuthenticatedUser() {
   const user = await getUser();
-  if(!user) {
+  if (!user) {
     await deleteSession();
-    redirect("/login")
+    redirect("/login");
   }
   return user;
 }
