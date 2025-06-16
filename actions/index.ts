@@ -104,8 +104,6 @@ export const saveProfileChanges = async (
 
   const file = formData.get("image") as File;
 
-  console.log("File:",file)
-  
   let imageUploadUrl = "";
   if (file.size) {
     const arrayBuffer = await file.arrayBuffer();
@@ -137,13 +135,14 @@ export const saveProfileChanges = async (
     imageUploadUrl,
   });
 
-  
   if (!changed) return { message: "Something went wrong." };
-  
+
   return { message: "Changes Saved" };
 };
 
 export const getPfp = async () => {
   const user = await getUser();
-  return user?.pfp
+  if (!user?.pfp) return;
+
+  return `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/${user.pfp}`;
 };

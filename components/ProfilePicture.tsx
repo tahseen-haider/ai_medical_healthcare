@@ -10,17 +10,18 @@ export default function ProfilePicture({ size }: { size?: number }) {
   useEffect(() => {
     (async function getImage() {
       const pfp = await getPfp();
-      setImage(pfp);
+      if (pfp) setImage(pfp);
     })();
   }, []);
   return (
     <div
       className={`rounded-full ${
-        size ? `w-${size} h-${size}` : "w-8 h-8"
-      } overflow-hidden shadow-[0_0_6px_rgba(0,0,0,0.4)] cursor-pointer object-cover`}
+        size ? `w-[${size}px] h-[${size}px]` : "w-8 h-8"
+      } overflow-hidden shadow-[0_0_6px_rgba(0,0,0,0.4)] flex justify-center items-center cursor-pointer object-cover`}
     >
       {image ? (
-        <img
+        <Image
+          unoptimized
           src={image}
           width={size || 32}
           height={size || 32}

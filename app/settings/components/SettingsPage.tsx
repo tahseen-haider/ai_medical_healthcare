@@ -201,7 +201,7 @@ export default function SettingsPage({ user }: { user: UserProfileDTO }) {
               router.push("/your-profile");
             }}
           >
-            Cancel
+            Show Profile
           </div>
         </div>
         {changesMade && (

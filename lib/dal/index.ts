@@ -53,25 +53,29 @@ export const uploadProfileChanges = cache(
     gender: string;
     imageUploadUrl: string;
   }) => {
-    const { email, ...rest } = data;
-
-    // Filter out empty string fields
+    const { email, imageUploadUrl, ...rest } = data;
     const filteredData = Object.fromEntries(
       Object.entries(rest).filter(([_, value]) => value !== "")
     );
-
+    
+    const updateData: any = {
+      ...filteredData,
+    };
+    
+    if (imageUploadUrl !== "") {
+      updateData.pfp = imageUploadUrl;
+    }
+    
     try {
       const updatedUser = await prisma.user.update({
         where: { email },
-        data: {
-          ...filteredData,
-          pfp: filteredData.imageUploadUrl,
-        },
+        data: updateData,
       });
 
-      return 1;
+      if (updatedUser) return 1;
     } catch {
       return 0;
     }
   }
 );
+

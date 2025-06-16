@@ -42,24 +42,22 @@ export default function ProfileButton() {
         <DropdownMenuTrigger>
           <ProfilePicture />
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="bg-light-1 dark:bg-dark-2 mt-2">
-          <DropdownMenuLabel><Link href='/your-profile'>{user?.name}</Link></DropdownMenuLabel>
+        <DropdownMenuContent className="bg-light-1 dark:bg-dark-2 mt-2 flex flex-col gap-2">
+          <DropdownMenuLabel>
+            <Link href="/your-profile">{user?.name}</Link>
+          </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem className="flex flex-col w-full items-start text-bold text-base pb-3">
-            {navLinks.map((ele) => (
-              <Link href={ele.link} key={ele.title} className=" w-full">
-                {ele.title}
-              </Link>
-            ))}
-          </DropdownMenuItem>
+          {navLinks.map((ele) => (
+            <Link href={ele.link} key={ele.title} className=" w-full">
+              {ele.title}
+            </Link>
+          ))}
           <DropdownMenuSeparator />
-          <DropdownMenuItem>
-            <form action={action}>
-              <Button type="submit" className="bg-red-500">
-                Logout
-              </Button>
-            </form>
-          </DropdownMenuItem>
+          <form action={action}>
+            <Button type="submit" className="bg-red-500">
+              Logout
+            </Button>
+          </form>
         </DropdownMenuContent>
       </DropdownMenu>
     </>
