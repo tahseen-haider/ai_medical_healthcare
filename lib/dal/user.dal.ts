@@ -127,8 +127,8 @@ export const verifyEmailTokenfromDB = async ({
   email,
   verifyToken,
 }: {
-  email: string | undefined;
-  verifyToken: number | undefined;
+  email: string;
+  verifyToken: number;
 }): Promise<UserIDandRoleForSessionDTO | undefined> => {
   const user = await prisma.user.findUnique({
     where: {
@@ -138,6 +138,7 @@ export const verifyEmailTokenfromDB = async ({
 
   if (!user || user.token != verifyToken) return undefined;
 
+  console.log({email})
   await prisma.user.update({
     where: { email },
     data: {
@@ -213,6 +214,7 @@ export const resetPasswordInDB = async ({
       token: null,
     },
   });
+  if(!updatedUser) return;
 
   return updatedUser.email;
 };

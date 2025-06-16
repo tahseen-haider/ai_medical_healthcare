@@ -338,11 +338,11 @@ export async function verifyEmail(
     if (!res) return { message: "Enter correct token" };
 
     await createSession(res.id, res.role);
-    return redirect("/");
   } catch (err) {
     console.error("Verification Error:", err);
     return { message: "Something went wrong during verification" };
   }
+  redirect("/");
 }
 
 export async function getCurrentlyAuthenticatedUser() {
