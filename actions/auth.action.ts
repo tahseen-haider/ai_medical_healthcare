@@ -342,5 +342,9 @@ export async function verifyEmail(
 
 export async function getCurrentlyAuthenticatedUser (){
   const user = await getUser();
+  if(!user) {
+    await deleteSession();
+    redirect("/login")
+  }
   return user;
 }
