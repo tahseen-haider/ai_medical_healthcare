@@ -348,7 +348,7 @@ export async function verifyEmail(
     console.error("Verification Error:", err);
     return { message: "Something went wrong during verification" };
   }
-  redirect("/");
+  redirect("/settings");
 }
 
 export async function getCurrentlyAuthenticatedUser() {
