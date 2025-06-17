@@ -18,23 +18,52 @@ const prisma = new PrismaClient();
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 io.on("connection", (socket) => {
-  socket.on("userMessage", async ({ message, chatId, isNew }) => {
+  socket.on("userMessage", async ({ message, image, chatId, isOldMessage }) => {
     try {
       // Retrieving from pinecone database
 
       // const retrievals = await queryPineconeVectorStore(message);
       // console.log("Retrievals :: ", retrievals)
 
+      const messages = [
+        {
+          role: "system",
+          content:
+            "You are a medical assistant.Be friendly, and charming, if user message is irrelavant, other than medical just respond with please ask medical questions. user may upload a medical report, extract the text and provide medical insight and provide with suggestions as a medical assistant. if image is unrelated to medical, just say image is not medical related",
+        },
+      ];
 
-      
-      // sending content to api for response
+      const userContent = [];
+
+      if (message) {
+        userContent.push({
+          type: "text",
+          text: message,
+        });
+      }
+      if (image) {
+        userContent.push({
+          type: "image_url",
+          image_url: { url: image },
+        });
+      }
+
+      if (userContent.length > 0) {
+        messages.push({
+          role: "user",
+          content: userContent,
+        });
+      } else {
+        socket.emit("botMessage", {
+          message: "Please send a message or an image.",
+        });
+        return;
+      }
+
       const completion = await openai.chat.completions.create({
         model: "gpt-4o-mini",
         stream: true,
-        messages: [
-          { role: "system", content: "You are a medical assistant. if user message is irrelavant, other than medical just respond with please ask medical questions" },
-          { role: "user", content: message },
-        ],
+        messages: messages,
       });
 
       let fullResponse = "";
@@ -47,12 +76,12 @@ io.on("connection", (socket) => {
 
       socket.emit("done");
 
-      if (!isNew) {
+      if (!isOldMessage) {
         await prisma.message.create({
           data: {
             chatId,
             role: "user",
-            content: message,
+            content: message?message:"Image Uploaded",
           },
         });
       }
@@ -66,7 +95,9 @@ io.on("connection", (socket) => {
       });
     } catch (err) {
       console.error(err);
-      socket.emit("botMessage", { message: "Error occurred. Please try again" });
+      socket.emit("botMessage", {
+        message: "Error occurred. Please try again",
+      });
     }
   });
 });

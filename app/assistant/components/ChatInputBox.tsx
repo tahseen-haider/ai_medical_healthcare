@@ -1,10 +1,11 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { ArrowUpFromLine, Loader2 } from "lucide-react";
+import { ArrowUpFromLine, Loader2, X } from "lucide-react";
 import ReportUploader from "./ReportUploader";
 import { $Enums } from "@prisma/client/edge";
 
 export default function ChatInputBox({
+  isNewChat,
   additionalInputElement,
   onSubmit,
   setPrompt,
@@ -12,7 +13,12 @@ export default function ChatInputBox({
   pending,
   action,
   isGenerating,
+  imageBase64,
+  setImageBase64,
 }: {
+  imageBase64?: string;
+  setImageBase64?: React.Dispatch<React.SetStateAction<string | undefined>>;
+  isNewChat?: boolean;
   additionalInputElement?: React.ReactNode;
   setMessages?: React.Dispatch<
     React.SetStateAction<
@@ -55,6 +61,7 @@ export default function ChatInputBox({
         <form onSubmit={onSubmit} action={action ? action : undefined}>
           <div className="flex flex-col-reverse w-full">
             <textarea
+              required={isNewChat}
               onKeyDown={handleKeyDown}
               autoFocus
               ref={textareaRef}
@@ -62,7 +69,6 @@ export default function ChatInputBox({
               className="w-full resize-none focus:outline-none p-2 font-roboto leading-[22px] -tracking-tight max-h-[132px] overflow-y-auto rounded-md"
               placeholder="Ask anything"
               rows={2}
-              required
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
             />
@@ -70,8 +76,19 @@ export default function ChatInputBox({
           </div>
           {/* Buttons */}
           <div className="w-full flex gap-5 justify-end p-2">
+            {imageBase64 && (
+              <div
+                className="relative w-10 h-10 object-cover overflow-hidden cursor-pointer"
+                onClick={() => {
+                  setImageBase64!("");
+                }}
+              >
+                <X className="absolute text-black w-full h-full opacity-0 hover:opacity-50" />
+                <img key={imageBase64} src={imageBase64} alt="uploaded image" />
+              </div>
+            )}
             {/* Report Uploader */}
-            <ReportUploader />
+            {!isNewChat && <ReportUploader />}
             {/* Prompt Sender */}
             <button
               ref={buttonRef}

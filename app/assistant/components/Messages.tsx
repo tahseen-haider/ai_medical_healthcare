@@ -6,6 +6,8 @@ import { usePathname } from "next/navigation";
 import ChatInputBox from "./ChatInputBox";
 import { $Enums } from "@prisma/client/edge";
 import { getSocket } from "@/lib/socket";
+import Image from "next/image";
+import { X } from "lucide-react";
 
 const socket = getSocket();
 
@@ -49,7 +51,7 @@ export default function Messages({
       socket.emit("userMessage", {
         message: lastMessage.content,
         chatId,
-        isNew: true,
+        isOldMessage: true,
       });
     }
   }, []);
@@ -93,6 +95,19 @@ export default function Messages({
     };
   }, []);
 
+  const [imageBase64, setImageBase64] = useState<string | undefined>();
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImageBase64(reader.result as string); // e.g. data:image/png;base64,...
+    };
+    reader.readAsDataURL(file); // auto-encodes to base64 with mime
+  };
+
   const [prompt, setPrompt] = useState("");
 
   return (
@@ -105,7 +120,7 @@ export default function Messages({
               Ask anything about medical or upload your medical report
             </p>
           </div>
-
+          {/* Messages */}
           {messages.map((ele, i) => (
             <MessageBox key={i} index={i} message={ele} imageUrl={imageUrl} />
           ))}
@@ -113,18 +128,39 @@ export default function Messages({
         <div ref={bottomRef} />
       </div>
 
+      {/* Chat Input */}
       <ChatInputBox
+      imageBase64={imageBase64}
+      setImageBase64={setImageBase64}
         onSubmit={(e) => {
           e.preventDefault();
-          socket.emit("userMessage", { chatId, message: prompt, isNew: false });
+
+          if (!imageBase64 && !prompt) return;
+
+          const newMessage: any = {
+            chatId,
+            isOldMessage: false,
+          };
+
+          if (prompt) {
+            newMessage.message = prompt;
+          }
+
+          if (imageBase64) {
+            newMessage.image = imageBase64;
+          }
+
+          socket.emit("userMessage", newMessage);
+
           setMessages((prev) => [
             ...prev,
             {
-              content: prompt,
+              content: prompt || "Image Uploaded!",
               role: "user",
               createdAt: new Date(),
             },
           ]);
+          setImageBase64("");
           setPrompt("");
         }}
         prompt={prompt}
@@ -132,7 +168,17 @@ export default function Messages({
         setMessages={setMessages}
         pending={isGenerating}
         additionalInputElement={
-          <input type="text" name="chatId" readOnly hidden value={chatId} />
+          <>
+            <input type="text" name="chatId" readOnly hidden value={chatId} />
+            <input
+              type="file"
+              name="image"
+              id="imageUpload"
+              accept="image/*"
+              hidden
+              onChange={handleFileChange}
+            />
+          </>
         }
       />
     </section>
