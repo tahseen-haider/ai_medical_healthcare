@@ -55,7 +55,7 @@ export const DateOfBirthPicker: React.FC<DateOfBirthPickerProps> = ({
   }, [day, month, year, onChange]);
 
   return (
-    <div className="flex gap-2">
+    <div className="flex gap-2 flex-col md:flex-row">
       {/* Day */}
       <Select value={day} onValueChange={setDay}>
         <SelectTrigger className="w-[80px]">

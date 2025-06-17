@@ -35,7 +35,7 @@ export default function SettingsPage({ user }: { user: UserProfileDTO }) {
   const [changesMade, setChangesMade] = useState(false);
 
   return (
-    <div className="w-full">
+    <div className="w-full min-h-[550px] flex flex-col justify-center">
       {pending && <LoadingScreen message="Updating your profile" />}
       <form
         action={action}
