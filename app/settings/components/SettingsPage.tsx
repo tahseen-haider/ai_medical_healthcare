@@ -17,7 +17,7 @@ import { Pencil } from "lucide-react";
 
 const genderArray = ["Male", "Female"];
 
-export default function SettingsPage({ user }: { user: UserProfileDTO }) {
+export default function SettingsPage({ user, imageUrl }: { user: UserProfileDTO, imageUrl?: string }) {
   const router = useRouter();
 
   const [name, setName] = useState(user?.name);
@@ -56,7 +56,7 @@ export default function SettingsPage({ user }: { user: UserProfileDTO }) {
                     className="object-cover w-[120px] h-[120px] rounded-full"
                   />
                 ) : (
-                  <ProfilePicture size={120} />
+                  <ProfilePicture size={120} image={imageUrl}/>
                 )}
               </div>
               <input

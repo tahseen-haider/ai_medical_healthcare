@@ -9,7 +9,7 @@ import { Menu, X } from "lucide-react";
 import Btn from "../Button";
 import ProfileButton from "./ProfileButton";
 
-function Navbar({ isAuthenticated }: { isAuthenticated: boolean }) {
+function Navbar({ isAuthenticated,imageUrl }: { isAuthenticated: boolean,imageUrl?: string }) {
   const NavLinks = [
     {
       title: "Home",
@@ -112,7 +112,7 @@ function Navbar({ isAuthenticated }: { isAuthenticated: boolean }) {
               </Btn>
             </Link>
           )}
-          {isAuthenticated && <ProfileButton />}
+          {isAuthenticated && <ProfileButton imageUrl={imageUrl}/>}
           <ThemeToggler />
         </div>
       </div>

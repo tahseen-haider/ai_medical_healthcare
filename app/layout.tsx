@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { cookies } from "next/headers";
 import { isUserAuthenticated } from "@/lib/session";
 import LayoutWrapper from "@/components/LayoutWrapper";
+import { getPfp } from "@/actions";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -33,6 +34,7 @@ export default async function RootLayout({
   const isAuthenticated = await isUserAuthenticated(
     cookieStore.get("session")?.value
   );
+  const imageUrl = await getPfp();
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -44,7 +46,7 @@ export default async function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <LayoutWrapper isAuthenticated={isAuthenticated}>
+            <LayoutWrapper isAuthenticated={isAuthenticated} imageUrl={imageUrl}>
               {children}
             </LayoutWrapper>
           </ThemeProvider>

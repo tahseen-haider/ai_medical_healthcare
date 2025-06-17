@@ -1,7 +1,6 @@
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -14,7 +13,7 @@ import LoadingScreen from "../LoadingScreen";
 import { UserProfileDTO } from "@/lib/dto/user.dto";
 import Link from "next/link";
 
-export default function ProfileButton() {
+export default function ProfileButton({imageUrl}:{imageUrl?:string}) {
   const [state, action, pending] = useActionState(logout, undefined);
   const [user, setUser] = useState<UserProfileDTO | undefined>();
   useEffect(() => {
@@ -40,7 +39,7 @@ export default function ProfileButton() {
       {pending && <LoadingScreen message="Logging you out..." />}
       <DropdownMenu>
         <DropdownMenuTrigger>
-          <ProfilePicture />
+          <ProfilePicture image={imageUrl}/>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="bg-light-1 dark:bg-dark-2 mt-2 flex flex-col gap-2">
           <DropdownMenuLabel>

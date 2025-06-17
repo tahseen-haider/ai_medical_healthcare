@@ -8,6 +8,7 @@ import React from "react";
 export default function MessageBox({
   index,
   message,
+  imageUrl
 }: {
   index: number;
   message: {
@@ -15,6 +16,7 @@ export default function MessageBox({
     role: $Enums.MessageRole;
     createdAt: Date;
   };
+  imageUrl?:string
 }) {
   const time = message.createdAt.toLocaleTimeString("en-US", {
     hour: "numeric",
@@ -33,7 +35,7 @@ export default function MessageBox({
           !isUser ? "flex-row" : "flex-row-reverse"
         }`}
       >
-        <div>{isUser ? <ProfilePicture /> : <AssistantPicture />}</div>
+        <div>{isUser ? <ProfilePicture image={imageUrl}/> : <AssistantPicture />}</div>
         <div
           className={` ${
             !isUser ? "bg-light-1 dark:bg-dark-4" : "bg-light-2 dark:bg-dark-3"

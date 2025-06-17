@@ -11,6 +11,7 @@ const socket = getSocket();
 
 export default function Messages({
   initialMessages,
+  imageUrl,
 }: {
   initialMessages: {
     content: string;
@@ -19,6 +20,7 @@ export default function Messages({
     role: $Enums.MessageRole;
     createdAt: Date;
   }[];
+  imageUrl?: string;
 }) {
   const [messages, setMessages] = useState(
     initialMessages.map(({ content, role, createdAt }) => ({
@@ -34,12 +36,12 @@ export default function Messages({
   const chatId = pathname.split("/assistant/")[1];
 
   // Scroll to bottom on new messages
-useLayoutEffect(() => {
-  const timeout = setTimeout(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, 100);
-  return () => clearTimeout(timeout);
-}, [messages]);
+  useLayoutEffect(() => {
+    const timeout = setTimeout(() => {
+      bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    }, 100);
+    return () => clearTimeout(timeout);
+  }, [messages]);
 
   useEffect(() => {
     const lastMessage = messages[messages.length - 1];
@@ -105,7 +107,7 @@ useLayoutEffect(() => {
           </div>
 
           {messages.map((ele, i) => (
-            <MessageBox key={i} index={i} message={ele} />
+            <MessageBox key={i} index={i} message={ele} imageUrl={imageUrl} />
           ))}
         </div>
         <div ref={bottomRef} />
