@@ -98,8 +98,8 @@ function sendCodeHTML(code: number) {
         `;
 }
 
-function sendResetLinkHTML(baseUrl: string, code: number) {
-  const resetLink = `${baseUrl}/reset-password/${code}`;
+function sendResetLinkHTML(baseUrl: string,email:string, code: number) {
+  const resetLink = `${baseUrl}/reset-password/${email}-${code}`;
 
   return `
     <!DOCTYPE html>
@@ -138,31 +138,7 @@ function sendResetLinkHTML(baseUrl: string, code: number) {
   `;
 }
 
-export async function resetPassword(
-  state: ResetPasswordFormState,
-  formData: FormData
-) {
-  const validatedFields = ResetPasswordFormSchema.safeParse({
-    code: Number(formData.get("code")),
-    newPassword: formData.get("newPassword"),
-    repeatNewPassword: formData.get("repeatNewPassword"),
-  });
 
-  if (!validatedFields.success) return { message: "Input a valid Password" };
-
-  const { code, newPassword, repeatNewPassword } = validatedFields.data;
-
-  if (newPassword !== repeatNewPassword)
-    return { message: "Passwords does not match" };
-
-  const hashedPassword = await bcrypt.hash(newPassword, 10);
-
-  const res = await resetPasswordInDB({ code, newPassword: hashedPassword });
-
-  // if (!res) return { message: "Error while reseting password" };
-
-  return { message: "Password Reset" };
-}
 
 async function sendEmail(req: { to: string; subject: string; html: string }) {
   const { to, subject, html } = req;
@@ -222,6 +198,7 @@ export async function sendVerifyEmail(
   return redirect(`/verify-email/${encodeURIComponent(email)}`);
 }
 
+
 export async function SendForgotPasswordLinkToEmail(
   state: SendForgotPasswordLinkToEmailState,
   formData: FormData
@@ -237,17 +214,46 @@ export async function SendForgotPasswordLinkToEmail(
   const code = Math.floor(100000 + Math.random() * 900000);
 
   await setUserToken({ code, email });
-
+  
   const res = await sendEmail({
     to: email,
     subject: "Reset Your MediTech Password",
-    html: sendResetLinkHTML("http://localhost:3000", code),
+    html: sendResetLinkHTML(process.env.BASE_URL!, email, code),
   });
 
   if (!res) return { message: "Failed to send Link" };
   return { message: "Link Sent! Check Your email" };
 }
 
+
+export async function resetPassword(
+  state: ResetPasswordFormState,
+  formData: FormData
+) {
+  const validatedFields = ResetPasswordFormSchema.safeParse({
+    email: formData.get('email'),
+    code: Number(formData.get("code")),
+    newPassword: formData.get("newPassword"),
+    repeatNewPassword: formData.get("repeatNewPassword"),
+  });
+
+  if (!validatedFields.success) return { message: "Input a valid Password" };
+
+  const { email, code, newPassword, repeatNewPassword } = validatedFields.data;
+
+  if (newPassword !== repeatNewPassword)
+    return { message: "Passwords does not match" };
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+  const res = await resetPasswordInDB({ email, code, newPassword: hashedPassword });
+
+  console.log(res)
+
+  if (!res) return { message: "Error while reseting password" };
+
+  return { message: "Password Reset Successfull. Login with new Password" };
+}
 export async function signup(state: SignUpFormState, formData: FormData) {
   const validatedFields = SignupFormSchema.safeParse({
     name: formData.get("username"),

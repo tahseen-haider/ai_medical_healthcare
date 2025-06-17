@@ -195,26 +195,28 @@ export const setUserToken = async ({
 };
 
 export const resetPasswordInDB = async ({
+  email,
   code,
   newPassword,
 }: {
+  email: string;
   code: number;
   newPassword: string;
 }) => {
   const user = await prisma.user.findFirst({
-    where: { token: code },
+    where: { email },
   });
 
   if (!user || !user.token) return;
 
-  // const updatedUser = await prisma.user.update({
-  //   where: { token: user.token },
-  //   data: {
-  //     password: newPassword,
-  //     token: null,
-  //   },
-  // });
-  // if(!updatedUser) return;
+  const updatedUser = await prisma.user.update({
+    where: { email },
+    data: {
+      password: newPassword,
+      token: null,
+    },
+  });
+  if(!updatedUser) return;
 
-  // return updatedUser.email;
+  return updatedUser.email;
 };

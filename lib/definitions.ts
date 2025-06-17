@@ -96,6 +96,7 @@ export const ContactFormSchema = z.object({
 });
 
 export const ResetPasswordFormSchema = z.object({
+  email: z.string(),
   code: z.number(),
   newPassword: z.string().trim(),
   repeatNewPassword: z.string().trim(),
