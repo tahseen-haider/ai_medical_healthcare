@@ -30,7 +30,7 @@ export async function decrypt(session: string | undefined = "") {
   }
 }
 
-export async function createSession(userId: string, role: "admin" | "user"){
+export async function createSession(userId: string, role: "admin" | "user") {
   const expiresAt = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
   const session = await encrypt({ userId, role, expiresAt });
   const cookieStore = await cookies();
@@ -60,6 +60,31 @@ export async function updateSession() {
     sameSite: "lax",
     path: "/",
   });
+}
+
+export const getUserIdnRoleIfAuthenticated = async () => {
+  
+  const cookieStore = await cookies();
+  const sessionToken = cookieStore.get("session")?.value;
+  if (!sessionToken) return;
+
+  const session = await decrypt(sessionToken);
+
+  if (!session?.userId) {
+    return;
+  }
+
+  const user = await prisma.user.findUnique({
+    where: {
+      id: session.userId,
+    },
+  });
+  if (user) {
+    return { role: session.role, userId: session.userId };
+  } else {
+    cookieStore.delete("session");
+    return;
+  }
 }
 
 export const getAuthenticateUserIdnRole = cache(async () => {

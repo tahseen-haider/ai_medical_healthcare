@@ -3,7 +3,7 @@
 import "server-only";
 
 import { cache } from "react";
-import { getAuthenticateUserIdnRole } from "../session";
+import { getUserIdnRoleIfAuthenticated } from "../session";
 import { prisma } from "../db/prisma";
 import {
   UserCredentialDTO,
@@ -12,8 +12,8 @@ import {
 } from "../dto/user.dto";
 import bcrypt from "bcryptjs";
 
-export const getUser = cache(async (): Promise<UserProfileDTO | undefined> => {
-  const session = await getAuthenticateUserIdnRole();
+export const getUser = async (): Promise<UserProfileDTO | undefined> => {
+  const session = await getUserIdnRoleIfAuthenticated();
   if (!session) return;
 
   try {
@@ -44,7 +44,7 @@ export const getUser = cache(async (): Promise<UserProfileDTO | undefined> => {
     console.log(error);
     return;
   }
-});
+}
 
 export const getUserByEmailPassword = cache(
   async (email: string, password: string) => {

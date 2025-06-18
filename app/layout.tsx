@@ -40,16 +40,18 @@ export default async function RootLayout({
       <body
         className={`${roboto.variable} ${ubuntu.variable} font-roboto antialiased bg-light-1 dark:bg-dark-4`}
       >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <LayoutWrapper isAuthenticated={isAuthenticated} 
+          imageUrl={imageUrl}
           >
-            <LayoutWrapper isAuthenticated={isAuthenticated} imageUrl={imageUrl}>
-              {children}
-            </LayoutWrapper>
-          </ThemeProvider>
+            {children}
+          </LayoutWrapper>
+        </ThemeProvider>
       </body>
     </html>
   );
