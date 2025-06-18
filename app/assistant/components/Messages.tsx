@@ -6,14 +6,13 @@ import { usePathname } from "next/navigation";
 import ChatInputBox from "./ChatInputBox";
 import { $Enums } from "@prisma/client/edge";
 import { getSocket } from "@/lib/socket";
-import Image from "next/image";
-import { X } from "lucide-react";
+import { v4 as uuidv4 } from "uuid";
 
 const socket = getSocket();
 
 export default function Messages({
   initialMessages,
-  imageUrl,
+  pfpUrl,
 }: {
   initialMessages: {
     content: string;
@@ -21,18 +20,22 @@ export default function Messages({
     id: string;
     role: $Enums.MessageRole;
     createdAt: Date;
+    image: string | null;
   }[];
-  imageUrl?: string;
+  pfpUrl?: string;
 }) {
   const [messages, setMessages] = useState(
-    initialMessages.map(({ content, role, createdAt }) => ({
+    initialMessages.map(({ id, content, role, createdAt, image }) => ({
+      id,
       content,
       role,
       createdAt,
+      image,
     }))
   );
 
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isUploading, setIsUploading] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const pathname = usePathname();
   const chatId = pathname.split("/assistant/")[1];
@@ -45,6 +48,10 @@ export default function Messages({
     return () => clearTimeout(timeout);
   }, [messages]);
 
+  // Generating random Id
+  const randomId = () => uuidv4();
+
+  // If last message is not answered run this
   useEffect(() => {
     const lastMessage = messages[messages.length - 1];
     if (lastMessage.role === "user") {
@@ -52,10 +59,14 @@ export default function Messages({
         message: lastMessage.content,
         chatId,
         isOldMessage: true,
+        image: lastMessage.image,
       });
     }
   }, []);
 
+  const [uploadedImgID, setUploadedImgID] = useState<string | null>(null);
+
+  // To handle the backend response
   useEffect(() => {
     const handleBotMessage = (data: { message: string }) => {
       setIsGenerating(true);
@@ -66,6 +77,8 @@ export default function Messages({
           const updatedLast = {
             ...last,
             content: last.content + data.message,
+            image: null,
+            id: last.id,
           };
           return [...prev.slice(0, -1), updatedLast];
         }
@@ -73,9 +86,11 @@ export default function Messages({
         return [
           ...prev,
           {
+            id: randomId(),
             content: data.message,
             role: "assistant",
             createdAt: new Date(),
+            image: null,
           },
         ];
       });
@@ -86,12 +101,19 @@ export default function Messages({
       // Optional: If you want to trigger anything at end
     };
 
+    const handleImageUploaded = (data: { public_image_id: string }) => {
+      setUploadedImgID(data.public_image_id);
+      setIsUploading(false);
+    };
+
     socket.off("botMessage").on("botMessage", handleBotMessage);
     socket.off("done").on("done", handleStreamDone);
+    socket.off("imageUploaded").on("imageUploaded", handleImageUploaded);
 
     return () => {
       socket.off("botMessage", handleBotMessage);
       socket.off("done", handleStreamDone);
+      socket.off("imageUploaded", handleImageUploaded);
     };
   }, []);
 
@@ -103,7 +125,10 @@ export default function Messages({
 
     const reader = new FileReader();
     reader.onloadend = () => {
-      setImageBase64(reader.result as string); // e.g. data:image/png;base64,...
+      const base64 = reader.result as string;
+      setImageBase64(base64); // e.g. data:image/png;base64,...
+      setIsUploading(true);
+      socket.emit("uploadImage", {image: base64, chatId});
     };
     reader.readAsDataURL(file); // auto-encodes to base64 with mime
   };
@@ -122,16 +147,21 @@ export default function Messages({
           </div>
           {/* Messages */}
           {messages.map((ele, i) => (
-            <MessageBox key={i} index={i} message={ele} imageUrl={imageUrl} />
+            <MessageBox
+              key={i}
+              index={i}
+              message={ele}
+              pfpUrl={pfpUrl}
+              uploadedImgID={uploadedImgID}
+            />
           ))}
         </div>
         <div ref={bottomRef} />
       </div>
-
       {/* Chat Input */}
       <ChatInputBox
-      imageBase64={imageBase64}
-      setImageBase64={setImageBase64}
+        imageBase64={imageBase64}
+        setImageBase64={setImageBase64}
         onSubmit={(e) => {
           e.preventDefault();
 
@@ -148,6 +178,7 @@ export default function Messages({
 
           if (imageBase64) {
             newMessage.image = imageBase64;
+            newMessage.public_id = uploadedImgID
           }
 
           socket.emit("userMessage", newMessage);
@@ -155,9 +186,11 @@ export default function Messages({
           setMessages((prev) => [
             ...prev,
             {
+              id: randomId(),
               content: prompt || "Image Uploaded!",
               role: "user",
               createdAt: new Date(),
+              image: uploadedImgID,
             },
           ]);
           setImageBase64("");
@@ -165,8 +198,7 @@ export default function Messages({
         }}
         prompt={prompt}
         setPrompt={setPrompt}
-        setMessages={setMessages}
-        pending={isGenerating}
+        pending={isGenerating||isUploading}
         additionalInputElement={
           <>
             <input type="text" name="chatId" readOnly hidden value={chatId} />

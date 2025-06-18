@@ -16,9 +16,8 @@ import cloudinary from "@/lib";
 import {
   getUser,
   getUserByEmailPassword,
-  getUserCredentialsByEmail,
 } from "@/lib/dal/user.dal";
-import { v4 as uuidv4 } from "uuid"; // npm install uuid if not already
+import { v4 as uuidv4 } from "uuid";
 
 export const contactUs = async (
   state: ContactFormState,

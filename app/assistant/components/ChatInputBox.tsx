@@ -2,7 +2,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { ArrowUpFromLine, Loader2, X } from "lucide-react";
 import ReportUploader from "./ReportUploader";
-import { $Enums } from "@prisma/client/edge";
 
 export default function ChatInputBox({
   isNewChat,
@@ -20,15 +19,6 @@ export default function ChatInputBox({
   setImageBase64?: React.Dispatch<React.SetStateAction<string | undefined>>;
   isNewChat?: boolean;
   additionalInputElement?: React.ReactNode;
-  setMessages?: React.Dispatch<
-    React.SetStateAction<
-      {
-        content: string;
-        role: $Enums.MessageRole;
-        createdAt: Date;
-      }[]
-    >
-  >;
   onSubmit?: React.FormEventHandler<HTMLFormElement>;
   setPrompt: React.Dispatch<React.SetStateAction<string>>;
   prompt: string;

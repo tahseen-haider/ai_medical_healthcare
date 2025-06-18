@@ -10,7 +10,7 @@ export default async function MessagesWrapper({ chatId }: { chatId: string }) {
   const messages = await getMessages(chatId);
   if (!messages) redirect("/assistant");
 
-  const imageUrl = await getPfp()
+  const pfpUrl = await getPfp()
   
-  return <Messages initialMessages={messages} imageUrl={imageUrl}/>;
+  return <Messages initialMessages={messages} pfpUrl={pfpUrl}/>;
 }

@@ -47,6 +47,7 @@ model Message {
   chatId      String       @db.ObjectId
   role        MessageRole  // "user" or "assistant"
   content     String
+  image       String?
   createdAt   DateTime     @default(now())
 }
 
