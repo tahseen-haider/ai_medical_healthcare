@@ -40,6 +40,7 @@ export default function Messages({
   const pathname = usePathname();
   const chatId = pathname.split("/assistant/")[1];
 
+
   // Scroll to bottom on new messages
   useLayoutEffect(() => {
     const timeout = setTimeout(() => {

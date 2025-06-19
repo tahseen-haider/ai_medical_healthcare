@@ -83,7 +83,7 @@ export const getChatListOfUser = async (userId: string) => {
 const getAllImgsOfChatId = async (chatId: string) => {
   try {
     const messages = await getMessages(chatId);
-    return messages?.map((ele) => ele.image)?.filter((ele) => ele);
+    return messages?.map((ele) => ele.image).filter((img): img is string => typeof img === 'string') || [];
   } catch (error) {
     console.log("Error while getting Images ids: ", error);
   }
