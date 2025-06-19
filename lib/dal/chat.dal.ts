@@ -5,6 +5,7 @@ import "server-only";
 import { prisma } from "../db/prisma";
 import cloudinary from "..";
 import { v4 as uuidv4 } from "uuid";
+import { getMessages } from "@/actions/chat.action";
 
 export const startNewChatInDB = async (
   userId: string,
@@ -79,15 +80,35 @@ export const getChatListOfUser = async (userId: string) => {
   return currentUser?.chats;
 };
 
+const getAllImgsOfChatId = async (chatId: string) => {
+  try {
+    const messages = await getMessages(chatId);
+    return messages?.map((ele) => ele.image)?.filter((ele) => ele);
+  } catch (error) {
+    console.log("Error while getting Images ids: ", error);
+  }
+};
+
 export const deleteChatFromDB = async (chatId: string) => {
-  await prisma.$transaction([
-    prisma.message.deleteMany({
-      where: { chatId },
-    }),
-    prisma.chatSession.delete({
-      where: { id: chatId },
-    }),
-  ]);
+  try {
+    const res = await getAllImgsOfChatId(chatId);
+
+    if (res) {
+      for (const id of res) {
+        await cloudinary.uploader.destroy(id!);
+      }
+    }
+    await prisma.$transaction([
+      prisma.message.deleteMany({
+        where: { chatId },
+      }),
+      prisma.chatSession.delete({
+        where: { id: chatId },
+      }),
+    ]);
+  } catch (error) {
+    console.log("Error while Deleting Chat: ", error);
+  }
 };
 
 export const getMessagesUsingChatId = async (chatId: string) => {
