@@ -59,7 +59,7 @@ export default function Messages({
         message: lastMessage.content,
         chatId,
         isOldMessage: true,
-        image: lastMessage.image,
+        public_id: lastMessage.image,
       });
     }
   }, []);

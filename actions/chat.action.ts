@@ -23,11 +23,13 @@ export async function startNewChat(state: ChatState, formData: FormData) {
   if (!validatedFields.success) return { message: "Invalid Input" };
 
   const { userPrompt } = validatedFields.data;
+  const imageBase64 = formData.get("imageBase64") as string | null
 
   const authenticateUser = await getAuthenticateUserIdnRole();
   const newChatSession = await startNewChatInDB(
     authenticateUser.userId,
-    userPrompt
+    userPrompt,
+    imageBase64
   );
 
   return redirect(`/assistant/${newChatSession?.id}`);

@@ -45,10 +45,11 @@ export default function ChatInputBox({
     }
   }
 
+
   return (
     <div className="lg:w-4/6 w-5/6 bottom-0 bg-light-1 dark:bg-dark-4">
       <div className="border-[1px] border-gray-400 p-1 mb-4 w-full mx-auto rounded-2xl">
-        <form onSubmit={onSubmit} action={action ? action : undefined}>
+        <form onSubmit={onSubmit} action={action}>
           <div className="flex flex-col-reverse w-full">
             <textarea
               required={isNewChat}
@@ -78,14 +79,14 @@ export default function ChatInputBox({
               </div>
             )}
             {/* Report Uploader */}
-            {!isNewChat && <ReportUploader />}
+            <ReportUploader />
             {/* Prompt Sender */}
             <button
               ref={buttonRef}
               onClick={() => {
                 textareaRef.current?.focus();
               }}
-              disabled={pending}
+              disabled={!prompt && !imageBase64 || pending}
               type="submit"
               aria-label="Send message"
               className="bg-light-4 text-white p-2 rounded-full relative shadow-light dark:shadow-dark"

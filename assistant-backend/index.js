@@ -37,17 +37,17 @@ io.on("connection", (socket) => {
         ];
 
         const userContent = [];
-
+        const newPublicId = `chat_images/${uuidv4()}`;
         if (message) {
           userContent.push({
             type: "text",
             text: message,
           });
         }
-        if (image) {
+        if (public_id) {
           userContent.push({
             type: "image_url",
-            image_url: { url: image },
+            image_url: { url: image ? image : `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/${public_id}` },
           });
         }
 
@@ -80,7 +80,7 @@ io.on("connection", (socket) => {
         socket.emit("done");
 
         if (!isOldMessage) {
-          if (image && message) {
+          if (public_id && message) {
             await prisma.message.create({
               data: {
                 image: public_id,
@@ -89,7 +89,7 @@ io.on("connection", (socket) => {
                 content: message,
               },
             });
-          } else if (image && !message) {
+          } else if (public_id && !message) {
             await prisma.message.create({
               data: {
                 image: public_id,
@@ -98,7 +98,7 @@ io.on("connection", (socket) => {
                 content: "Image Uploaded",
               },
             });
-          } else if (!image && message) {
+          } else if (!public_id && message) {
             await prisma.message.create({
               data: {
                 chatId,

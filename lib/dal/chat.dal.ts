@@ -3,9 +3,28 @@
 import "server-only";
 
 import { prisma } from "../db/prisma";
+import cloudinary from "..";
+import { v4 as uuidv4 } from "uuid";
 
-export const startNewChatInDB = async (userId: string, userPrompt: string) => {
+export const startNewChatInDB = async (
+  userId: string,
+  userPrompt: string,
+  imageBase64: string | null
+) => {
   try {
+    let publicUploadedImageId = "";
+    if (imageBase64) {
+      const newPublicId = `chat_images/${userId}-${uuidv4()}`;
+
+      const res = await cloudinary.uploader.upload(imageBase64, {
+        folder: "chat_images",
+        public_id: newPublicId,
+        overwrite: false,
+      });
+
+      publicUploadedImageId = res.public_id
+    }
+    
     const chatSession = await prisma.chatSession.create({
       data: {
         userId,
@@ -14,6 +33,7 @@ export const startNewChatInDB = async (userId: string, userPrompt: string) => {
           create: {
             role: "user",
             content: userPrompt,
+            image: publicUploadedImageId,
           },
         },
       },
@@ -37,9 +57,8 @@ export const sendPrompt = async (chatId: string, userPrompt: string) => {
       content: userPrompt,
     },
   });
-  return messages
+  return messages;
 };
-
 
 export const getChatListOfUser = async (userId: string) => {
   const currentUser = await prisma.user.findUnique({
@@ -66,9 +85,9 @@ export const deleteChatFromDB = async (chatId: string) => {
 export const getMessagesUsingChatId = async (chatId: string) => {
   const messages = await prisma.message.findMany({
     where: {
-      chatId
-    }
-  })
-  if(!messages || messages.length===0) return null;
-  return messages
-}
+      chatId,
+    },
+  });
+  if (!messages || messages.length === 0) return null;
+  return messages;
+};
