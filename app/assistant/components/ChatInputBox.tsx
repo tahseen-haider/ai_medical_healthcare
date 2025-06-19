@@ -69,7 +69,7 @@ export default function ChatInputBox({
           <div className="w-full flex gap-5 justify-end p-2">
             {imageBase64 && (
               <div
-                className="relative w-10 h-10 object-cover overflow-hidden cursor-pointer"
+                className="relative w-10 h-10 flex items-center object-cover overflow-hidden cursor-pointer"
                 onClick={() => {
                   setImageBase64!("");
                 }}

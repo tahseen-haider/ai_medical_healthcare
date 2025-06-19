@@ -8,7 +8,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export const startNewChatInDB = async (
   userId: string,
-  userPrompt: string,
+  userPrompt: string | null,
   imageBase64: string | null
 ) => {
   try {
@@ -22,18 +22,26 @@ export const startNewChatInDB = async (
         overwrite: false,
       });
 
-      publicUploadedImageId = res.public_id
+      publicUploadedImageId = res.public_id;
     }
-    
+
     const chatSession = await prisma.chatSession.create({
       data: {
         userId,
-        title: userPrompt.slice(0, 50),
+        title: userPrompt
+          ? userPrompt !== ""
+            ? userPrompt?.slice(0, 50)
+            : "Image Uploaded"
+          : "Image Uploaded",
         messages: {
           create: {
             role: "user",
-            content: userPrompt,
-            image: publicUploadedImageId,
+            content: userPrompt
+              ? userPrompt !== ""
+                ? userPrompt
+                : "Image Uploaded"
+              : "Image Uploaded",
+            image: publicUploadedImageId ? publicUploadedImageId : undefined,
           },
         },
       },
