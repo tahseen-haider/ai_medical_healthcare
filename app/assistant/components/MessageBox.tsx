@@ -5,7 +5,6 @@ import ProfilePicture from "@/components/ProfilePicture";
 import { $Enums } from "@prisma/client/edge";
 import Image from "next/image";
 import React, { useState } from "react";
-import img from "./95682-plz-check-my-cbc-report-marham-32.jpeg";
 
 export default function MessageBox({
   message,
@@ -79,7 +78,7 @@ export default function MessageBox({
                     alt="uploaded image"
                     height={1000}
                     width={1000}
-                    className="h-full w-fit  object-contain bg-amber-200"
+                    className="h-full w-fit  object-contain"
                   />
                 </div>
               )}

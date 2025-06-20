@@ -47,7 +47,11 @@ io.on("connection", (socket) => {
         if (public_id) {
           userContent.push({
             type: "image_url",
-            image_url: { url: image ? image : `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/${public_id}` },
+            image_url: {
+              url: image
+                ? image
+                : `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/${public_id}`,
+            },
           });
         }
 
@@ -133,10 +137,24 @@ io.on("connection", (socket) => {
         public_id: newPublicId,
         overwrite: false,
       });
-
+      
       socket.emit("imageUploaded", { public_image_id: res.public_id });
     } catch (err) {
       console.log(err);
+      socket.emit("imageUploaded", { public_image_id: "" });
+    }
+  });
+  socket.on("deleteImage", async ({ uploadedImgID }) => {
+    try {
+      const res = await cloudinary.uploader.destroy(uploadedImgID);
+      if(res) {
+        socket.emit("imageDeleted")
+      }else{
+        throw Error
+      }
+    } catch (err) {
+      console.log("Not Deleted",err);
+      socket.emit("imageDeleted")
     }
   });
 });
