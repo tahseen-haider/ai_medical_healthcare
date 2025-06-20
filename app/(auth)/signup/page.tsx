@@ -12,7 +12,7 @@ export default function SignupPage() {
   return (
     <main className="bg-light-1 dark:bg-dark-4 flex flex-col items-center">
       {/* Login Section */}
-      <section className="px-6 py-10 flex items-center flex-col  gap-12 w-full max-w-[1920px]">
+      <section className="px-2 sm:px-6 py-10 flex items-center flex-col  gap-12 w-full max-w-[1920px]">
         <div className="flex justify-between gap-8 w-full">
           <div className="flex flex-col gap-3">
             <h1 className="font-ubuntu font-bold text-4xl text-dark-4 dark:text-white -tracking-[0.5px] ">

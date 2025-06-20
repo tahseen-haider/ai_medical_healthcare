@@ -37,7 +37,7 @@ export default function AppointmentPage() {
   return (
     <main className="flex flex-col items-center">
       <div className="max-w-[1920px] w-full">
-        <section className="px-6 py-10 flex items-center flex-col  gap-12 max-w-[1920px] w-full bg-light-2 dark:bg-dark-4">
+        <section className="px-2 sm:px-6 py-10 flex items-center flex-col  gap-12 max-w-[1920px] w-full bg-light-2 dark:bg-dark-4">
           <div className="flex justify-between w-full">
             <div className="flex flex-col gap-3">
               <h1 className="font-ubuntu font-bold text-4xl text-dark-4 dark:text-white -tracking-[0.5px] ">

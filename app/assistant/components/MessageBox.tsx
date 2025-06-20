@@ -47,7 +47,7 @@ export default function MessageBox({
         </div>
         <div
           className={` ${
-            !isUser ? "bg-light-1 dark:bg-dark-4" : "bg-light-2 dark:bg-dark-3"
+            !isUser ? "bg-light-1 dark:bg-dark-4" : "text-white bg-light-4 dark:bg-dark-3"
           } shadow-light dark:shadow-dark w-full rounded-lg py-2 px-4 whitespace-pre-wrap`}
         >
           {message.image && (

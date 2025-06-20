@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
 
-  const restrictedRoutes = /^\/(login|signup|verify-email(?:\/.*)?)$/;
+  const restrictedRoutes = /^\/(login|signup|verify-email(?:\/.*)?|dashboard)$/;
   const publicRoutes =
     /^\/$|^\/(appointment|contact-us|about-us|reset-password(?:\/.*)?)$/;
 

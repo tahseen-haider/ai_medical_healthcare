@@ -11,7 +11,7 @@ export default function ChatSuspenseFallbackMessage({ isUser }: { isUser: boolea
         {/* Message bubble skeleton */}
         <div
           className={`${
-            !isUser ? 'bg-light-1 dark:bg-dark-4' : 'bg-light-2 dark:bg-dark-3'
+            !isUser ? 'bg-light-1 dark:bg-dark-4' : 'bg-light-4 dark:bg-dark-3'
           } shadow-light dark:shadow-dark w-full rounded-lg py-4 px-4 animate-pulse`}
         >
           <div className="h-4 bg-gray-300 dark:bg-dark-2 rounded w-3/4 mb-2" />

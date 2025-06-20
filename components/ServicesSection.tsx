@@ -34,24 +34,24 @@ const servicesList = [
 ];
 export default function ServicesSection() {
   return (
-    <section className="px-6 py-16">
-      <h2 className="font-ubuntu font-bold text-4xl -tracking-[0.5px]">
+    <section className="px-2 sm:px-6 py-16">
+      <h2 className="font-ubuntu font-bold text-2xl sm:text-4xl -tracking-[0.5px]">
         Our Services
       </h2>
       <div className="mt-10 flex flex-wrap justify-between">
         {servicesList.map((ele) => (
           <div
             key={ele.title}
-            className="h-72 w-full md:w-1/2 lg:w-1/4 flex justify-center mb-12"
+            className="h-60 sm:h-72 w-full md:w-1/2 lg:w-1/4 flex justify-center mb-6 sm:mb-12"
           >
-            <Link href={ele.link} className="group cursor-pointer flex flex-col gap-5 h-72 w-[90%] lg:max-w-72 rounded-[35px] bg-light-1 dark:bg-dark-1 hover:bg-light-4 dark:hover:bg-light-1 shadow-light dark:shadow-dark p-6">
-              <div className="w-14 h-14 rounded-lg bg-[rgba(175,213,255,0.55)] flex items-center justify-center text-black group-hover:text-white dark:group-hover:text-dark-4">
+            <Link href={ele.link} className="group cursor-pointer flex flex-col gap-3 sm:gap-5 h-full w-[90%] lg:max-w-72 rounded-[35px] bg-light-1 dark:bg-dark-4 hover:bg-light-4 dark:hover:bg-dark-1 shadow-light dark:shadow-dark p-6">
+              <div className="w-14 h-14 shadow-light rounded-lg bg-light-4 dark:bg-dark-3 text-white flex items-center justify-center  group-hover:text-white dark:group-hover:text-white">
                 {ele.icon}
               </div>
-              <h3 className="font-ubuntu font-bold text-2xl tracking-tight dark:group-hover:text-dark-4 group-hover:text-light-1">
+              <h3 className="font-ubuntu font-bold text-xl sm:text-2xl tracking-tight dark:group-hover:text-white group-hover:text-light-1">
                 {ele.title.split(" ")[0]} <br /> {ele.title.split(" ")[1]}
               </h3>
-              <p className="tracking-tight text-base font-medium leading-5 text-gray-600 dark:text-white dark:group-hover:text-dark-4 group-hover:text-light-1">
+              <p className="tracking-tight text-base  leading-5 text-gray-600 dark:text-white dark:group-hover:text-white group-hover:text-light-1">
                 {ele.desc}
               </p>
             </Link>

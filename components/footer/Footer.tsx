@@ -76,7 +76,7 @@ export default function Footer() {
     <footer className="relative z-0 bg-light-2 dark:bg-dark-3 dark:text-white flex flex-col items-center">
       <div className="max-w-[1920px] w-full">
         {/* Top Section */}
-        <div className=" px-6 flex flex-wrap justify-between py-10">
+        <div className=" px-2 sm:px-6 flex flex-wrap justify-between py-10">
           {/* Contacts */}
           <div className="lg:w-1/3 sm:w-1/2 w-full">
             <div className="flex flex-col justify-between gap-10">

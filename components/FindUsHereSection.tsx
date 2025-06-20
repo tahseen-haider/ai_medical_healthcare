@@ -2,17 +2,17 @@ import { Home, Mail, Phone } from "lucide-react";
 
 const contactList = [
   {
-    icon: <Phone size={60} />,
+    icon: <Phone className="w-10 h-10 sm:w-16 sm:h-16"/>,
     title: "Phone",
     detail: "+92 302 0620626",
   },
   {
-    icon: <Mail size={60} />,
+    icon: <Mail className="w-10 h-10 sm:w-16 sm:h-16"/>,
     title: "Email",
     detail: "tahsin3194@gmail.com",
   },
   {
-    icon: <Home size={60} />,
+    icon: <Home className="w-10 h-10 sm:w-16 sm:h-16"/>,
     title: "Location",
     detail: "University of Sahiwal, Punjab",
   },
@@ -20,16 +20,16 @@ const contactList = [
 
 export default function FindUsHereSection() {
   return (
-    <section className="flex flex-col px-6 py-20 gap-10">
-      <h2 className="font-ubuntu font-bold text-4xl text-dark-4 dark:text-white -tracking-[0.5px] ">
+    <section className="flex flex-col px-2 sm:px-6 py-10 sm:py-20 gap-10">
+      <h2 className="font-ubuntu font-bold text-2xl sm:text-4xl -tracking-[0.5px]">
         Find Us Here
       </h2>
       {/* Contacts */}
-      <div className="flex flex-col lg:flex-row justify-between gap-12 text-white">
+      <div className="flex flex-col lg:flex-row justify-between gap-4 sm:gap-12 text-white">
         {contactList.map((ele) => (
           <div
             key={ele.title}
-            className="w-full h-[120px] lg:w-1/3 bg-light-4 dark:bg-dark-3 flex items-center p-6 gap-4 rounded-[35px] shadow-light dark:shadow-dark "
+            className="w-full h-[60px] sm:h-[120px] lg:w-1/3 bg-light-4 dark:bg-dark-3 flex items-center p-6 gap-4 rounded-[15px] shadow-light dark:shadow-dark "
           >
             <div>{ele.icon}</div>
             <div>

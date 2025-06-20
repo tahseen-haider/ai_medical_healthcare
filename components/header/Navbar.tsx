@@ -50,7 +50,7 @@ function Navbar({
 
   return (
     <header
-      className={`fixed z-30 w-screen h-16 dark:bg-dark-1 bg-light-4  flex justify-center`}
+      className={`fixed z-30 w-screen h-14 sm:h-16 dark:bg-dark-1 bg-light-4  flex justify-center`}
     >
       <div className="max-w-[1920px] w-full flex items-center justify-between h-full px-2 lg:px-6">
         <div className="absolute -z-10 w-screen h-full left-0 dark:bg-dark-1 bg-light-4" />
@@ -66,26 +66,30 @@ function Navbar({
           <ul
             className={`   lg:relative lg:flex-row lg:w-fit lg:top-0 lg:z-0
                         absolute dark:bg-dark-1 bg-light-4 flex flex-col items-center lg:gap-7 w-screen left-0 ${
-                          isNavbarDown ? "top-16" : "-top-60"
-                        } transition-all duration-1000 -z-20`}
+                          isNavbarDown ? "top-14" : "-top-60"
+                        } transition-all duration-300 -z-20`}
           >
             {NavLinks.map((ele) => (
               <li key={ele.title} className="py-3">
                 <Link
+                  onClick={()=>{setIsNavbarDown(false)}}
                   href={ele.link}
                   className={`text-[18px] ${
                     isActiveLink(pathname, ele.link)
-                      ? "text-black"
+                      ? "text-black border-b-4 border-black pb-1 font-bold"
                       : "text-white"
-                  } font-roboto font-bold leading-[22px] -tracking-[0.5px]`}
+                  } font-roboto leading-[22px] -tracking-[0.5px]`}
                 >
                   {ele.title}
                 </Link>
               </li>
             ))}
-            <div className="sm:hidden text-[18px] pb-3 flex gap-4 items-center font-roboto font-bold leading-[22px] -tracking-[0.5px]">
+            <div className="sm:hidden p-2 border-t-2 w-full flex justify-center items-center">
+            <div className="text-[18px] text-white  flex gap-4 items-center justify-center font-roboto font-bold leading-[22px] -tracking-[0.5px]">
               Toggle Theme: 
               <ThemeToggler />
+            </div>
+
             </div>
           </ul>
         </nav>

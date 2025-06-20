@@ -30,9 +30,9 @@ export default function ChatList({ chatsList }: { chatsList: chatsListType }) {
           key={index}
           className={`h-10 w-full border-2 ${
             ele.id === chatId
-              ? "bg-light-2 dark:bg-dark-2 font-bold"
+              ? "bg-light-4 dark:bg-dark-2 font-bold text-white dark:text-white"
               : "bg-light-1 dark:bg-dark-4 font-normal"
-          } text-black dark:text-white rounded-lg flex items-center font-ubuntu cursor-pointer`}
+          } rounded-lg flex items-center font-ubuntu cursor-pointer`}
         >
           <div className="flex justify-between w-full pl-3 items-center">
             {ele.title?.slice(0, 30)}

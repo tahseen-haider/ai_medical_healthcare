@@ -6,13 +6,13 @@ import YouTubeEmbed from "./YouTubeEmbed";
 
 export default function WhyChooseUsSection() {
   return (
-    <section className="flex lg:flex-row flex-col justify-between items-center px-6 py-16 bg-light-2 dark:bg-dark-3 mb-1 ">
+    <section className="flex lg:flex-row flex-col justify-between items-center px-2 sm:px-6 py-10 sm:py-16 bg-light-2 dark:bg-dark-3 mb-1 ">
       <div className="w-full h-full pb-8 lg:pb-0 lg:w-1/2  flex flex-col justify-between">
-        <h2 className="font-ubuntu font-bold text-4xl text-dark-4 dark:text-white -tracking-[0.5px] ">
+        <h2 className="font-ubuntu font-bold text-2xl sm:text-4xl -tracking-[0.5px]">
           Why Choose Us?
         </h2>
-        <div className="my-12 flex flex-wrap justify-between gap-4">
-          <h3 className="font-ubuntu font-bold text-2xl text-black dark:text-white leading-7 tracking-tight">
+        <div className="my-4 pb-4 sm:my-12 flex flex-wrap justify-between gap-4">
+          <h3 className="font-ubuntu font-bold text-lg sm:text-2xl text-black dark:text-white leading-7 tracking-tight">
             We Made Health Care Easy <br />
             for your family
           </h3>

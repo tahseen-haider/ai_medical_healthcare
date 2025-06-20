@@ -9,7 +9,7 @@ export default function HeroBtn() {
       onClick={(e) => {
         redirect("/assistant");
       }}
-      className="bg-light-1 hover:text-white font-bold text-3xl px-6 py-8"
+      className="bg-light-4 dark:bg-dark-1 text-white hover:text-white font-bold text-3xl px-6 py-8"
     >
       Chat with Ai NOW
     </Btn>

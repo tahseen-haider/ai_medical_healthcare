@@ -14,7 +14,7 @@ export default function VerifyEmailPage({
   const [state, action, pending] = useActionState(verifyEmail, undefined);
 
   return (
-    <section className="px-6 py-10 flex items-center flex-col  gap-12 max-w-[1920px] w-full">
+    <section className="px-2 sm:px-6 py-10 flex items-center flex-col  gap-12 max-w-[1920px] w-full">
       <div className="flex justify-between w-full">
         <div className="flex flex-col gap-3">
           <h1 className="font-ubuntu font-bold text-4xl text-dark-4 dark:text-white -tracking-[0.5px] ">
