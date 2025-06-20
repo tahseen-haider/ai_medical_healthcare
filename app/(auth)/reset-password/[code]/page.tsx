@@ -46,7 +46,7 @@ export default function page({
       {/* Form */}
       <form
         action={action}
-        className="w-5/6 rounded-4xl shadow-light dark:shadow-dark py-16 px-5 lg:px-6 flex flex-col items-center gap-12"
+        className="w-full md:w-5/6 rounded-4xl shadow-light dark:shadow-dark py-16 px-5 lg:px-6 flex flex-col items-center gap-12"
       >
         <div className="flex flex-col lg:flex-row gap-6 w-full">
           <input
