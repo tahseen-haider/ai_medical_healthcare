@@ -40,7 +40,6 @@ export default function Messages({
   const pathname = usePathname();
   const chatId = pathname.split("/assistant/")[1];
 
-
   // Scroll to bottom on new messages
   useLayoutEffect(() => {
     const timeout = setTimeout(() => {
@@ -119,6 +118,7 @@ export default function Messages({
   }, []);
 
   const [imageBase64, setImageBase64] = useState<string | undefined>();
+  const imageUploaderRef = useRef<HTMLInputElement | null>(null);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -126,10 +126,13 @@ export default function Messages({
 
     const reader = new FileReader();
     reader.onloadend = () => {
+      if (imageUploaderRef.current) {
+        imageUploaderRef.current.value = "";
+      }
       const base64 = reader.result as string;
       setImageBase64(base64); // e.g. data:image/png;base64,...
       setIsUploading(true);
-      socket.emit("uploadImage", {image: base64, chatId});
+      socket.emit("uploadImage", { image: base64, chatId });
     };
     reader.readAsDataURL(file); // auto-encodes to base64 with mime
   };
@@ -161,8 +164,11 @@ export default function Messages({
       </div>
       {/* Chat Input */}
       <ChatInputBox
+        onCancelImg={() => {
+          if (imageUploaderRef.current) imageUploaderRef.current.value = "";
+          setImageBase64("");
+        }}
         imageBase64={imageBase64}
-        setImageBase64={setImageBase64}
         onSubmit={(e) => {
           e.preventDefault();
 
@@ -179,7 +185,7 @@ export default function Messages({
 
           if (imageBase64) {
             newMessage.image = imageBase64;
-            newMessage.public_id = uploadedImgID
+            newMessage.public_id = uploadedImgID;
           }
 
           socket.emit("userMessage", newMessage);
@@ -199,11 +205,12 @@ export default function Messages({
         }}
         prompt={prompt}
         setPrompt={setPrompt}
-        pending={isGenerating||isUploading}
+        pending={isGenerating || isUploading}
         additionalInputElement={
           <>
             <input type="text" name="chatId" readOnly hidden value={chatId} />
             <input
+              ref={imageUploaderRef}
               type="file"
               name="image"
               id="imageUpload"

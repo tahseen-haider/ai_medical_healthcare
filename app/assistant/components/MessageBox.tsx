@@ -22,8 +22,10 @@ export default function MessageBox({
   pfpUrl?: string;
 }) {
   const [maximizedImg, setMaximizedImg] = useState(false);
-  const image = message.image?`https://res.cloudinary.com/dydu5o7ny/image/upload/${message.image}`:"";
-  
+  const image = message.image
+    ? `https://res.cloudinary.com/dydu5o7ny/image/upload/${message.image}`
+    : "";
+
   const time = message.createdAt.toLocaleTimeString("en-US", {
     hour: "numeric",
     minute: "2-digit",
@@ -57,7 +59,7 @@ export default function MessageBox({
                 height={80}
                 width={80}
                 quality={40}
-                className="rounded-sm cursor-pointer w-auto h-auto"
+                className="rounded-sm cursor-pointer w-auto h-auto mb-3"
                 onClick={() => {
                   setMaximizedImg(true);
                 }}
@@ -83,7 +85,11 @@ export default function MessageBox({
               )}
             </>
           )}
-          <Markdown text={message.content}></Markdown>
+          {message.role === "user" ? (
+            message.content
+          ) : (
+            <Markdown text={message.content}></Markdown>
+          )}
         </div>
       </div>
       <div

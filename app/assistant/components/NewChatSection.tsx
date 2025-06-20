@@ -1,5 +1,5 @@
 "use client";
-import { useActionState, useState } from "react";
+import { useActionState, useRef, useState } from "react";
 import { startNewChat } from "@/actions/chat.action";
 import ChatInputBox from "./ChatInputBox";
 
@@ -7,6 +7,9 @@ export default function NewChatSection() {
   const [state, action, pending] = useActionState(startNewChat, undefined);
   const [prompt, setPrompt] = useState("");
   const [imageBase64, setImageBase64] = useState<string | undefined>();
+
+  const imageUploaderRef = useRef<HTMLInputElement | null>(null);
+
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -24,7 +27,11 @@ export default function NewChatSection() {
         What can I help with?
       </h2>
       <ChatInputBox
-        pending={ pending}
+        onCancelImg={() => {
+          setImageBase64("");
+          if (imageUploaderRef.current) imageUploaderRef.current.value = "";
+        }}
+        pending={pending}
         action={action}
         prompt={prompt}
         setPrompt={setPrompt}
@@ -32,6 +39,7 @@ export default function NewChatSection() {
         additionalInputElement={
           <>
             <input
+              ref={imageUploaderRef}
               type="file"
               name="image"
               id="imageUpload"
@@ -40,7 +48,7 @@ export default function NewChatSection() {
               onChange={handleFileChange}
             />
             <input
-              value={imageBase64 || ''}
+              value={imageBase64 || ""}
               type="text"
               name="imageBase64"
               hidden

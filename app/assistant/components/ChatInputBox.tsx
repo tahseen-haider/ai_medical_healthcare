@@ -13,10 +13,10 @@ export default function ChatInputBox({
   action,
   isGenerating,
   imageBase64,
-  setImageBase64,
+  onCancelImg,
 }: {
+  onCancelImg?: () => void;
   imageBase64?: string;
-  setImageBase64?: React.Dispatch<React.SetStateAction<string | undefined>>;
   isNewChat?: boolean;
   additionalInputElement?: React.ReactNode;
   onSubmit?: React.FormEventHandler<HTMLFormElement>;
@@ -45,7 +45,6 @@ export default function ChatInputBox({
     }
   }
 
-
   return (
     <div className="lg:w-4/6 w-5/6 bottom-0 bg-light-1 dark:bg-dark-4">
       <div className="border-[1px] border-gray-400 p-1 mb-4 w-full mx-auto rounded-2xl">
@@ -70,9 +69,7 @@ export default function ChatInputBox({
             {imageBase64 && (
               <div
                 className="relative w-10 h-10 flex items-center object-cover overflow-hidden cursor-pointer"
-                onClick={() => {
-                  setImageBase64!("");
-                }}
+                onClick={onCancelImg}
               >
                 <X className="absolute text-black w-full h-full opacity-0 hover:opacity-50" />
                 <img key={imageBase64} src={imageBase64} alt="uploaded image" />
@@ -86,7 +83,7 @@ export default function ChatInputBox({
               onClick={() => {
                 textareaRef.current?.focus();
               }}
-              disabled={!prompt && !imageBase64 || pending}
+              disabled={(!prompt && !imageBase64) || pending}
               type="submit"
               aria-label="Send message"
               className="bg-light-4 text-white p-2 rounded-full relative shadow-light dark:shadow-dark"
