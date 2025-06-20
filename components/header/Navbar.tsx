@@ -9,7 +9,13 @@ import { Menu, X } from "lucide-react";
 import Btn from "../Button";
 import ProfileButton from "./ProfileButton";
 
-function Navbar({ isAuthenticated,imageUrl }: { isAuthenticated: boolean,imageUrl?: string }) {
+function Navbar({
+  isAuthenticated,
+  imageUrl,
+}: {
+  isAuthenticated: boolean;
+  imageUrl?: string;
+}) {
   const NavLinks = [
     {
       title: "Home",
@@ -77,18 +83,14 @@ function Navbar({ isAuthenticated,imageUrl }: { isAuthenticated: boolean,imageUr
                 </Link>
               </li>
             ))}
+            <div className="sm:hidden text-[18px] pb-3 flex gap-4 items-center font-roboto font-bold leading-[22px] -tracking-[0.5px]">
+              Toggle Theme: 
+              <ThemeToggler />
+            </div>
           </ul>
         </nav>
 
         <div className="flex gap-4 lg:w-37 w-48 justify-end items-center">
-          <div className="lg:hidden">
-            <Btn
-              onClick={() => setIsNavbarDown(!isNavbarDown)}
-              className="text-black hover:text-white bg-white"
-            >
-              {!isNavbarDown ? <Menu /> : <X />}
-            </Btn>
-          </div>
           {isNavbarDown && (
             <div
               className="absolute top-0 left-0 w-full h-screen backdrop-blur-sm -z-30"
@@ -108,12 +110,22 @@ function Navbar({ isAuthenticated,imageUrl }: { isAuthenticated: boolean,imageUr
                 onClick={() => {}}
                 className="bg-light-1 hover:text-white text-black"
               >
-                Login
+                Get Started
               </Btn>
             </Link>
           )}
-          {isAuthenticated && <ProfileButton imageUrl={imageUrl}/>}
-          <ThemeToggler />
+          {isAuthenticated && <ProfileButton imageUrl={imageUrl} />}
+          <div className="hidden sm:block">
+            <ThemeToggler />
+          </div>
+          <div className="lg:hidden">
+            <Btn
+              onClick={() => setIsNavbarDown(!isNavbarDown)}
+              className="text-black hover:text-white bg-white"
+            >
+              {!isNavbarDown ? <Menu /> : <X />}
+            </Btn>
+          </div>
         </div>
       </div>
     </header>
