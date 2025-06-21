@@ -86,6 +86,7 @@ export default function SignupPage() {
                 placeholder="********"
                 required
                 minLength={8}
+                maxLength={15}
                 className="block border-2 border-gray-200 h-14 w-full p-4 rounded-2xl mt-2 "
               />
             </div>

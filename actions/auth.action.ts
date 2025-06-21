@@ -139,9 +139,17 @@ function sendResetLinkHTML(baseUrl: string,email:string, code: number) {
 }
 
 
+type EmailRequest = {
+  to: string;
+  subject: string;
+  html: string;
+};
 
-async function sendEmail(req: { to: string; subject: string; html: string }) {
-  const { to, subject, html } = req;
+export async function sendEmail({ to, subject, html }: EmailRequest) {
+  if (!process.env.EMAIL_ADMIN || !process.env.PASSWORD_ADMIN) {
+    console.error("Missing email environment variables.");
+    return undefined;
+  }
 
   try {
     const transporter = nodemailer.createTransport({
@@ -152,18 +160,21 @@ async function sendEmail(req: { to: string; subject: string; html: string }) {
       },
     });
 
-    const res = await transporter.sendMail({
+    const mailOptions = {
       from: `"Tahsin Haider" <${process.env.EMAIL_ADMIN}>`,
       to,
       subject,
       html,
-    });
+    };
 
-    return res;
+    const response = await transporter.sendMail(mailOptions);
+    return response;
   } catch (error) {
+    console.error("Email sending failed:", error);
     return undefined;
   }
 }
+
 
 export async function sendVerifyEmail(
   state: VerifyEmailFormState,
@@ -254,6 +265,8 @@ export async function resetPassword(
 
   return { message: "Password Reset Successfull. Login with new Password" };
 }
+
+
 export async function signup(state: SignUpFormState, formData: FormData) {
   const validatedFields = SignupFormSchema.safeParse({
     name: formData.get("username"),
@@ -268,13 +281,14 @@ export async function signup(state: SignUpFormState, formData: FormData) {
   }
 
   const { name, email, password } = validatedFields.data;
+
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const userToken = await insertUserToDB(name, email, hashedPassword);
 
   if (!userToken) {
     return {
-      message: "An error occurred while creating your account.",
+      message: "Email already used. Login or Reset Password from Login Page",
     };
   }
 

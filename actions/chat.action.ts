@@ -1,5 +1,7 @@
 "use server";
 
+
+import { v4 as uuidv4 } from "uuid";
 import {
   deleteChatFromDB,
   getChatListOfUser,
@@ -7,13 +9,13 @@ import {
   startNewChatInDB,
 } from "@/lib/dal/chat.dal";
 import {
-  ChatInputSchema,
   ChatState,
   DeleteChatSchema,
   NewChatInputSchema,
 } from "@/lib/definitions";
 import { getAuthenticateUserIdnRole } from "@/lib/session";
 import { redirect } from "next/navigation";
+import cloudinary from "@/lib";
 
 export async function startNewChat(state: ChatState, formData: FormData) {
   const validatedFields = NewChatInputSchema.safeParse({
@@ -61,4 +63,32 @@ export async function deleteChat(state: ChatState, formData: FormData) {
   await deleteChatFromDB(chatId);
 
   redirect("/assistant");
+}
+
+
+export async function uploadImageAction(image: string, chatId: string) {
+  try {
+    const publicId = `${chatId}-${uuidv4()}`;
+
+    const result = await cloudinary.uploader.upload(image, {
+      folder: "chat_images",
+      public_id: publicId,
+      overwrite: false,
+    });
+
+    return { public_image_id: result.public_id };
+  } catch (error) {
+    console.error("Cloudinary upload error:", error);
+    return { public_image_id: "" };
+  }
+}
+
+export async function deleteFromCloudinary(publicId: string) {
+  try {
+    const res = await cloudinary.uploader.destroy(publicId);
+    return res.result === "ok";
+  } catch (err) {
+    console.error("Cloudinary Deletion Error:", err);
+    return false;
+  }
 }
