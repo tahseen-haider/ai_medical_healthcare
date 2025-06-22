@@ -73,24 +73,24 @@ const links = [
 ];
 export default function Footer() {
   return (
-    <footer className="relative z-0 bg-light-2 dark:bg-dark-3 dark:text-white flex flex-col items-center">
+    <footer className="relative z-0 bg-light-4 dark:bg-dark-4 dark:text-white flex flex-col items-center">
       <div className="max-w-[1920px] w-full">
         {/* Top Section */}
         <div className=" px-2 sm:px-6 flex flex-wrap justify-between py-10">
           {/* Contacts */}
           <div className="lg:w-1/3 sm:w-1/2 w-full">
             <div className="flex flex-col justify-between gap-10">
-              <h3 className="font-ubuntu text-lg font-bold leading-[22px] -tracking-[0.5px] text-black dark:text-white">
+              <h3 className="font-ubuntu text-lg font-bold leading-[22px] -tracking-[0.5px] text-gray-900 dark:text-white">
                 MediTech Medical & <br />
                 Healthcare Center
               </h3>
               <div className="flex flex-col gap-2">
                 {contactList.map((ele) => (
                   <div key={ele.title} className="flex items-center gap-2">
-                    <div className="w-6 h-6 bg-gray-600 rounded-full text-white flex items-center justify-center">
+                    <div className="w-6 h-6 bg-gray-100 rounded-full text-light-4 dark:text-dark-4 flex items-center justify-center">
                       {ele.icon}
                     </div>
-                    <p className="text-base text-gray-600 dark:text-gray-200">
+                    <p className="text-base text-gray-100">
                       {ele.title}
                     </p>
                   </div>
@@ -105,7 +105,7 @@ export default function Footer() {
                 <Link
                   key={ele.title}
                   href={ele.link}
-                  className="font-semibold font-roboto text-gray-600 dark:text-gray-200 dark:hover:text-white -tracking-[0.5px] hover:text-gray-800"
+                  className="font-semibold font-roboto text-gray-100 dark:hover:text-white -tracking-[0.5px] hover:text-white"
                 >
                   {ele.title}
                 </Link>
@@ -116,10 +116,10 @@ export default function Footer() {
           <div className="lg:w-1/3 lg:mt-0 w-full mt-14">
             <div className="flex flex-col gap-7">
               <div>
-                <h5 className="font-bold font-ubuntu text-2xl leading-7 -tracking-[0.5px] text-black dark:text-white">
+                <h5 className="font-bold font-ubuntu text-2xl leading-7 -tracking-[0.5px] text-gray-900 dark:text-white">
                   Be Our Subscriber
                 </h5>
-                <p className="-tracking-[0.5px] text-gray-700 dark:text-gray-200">
+                <p className="-tracking-[0.5px] text-gray-800 dark:text-gray-200">
                   to get the latest news about health from our experts
                 </p>
               </div>
@@ -129,8 +129,8 @@ export default function Footer() {
         </div>
         {/* Bottom Section */}
       </div>
-        <div className="w-full bg-light-4 dark:bg-dark-1 flex justify-center">
-          <div className="max-w-[1920px] w-full flex md:gap-0 gap-2 items-center py-3 justify-between px-6 md:flex-row flex-col">
+        <div className="w-full bg-light-4 dark:bg-dark-4 flex justify-center border-t-2">
+          <div className="max-w-[1920px] w-full flex md:gap-9 gap-2 items-center py-3 justify-center px-6 md:flex-row flex-col">
             <div className="flex gap-5 items-center justify-center py-0">
               <p className="text-lg text-white">Follow Us</p>
               <div className="flex gap-3 items-center">
@@ -138,7 +138,7 @@ export default function Footer() {
                   <Link
                     href={ele.link}
                     key={ele.alt}
-                    className="w-6 h-6 rounded-full bg-white flex items-center justify-center"
+                    className="w-6 h-6 rounded-sm bg-white hover:bg-gray-200 flex items-center justify-center"
                   >
                     <Image src={ele.img} alt={ele.alt} width={18} height={18} />
                   </Link>

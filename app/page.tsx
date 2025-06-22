@@ -5,7 +5,7 @@ import WhyChooseUsSection from "@/components/WhyChooseUsSection";
 
 export default async function Home() {
   return (
-    <main className="flex justify-center bg-light-1 dark:bg-dark-4">
+    <main className="flex justify-center ">
       <div className="max-w-[1920px] w-full">
         {/* Hero Section */}
         <div className="flex flex-col sm:flex-row gap-10 justify-between px-2 sm:px-6 py-24 h-fit bg-light-1 dark:bg-dark-4 bg-[url('../public/images/hero.png')]  bg-cover bg-center">
@@ -13,7 +13,7 @@ export default async function Home() {
             <h1 className="font-ubuntu font-bold -tracking-[0.5px] leading-10 sm:leading-[62px] text-3xl sm:text-5xl">
               Your 24/7 <br />
               AI-Powered <br />
-              Healthcare Companion
+              <span className="text-light-4 dark:text-light-3">Healthcare</span> Companion 
             </h1>
             <h5 className="pt-4 font-ubuntu text-lg sm:text-2xl -tracking-[0.5px] leading-6 sm:leading-[30px] text-gray-700 dark:text-gray-200">
               Get personalized health insights, symptom checks, and wellness

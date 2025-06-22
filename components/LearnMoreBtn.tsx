@@ -8,7 +8,7 @@ export default function LearnMoreBtn() {
       onClick={() => {
         window.open("https://www.youtube.com/results?search_query=ai+in+medicine","_blank", "noopener,noreferrer");
       }}
-      className="bg-light-1 hover:text-white w-fit font-bold text-2xl p-7"
+      className="bg-light-1 w-fit font-bold text-2xl p-7"
     >
       Learn More
     </Btn>

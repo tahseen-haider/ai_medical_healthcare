@@ -29,7 +29,7 @@ export default function FindUsHereSection() {
         {contactList.map((ele) => (
           <div
             key={ele.title}
-            className="w-full h-[60px] sm:h-[120px] lg:w-1/3 bg-light-4 dark:bg-dark-3 flex items-center p-6 gap-4 rounded-[15px] shadow-light dark:shadow-dark "
+            className="w-full h-[60px] sm:h-[120px] lg:w-1/3 bg-light-4 dark:bg-dark-4 flex items-center p-6 gap-4 rounded-[15px] shadow-light dark:shadow-dark "
           >
             <div>{ele.icon}</div>
             <div>

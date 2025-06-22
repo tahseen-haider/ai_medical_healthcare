@@ -44,8 +44,8 @@ export default function ServicesSection() {
             key={ele.title}
             className="h-60 sm:h-72 w-full md:w-1/2 lg:w-1/4 flex justify-center mb-6 sm:mb-12"
           >
-            <Link href={ele.link} className="group cursor-pointer flex flex-col gap-3 sm:gap-5 h-full w-[90%] lg:max-w-72 rounded-[35px] bg-light-1 dark:bg-dark-4 hover:bg-light-4 dark:hover:bg-dark-1 shadow-light dark:shadow-dark p-6">
-              <div className="w-14 h-14 shadow-light rounded-lg bg-light-4 dark:bg-dark-3 text-white flex items-center justify-center  group-hover:text-white dark:group-hover:text-white">
+            <Link href={ele.link} className="group cursor-pointer flex flex-col gap-3 sm:gap-5 h-full w-[90%] lg:max-w-72 rounded-[35px] bg-light-1 dark:bg-dark-4 hover:bg-light-4 dark:hover:bg-dark-1 shadow-light dark:shadow-dark p-6 transition-all duration-300">
+              <div className="w-14 h-14 shadow-light rounded-lg bg-light-4 dark:bg-dark-3 text-white flex items-center justify-center  group-hover:text-white dark:group-hover:text-white group-hover:bg-gray-700">
                 {ele.icon}
               </div>
               <h3 className="font-ubuntu font-bold text-xl sm:text-2xl tracking-tight dark:group-hover:text-white group-hover:text-light-1">

@@ -38,7 +38,7 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${roboto.variable} ${ubuntu.variable} font-roboto antialiased bg-light-1 dark:bg-dark-4`}
+        className={`${roboto.variable} ${ubuntu.variable} font-roboto antialiased bg-gray-50 dark:bg-gray-950`}
       >
         <ThemeProvider
           attribute="class"

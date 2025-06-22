@@ -50,10 +50,10 @@ function Navbar({
 
   return (
     <header
-      className={`fixed z-30 w-screen h-14 sm:h-16 dark:bg-dark-1 bg-light-4  flex justify-center`}
+      className={`fixed z-30 w-screen h-14 sm:h-16 dark:bg-dark-4 bg-light-4  flex justify-center border-b-2`}
     >
       <div className="max-w-[1920px] w-full flex items-center justify-between h-full px-2 lg:px-6">
-        <div className="absolute -z-10 w-screen h-full left-0 dark:bg-dark-1 bg-light-4" />
+        <div className="absolute -z-10 w-screen h-full left-0 dark:bg-dark-4 bg-light-4" />
         {/* LOGO */}
         <Link href="/" className="flex items-center">
           <Image src={logo} width={52} height={52} alt="Logo of MediTech" />
@@ -65,7 +65,7 @@ function Navbar({
         <nav>
           <ul
             className={`   lg:relative lg:flex-row lg:w-fit lg:top-0 lg:z-0
-                        absolute dark:bg-dark-1 bg-light-4 flex flex-col items-center lg:gap-7 w-screen left-0 ${
+                        absolute dark:bg-dark-4 bg-light-4 flex flex-col items-center lg:gap-7 w-screen left-0 ${
                           isNavbarDown ? "top-14" : "-top-60"
                         } transition-all duration-300 -z-20`}
           >
@@ -76,7 +76,7 @@ function Navbar({
                   href={ele.link}
                   className={`text-[18px] ${
                     isActiveLink(pathname, ele.link)
-                      ? "text-black border-b-4 border-black pb-1 font-bold"
+                      ? "text-gray-800 dark:text-gray-300 border-b-4 border-gray-800 dark:border-gray-300 pb-1 font-bold"
                       : "text-white"
                   } font-roboto leading-[22px] -tracking-[0.5px]`}
                 >
