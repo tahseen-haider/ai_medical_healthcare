@@ -65,7 +65,7 @@ export default function MessageBox({
               />
               {maximizedImg && (
                 <div
-                  className="absolute inset-0 w-full h-full backdrop-blur-xs p-6 flex items-center justify-center"
+                  className="absolute z-40 inset-0 w-full h-full backdrop-blur-xs p-6 flex items-center justify-center"
                   onClick={(e) => {
                     setMaximizedImg(false);
                   }}

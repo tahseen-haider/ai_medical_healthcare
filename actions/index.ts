@@ -12,7 +12,7 @@ import {
   uploadInquiry,
   uploadProfileChanges,
 } from "@/lib/dal";
-import cloudinary from "@/lib";
+import cloudinary from "@/lib/cloudinary";
 import {
   getUser,
   getUserByEmailPassword,

@@ -1,14 +1,13 @@
+export const dynamic = "force-dynamic";
+
+import { prisma } from "@/lib/db/prisma";
 import { NextRequest } from "next/server";
 import { OpenAI } from "openai";
-import { v4 as uuidv4 } from "uuid";
-
-// Optional: import Prisma if saving to DB (see note below)
-import { PrismaClient } from "@prisma/client";
-const prisma = new PrismaClient();
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 export async function GET(req: NextRequest) {
+  console.log("SSE")
   const { searchParams } = new URL(req.url);
 
   const message = searchParams.get("message");

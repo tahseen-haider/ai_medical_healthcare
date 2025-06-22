@@ -1,7 +1,8 @@
 "use client";
-import { useActionState, useRef, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { startNewChat } from "@/actions/chat.action";
 import ChatInputBox from "./ChatInputBox";
+import { Camera, X } from "lucide-react";
 
 export default function NewChatSection() {
   const [state, action, pending] = useActionState(startNewChat, undefined);
@@ -21,6 +22,10 @@ export default function NewChatSection() {
     };
     reader.readAsDataURL(file); // auto-encodes to base64 with mime
   };
+
+  useEffect(() => {
+    console.log(imageBase64);
+  }, [imageBase64]);
   return (
     <section className="flex flex-col gap-4 w-full h-[calc(100vh-65px)] items-center justify-center">
       <h2 className="font-ubuntu text-4xl tracking-tight leading-12">
@@ -47,6 +52,28 @@ export default function NewChatSection() {
               hidden
               onChange={handleFileChange}
             />
+            <div className="absolute right-16 bottom-3 bg-light-4 w-9 h-9 flex items-center justify-center text-white p-2 rounded-full shadow-light dark:shadow-dark">
+              <label
+                htmlFor="imageUpload"
+                aria-label="Upload Report"
+                className="cursor-pointer"
+              >
+                <Camera size={24} />
+              </label>
+            </div>
+            {imageBase64 && (
+              <button
+                disabled={pending}
+                onClick={() => {
+                  imageUploaderRef.current!.value = "";
+                  setImageBase64("");
+                }}
+                className="absolute bottom-2 right-29 w-10 h-10 flex items-center object-cover overflow-hidden cursor-pointer"
+              >
+                <X className="absolute text-black w-full h-full opacity-0 hover:opacity-50" />
+                <img key={imageBase64} src={imageBase64} alt="uploaded image" />
+              </button>
+            )}
             <input
               value={imageBase64 || ""}
               type="text"

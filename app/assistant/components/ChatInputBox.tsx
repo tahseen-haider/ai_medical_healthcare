@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useRef, useState } from "react";
-import { ArrowUpFromLine, Loader2, X } from "lucide-react";
-import ReportUploader from "./ReportUploader";
+import { ArrowUpFromLine, Camera, Loader2, X } from "lucide-react";
+import { v4 as uuidv4 } from "uuid";
 
 export default function ChatInputBox({
   isNewChat,
@@ -14,7 +14,23 @@ export default function ChatInputBox({
   isGenerating,
   imageBase64,
   onCancelImg,
+  imageUploaderRef,
+  chatId,
+  setImageBase64,
+  uploadedImgID,
+  deleteImageAction,
+  setUploadedImgID,
+  setIsUploading,
+  additionalFormsElements
 }: {
+  additionalFormsElements?: React.ReactNode
+  setIsUploading?: React.Dispatch<React.SetStateAction<boolean>>;
+  setUploadedImgID?: React.Dispatch<React.SetStateAction<string | null>>;
+  deleteImageAction?: (payload: FormData) => void;
+  uploadedImgID?: string | null;
+  setImageBase64?: React.Dispatch<React.SetStateAction<string | undefined>>;
+  chatId?: string;
+  imageUploaderRef?: React.RefObject<HTMLInputElement | null>;
   onCancelImg?: () => void;
   imageBase64?: string;
   isNewChat?: boolean;
@@ -27,8 +43,6 @@ export default function ChatInputBox({
   isGenerating?: boolean;
 }) {
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
-
   useEffect(() => {
     const textarea = textareaRef.current;
     if (textarea) {
@@ -44,10 +58,12 @@ export default function ChatInputBox({
       buttonRef.current?.click();
     }
   }
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   return (
     <div className="lg:w-4/6 w-5/6 bottom-0 bg-light-1 dark:bg-dark-4">
-      <div className="border-[1px] border-gray-400 p-1 mb-4 w-full mx-auto rounded-2xl">
+      <div className="relative border-[1px] border-gray-400 p-1 mb-4 w-full mx-auto rounded-2xl">
+        {/* Prompt Form */}
         <form onSubmit={onSubmit} action={action}>
           <div className="flex flex-col-reverse w-full">
             <textarea
@@ -66,18 +82,6 @@ export default function ChatInputBox({
           </div>
           {/* Buttons */}
           <div className="w-full flex gap-5 justify-end p-2">
-            {imageBase64 && (
-              <div
-                className="relative w-10 h-10 flex items-center object-cover overflow-hidden cursor-pointer"
-                onClick={onCancelImg}
-              >
-                <X className="absolute text-black w-full h-full opacity-0 hover:opacity-50" />
-                <img key={imageBase64} src={imageBase64} alt="uploaded image" />
-              </div>
-            )}
-            {/* Report Uploader */}
-            <ReportUploader />
-            {/* Prompt Sender */}
             <button
               ref={buttonRef}
               onClick={() => {
@@ -86,7 +90,7 @@ export default function ChatInputBox({
               disabled={(!prompt && !imageBase64) || pending}
               type="submit"
               aria-label="Send message"
-              className="bg-light-4 text-white p-2 rounded-full relative shadow-light dark:shadow-dark"
+              className="bg-light-4 w-9 h-9 flex items-center text-white p-2 rounded-full relative shadow-light dark:shadow-dark"
               style={
                 pending ? { pointerEvents: "none", cursor: "not-allowed" } : {}
               }
@@ -99,6 +103,7 @@ export default function ChatInputBox({
             </button>
           </div>
         </form>
+        {additionalFormsElements && additionalFormsElements}
       </div>
     </div>
   );

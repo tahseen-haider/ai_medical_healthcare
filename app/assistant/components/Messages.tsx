@@ -1,14 +1,19 @@
 "use client";
 
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, {
+  useActionState,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import MessageBox from "./MessageBox";
 import { usePathname } from "next/navigation";
 import ChatInputBox from "./ChatInputBox";
 import { $Enums } from "@prisma/client/edge";
-import { getSocket } from "@/lib/socket";
 import { v4 as uuidv4 } from "uuid";
-
-const socket = getSocket();
+import { deleteImageFromCloudinary } from "@/actions/chat.action";
+import { Camera, X } from "lucide-react";
 
 export default function Messages({
   initialMessages,
@@ -27,6 +32,9 @@ export default function Messages({
   const pathname = usePathname();
   const chatId = pathname.split("/assistant/")[1];
 
+  const [ImageDeletededState, deleteImageAction, pendingImageDeleting] =
+    useActionState(deleteImageFromCloudinary, {});
+
   // States
   const [messages, setMessages] = useState(
     initialMessages.map(({ id, content, role, createdAt, image }) => ({
@@ -43,24 +51,29 @@ export default function Messages({
   const [imageBase64, setImageBase64] = useState<string | undefined>();
   const [prompt, setPrompt] = useState("");
 
+  const uploadImageFormRef = useRef<HTMLFormElement>(null);
+  const uploadToCloudinary = async (file: File) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "image_upload"); // Must be unsigned
+
+    const res = await fetch(
+      "https://api.cloudinary.com/v1_1/dydu5o7ny/image/upload",
+      {
+        method: "POST",
+        body: formData,
+      }
+    );
+
+    const data = await res.json();
+    return data.public_id; // Or data.secure_url
+  };
+  const publicId = `${chatId}-${uuidv4()}`;
+
   // Refs
   const imageUploaderRef = useRef<HTMLInputElement | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  // Functions
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      const base64 = reader.result as string;
-      setImageBase64(base64); // e.g. data:image/png;base64,...
-      setIsUploading(true);
-      socket.emit("uploadImage", { image: base64, chatId });
-    };
-    reader.readAsDataURL(file); // auto-encodes to base64 with mime
-  };
   const randomId = () => uuidv4();
 
   // Scroll to bottom on new messages
@@ -74,72 +87,76 @@ export default function Messages({
   // If last message is not answered run this
   useEffect(() => {
     const lastMessage = messages[messages.length - 1];
-    if (lastMessage.role === "user") {
-      socket.emit("userMessage", {
-        message: lastMessage.content,
+    if (lastMessage.role === "user" && !isGenerating) {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: randomId(),
+          createdAt: new Date(Date.now()),
+          image: null,
+          role: "assistant",
+          content: "",
+        },
+      ]);
+      setIsGenerating(true);
+
+      streamGPTMessage({
         chatId,
-        isOldMessage: true,
-        public_id: lastMessage.image,
+        message: lastMessage.content,
+        public_id: lastMessage.image || undefined,
+        onData: (token) => {
+          setMessages((prev) => {
+            const last = prev[prev.length - 1];
+            const updatedLast = {
+              ...last,
+              content: last.content + token,
+            };
+            return [...prev.slice(0, -1), updatedLast];
+          });
+        },
+        onDone: () => setIsGenerating(false),
       });
     }
   }, []);
 
-  // To handle the backend response
-  useEffect(() => {
-    const handleBotMessage = (data: { message: string }) => {
-      setIsGenerating(true);
-      setMessages((prev) => {
-        const last = prev[prev.length - 1];
-        // If last message is from assistant, append to it
-        if (last?.role === "assistant") {
-          const updatedLast = {
-            ...last,
-            content: last.content + data.message,
-            image: null,
-            id: last.id,
-          };
-          return [...prev.slice(0, -1), updatedLast];
-        }
-        // Otherwise, start a new assistant message
-        return [
-          ...prev,
-          {
-            id: randomId(),
-            content: data.message,
-            role: "assistant",
-            createdAt: new Date(),
-            image: null,
-          },
-        ];
-      });
+  // Server Sent Event Connection
+  const streamGPTMessage = ({
+    chatId,
+    message,
+    public_id,
+    onData,
+    onDone,
+  }: {
+    chatId: string;
+    message?: string;
+    public_id?: string;
+    onData: (token: string) => void;
+    onDone: () => void;
+  }) => {
+    const params = new URLSearchParams({
+      chatId,
+      isOldMessage: "false",
+    });
+
+    if (message) params.set("message", message);
+    if (public_id) params.set("public_id", public_id);
+
+    const eventSource = new EventSource(`/api/stream-gpt?${params.toString()}`);
+
+    eventSource.onmessage = (event) => {
+      onData(event.data);
     };
 
-    const handleStreamDone = () => {
-      setIsGenerating(false);
-      // Optional: If you want to trigger anything at end
-    };
+    eventSource.addEventListener("done", () => {
+      onDone();
+      eventSource.close();
+    });
 
-    const handleImageUploaded = (data: { public_image_id: string }) => {
-      setUploadedImgID(data.public_image_id);
-      setIsUploading(false);
+    eventSource.onerror = (err) => {
+      console.error("SSE error", err);
+      eventSource.close();
     };
-
-    const handleImageDeleted = () => {
-      setIsUploading(false);
-    };
-
-    socket.off("botMessage").on("botMessage", handleBotMessage);
-    socket.off("done").on("done", handleStreamDone);
-    socket.off("imageUploaded").on("imageUploaded", handleImageUploaded);
-    socket.off("imageDeleted").on("imageDeleted", handleImageDeleted);
-
-    return () => {
-      socket.off("botMessage", handleBotMessage);
-      socket.off("done", handleStreamDone);
-      socket.off("imageUploaded", handleImageUploaded);
-      socket.off("imageDeleted", handleImageUploaded);
-    };
-  }, []);
+  };
 
   return (
     <section className="flex flex-col items-center">
@@ -166,35 +183,12 @@ export default function Messages({
       </div>
       {/* Chat Input */}
       <ChatInputBox
-        onCancelImg={() => {
-          if(isUploading) return;
-          setIsUploading(true);
-          socket.emit("deleteImage", {uploadedImgID});
-          if (imageUploaderRef.current) imageUploaderRef.current.value = "";
-          setImageBase64("");
-          // Delete the cloudinary image here when cancel button is clicked
-        }}
         imageBase64={imageBase64}
+        uploadedImgID={uploadedImgID}
         onSubmit={(e) => {
           e.preventDefault();
 
           if (!imageBase64 && !prompt) return;
-
-          const newMessage: any = {
-            chatId,
-            isOldMessage: false,
-          };
-
-          if (prompt) {
-            newMessage.message = prompt;
-          }
-
-          if (imageBase64) {
-            newMessage.image = imageBase64;
-            newMessage.public_id = uploadedImgID;
-          }
-
-          socket.emit("userMessage", newMessage);
 
           setMessages((prev) => [
             ...prev,
@@ -206,25 +200,130 @@ export default function Messages({
               image: uploadedImgID,
             },
           ]);
+
+          streamGPTMessage({
+            chatId,
+            message: prompt,
+            public_id: uploadedImgID || undefined,
+            onData: (token) => {
+              setMessages((prev) => {
+                const last = prev[prev.length - 1];
+                if (last?.role !== "assistant") {
+                  return [
+                    ...prev,
+                    {
+                      id: randomId(),
+                      content: token,
+                      role: "assistant",
+                      createdAt: new Date(),
+                      image: null,
+                    },
+                  ];
+                }
+
+                // Otherwise, append to last
+                const updatedLast = {
+                  ...last,
+                  content: last.content + token,
+                };
+                return [...prev.slice(0, -1), updatedLast];
+              });
+            },
+            onDone: () => setIsGenerating(false),
+          });
           setImageBase64("");
           setPrompt("");
+          setIsGenerating(true);
         }}
+        setIsUploading={setIsUploading}
+        setUploadedImgID={setUploadedImgID}
+        deleteImageAction={deleteImageAction}
+        setImageBase64={setImageBase64}
+        chatId={chatId}
         prompt={prompt}
         setPrompt={setPrompt}
-        pending={isGenerating || isUploading}
+        pending={isGenerating || isUploading || pendingImageDeleting}
+        imageUploaderRef={imageUploaderRef}
         additionalInputElement={
           <>
             <input type="text" name="chatId" readOnly hidden value={chatId} />
-            <input
-              ref={imageUploaderRef}
-              type="file"
-              name="image"
-              id="imageUpload"
-              accept="image/*"
-              hidden
-              onChange={handleFileChange}
-              disabled={isUploading}
-            />
+          </>
+        }
+        additionalFormsElements={
+          <>
+            {/* Image Uploader Form */}
+            <form
+              ref={uploadImageFormRef}
+              className="absolute right-16 bottom-3 flex gap-4"
+            >
+              <input
+                ref={imageUploaderRef}
+                type="file"
+                name="image"
+                id="imageUpload"
+                accept="image/*"
+                hidden
+                onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
+                  setIsUploading(true);
+                  const file = e.target.files?.[0];
+                  if (!file) return;
+
+                  const reader = new FileReader();
+                  reader.onloadend = async () => {
+                    const base64 = reader.result as string;
+                    setImageBase64(base64);
+                    const public_image_id = await uploadToCloudinary(file);
+                    setUploadedImgID(public_image_id);
+                    setIsUploading(false);
+                  };
+                  reader.readAsDataURL(file);
+                }}
+                disabled={isGenerating || isUploading || pendingImageDeleting}
+              />
+              <input type="text" name="chatId" readOnly hidden value={chatId} />
+              <div className="bg-light-4 w-9 h-9 flex items-center justify-center text-white p-2 rounded-full relative shadow-light dark:shadow-dark">
+                <label
+                  htmlFor="imageUpload"
+                  aria-label="Upload Report"
+                  className="cursor-pointer"
+                >
+                  <Camera size={24} />
+                </label>
+              </div>
+            </form>
+            {/* Cancel Image Form */}
+            {imageBase64 && (
+              <form
+                action={deleteImageAction}
+                onSubmit={() => {
+                  if (isUploading) return;
+                  if (imageUploaderRef.current)
+                    imageUploaderRef.current.value = "";
+                  setImageBase64("");
+                }}
+                className="absolute bottom-2 right-30"
+              >
+                <input
+                  type="text"
+                  name="public_image_id"
+                  value={uploadedImgID || ""}
+                  hidden
+                  readOnly
+                />
+                <button
+                  type="submit"
+                  className="relative w-10 h-10 flex items-center object-cover overflow-hidden cursor-pointer"
+                  disabled={isGenerating || isUploading || pendingImageDeleting}
+                >
+                  <X className="absolute text-black w-full h-full opacity-0 hover:opacity-50" />
+                  <img
+                    key={imageBase64}
+                    src={imageBase64}
+                    alt="uploaded image"
+                  />
+                </button>
+              </form>
+            )}
           </>
         }
       />

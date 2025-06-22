@@ -1,7 +1,6 @@
 "use server";
 
-
-import { v4 as uuidv4 } from "uuid";
+import cloudinary from "@/lib/cloudinary";
 import {
   deleteChatFromDB,
   getChatListOfUser,
@@ -15,7 +14,7 @@ import {
 } from "@/lib/definitions";
 import { getAuthenticateUserIdnRole } from "@/lib/session";
 import { redirect } from "next/navigation";
-import cloudinary from "@/lib";
+import { v4 as uuidv4 } from "uuid";
 
 export async function startNewChat(state: ChatState, formData: FormData) {
   const validatedFields = NewChatInputSchema.safeParse({
@@ -25,7 +24,7 @@ export async function startNewChat(state: ChatState, formData: FormData) {
   if (!validatedFields.success) return { message: "Invalid Input" };
 
   const { userPrompt } = validatedFields.data;
-  const imageBase64 = formData.get("imageBase64") as string | null
+  const imageBase64 = formData.get("imageBase64") as string | null;
 
   const authenticateUser = await getAuthenticateUserIdnRole();
   const newChatSession = await startNewChatInDB(
@@ -41,13 +40,16 @@ export async function getChatList() {
   const user = await getAuthenticateUserIdnRole();
   const chatList = await getChatListOfUser(user.userId);
 
-  if(chatList?.length===0) return []
+  if (chatList?.length === 0) return [];
   return chatList;
 }
 
 export async function getMessages(chatId: string) {
   const res = await getMessagesUsingChatId(chatId);
-  if(!res) { console.log("first"); return null};
+  if (!res) {
+    console.log("first");
+    return null;
+  }
   return res;
 }
 
@@ -65,30 +67,23 @@ export async function deleteChat(state: ChatState, formData: FormData) {
   redirect("/assistant");
 }
 
+export const uploadChatImageToCloudinary = async(base64: string, publicId: string) => {
+  const res = await cloudinary.uploader.upload(base64, {
+    folder: "chat_images",
+    public_id: publicId,
+    overwrite: false,
+  });
+  return res.public_id;
+};
 
-export async function uploadImageAction(image: string, chatId: string) {
-  try {
-    const publicId = `${chatId}-${uuidv4()}`;
-
-    const result = await cloudinary.uploader.upload(image, {
-      folder: "chat_images",
-      public_id: publicId,
-      overwrite: false,
-    });
-
-    return { public_image_id: result.public_id };
-  } catch (error) {
-    console.error("Cloudinary upload error:", error);
-    return { public_image_id: "" };
-  }
-}
-
-export async function deleteFromCloudinary(publicId: string) {
+export async function deleteImageFromCloudinary(state: {}, formData: FormData) {
+  const publicId = formData.get("public_image_id") as string;
+  if (!publicId) return {};
   try {
     const res = await cloudinary.uploader.destroy(publicId);
-    return res.result === "ok";
+    return {};
   } catch (err) {
     console.error("Cloudinary Deletion Error:", err);
-    return false;
+    return {};
   }
 }

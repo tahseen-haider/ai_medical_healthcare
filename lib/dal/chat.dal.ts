@@ -3,7 +3,7 @@
 import "server-only";
 
 import { prisma } from "../db/prisma";
-import cloudinary from "..";
+import cloudinary from "../cloudinary";
 import { v4 as uuidv4 } from "uuid";
 import { getMessages } from "@/actions/chat.action";
 
