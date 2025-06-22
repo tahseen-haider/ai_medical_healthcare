@@ -7,7 +7,7 @@ import { OpenAI } from "openai";
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 export async function GET(req: NextRequest) {
-  console.log("SSE")
+  console.log("SSE");
   const { searchParams } = new URL(req.url);
 
   const message = searchParams.get("message");
@@ -25,7 +25,7 @@ export async function GET(req: NextRequest) {
           {
             role: "system",
             content:
-              "You are a medical assistant. Be friendly and charming. If the user message is irrelevant (not medical), respond with: 'Please ask medical questions.' If an image is uploaded, analyze it and provide medical insights. If the image is unrelated to medical, say: 'Image is not medical related.'",
+              "You are a medical assistant. Be friendly and charming. If the user message is irrelevant (not medical), respond with: 'Please ask medical questions.' If an image is uploaded, analyze it and provide medical insights. If the image is unrelated to medical, say: 'Image is not medical related.' ",
           },
         ];
 
@@ -45,7 +45,9 @@ export async function GET(req: NextRequest) {
         }
 
         if (userContent.length === 0) {
-          controller.enqueue(encoder.encode(`data: Please send a message or an image.\n\n`));
+          controller.enqueue(
+            encoder.encode(`data: Please send a message or an image.\n\n`)
+          );
           controller.close();
           return;
         }
@@ -62,8 +64,12 @@ export async function GET(req: NextRequest) {
 
         for await (const chunk of completion) {
           const token = chunk.choices[0]?.delta?.content || "";
-          fullResponse += token;
-          controller.enqueue(encoder.encode(`data: ${token}\n\n`));
+          const cleanedToken = token.replace(/\n+/g, "\n");
+
+          fullResponse += cleanedToken;
+
+          const data = JSON.stringify({ token: cleanedToken });
+          controller.enqueue(encoder.encode(`data: ${data}\n\n`));
         }
 
         controller.enqueue(encoder.encode("event: done\ndata: done\n\n"));
@@ -112,7 +118,9 @@ export async function GET(req: NextRequest) {
         }
       } catch (err: any) {
         console.error("SSE Error:", err);
-        controller.enqueue(encoder.encode(`data: Error occurred. Please try again.\n\n`));
+        controller.enqueue(
+          encoder.encode(`data: Error occurred. Please try again.\n\n`)
+        );
         controller.close();
       }
     },

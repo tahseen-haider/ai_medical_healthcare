@@ -1,10 +1,10 @@
 "use client";
 import AssistantPicture from "@/components/AssistantPicture";
-import Markdown from "@/components/markdown";
 import ProfilePicture from "@/components/ProfilePicture";
 import { $Enums } from "@prisma/client/edge";
 import Image from "next/image";
 import React, { useState } from "react";
+import Markdown from "react-markdown";
 
 export default function MessageBox({
   message,
@@ -47,8 +47,10 @@ export default function MessageBox({
         </div>
         <div
           className={` ${
-            !isUser ? "bg-light-1 dark:bg-gray-950" : "text-white bg-light-4 dark:bg-dark-3"
-          } shadow-light dark:shadow-dark w-full rounded-lg py-2 px-4 whitespace-pre-wrap`}
+            !isUser
+              ? "bg-light-1 dark:bg-gray-950"
+              : "text-white bg-light-4 dark:bg-dark-3"
+          } shadow-light dark:shadow-dark w-full rounded-lg py-2 px-4 whitespace-pre-line`}
         >
           {message.image && (
             <>
@@ -84,11 +86,9 @@ export default function MessageBox({
               )}
             </>
           )}
-          {message.role === "user" ? (
-            message.content
-          ) : (
-            <Markdown text={message.content}></Markdown>
-          )}
+          <Markdown>
+            {message.content}
+          </Markdown>
         </div>
       </div>
       <div

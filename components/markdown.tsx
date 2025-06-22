@@ -22,6 +22,7 @@ export default function Markdown({ text }: { text: string }) {
   if(!isMarkedDown) return <div>Loading...</div>
   return (
     <div
+    className="prose max-w-none"
       dangerouslySetInnerHTML={{ __html: secureHTML }}
     />
   );

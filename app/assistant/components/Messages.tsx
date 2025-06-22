@@ -68,7 +68,6 @@ export default function Messages({
     const data = await res.json();
     return data.public_id; // Or data.secure_url
   };
-  const publicId = `${chatId}-${uuidv4()}`;
 
   // Refs
   const imageUploaderRef = useRef<HTMLInputElement | null>(null);
@@ -83,6 +82,49 @@ export default function Messages({
     }, 100);
     return () => clearTimeout(timeout);
   }, [messages]);
+
+  // Server Sent Event Connection
+  const streamGPTMessage = ({
+    chatId,
+    message,
+    public_id,
+    onData,
+    onDone,
+    isOldMessage
+  }: {
+    isOldMessage:boolean,
+    chatId: string;
+    message?: string;
+    public_id?: string;
+    onData: (token: string) => void;
+    onDone: () => void;
+  }) => {
+    const params = new URLSearchParams({
+      chatId,
+      isOldMessage: isOldMessage.toString()
+    });
+
+    if (message) params.set("message", message);
+    if (public_id) params.set("public_id", public_id);
+
+    const eventSource = new EventSource(`/api/stream-gpt?${params.toString()}`);
+
+    eventSource.onmessage = (event) => {
+      const { token } = JSON.parse(event.data);
+      const cleanedToken = token.replace(/\n+/g, "\n");
+      onData(cleanedToken);
+    };
+
+    eventSource.addEventListener("done", () => {
+      onDone();
+      eventSource.close();
+    });
+
+    eventSource.onerror = (err) => {
+      console.error("SSE error", err);
+      eventSource.close();
+    };
+  };
 
   // If last message is not answered run this
   useEffect(() => {
@@ -101,6 +143,7 @@ export default function Messages({
       setIsGenerating(true);
 
       streamGPTMessage({
+        isOldMessage: true,
         chatId,
         message: lastMessage.content,
         public_id: lastMessage.image || undefined,
@@ -119,44 +162,6 @@ export default function Messages({
     }
   }, []);
 
-  // Server Sent Event Connection
-  const streamGPTMessage = ({
-    chatId,
-    message,
-    public_id,
-    onData,
-    onDone,
-  }: {
-    chatId: string;
-    message?: string;
-    public_id?: string;
-    onData: (token: string) => void;
-    onDone: () => void;
-  }) => {
-    const params = new URLSearchParams({
-      chatId,
-      isOldMessage: "false",
-    });
-
-    if (message) params.set("message", message);
-    if (public_id) params.set("public_id", public_id);
-
-    const eventSource = new EventSource(`/api/stream-gpt?${params.toString()}`);
-
-    eventSource.onmessage = (event) => {
-      onData(event.data);
-    };
-
-    eventSource.addEventListener("done", () => {
-      onDone();
-      eventSource.close();
-    });
-
-    eventSource.onerror = (err) => {
-      console.error("SSE error", err);
-      eventSource.close();
-    };
-  };
 
   return (
     <section className="flex flex-col items-center">
@@ -202,6 +207,7 @@ export default function Messages({
           ]);
 
           streamGPTMessage({
+            isOldMessage:false,
             chatId,
             message: prompt,
             public_id: uploadedImgID || undefined,
