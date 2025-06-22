@@ -32,7 +32,7 @@ export default function ContactUsPage() {
           {/* Form */}
           <form
             action={action}
-            className="lg:w-5/6 w-full rounded-4xl shadow-light dark:shadow-dark py-16 px-5 lg:px-6 flex flex-col items-center gap-12"
+            className="lg:w-5/6 w-full rounded-lg shadow-light dark:shadow-dark py-16 px-5 lg:px-6 flex flex-col items-center gap-12 max-w-[1000px] dark:bg-dark-4"
           >
             <div className="flex flex-col lg:flex-row gap-6 w-full">
               <div className="w-full lg:w-1/2">
@@ -49,7 +49,7 @@ export default function ContactUsPage() {
                   placeholder="John Doe"
                   required
                   minLength={8}
-                  className="block border-2 border-gray-200 h-14 w-full p-4 rounded-2xl mt-2 "
+                  className="input-field"
                 />
               </div>
               <div className="lg:w-1/2 w-full">
@@ -65,7 +65,7 @@ export default function ContactUsPage() {
                   name="email"
                   placeholder="example@mail.com"
                   required
-                  className="block border-2 border-gray-200 h-14 w-full p-4 rounded-2xl mt-2 "
+                  className="input-field"
                 />
               </div>
             </div>
@@ -81,7 +81,7 @@ export default function ContactUsPage() {
                 name="inquiry"
                 placeholder="Enter your message here"
                 required
-                className="block border-2 h-40 border-gray-200 w-full p-4 rounded-2xl mt-2 "
+                className="block border-2 h-40 bg-gray-200 dark:bg-gray-950 border-gray-200 w-full p-4 rounded-sm mt-2 focus:bg-gray-100 dark:focus:bg-gray-800"
               />
             </div>
             <button

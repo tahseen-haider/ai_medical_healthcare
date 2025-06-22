@@ -10,7 +10,7 @@ export default function SignupPage() {
   const [state, action, pending] = useActionState(signup, undefined);
 
   return (
-    <main className="bg-light-1 dark:bg-dark-4 flex flex-col items-center">
+    <main className="flex flex-col items-center">
       {/* Login Section */}
       <section className="px-2 sm:px-6 py-10 flex items-center flex-col  gap-12 w-full max-w-[1920px]">
         <div className="flex justify-between gap-8 w-full">
@@ -39,7 +39,7 @@ export default function SignupPage() {
         {/* Form */}
         <form
           action={action}
-          className="w-full lg:w-5/6 rounded-4xl shadow-light dark:shadow-dark py-16 px-5 lg:px-6 flex flex-col items-center gap-12"
+          className="w-full lg:w-5/6 rounded-lg shadow-light dark:shadow-dark py-16 px-5 lg:px-6 flex flex-col items-center gap-12 max-w-[1000px] dark:bg-dark-4"
         >
           <div className="flex lg:flex-row flex-col gap-6 w-full">
             <div className="w-full lg:w-1/3">
@@ -55,7 +55,7 @@ export default function SignupPage() {
                 name="username"
                 placeholder="John Doe"
                 required
-                className="block border-2 border-gray-200 h-14 w-full p-4 rounded-2xl mt-2 "
+                className="input-field"
               />
             </div>
             <div className="w-full lg:w-1/3">
@@ -68,10 +68,9 @@ export default function SignupPage() {
                 name="email"
                 placeholder="example@mail.com"
                 required
-                className="block border-2 border-gray-200 h-14 w-full p-4 rounded-2xl mt-2 "
+                className="input-field "
               />
             </div>
-            {state?.errors?.email && <p>{state.errors.email}</p>}
             <div className="w-full lg:w-1/3">
               <label
                 htmlFor="password"
@@ -87,7 +86,7 @@ export default function SignupPage() {
                 required
                 minLength={8}
                 maxLength={15}
-                className="block border-2 border-gray-200 h-14 w-full p-4 rounded-2xl mt-2 "
+                className="input-field"
               />
             </div>
             {state?.errors?.password && (

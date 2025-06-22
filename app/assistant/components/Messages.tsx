@@ -281,7 +281,7 @@ export default function Messages({
                 disabled={isGenerating || isUploading || pendingImageDeleting}
               />
               <input type="text" name="chatId" readOnly hidden value={chatId} />
-              <div className="bg-light-4 w-9 h-9 flex items-center justify-center text-white p-2 rounded-full relative shadow-light dark:shadow-dark">
+              <div className="bg-light-4 dark:bg-dark-3 w-9 h-9 flex items-center justify-center text-white p-2 rounded-full relative shadow-light dark:shadow-dark">
                 <label
                   htmlFor="imageUpload"
                   aria-label="Upload Report"

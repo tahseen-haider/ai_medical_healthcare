@@ -52,7 +52,7 @@ export default function NewChatSection() {
               hidden
               onChange={handleFileChange}
             />
-            <div className="absolute right-16 bottom-3 bg-light-4 w-9 h-9 flex items-center justify-center text-white p-2 rounded-full shadow-light dark:shadow-dark">
+            <div className="absolute right-16 bottom-3 bg-light-4 dark:bg-dark-3 w-9 h-9 flex items-center justify-center text-white p-2 rounded-full shadow-light dark:shadow-dark">
               <label
                 htmlFor="imageUpload"
                 aria-label="Upload Report"

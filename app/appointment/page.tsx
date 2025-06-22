@@ -37,7 +37,7 @@ export default function AppointmentPage() {
   return (
     <main className="flex flex-col items-center">
       <div className="max-w-[1920px] w-full">
-        <section className="px-2 sm:px-6 py-10 flex items-center flex-col  gap-12 max-w-[1920px] w-full bg-light-2 dark:bg-dark-4">
+        <section className="px-2 sm:px-6 py-10 flex items-center flex-col  gap-12 max-w-[1920px] w-full ">
           <div className="flex justify-between w-full">
             <div className="flex flex-col gap-3">
               <h1 className="font-ubuntu font-bold text-4xl text-dark-4 dark:text-white -tracking-[0.5px] ">
@@ -51,7 +51,7 @@ export default function AppointmentPage() {
           {/* Form */}
           <form
             action={action}
-            className="w-full lg:w-5/6 rounded-4xl shadow-light dark:shadow-dark py-16 px-5 lg:px-6 flex flex-col items-center gap-12 bg-white dark:bg-dark-4"
+            className="w-full lg:w-5/6 rounded-lg shadow-light dark:shadow-dark py-16 px-5 lg:px-6 flex flex-col items-center gap-12 bg-white dark:bg-dark-4 max-w-[1000px]"
           >
             <div className="flex flex-col lg:flex-row gap-6 w-full">
               <div className="w-full lg:w-1/2">
@@ -68,7 +68,7 @@ export default function AppointmentPage() {
                   placeholder="John Doe"
                   required
                   minLength={2}
-                  className="block border-2 border-gray-200 h-14 w-full p-4 rounded-2xl mt-2 "
+                  className="input-field"
                 />
                 <p>{state?.errors.fullname}</p>
               </div>
@@ -85,7 +85,7 @@ export default function AppointmentPage() {
                   name="email"
                   placeholder="example@mail.com"
                   required
-                  className="block border-2 border-gray-200 h-14 w-full p-4 rounded-2xl mt-2 "
+                  className="input-field"
                 />
                 <p>{state?.errors.email}</p>
               </div>
@@ -108,7 +108,7 @@ export default function AppointmentPage() {
                   required
                   minLength={10}
                   maxLength={13}
-                  className="block border-2 border-gray-200 h-14 w-full p-4 rounded-2xl mt-2 "
+                  className="input-field"
                 />
                 <p>{state?.errors.phone}</p>
               </div>

@@ -24,7 +24,7 @@ export default function ChatSidebarWrapper({children}: Readonly<{children: React
       <div
         className={`${
           isSidebarOpen ? "-left-42" : "left-0"
-        } absolute p-2 opacity-90 hover:opacity-100 backdrop-blur-sm flex flex-col gap-4 rounded-br-lg justify-between items-center border-b-2 border-r-2 z-10 transition-all duration-300`}
+        } absolute p-2 bg-white dark:bg-dark-4 opacity-90 hover:opacity-100 backdrop-blur-sm flex flex-col gap-4 rounded-br-lg justify-between items-center border-b-2 border-r-2 z-10 transition-all duration-300`}
       >
         <button
           className="p-2"

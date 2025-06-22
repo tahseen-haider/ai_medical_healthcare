@@ -6,12 +6,12 @@ export default function FooterForm() {
   return (
     <form
       action=""
-      className="border-2 border-white bg-gray-200 dark:bg-gray-950 rounded-lg p-[4px] max-w-[400px] flex justify-between"
+      className="border-2 flex border-white bg-gray-200 dark:bg-gray-950 rounded-lg p-[4px] max-w-[400px] flex justify-between"
     >
       <input
         type="email"
         placeholder="example@email.com"
-        className="w-full focus:ring-0 px-2 dark:text-gray-200 outline-0"
+        className="input-fields w-full outline-0"
       />
       <Btn
         onClick={(e) => {

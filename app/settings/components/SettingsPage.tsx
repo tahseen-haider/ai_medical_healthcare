@@ -45,7 +45,7 @@ export default function SettingsPage({ user, imageUrl }: { user: UserProfileDTO,
         }}
       >
         <section className="w-full flex flex-col md:flex-row p-6 gap-6">
-          <div className="w-full md:w-1/3 border-2 p-4 flex flex-col items-center justify-center gap-3">
+          <div className="w-full md:w-1/3 p-4 flex flex-col items-center justify-center gap-3">
             <div className="relative flex flex-col items-center">
               <div className="w-[120px]">
                 {image ? (
@@ -82,14 +82,14 @@ export default function SettingsPage({ user, imageUrl }: { user: UserProfileDTO,
             </div>
           </div>
           <div className="w-full md:w-2/3 border-2 p-4 flex flex-col gap-6 justify-center">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-2 gap-4 items-center">
               <h3>Full Name</h3>
               <input
                 name="name"
                 required
                 type="text"
                 maxLength={20}
-                className="bg-black dark:bg-white p-1 text-white dark:text-black rounded-sm border-2"
+                className="input-field"
                 value={name!}
                 onChange={(e) => {
                   setName((prev) => e.target.value);
@@ -108,13 +108,13 @@ export default function SettingsPage({ user, imageUrl }: { user: UserProfileDTO,
                 readOnly
               />
             </div>
-            <div className="grid grid-cols-2 gap-4 items-center">
+            <div className="grid grid-cols-2 gap-4 items-center justify-center">
               <h3>Phone</h3>
               <input
                 name="phone"
                 type="text"
                 maxLength={20}
-                className="bg-black dark:bg-white p-1 text-white dark:text-black rounded-sm border-2"
+                className="input-field"
                 value={phone || ""}
                 onChange={(e) => {
                   setPhone((prev) => e.target.value);

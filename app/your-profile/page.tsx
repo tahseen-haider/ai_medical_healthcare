@@ -10,13 +10,13 @@ export default async function page() {
   return (
     <div className="min-h-[550px] w-full flex items-center">
       <section className="w-full flex flex-col md:flex-row p-6 gap-6">
-        <div className="w-full md:w-1/3 border-2 p-4 flex flex-col items-center justify-center gap-3">
+        <div className="w-full md:w-1/3  p-4 flex flex-col items-center justify-center gap-3">
           <div>
             <ProfilePicture image={pfp} size={120} />
           </div>
           <div className="w-full text-center">
             <h2 className="font-ubuntu font-bold text-2xl">{user?.name}</h2>
-            <p className="text-gray-300">{user?.email}</p>
+            <p className="text-gray-800 dark:text-gray-400">{user?.email}</p>
           </div>
           <EditButton />
         </div>

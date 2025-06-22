@@ -11,7 +11,7 @@ export default function LoginPage() {
   const [state, action, pending] = useActionState(login, undefined);
 
   return (
-    <main className="bg-light-1 dark:bg-dark-4 flex flex-col items-center">
+    <main className=" flex flex-col items-center">
       
       {/* Uploading */}
       {pending && <LoadingScreen message="Logging In..."/>}
@@ -44,7 +44,7 @@ export default function LoginPage() {
         {/* Form */}
         <form
           action={action}
-          className="lg:w-5/6 w-full rounded-4xl shadow-light dark:shadow-dark py-16 px-5 lg:px-6 flex flex-col items-center gap-12"
+          className="lg:w-5/6 w-full rounded-lg shadow-light dark:shadow-dark py-16 px-5 lg:px-6 flex flex-col items-center gap-12 max-w-[1000px] dark:bg-dark-4"
         >
           <div className="flex flex-col lg:flex-row gap-6 w-full">
             <div className="lg:w-1/2 w-full">
@@ -57,7 +57,7 @@ export default function LoginPage() {
                 name="email"
                 placeholder="example@mail.com"
                 required
-                className="block border-2 border-gray-200 h-14 w-full p-4 rounded-2xl mt-2 "
+                className="input-field"
               />
             </div>
             <div className="w-full lg:w-1/2">
@@ -74,7 +74,7 @@ export default function LoginPage() {
                 placeholder="********"
                 required
                 minLength={8}
-                className="block border-2 border-gray-200 h-14 w-full p-4 rounded-2xl mt-2 "
+                className="input-field"
               />
             </div>
           </div>
@@ -90,7 +90,7 @@ export default function LoginPage() {
           </button>
         </form>
         {/* Links */}
-        <div className="w-5/6 lg:w-4/6 flex lg:flex-row flex-col gap-5 text-center justify-between font-bold text-white">
+        <div className="w-5/6 max-w-[1000px] lg:w-4/6 flex lg:flex-row flex-col gap-5 text-center justify-between font-bold text-white">
           <Link href="/verify-email" className="bg-light-4 py-1 px-3 shadow-light dark:shadow-dark rounded-lg">Verify your email address</Link>
           <Link href="/reset-password" className="bg-light-4 py-1 px-3 shadow-light dark:shadow-dark rounded-lg">Forgot Password?</Link>
         </div>

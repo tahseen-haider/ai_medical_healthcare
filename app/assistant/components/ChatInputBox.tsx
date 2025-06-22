@@ -61,7 +61,7 @@ export default function ChatInputBox({
   const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   return (
-    <div className="lg:w-4/6 w-5/6 bottom-0 bg-light-1 dark:bg-dark-4">
+    <div className="lg:w-4/6 w-5/6 bottom-0 bg-gray-50 dark:bg-gray-950">
       <div className="relative border-[1px] border-gray-400 p-1 mb-4 w-full mx-auto rounded-2xl">
         {/* Prompt Form */}
         <form onSubmit={onSubmit} action={action}>
@@ -90,7 +90,7 @@ export default function ChatInputBox({
               disabled={(!prompt && !imageBase64) || pending}
               type="submit"
               aria-label="Send message"
-              className="bg-light-4 w-9 h-9 flex items-center text-white p-2 rounded-full relative shadow-light dark:shadow-dark"
+              className="bg-light-4 dark:bg-dark-3 w-9 h-9 flex items-center text-white p-2 rounded-full relative shadow-light dark:shadow-dark"
               style={
                 pending ? { pointerEvents: "none", cursor: "not-allowed" } : {}
               }

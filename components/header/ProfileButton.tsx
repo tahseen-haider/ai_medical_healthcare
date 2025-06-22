@@ -1,3 +1,4 @@
+"use client"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,10 +29,10 @@ export default function ProfileButton({imageUrl}:{imageUrl?:string}) {
       title: "Your Profile",
       link: "/your-profile",
     },
-    {
-      title: "Settings",
-      link: "/settings",
-    },
+    // {
+    //   title: "Settings",
+    //   link: "/settings",
+    // },
   ];
 
   return (
@@ -41,19 +42,19 @@ export default function ProfileButton({imageUrl}:{imageUrl?:string}) {
         <DropdownMenuTrigger>
           <ProfilePicture image={imageUrl}/>
         </DropdownMenuTrigger>
-        <DropdownMenuContent className="bg-light-1 dark:bg-dark-2 mt-2 flex flex-col gap-2">
+        <DropdownMenuContent className="bg-white dark:bg-dark-2 mt-2 flex flex-col">
           <DropdownMenuLabel>
-            <Link href="/your-profile">{user?.name}</Link>
+            <Link className="text-lg" href="/your-profile">{user?.name}</Link>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
           {navLinks.map((ele) => (
-            <Link href={ele.link} key={ele.title} className=" w-full">
+            <Link href={ele.link} key={ele.title} className="w-full px-3 py-1 hover:bg-light-4 hover:text-white rounded-sm">
               {ele.title}
             </Link>
           ))}
           <DropdownMenuSeparator />
           <form action={action}>
-            <Button type="submit" className="bg-red-500">
+            <Button type="submit" className="bg-red-500 mt-3">
               Logout
             </Button>
           </form>

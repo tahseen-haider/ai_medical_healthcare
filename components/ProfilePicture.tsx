@@ -12,7 +12,7 @@ export default function ProfilePicture({
     <div
       className={`rounded-full ${
         size ? `w-[${size}px] h-[${size}px]` : "w-8 h-8"
-      } overflow-hidden shadow-[0_0_6px_rgba(0,0,0,0.4)] flex justify-center items-center cursor-pointer object-cover`}
+      } overflow-hidden  flex justify-center items-center cursor-pointer object-cover shadow-light dark:shadow-dark`}
     >
       <Image
         unoptimized

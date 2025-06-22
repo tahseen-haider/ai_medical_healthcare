@@ -46,7 +46,7 @@ export default function page({
       {/* Form */}
       <form
         action={action}
-        className="w-full md:w-5/6 rounded-4xl shadow-light dark:shadow-dark py-16 px-5 lg:px-6 flex flex-col items-center gap-12"
+        className="w-full lg:w-5/6 rounded-lg shadow-light dark:shadow-dark py-16 px-5 lg:px-6 flex flex-col items-center gap-12 max-w-[1000px] dark:bg-dark-4"
       >
         <div className="flex flex-col lg:flex-row gap-6 w-full">
           <input
@@ -79,7 +79,7 @@ export default function page({
               placeholder="********"
               required
               minLength={6}
-              className="block border-2 border-gray-200 h-14 w-full p-4 rounded-2xl mt-2 "
+              className="input-field"
             />
           </div>
           <div className="w-full lg:w-1/2">
@@ -96,7 +96,7 @@ export default function page({
               placeholder="********"
               required
               minLength={6}
-              className="block border-2 border-gray-200 h-14 w-full p-4 rounded-2xl mt-2 "
+              className="input-field"
             />
           </div>
         </div>
