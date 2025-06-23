@@ -189,7 +189,6 @@ export default function Messages({
       {/* Chat Input */}
       <ChatInputBox
         imageBase64={imageBase64}
-        uploadedImgID={uploadedImgID}
         onSubmit={(e) => {
           e.preventDefault();
 
@@ -241,15 +240,9 @@ export default function Messages({
           setPrompt("");
           setIsGenerating(true);
         }}
-        setIsUploading={setIsUploading}
-        setUploadedImgID={setUploadedImgID}
-        deleteImageAction={deleteImageAction}
-        setImageBase64={setImageBase64}
-        chatId={chatId}
         prompt={prompt}
         setPrompt={setPrompt}
         pending={isGenerating || isUploading || pendingImageDeleting}
-        imageUploaderRef={imageUploaderRef}
         additionalInputElement={
           <>
             <input type="text" name="chatId" readOnly hidden value={chatId} />

@@ -32,10 +32,6 @@ export default function NewChatSection() {
         What can I help with?
       </h2>
       <ChatInputBox
-        onCancelImg={() => {
-          setImageBase64("");
-          if (imageUploaderRef.current) imageUploaderRef.current.value = "";
-        }}
         pending={pending}
         action={action}
         prompt={prompt}
