@@ -24,15 +24,6 @@ export async function decrypt(session: string | undefined = "") {
       algorithms: ["HS256"],
     });
     const res = payload as { userId: string; role: string };
-    const user = await prisma.user.findUnique({
-      where: {
-        id: res.userId
-      }
-    })
-    if(!user){
-      deleteSession();
-      redirect("/")
-    }
     return res
   } catch (error) {
     console.error("JWT verification failed:", error);
