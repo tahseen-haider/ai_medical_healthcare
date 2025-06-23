@@ -196,11 +196,9 @@ export const setUserToken = async ({
 
 export const resetPasswordInDB = async ({
   email,
-  code,
   newPassword,
 }: {
   email: string;
-  code: number;
   newPassword: string;
 }) => {
   const user = await prisma.user.findFirst({

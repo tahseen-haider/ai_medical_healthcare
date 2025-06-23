@@ -99,7 +99,7 @@ function sendCodeHTML(code: number) {
 }
 
 function sendResetLinkHTML(baseUrl: string,email:string, code: number) {
-  const resetLink = `${baseUrl}/reset-password/${email}-${code}`;
+  const resetLink = `${baseUrl}/reset-password/${encodeURIComponent(email)}-${code}`;
 
   return `
     <!DOCTYPE html>
@@ -257,14 +257,18 @@ export async function resetPassword(
 
   if (!validatedFields.success) return { message: "Input a valid Password" };
 
-  const { email, code, newPassword, repeatNewPassword } = validatedFields.data;
-
+  const { code, newPassword, repeatNewPassword } = validatedFields.data;
+  const email = formData.get("email") as string
   if (newPassword !== repeatNewPassword)
     return { message: "Passwords does not match" };
 
+
+  const existingUser = await getUserCredentialsByEmail(email);
+  if(!existingUser) return {message: "Email does not exist, Try Signing Up"}
+
   const hashedPassword = await bcrypt.hash(newPassword, 10);
 
-  const res = await resetPasswordInDB({ email, code, newPassword: hashedPassword });
+  const res = await resetPasswordInDB({ email, newPassword: hashedPassword });
 
   console.log(res)
 

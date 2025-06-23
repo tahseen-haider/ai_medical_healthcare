@@ -13,8 +13,9 @@ export default function page({
 }) {
   const resolvedParams = React.use(params);
   const emailnCode = resolvedParams.code;
-  const email = emailnCode.toString().split("-")[0]
+  const emailEncoded = emailnCode.toString().split("-")[0]
   const code = emailnCode.toString().split("-")[1]
+  const email = decodeURIComponent(emailEncoded);
 
   const [state, action, pending] = useActionState(resetPassword, undefined);
 
@@ -51,19 +52,19 @@ export default function page({
         <div className="flex flex-col lg:flex-row gap-6 w-full">
           <input
             value={email}
-            onChange={() => {}}
             id="email"
-            type="number"
+            type="text"
             name="email"
             hidden
+            readOnly
           />
           <input
             value={code}
-            onChange={() => {}}
             id="code"
             type="number"
             name="code"
             hidden
+            readOnly
           />
           <div className="w-full lg:w-1/2">
             <label

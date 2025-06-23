@@ -29,6 +29,10 @@ export default function ProfileButton({imageUrl}:{imageUrl?:string}) {
       title: "Your Profile",
       link: "/your-profile",
     },
+    {
+      title: "Reset Password",
+      link: "/reset-password",
+    },
     // {
     //   title: "Settings",
     //   link: "/settings",
