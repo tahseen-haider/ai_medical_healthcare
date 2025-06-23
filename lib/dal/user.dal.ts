@@ -3,7 +3,7 @@
 import "server-only";
 
 import { cache } from "react";
-import { getUserIdnRoleIfAuthenticated } from "../session";
+import { deleteSession, getUserIdnRoleIfAuthenticated } from "../session";
 import { prisma } from "../db/prisma";
 import {
   UserCredentialDTO,
@@ -11,6 +11,8 @@ import {
   UserProfileDTO,
 } from "../dto/user.dto";
 import bcrypt from "bcryptjs";
+import cloudinary from "../cloudinary";
+import { redirect } from "next/navigation";
 
 export const getUser = async (): Promise<UserProfileDTO | undefined> => {
   const session = await getUserIdnRoleIfAuthenticated();
@@ -44,7 +46,7 @@ export const getUser = async (): Promise<UserProfileDTO | undefined> => {
     console.log(error);
     return;
   }
-}
+};
 
 export const getUserByEmailPassword = cache(
   async (email: string, password: string) => {
@@ -138,7 +140,7 @@ export const verifyEmailTokenfromDB = async ({
 
   if (!user || user.token != verifyToken) return undefined;
 
-  console.log({email})
+  console.log({ email });
   await prisma.user.update({
     where: { email },
     data: {
@@ -212,7 +214,61 @@ export const resetPasswordInDB = async ({
       token: null,
     },
   });
-  if(!updatedUser) return;
+  if (!updatedUser) return;
 
   return updatedUser.email;
+};
+
+export const deleteUserFromDB = async () => {
+  const user = await getUserIdnRoleIfAuthenticated();
+
+  try {
+    const messagesWithImages = await prisma.message.findMany({
+      where: {
+        chat: {
+          userId: user?.userId,
+        },
+        NOT: {
+          image: null,
+        },
+      },
+      select: {
+        image: true,
+      },
+    });
+    const imageUrls = messagesWithImages.map((m) => m.image).filter(Boolean);
+
+    await prisma.$transaction(async (tx) => {
+      await tx.message.deleteMany({
+        where: {
+          chat: {
+            userId: user?.userId,
+          },
+        },
+      });
+
+      await tx.chatSession.deleteMany({
+        where: {
+          userId: user?.userId,
+        },
+      });
+
+      await tx.user.delete({
+        where: {
+          id: user?.userId,
+        },
+      });
+    });
+
+    for (const id of imageUrls) {
+      await cloudinary.uploader.destroy(id!);
+    }
+
+    deleteSession();
+    return 1;
+  } catch (error) {
+    return 0;
+  } finally {
+    redirect("/");
+  }
 };

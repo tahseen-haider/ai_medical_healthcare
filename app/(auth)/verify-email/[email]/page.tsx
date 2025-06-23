@@ -70,7 +70,7 @@ export default function VerifyEmailPage({
         </button>
       </form>
       {/* Uploading */}
-      {pending && <LoadingScreen message="Sending verification email" />}
+      {pending && <LoadingScreen message="Verifying your email..." />}
     </section>
   );
 }

@@ -1,6 +1,7 @@
 "use server";
 
 import {
+  deleteUserFromDB,
   getUser,
   getUserCredentialsByEmail,
   insertUserToDB,
@@ -384,4 +385,10 @@ export async function getCurrentlyAuthenticatedUser() {
     redirect("/login");
   }
   return user;
+}
+
+export async function deleteUserAccount(state: {message: string}|undefined, formData:FormData) {
+  const res = await deleteUserFromDB();
+  if(!res) return {message: "Error while deleting account"}
+  return {message: "User Deleted"}
 }
