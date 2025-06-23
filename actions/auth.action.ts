@@ -191,8 +191,9 @@ export async function sendVerifyEmail(
 
   const verified = await verifyUserCredentials({ email, password });
 
-  if (!verified) return { message: "Incorrect email or password" };
-  if (verified === "alreadyVerified")
+  if (!verified) return { message: "Incorrect email or password, Use right Password or Reset it" };
+
+  if (verified)
     return { message: "User is already Verified" };
 
   const code = Math.floor(100000 + Math.random() * 900000);

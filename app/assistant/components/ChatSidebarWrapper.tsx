@@ -50,10 +50,10 @@ export default function ChatSidebarWrapper({children}: Readonly<{children: React
       <div
         className={`${
           isSidebarOpen ? "w-80 border-r-2" : "w-0"
-        } absolute overflow-hidden z-20 bg-light-1 dark:bg-dark-4 transition-all`}
+        } absolute overflow-hidden z-20 bg-gray-50 dark:bg-dark-4 transition-all`}
       >
         {/* Menu buttons */}
-        <div className="px-6 flex justify-between h-10 items-center border-b-2">
+        <div className="px-6 flex justify-between h-10 items-center border-b-2 bg-white dark:bg-dark-4">
           <button
             className="p-2"
             onClick={() => {

@@ -170,13 +170,11 @@ export const verifyUserCredentials = async ({
   });
   if (!user) return;
 
-  if (user.is_verified) return "alreadyVerified";
-
   const isPasswordMatched = await bcrypt.compare(password, user.password);
 
   if (!isPasswordMatched) return;
 
-  return user.email;
+  return user.is_verified === true;
 };
 
 export const setUserToken = async ({
