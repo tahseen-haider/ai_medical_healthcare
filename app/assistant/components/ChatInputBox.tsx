@@ -1,7 +1,6 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
-import { ArrowUpFromLine, Camera, Loader2, X } from "lucide-react";
-import { v4 as uuidv4 } from "uuid";
+import React, { useEffect, useRef } from "react";
+import { ArrowUpFromLine, Camera, Loader2 } from "lucide-react";
 
 export default function ChatInputBox({
   isNewChat,
@@ -13,25 +12,9 @@ export default function ChatInputBox({
   action,
   isGenerating,
   imageBase64,
-  onCancelImg,
-  imageUploaderRef,
-  chatId,
-  setImageBase64,
-  uploadedImgID,
-  deleteImageAction,
-  setUploadedImgID,
-  setIsUploading,
   additionalFormsElements
 }: {
   additionalFormsElements?: React.ReactNode
-  setIsUploading?: React.Dispatch<React.SetStateAction<boolean>>;
-  setUploadedImgID?: React.Dispatch<React.SetStateAction<string | null>>;
-  deleteImageAction?: (payload: FormData) => void;
-  uploadedImgID?: string | null;
-  setImageBase64?: React.Dispatch<React.SetStateAction<string | undefined>>;
-  chatId?: string;
-  imageUploaderRef?: React.RefObject<HTMLInputElement | null>;
-  onCancelImg?: () => void;
   imageBase64?: string;
   isNewChat?: boolean;
   additionalInputElement?: React.ReactNode;
