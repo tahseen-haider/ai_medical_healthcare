@@ -222,6 +222,10 @@ export async function SendForgotPasswordLinkToEmail(
 
   const { email } = validatedFields.data;
 
+  try {
+    const existingUser = await getUserCredentialsByEmail(email);
+  if(!existingUser) return {message: "There is no account with this email"}
+
   const code = Math.floor(100000 + Math.random() * 900000);
 
   await setUserToken({ code, email });
@@ -234,6 +238,9 @@ export async function SendForgotPasswordLinkToEmail(
 
   if (!res) return { message: "Failed to send Link" };
   return { message: "Link Sent! Check Your email" };
+  } catch (error) {
+    return {message: "There was an error."}
+  }
 }
 
 
