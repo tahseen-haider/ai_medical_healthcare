@@ -176,7 +176,7 @@ export const verifyUserCredentials = async ({
 
   if (!isPasswordMatched) return;
 
-  return user.is_verified === true;
+  return user;
 };
 
 export const setUserToken = async ({

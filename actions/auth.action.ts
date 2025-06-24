@@ -190,12 +190,9 @@ export async function sendVerifyEmail(
 
   const { email, password } = validatedFields.data;
 
-  const verified = await verifyUserCredentials({ email, password });
+  const userExists = await verifyUserCredentials({ email, password });
 
-  if (!verified) return { message: "Incorrect email or password, Use right Password or Reset it" };
-
-  if (verified)
-    return { message: "User is already Verified" };
+  if (!userExists) return { message: "Incorrect email or password, Use right Password or Reset it" };
 
   const code = Math.floor(100000 + Math.random() * 900000);
 
@@ -271,8 +268,6 @@ export async function resetPassword(
   const hashedPassword = await bcrypt.hash(newPassword, 10);
 
   const res = await resetPasswordInDB({ email, newPassword: hashedPassword });
-
-  console.log(res)
 
   if (!res) return { message: "Error while reseting password" };
 
