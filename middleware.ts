@@ -1,4 +1,4 @@
-import { isUserAuthenticated } from "@/lib/session";
+import { getUserRoleFromSession, isUserAuthenticated } from "@/lib/session";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(req: NextRequest) {
@@ -16,10 +16,15 @@ export async function middleware(req: NextRequest) {
   
   // For Authenticated
   try {
-    const isAuth = await isUserAuthenticated(sessionToken);
-    if (isAuth) {
+    const isAuthRole = await getUserRoleFromSession(sessionToken);
+    if (isAuthRole) {
       if (isRestrictedRoute) {
         return NextResponse.redirect(new URL("/", req.url));
+      }
+      if(/^\/admin\/(.*)$/.test(pathname)){
+        if("admin" !== isAuthRole){
+          return NextResponse.redirect(new URL("/", req.url))
+        }
       }
       return NextResponse.next();
     }
@@ -38,6 +43,6 @@ export const config = {
     "/your-profile",
     "/verify-email(:/.*)?",
     "/assistant(:/.*)?",
-    "/admin/dashboard"
+    "/admin(:/.*)?"
   ],
 };
