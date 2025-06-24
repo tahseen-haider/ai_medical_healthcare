@@ -237,6 +237,7 @@ export default function Messages({
             onDone: () => setIsGenerating(false),
           });
           setImageBase64("");
+          setUploadedImgID("")
           setPrompt("");
           setIsGenerating(true);
         }}
