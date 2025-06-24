@@ -29,10 +29,10 @@ function Navbar({
       title: "Find Real Doctor",
       link: "/appointment",
     },
-    {
-      title: "About Us",
-      link: "/about-us",
-    },
+    // {
+    //   title: "About Us",
+    //   link: "/about-us",
+    // },
     {
       title: "Contact",
       link: "/contact-us",

@@ -83,7 +83,6 @@ export const getUserIdnRoleIfAuthenticated = async () => {
   if (user) {
     return { role: session.role, userId: session.userId };
   } else {
-    cookieStore.delete("session");
     return;
   }
 }
@@ -108,7 +107,6 @@ export const getAuthenticateUserIdnRole = cache(async () => {
     if (user) {
       return { role: session.role, userId: session.userId };
     } else {
-      cookieStore.delete("session");
       redirect("/login");
     }
   } catch {
