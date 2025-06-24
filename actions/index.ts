@@ -18,6 +18,7 @@ import {
   getUserByEmailPassword,
 } from "@/lib/dal/user.dal";
 import { v4 as uuidv4 } from "uuid";
+import { redirect } from "next/navigation";
 
 export const contactUs = async (
   state: ContactFormState,
@@ -110,15 +111,15 @@ export const saveProfileChanges = async (
     const base64 = buffer.toString("base64");
     const dataUri = `data:${file.type};base64,${base64}`;
 
-    // ✅ 1. Delete the old image if it exists
+    
     if (user.pfp) {
       await cloudinary.uploader.destroy(user.pfp);
     }
 
-    // ✅ 2. Create a unique public ID
+    
     const newPublicId = `profile_images/${user.id}-${uuidv4()}`;
 
-    // ✅ 3. Upload new image
+    
     const uploadResult = await cloudinary.uploader.upload(dataUri, {
       folder: "profile_images",
       public_id: newPublicId,
@@ -131,7 +132,7 @@ export const saveProfileChanges = async (
   }
 
 
-  // ✅ 4. Save updated profile data (including new image public_id)
+  
   const changed = await uploadProfileChanges({
     name,
     email,
@@ -143,7 +144,7 @@ export const saveProfileChanges = async (
 
   if (!changed) return { message: "Something went wrong." };
 
-  return { message: "Changes Saved" };
+  return redirect("/");
 };
 
 export const getPfp = async () => {

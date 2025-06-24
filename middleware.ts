@@ -3,32 +3,24 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-
   const restrictedRoutes = /^\/(login|signup|verify-email(?:\/.*)?|dashboard)$/;
-  const publicRoutes =
-    /^\/$|^\/(appointment|contact-us|about-us|reset-password(?:\/.*)?)$/;
-
   const isRestrictedRoute = restrictedRoutes.test(pathname);
-  const isPublicRoutes = publicRoutes.test(pathname);
 
   const sessionToken = req.cookies.get("session")?.value;
 
-  // If not authenticated
+  // For Unauthenticated
   if (!sessionToken) {
-    if (isRestrictedRoute || isPublicRoutes) return NextResponse.next();
-
+    if (isRestrictedRoute) return NextResponse.next();
     return NextResponse.redirect(new URL("/login", req.url));
   }
-
-  // If authenticated
+  
+  // For Authenticated
   try {
     const isAuth = await isUserAuthenticated(sessionToken);
-
     if (isAuth) {
       if (isRestrictedRoute) {
         return NextResponse.redirect(new URL("/", req.url));
       }
-
       return NextResponse.next();
     }
   } catch {
@@ -39,5 +31,13 @@ export async function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/login", "/signup", "/verify-email(:/.*)?", "/assistant(:/.*)?"],
+  matcher: [
+    "/login",
+    "/signup",
+    "/settings",
+    "/your-profile",
+    "/verify-email(:/.*)?",
+    "/assistant(:/.*)?",
+    "/admin/dashboard"
+  ],
 };

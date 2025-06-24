@@ -17,7 +17,13 @@ import { Pencil } from "lucide-react";
 
 const genderArray = ["Male", "Female"];
 
-export default function SettingsPage({ user, imageUrl }: { user: UserProfileDTO, imageUrl?: string }) {
+export default function SettingsPage({
+  user,
+  imageUrl,
+}: {
+  user: UserProfileDTO;
+  imageUrl?: string;
+}) {
   const router = useRouter();
 
   const [name, setName] = useState(user?.name);
@@ -56,7 +62,7 @@ export default function SettingsPage({ user, imageUrl }: { user: UserProfileDTO,
                     className="object-cover w-[120px] h-[120px] rounded-full"
                   />
                 ) : (
-                  <ProfilePicture size={120} image={imageUrl}/>
+                  <ProfilePicture size={120} image={imageUrl} />
                 )}
               </div>
               <input
@@ -165,7 +171,7 @@ export default function SettingsPage({ user, imageUrl }: { user: UserProfileDTO,
         {/* Buttons */}
         <div className="w-full flex md:flex-row flex-col items-center justify-center mb-10 mt-2 gap-5">
           <div
-            className="bg-light-3 cursor-pointer dark:bg-dark-1 px-4 py-1 shadow-light border-2 dark:shadow-dark hover:shadow-none hover:dark:shadow-none font-bold text-lg rounded-lg"
+            className="bg-light-3 cursor-pointer dark:bg-dark-1 px-4 py-1 shadow-light dark:shadow-dark hover:shadow-none hover:dark:shadow-none font-bold text-lg rounded-lg"
             onClick={(e) => {
               e.preventDefault();
               if (
@@ -193,15 +199,6 @@ export default function SettingsPage({ user, imageUrl }: { user: UserProfileDTO,
             }}
           >
             Reset Changes
-          </div>
-          <div
-            className="bg-light-1 cursor-pointer dark:bg-dark-4 px-4 py-1 shadow-light border-2 dark:shadow-dark hover:shadow-none hover:dark:shadow-none font-bold text-lg rounded-lg"
-            onClick={(e) => {
-              e.preventDefault();
-              router.push("/your-profile");
-            }}
-          >
-            Show Profile
           </div>
         </div>
         {changesMade && (

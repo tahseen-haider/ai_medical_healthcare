@@ -40,7 +40,7 @@ function Navbar({
   ];
   const isActiveLink = (pathname: string, link: string) => {
     if (link === "/") {
-      return pathname === "/"; // Only match Home on exact "/"
+      return pathname === "/";
     }
     return pathname === link || pathname.startsWith(`${link}/`);
   };
@@ -72,24 +72,26 @@ function Navbar({
             {NavLinks.map((ele) => (
               <li key={ele.title} className="py-3">
                 <Link
-                  onClick={()=>{setIsNavbarDown(false)}}
+                  onClick={() => {
+                    setIsNavbarDown(false);
+                  }}
                   href={ele.link}
                   className={`text-[18px] ${
                     isActiveLink(pathname, ele.link)
                       ? "text-gray-800 dark:text-gray-300 border-b-4 border-gray-800 dark:border-gray-300 pb-1 font-bold"
-                      : "text-white"
+                      : "text-white hover:border-b-[1px] pb-[6px] border-gray-200 dark:border-gray-300 "
                   } font-roboto leading-[22px] -tracking-[0.5px]`}
                 >
                   {ele.title}
                 </Link>
               </li>
             ))}
+            {/* Theme toggeler for smaller screens */}
             <div className="sm:hidden p-2 border-t-2 w-full flex justify-center items-center">
-            <div className="text-[18px] text-white  flex gap-4 items-center justify-center font-roboto font-bold leading-[22px] -tracking-[0.5px]">
-              Toggle Theme: 
-              <ThemeToggler />
-            </div>
-
+              <div className="text-[18px] text-white  flex gap-4 items-center justify-center font-roboto font-bold leading-[22px] -tracking-[0.5px]">
+                Toggle Theme:
+                <ThemeToggler />
+              </div>
             </div>
           </ul>
         </nav>
