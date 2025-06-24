@@ -179,16 +179,16 @@ export const verifyUserCredentials = async ({
   return user;
 };
 
-export const verifyToken = async (email:string, code:number) => { 
+export const verifyToken = async (email: string, code: number) => {
   const user = await prisma.user.findFirst({
     where: {
-      email
-    }
-  })
+      email,
+    },
+  });
 
-  if(user?.token !== code) return;
+  if (user?.token !== code) return;
   return user;
- }
+};
 
 export const setUserToken = async ({
   code,
@@ -223,7 +223,7 @@ export const resetPasswordInDB = async ({
     data: {
       password: newPassword,
       token: null,
-      is_verified: true
+      is_verified: true,
     },
   });
   if (!updatedUser) return;
@@ -235,6 +235,7 @@ export const deleteUserFromDB = async () => {
   const user = await getUserIdnRoleIfAuthenticated();
 
   try {
+    // Get all messages that have images
     const messagesWithImages = await prisma.message.findMany({
       where: {
         chat: {
@@ -250,6 +251,16 @@ export const deleteUserFromDB = async () => {
     });
     const imageUrls = messagesWithImages.map((m) => m.image).filter(Boolean);
 
+    // Get profile Image and delete it
+    const activeUser = await prisma.user.findFirst({
+      where: {
+        id: user?.userId,
+      },
+    });
+    const profilePicture = activeUser?.pfp;
+    if (profilePicture) await cloudinary.uploader.destroy(profilePicture);
+
+    // Delete messages and chats
     await prisma.$transaction(async (tx) => {
       await tx.message.deleteMany({
         where: {

@@ -128,7 +128,7 @@ export default function ProfileButton({ imageUrl }: { imageUrl?: string }) {
               <h3 className="font-bold font-ubuntu text-lg">
                 Do You Really Want To Delete Your Account?
               </h3>
-              <p className="text-black">This is irreversible</p>
+              <p className="text-black dark:text-gray-200">This is irreversible</p>
             </div>
             <div className="flex gap-4">
               <form
