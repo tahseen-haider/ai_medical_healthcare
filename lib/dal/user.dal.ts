@@ -179,6 +179,17 @@ export const verifyUserCredentials = async ({
   return user;
 };
 
+export const verifyToken = async (email:string, code:number) => { 
+  const user = await prisma.user.findFirst({
+    where: {
+      email
+    }
+  })
+
+  if(user?.token !== code) return;
+  return user;
+ }
+
 export const setUserToken = async ({
   code,
   email,
@@ -212,6 +223,7 @@ export const resetPasswordInDB = async ({
     data: {
       password: newPassword,
       token: null,
+      is_verified: true
     },
   });
   if (!updatedUser) return;

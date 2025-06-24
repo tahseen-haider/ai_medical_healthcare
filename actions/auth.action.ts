@@ -9,6 +9,7 @@ import {
   resetPasswordInDB,
   setUserToken,
   verifyEmailTokenfromDB,
+  verifyToken,
   verifyUserCredentials,
 } from "@/lib/dal/user.dal";
 import {
@@ -265,15 +266,20 @@ export async function resetPassword(
   const existingUser = await getUserCredentialsByEmail(email);
   if(!existingUser) return {message: "Email does not exist, Try Signing Up"}
 
+  const codeMatches = await verifyToken(email, code);
+
+  if(!codeMatches) return {message: "Token is incorrect, Please resend Reset Email"}
+
   const hashedPassword = await bcrypt.hash(newPassword, 10);
 
   const res = await resetPasswordInDB({ email, newPassword: hashedPassword });
 
   if (!res) return { message: "Error while reseting password" };
 
-  return { message: "Password Reset Successfull. Login with new Password" };
-}
+  await deleteSession();
 
+  redirect("/login")
+}
 
 export async function signup(state: SignUpFormState, formData: FormData) {
   const validatedFields = SignupFormSchema.safeParse({

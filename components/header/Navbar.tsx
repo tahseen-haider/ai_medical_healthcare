@@ -34,7 +34,7 @@ function Navbar({
     //   link: "/about-us",
     // },
     {
-      title: "Contact",
+      title: "Contact Us",
       link: "/contact-us",
     },
   ];
