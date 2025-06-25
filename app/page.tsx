@@ -8,7 +8,7 @@ export default async function Home() {
     <main className="flex justify-center ">
       <div className="max-w-[1920px] w-full">
         {/* Hero Section */}
-        <div className="flex flex-col sm:flex-row gap-10 justify-between px-2 sm:px-6 py-24 h-fit bg-light-1 dark:bg-dark-4 bg-[url('../public/images/hero.png')]  bg-cover bg-center">
+        <div className="flex flex-col sm:flex-row gap-10 justify-between px-2 sm:px-6 py-24 h-fit bg-gray-50 dark:bg-dark-4 bg-[url('../public/images/hero.png')]  bg-cover bg-center">
           <div className="">
             <h1 className="font-ubuntu font-bold -tracking-[0.5px] leading-10 sm:leading-[62px] text-3xl sm:text-5xl">
               Your 24/7 <br />

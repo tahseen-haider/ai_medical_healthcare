@@ -14,7 +14,7 @@ interface LayoutWrapperProps {
 export default function LayoutWrapper({ children, isAuthenticated, imageUrl }: LayoutWrapperProps) {
   const pathname = usePathname();
 
-  const hideFooterRoutes = /^\/(assistant(\/.*)?|dashboard(\/.*)?)$/; 
+  const hideFooterRoutes = /^\/(assistant(\/.*)?|admin(\/.*)?)$/; 
 
   const showFooter = !hideFooterRoutes.test(pathname);
 

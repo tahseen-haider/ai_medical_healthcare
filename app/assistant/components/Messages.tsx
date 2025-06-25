@@ -83,7 +83,7 @@ export default function Messages({
     return () => clearTimeout(timeout);
   }, [messages]);
 
-  // Server Sent Event Connection
+  // Server Sent Event Declaration
   const streamGPTMessage = ({
     chatId,
     message,
