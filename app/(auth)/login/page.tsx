@@ -12,30 +12,29 @@ export default function LoginPage() {
 
   return (
     <main className=" flex flex-col items-center">
-      
       {/* Uploading */}
-      {pending && <LoadingScreen message="Logging In..."/>}
+      {pending && <LoadingScreen message="Logging In..." />}
 
       {/* Login Section */}
-      <section className="px-2 sm:px-6 py-10 flex items-center flex-col  gap-12 max-w-[1920px] w-full">
-        <div className="flex justify-between w-full">
+      <section className="px-2 sm:px-6 py-4 flex items-center flex-col  gap-6 max-w-[500px] w-full">
+        <div className="flex justify-between w-full gap-5">
           <div className="flex flex-col gap-3">
             <h1 className="font-ubuntu font-bold text-4xl text-dark-4 dark:text-white -tracking-[0.5px] ">
               Login
             </h1>
-            <h5 className="font-bold font-ubuntu text-base lg:text-xl text-gray-600 dark:text-gray-400">
+            <h5 className="font-bold font-ubuntu text-base text-gray-600 dark:text-gray-400">
               Login to see your chats
             </h5>
           </div>
           <div className="flex flex-col gap-3 justify-between">
-            <h5 className="font-bold font-ubuntu text-base lg:text-xl text-gray-600 dark:text-gray-400">
+            <h5 className="font-bold font-ubuntu text-base text-gray-600 dark:text-gray-400">
               Don't have an account?
             </h5>
             <Btn
               onClick={(e) => {
                 redirect("/signup");
               }}
-              className="bg-light-4 text-white font-bold font-ubuntu text-base lg:text-xl p-3 lg:p-6"
+              className="bg-light-4 text-white font-bold font-ubuntu text-base p-3"
             >
               Create an account
             </Btn>
@@ -44,10 +43,10 @@ export default function LoginPage() {
         {/* Form */}
         <form
           action={action}
-          className="lg:w-5/6 w-full rounded-lg shadow-light dark:shadow-dark py-16 px-5 lg:px-6 flex flex-col items-center gap-12 max-w-[1000px] dark:bg-dark-4"
+          className="w-full rounded-lg shadow-light dark:shadow-dark py-16 px-5 flex flex-col items-center gap-12 max-w-[500px] dark:bg-dark-4"
         >
-          <div className="flex flex-col lg:flex-row gap-6 w-full">
-            <div className="lg:w-1/2 w-full">
+          <div className="flex flex-col gap-6 w-full">
+            <div className="w-full">
               <label htmlFor="email" className="font-ubuntu font-bold text-lg">
                 Email
               </label>
@@ -60,7 +59,7 @@ export default function LoginPage() {
                 className="input-field"
               />
             </div>
-            <div className="w-full lg:w-1/2">
+            <div className="w-full">
               <label
                 htmlFor="password"
                 className="font-ubuntu font-bold text-lg"
@@ -88,12 +87,22 @@ export default function LoginPage() {
           >
             Login
           </button>
+          {/* Links */}
+          <div className="max-w-[1000px flex flex-col gap-5 text-center justify-between font-bold text-white">
+            <Link
+              href="/verify-email"
+              className="bg-light-4 py-1 px-3 shadow-light dark:shadow-dark rounded-lg"
+            >
+              Verify your email address
+            </Link>
+            <Link
+              href="/reset-password"
+              className="bg-light-4 py-1 px-3 shadow-light dark:shadow-dark rounded-lg"
+            >
+              Forgot Password?
+            </Link>
+          </div>
         </form>
-        {/* Links */}
-        <div className="w-5/6 max-w-[1000px] lg:w-4/6 flex lg:flex-row flex-col gap-5 text-center justify-between font-bold text-white">
-          <Link href="/verify-email" className="bg-light-4 py-1 px-3 shadow-light dark:shadow-dark rounded-lg">Verify your email address</Link>
-          <Link href="/reset-password" className="bg-light-4 py-1 px-3 shadow-light dark:shadow-dark rounded-lg">Forgot Password?</Link>
-        </div>
       </section>
       {/* Find Us */}
       <div className="w-full max-w-[1920px]">

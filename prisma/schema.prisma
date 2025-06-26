@@ -29,6 +29,23 @@ model User {
   token      Int?
 
   chats      ChatSession[]
+  account    Account?
+}
+
+model Account {
+  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId             String   @unique @db.ObjectId
+  provider           String
+  providerAccountId  String
+  access_token       String?
+  refresh_token      String?
+  expires_at         Int?
+  token_type         String?
+  id_token           String?
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@unique([provider, providerAccountId])
 }
 
 model ChatSession {

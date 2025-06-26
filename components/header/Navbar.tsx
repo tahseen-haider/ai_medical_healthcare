@@ -4,7 +4,7 @@ import logo from "@/public/images/LOGO.png";
 import { ThemeToggler } from "./theme-toggler";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import Btn from "../Button";
 import ProfileButton from "./ProfileButton";
@@ -47,7 +47,20 @@ function Navbar({
 
   const pathname = usePathname();
   const [isNavbarDown, setIsNavbarDown] = useState(false);
+  const [mounted, setMounted] = useState(false);
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const hideLinks =
+    mounted &&
+    /^\/(login|signup|verify-email(\/.*)?|reset-password(\/.*)?)$/.test(
+      pathname
+    );
+
+    if (!mounted) return null;
+    
   return (
     <header
       className={`fixed z-30 w-screen h-14 sm:h-16 dark:bg-dark-4 bg-light-4  flex justify-center border-b-2`}
@@ -62,39 +75,41 @@ function Navbar({
           </h3>
         </Link>
         {/* NavLinks */}
-        <nav>
-          <ul
-            className={`   lg:relative lg:flex-row lg:w-fit lg:top-0 lg:z-0
+        {!hideLinks && (
+          <nav>
+            <ul
+              className={`   lg:relative lg:flex-row lg:w-fit lg:top-0 lg:z-0
                         absolute dark:bg-dark-4 bg-light-4 flex flex-col items-center lg:gap-7 w-screen left-0 ${
                           isNavbarDown ? "top-14" : "-top-60"
                         } transition-all duration-300 -z-20`}
-          >
-            {NavLinks.map((ele) => (
-              <li key={ele.title} className="py-3">
-                <Link
-                  onClick={() => {
-                    setIsNavbarDown(false);
-                  }}
-                  href={ele.link}
-                  className={`text-[18px] ${
-                    isActiveLink(pathname, ele.link)
-                      ? "text-gray-800 dark:text-gray-300 border-b-4 border-gray-800 dark:border-gray-300 pb-1 font-bold"
-                      : "text-white hover:border-b-[1px] pb-[6px] border-gray-200 dark:border-gray-300 "
-                  } font-roboto leading-[22px] -tracking-[0.5px]`}
-                >
-                  {ele.title}
-                </Link>
-              </li>
-            ))}
-            {/* Theme toggeler for smaller screens */}
-            <div className="sm:hidden p-2 border-t-2 w-full flex justify-center items-center">
-              <div className="text-[18px] text-white  flex gap-4 items-center justify-center font-roboto font-bold leading-[22px] -tracking-[0.5px]">
-                Toggle Theme:
-                <ThemeToggler />
+            >
+              {NavLinks.map((ele) => (
+                <li key={ele.title} className="py-3">
+                  <Link
+                    onClick={() => {
+                      setIsNavbarDown(false);
+                    }}
+                    href={ele.link}
+                    className={`text-[18px] ${
+                      isActiveLink(pathname, ele.link)
+                        ? "text-gray-800 dark:text-gray-300 border-b-4 border-gray-800 dark:border-gray-300 pb-1 font-bold"
+                        : "text-white hover:border-b-[1px] pb-[6px] border-gray-200 dark:border-gray-300 "
+                    } font-roboto leading-[22px] -tracking-[0.5px]`}
+                  >
+                    {ele.title}
+                  </Link>
+                </li>
+              ))}
+              {/* Theme toggeler for smaller screens */}
+              <div className="sm:hidden p-2 border-t-2 w-full flex justify-center items-center">
+                <div className="text-[18px] text-white  flex gap-4 items-center justify-center font-roboto font-bold leading-[22px] -tracking-[0.5px]">
+                  Toggle Theme:
+                  <ThemeToggler />
+                </div>
               </div>
-            </div>
-          </ul>
-        </nav>
+            </ul>
+          </nav>
+        )}
 
         <div className="flex gap-4 lg:w-37 w-48 justify-end items-center">
           {isNavbarDown && (
