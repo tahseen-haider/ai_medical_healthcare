@@ -16,6 +16,7 @@ import cloudinary from "@/lib/cloudinary";
 import {
   getUser,
   getUserByEmailPassword,
+  getUserCredentialsByEmail,
 } from "@/lib/dal/user.dal";
 import { v4 as uuidv4 } from "uuid";
 import { redirect } from "next/navigation";
@@ -93,13 +94,12 @@ export const saveProfileChanges = async (
     phone: formData.get("phone"),
     dob: formData.get("dob"),
     gender: formData.get("gender"),
-    password: formData.get("password"),
   });
 
   if (!validatedFields.success) return { message: "Inputs were invalid" };
 
-  const { name, email, phone, dob, gender, password } = validatedFields.data;
-  const user = await getUserByEmailPassword(email, password);
+  const { name, email, phone, dob, gender } = validatedFields.data;
+  const user = await getUserCredentialsByEmail(email);
   if (!user) return { message: "Password is incorrect" };
 
   const file = formData.get("image") as File;

@@ -21,7 +21,7 @@ model User {
   name       String
   dob        String?
   gender     String?
-  password   String
+  password   String?
   pfp        String?
   createdAt  DateTime @default(now())
   role       UserRole @default(user)
@@ -29,7 +29,7 @@ model User {
   token      Int?
 
   chats      ChatSession[]
-  account    Account?
+  accounts    Account[]
 }
 
 model Account {

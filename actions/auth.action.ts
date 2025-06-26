@@ -100,8 +100,10 @@ function sendCodeHTML(code: number) {
         `;
 }
 
-function sendResetLinkHTML(baseUrl: string,email:string, code: number) {
-  const resetLink = `${baseUrl}/reset-password/${encodeURIComponent(email)}-${code}`;
+function sendResetLinkHTML(baseUrl: string, email: string, code: number) {
+  const resetLink = `${baseUrl}/reset-password/${encodeURIComponent(
+    email
+  )}-${code}`;
 
   return `
     <!DOCTYPE html>
@@ -140,7 +142,6 @@ function sendResetLinkHTML(baseUrl: string,email:string, code: number) {
   `;
 }
 
-
 type EmailRequest = {
   to: string;
   subject: string;
@@ -177,7 +178,6 @@ export async function sendEmail({ to, subject, html }: EmailRequest) {
   }
 }
 
-
 export async function sendVerifyEmail(
   state: VerifyEmailFormState,
   formData: FormData
@@ -193,7 +193,10 @@ export async function sendVerifyEmail(
 
   const userExists = await verifyUserCredentials({ email, password });
 
-  if (!userExists) return { message: "Incorrect email or password, Use right Password or Reset it" };
+  if (!userExists)
+    return {
+      message: "Incorrect email or password, Use right Password or Reset it",
+    };
 
   const code = Math.floor(100000 + Math.random() * 900000);
 
@@ -209,7 +212,6 @@ export async function sendVerifyEmail(
   return redirect(`/verify-email/${encodeURIComponent(email)}`);
 }
 
-
 export async function SendForgotPasswordLinkToEmail(
   state: SendForgotPasswordLinkToEmailState,
   formData: FormData
@@ -224,32 +226,32 @@ export async function SendForgotPasswordLinkToEmail(
 
   try {
     const existingUser = await getUserCredentialsByEmail(email);
-  if(!existingUser) return {message: "There is no account with this email"}
+    if (!existingUser)
+      return { message: "There is no account with this email" };
 
-  const code = Math.floor(100000 + Math.random() * 900000);
+    const code = Math.floor(100000 + Math.random() * 900000);
 
-  await setUserToken({ code, email });
-  
-  const res = await sendEmail({
-    to: email,
-    subject: "Reset Your MediTech Password",
-    html: sendResetLinkHTML(process.env.BASE_URL!, email, code),
-  });
+    await setUserToken({ code, email });
 
-  if (!res) return { message: "Failed to send Link" };
-  return { message: "Link Sent! Check Your email" };
+    const res = await sendEmail({
+      to: email,
+      subject: "Reset Your MediTech Password",
+      html: sendResetLinkHTML(process.env.BASE_URL!, email, code),
+    });
+
+    if (!res) return { message: "Failed to send Link" };
+    return { message: "Link Sent! Check Your email" };
   } catch (error) {
-    return {message: "There was an error."}
+    return { message: "There was an error." };
   }
 }
-
 
 export async function resetPassword(
   state: ResetPasswordFormState,
   formData: FormData
 ) {
   const validatedFields = ResetPasswordFormSchema.safeParse({
-    email: formData.get('email'),
+    email: formData.get("email"),
     code: Number(formData.get("code")),
     newPassword: formData.get("newPassword"),
     repeatNewPassword: formData.get("repeatNewPassword"),
@@ -258,17 +260,17 @@ export async function resetPassword(
   if (!validatedFields.success) return { message: "Input a valid Password" };
 
   const { code, newPassword, repeatNewPassword } = validatedFields.data;
-  const email = formData.get("email") as string
+  const email = formData.get("email") as string;
   if (newPassword !== repeatNewPassword)
     return { message: "Passwords does not match" };
 
-
   const existingUser = await getUserCredentialsByEmail(email);
-  if(!existingUser) return {message: "Email does not exist, Try Signing Up"}
+  if (!existingUser) return { message: "Email does not exist, Try Signing Up" };
 
   const codeMatches = await verifyToken(email, code);
 
-  if(!codeMatches) return {message: "Token is incorrect, Please resend Reset Email"}
+  if (!codeMatches)
+    return { message: "Token is incorrect, Please resend Reset Email" };
 
   const hashedPassword = await bcrypt.hash(newPassword, 10);
 
@@ -278,7 +280,7 @@ export async function resetPassword(
 
   await deleteSession();
 
-  redirect("/login")
+  redirect("/login");
 }
 
 export async function signup(state: SignUpFormState, formData: FormData) {
@@ -333,13 +335,14 @@ export async function login(state: LoginFormState, formData: FormData) {
 
   const user = await getUserCredentialsByEmail(email);
 
-  if (!user) return { success: false, message: "Email is incorrect." };
+  if (!user || !user.password)
+    return { success: false, message: "Email or Password is incorrect." };
 
   const isVerified = await isUserVerified(user.email);
 
   if (!isVerified) return { success: false, message: "Email is not verified." };
 
-  const isPasswordMatched = await bcrypt.compare(password, user.password);
+  const isPasswordMatched = await bcrypt.compare(password, user.password!);
 
   if (!isPasswordMatched)
     return { success: false, message: "Email or password is incorrect" };
@@ -388,8 +391,14 @@ export async function getCurrentlyAuthenticatedUser() {
   return user;
 }
 
-export async function deleteUserAccount(state: {message: string}|undefined, formData:FormData) {
+export async function deleteUserAccount(
+  state: { message: string } | undefined,
+  formData: FormData
+) {
   const res = await deleteUserFromDB();
-  if(!res) return {message: "Error while deleting account"}
-  return {message: "User Deleted"}
+  if (!res) {
+    console.log("error")
+    return { message: "Error while deleting account" };
+  }
+  return { message: "User Deleted" };
 }

@@ -62,7 +62,6 @@ export const SaveProfileChangesState = z.object({
   phone: z.string().trim(),
   dob: z.string().trim(),
   gender: z.string().trim(),
-  password: z.string().trim()
 }) 
 
 // Chat Zod Validations

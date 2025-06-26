@@ -3,6 +3,8 @@ import { signup } from "@/actions/auth.action";
 import Btn from "@/components/Button";
 import FindUsHereSection from "@/components/FindUsHereSection";
 import LoadingScreen from "@/components/LoadingScreen";
+import { signInWithOAuth } from "@/lib/oauth-client";
+import Image from "next/image";
 import { redirect } from "next/navigation";
 import { useActionState } from "react";
 
@@ -37,77 +39,116 @@ export default function SignupPage() {
           </div>
         </div>
         {/* Form */}
-        <form
-          action={action}
-          className="w-full rounded-lg shadow-light dark:shadow-dark py-16 px-5 flex flex-col items-center gap-12 max-w-[1000px] dark:bg-dark-4"
-        >
-          <div className="flex flex-col gap-6 w-full">
-            <div className="w-full">
-              <label
-                htmlFor="username"
-                className="font-ubuntu font-bold text-lg"
-              >
-                Username
-              </label>
-              <input
-                id="username"
-                type="username"
-                name="username"
-                placeholder="John Doe"
-                required
-                className="input-field"
+        <div className="w-full rounded-lg shadow-light dark:shadow-dark py-16 px-5 flex flex-col items-center gap-12 max-w-[500px] dark:bg-dark-4">
+          {/* OAuth */}
+          <div className="w-full flex justify-between text-black font-bold">
+            <button
+              onClick={() => signInWithOAuth("google")}
+              className="flex items-center w-1/2 justify-between mr-4 bg-white p-4 rounded-lg shadow-dark dark:shadow-light"
+            >
+              Sign Up with Google{" "}
+              <Image
+                width={40}
+                height={40}
+                src="/icons/google-brands.svg"
+                alt="google-logo"
               />
-            </div>
-            <div className="w-full">
-              <label htmlFor="email" className="font-ubuntu font-bold text-lg">
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                name="email"
-                placeholder="example@mail.com"
-                required
-                className="input-field "
+            </button>
+            <button
+              onClick={() => signInWithOAuth("github")}
+              className="flex items-center w-1/2 justify-between mr-4 bg-white p-4 rounded-lg shadow-dark dark:shadow-light"
+            >
+              Sign Up with GitHub
+              <Image
+                width={40}
+                height={40}
+                src="/icons/github-brands.svg"
+                alt="github-logo"
               />
-            </div>
-            <div className="w-full">
-              <label
-                htmlFor="password"
-                className="font-ubuntu font-bold text-lg"
-              >
-                Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                name="password"
-                placeholder="********"
-                required
-                minLength={8}
-                maxLength={15}
-                className="input-field"
-              />
-            </div>
-            {state?.errors?.password && (
-              <div>
-                <p>Password must:</p>
-                <ul>
-                  {state.errors.password.map((error) => (
-                    <li key={error}>- {error}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
+            </button>
           </div>
-          <button
-            type="submit"
-            className="px-6 py-3 bg-light-4 rounded-lg font-bold font-ubuntu text-2xl text-white shadow-light cursor-pointer hover:bg-black hover:text-white"
+          {/* Separator */}
+          <div className="w-full border-b-2 relative flex justify-center">
+            <div className="absolute text-center -top-6 text-lg bg-gray-50 dark:bg-dark-4 p-3">
+              OR
+            </div>
+          </div>
+          {/* Custom Auth */}
+          <form
+            action={action}
+            className="w-full flex flex-col items-center gap-6"
           >
-            SignUp
-          </button>
-          {state?.message && <p className="text-red-600">{state.message}</p>}
-        </form>
+            <div className="flex flex-col gap-6 w-full">
+              <div className="w-full">
+                <label
+                  htmlFor="username"
+                  className="font-ubuntu font-bold text-lg"
+                >
+                  Username
+                </label>
+                <input
+                  id="username"
+                  type="username"
+                  name="username"
+                  placeholder="John Doe"
+                  required
+                  className="input-field"
+                />
+              </div>
+              <div className="w-full">
+                <label
+                  htmlFor="email"
+                  className="font-ubuntu font-bold text-lg"
+                >
+                  Email
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  name="email"
+                  placeholder="example@mail.com"
+                  required
+                  className="input-field "
+                />
+              </div>
+              <div className="w-full">
+                <label
+                  htmlFor="password"
+                  className="font-ubuntu font-bold text-lg"
+                >
+                  Password
+                </label>
+                <input
+                  id="password"
+                  type="password"
+                  name="password"
+                  placeholder="********"
+                  required
+                  minLength={8}
+                  maxLength={15}
+                  className="input-field"
+                />
+              </div>
+              {state?.errors?.password && (
+                <div>
+                  <p>Password must:</p>
+                  <ul>
+                    {state.errors.password.map((error) => (
+                      <li key={error}>- {error}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
+            <button
+              type="submit"
+              className="px-6 py-3 bg-light-4 rounded-lg font-bold font-ubuntu text-2xl text-white shadow-light cursor-pointer hover:bg-black hover:text-white"
+            >
+              SignUp
+            </button>
+            {state?.message && <p className="text-red-600">{state.message}</p>}
+          </form>
+        </div>
 
         {(state?.errors?.email || state?.errors?.password) && (
           <p>{state.errors.email}</p>

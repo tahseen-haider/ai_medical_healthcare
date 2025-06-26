@@ -66,7 +66,7 @@ export const getUserByEmailPassword = cache(
     });
     if (!user) return;
 
-    const correctPassword = await bcrypt.compare(password, user?.password);
+    const correctPassword = await bcrypt.compare(password, user.password!);
     if (!correctPassword) return;
 
     return {
@@ -93,6 +93,7 @@ export const getUserCredentialsByEmail = cache(
         email: true,
         password: true,
         role: true,
+        pfp: true,
       },
     });
     return user;
@@ -172,7 +173,7 @@ export const verifyUserCredentials = async ({
   });
   if (!user) return;
 
-  const isPasswordMatched = await bcrypt.compare(password, user.password);
+  const isPasswordMatched = await bcrypt.compare(password, user.password!);
 
   if (!isPasswordMatched) return;
 
@@ -233,7 +234,6 @@ export const resetPasswordInDB = async ({
 
 export const deleteUserFromDB = async () => {
   const user = await getUserIdnRoleIfAuthenticated();
-
   try {
     // Get all messages that have images
     const messagesWithImages = await prisma.message.findMany({
@@ -276,6 +276,12 @@ export const deleteUserFromDB = async () => {
         },
       });
 
+      await tx.account.deleteMany({
+        where: {
+          userId: user?.userId,
+        },
+      });
+
       await tx.user.delete({
         where: {
           id: user?.userId,
@@ -290,6 +296,7 @@ export const deleteUserFromDB = async () => {
     deleteSession();
     return 1;
   } catch (error) {
+    console.log("Catching")
     return 0;
   } finally {
     redirect("/");

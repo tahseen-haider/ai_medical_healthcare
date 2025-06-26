@@ -17,8 +17,6 @@ import ProfilePicture from "../ProfilePicture";
 import LoadingScreen from "../LoadingScreen";
 import { UserProfileDTO } from "@/lib/dto/user.dto";
 import Link from "next/link";
-import PopUpCard from "../PopUpCard";
-import Btn from "../Button";
 
 export default function ProfileButton({ imageUrl }: { imageUrl?: string }) {
   const [state, action, pending] = useActionState(logout, undefined);
@@ -53,7 +51,10 @@ export default function ProfileButton({ imageUrl }: { imageUrl?: string }) {
 
   return (
     <>
-      {(pending || pendingDeletingAccount) && (
+      {(pendingDeletingAccount) && (
+        <LoadingScreen message="Deleting your account..." />
+      )}
+      {(pending) && (
         <LoadingScreen message="Logging you out..." />
       )}
       <DropdownMenu open={open} onOpenChange={setOpen}>

@@ -14,8 +14,9 @@ export type UserProfileDTO = {
 export type UserCredentialDTO = {
   id: string;
   email: string;
-  password: string;
+  password: string | null;
   role: UserRole;
+  pfp: string | null
 };
 
 export type UserIDandRoleForSessionDTO = {
