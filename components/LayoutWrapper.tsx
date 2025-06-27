@@ -7,11 +7,11 @@ import { Toaster } from "sonner";
 
 interface LayoutWrapperProps {
   children: React.ReactNode;
-  isAuthenticated: boolean;
+  role: string | undefined;
   imageUrl?: string
 }
 
-export default function LayoutWrapper({ children, isAuthenticated, imageUrl }: LayoutWrapperProps) {
+export default function LayoutWrapper({ children, role, imageUrl }: LayoutWrapperProps) {
   const pathname = usePathname();
 
   const hideFooterRoutes = /^\/(assistant(\/.*)?|admin(\/.*)?)$/; 
@@ -21,7 +21,7 @@ export default function LayoutWrapper({ children, isAuthenticated, imageUrl }: L
   return (
     <>
       <Toaster richColors position="top-center" />
-      <Navbar isAuthenticated={isAuthenticated} imageUrl={imageUrl}/>
+      <Navbar role={role} imageUrl={imageUrl}/>
       <div className="h-16" />
       {children}
       {showFooter && <Footer />}

@@ -31,7 +31,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const cookieStore = await cookies();
-  const isAuthenticated = await isUserAuthenticated(
+  const role = await isUserAuthenticated(
     cookieStore.get("session")?.value
   );
   const imageUrl = await getPfp();
@@ -46,7 +46,7 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <LayoutWrapper isAuthenticated={isAuthenticated} 
+          <LayoutWrapper role={role} 
           imageUrl={imageUrl}
           >
             {children}

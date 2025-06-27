@@ -10,13 +10,13 @@ import Btn from "../Button";
 import ProfileButton from "./ProfileButton";
 
 function Navbar({
-  isAuthenticated,
+  role,
   imageUrl,
 }: {
-  isAuthenticated: boolean;
+  role: string | undefined;
   imageUrl?: string;
 }) {
-  const NavLinks = [
+  const UserNavLinks = [
     {
       title: "Home",
       link: "/",
@@ -36,6 +36,30 @@ function Navbar({
     {
       title: "Contact Us",
       link: "/contact-us",
+    },
+  ];
+  const AdminNavLinks = [
+    {
+      title: "Home",
+      link: "/",
+    },
+    {
+      title: "Ai Assistant",
+      link: "/assistant",
+    },
+    {
+      title: "Dashboard",
+      link: "/admin/dashboard",
+    },
+  ];
+  const DoctorNavLinks = [
+    {
+      title: "Home",
+      link: "/",
+    },
+    {
+      title: "Ai Assistant",
+      link: "/assistant",
     },
   ];
   const isActiveLink = (pathname: string, link: string) => {
@@ -59,8 +83,11 @@ function Navbar({
       pathname
     );
 
-    if (!mounted) return null;
-    
+  const isAdmin = role === "admin";
+  const isDoctor = role === "doctor";
+
+  if (!mounted) return null;
+
   return (
     <header
       className={`fixed z-30 w-screen h-14 sm:h-16 dark:bg-dark-4 bg-light-4  flex justify-center border-b-2`}
@@ -74,7 +101,7 @@ function Navbar({
             MediTech
           </h3>
         </Link>
-        {/* NavLinks */}
+        {/* UserNavLinks */}
         {!hideLinks && (
           <nav>
             <ul
@@ -83,7 +110,12 @@ function Navbar({
                           isNavbarDown ? "top-14" : "-top-60"
                         } transition-all duration-300 -z-20`}
             >
-              {NavLinks.map((ele) => (
+              {(isAdmin
+                ? AdminNavLinks
+                : isDoctor
+                ? DoctorNavLinks
+                : UserNavLinks
+              ).map((ele) => (
                 <li key={ele.title} className="py-3">
                   <Link
                     onClick={() => {
@@ -118,7 +150,7 @@ function Navbar({
               onClick={() => setIsNavbarDown(false)}
             />
           )}
-          {!isAuthenticated && (
+          {!role && (
             <Link
               href="/login"
               className={`${
@@ -135,7 +167,7 @@ function Navbar({
               </Btn>
             </Link>
           )}
-          {isAuthenticated && <ProfileButton imageUrl={imageUrl} />}
+          {role && <ProfileButton imageUrl={imageUrl} />}
           <div className="hidden sm:block">
             <ThemeToggler />
           </div>
