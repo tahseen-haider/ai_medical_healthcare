@@ -4,7 +4,7 @@ import logo from "@/public/images/LOGO.png";
 import { ThemeToggler } from "./theme-toggler";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import Btn from "../Button";
 import ProfileButton from "./ProfileButton";
@@ -73,7 +73,7 @@ function Navbar({
   const [isNavbarDown, setIsNavbarDown] = useState(false);
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     setMounted(true);
   }, []);
 
@@ -86,7 +86,6 @@ function Navbar({
   const isAdmin = role === "admin";
   const isDoctor = role === "doctor";
 
-  if (!mounted) return null;
 
   return (
     <header
