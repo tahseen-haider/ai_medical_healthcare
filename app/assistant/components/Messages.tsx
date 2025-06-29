@@ -72,6 +72,7 @@ export default function Messages({
   // Refs
   const imageUploaderRef = useRef<HTMLInputElement | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   const randomId = () => uuidv4();
 
@@ -188,6 +189,7 @@ export default function Messages({
       </div>
       {/* Chat Input */}
       <ChatInputBox
+        buttonRef={buttonRef}
         imageBase64={imageBase64}
         onSubmit={(e) => {
           e.preventDefault();
@@ -214,6 +216,7 @@ export default function Messages({
               setMessages((prev) => {
                 const last = prev[prev.length - 1];
                 if (last?.role !== "assistant") {
+                  console.log("first")
                   return [
                     ...prev,
                     {

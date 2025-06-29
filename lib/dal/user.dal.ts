@@ -141,7 +141,6 @@ export const verifyEmailTokenfromDB = async ({
 
   if (!user || user.token != verifyToken) return undefined;
 
-  console.log({ email });
   await prisma.user.update({
     where: { email },
     data: {

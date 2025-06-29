@@ -123,7 +123,7 @@ function Navbar({
                     href={ele.link}
                     className={`text-[18px] ${
                       isActiveLink(pathname, ele.link)
-                        ? "text-gray-800 dark:text-gray-300 border-b-4 border-gray-800 dark:border-gray-300 pb-1 font-bold"
+                        ? "text-white dark:text-gray-300 border-b-4 border-white dark:border-gray-300 pb-1 font-bold"
                         : "text-white hover:border-b-[1px] pb-[6px] border-gray-200 dark:border-gray-300 "
                     } font-roboto leading-[22px] -tracking-[0.5px]`}
                   >

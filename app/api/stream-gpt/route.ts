@@ -7,7 +7,6 @@ import { OpenAI } from "openai";
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 export async function GET(req: NextRequest) {
-  console.log("SSE");
   const { searchParams } = new URL(req.url);
 
   const message = searchParams.get("message");

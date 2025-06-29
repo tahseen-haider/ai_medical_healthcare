@@ -48,7 +48,6 @@ function ReportUploader({ onReportUpload }: Props) {
         reader.readAsDataURL(file);
         reader.onloadend = () => {
           const fileContent = reader.result as string;
-          console.log(fileContent);
         };
       }
 
@@ -58,7 +57,6 @@ function ReportUploader({ onReportUpload }: Props) {
           reader.onloadend = () => {
             const base64string = reader.result as string;
             setBase64String(base64string);
-            console.log(base64string);
           };
           reader.readAsDataURL(compressedFile);
         });

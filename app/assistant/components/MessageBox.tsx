@@ -49,7 +49,7 @@ export default function MessageBox({
           className={` ${
             !isUser
               ? "bg-light-1 dark:bg-gray-950"
-              : "text-white bg-light-4 dark:bg-dark-3"
+              : "text-white bg-light-4 dark:bg-dark-4"
           } shadow-light dark:shadow-dark w-full rounded-lg py-2 px-4 whitespace-pre-line`}
         >
           {message.image && (

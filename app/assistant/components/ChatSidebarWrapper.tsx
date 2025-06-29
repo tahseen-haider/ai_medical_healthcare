@@ -50,7 +50,7 @@ export default function ChatSidebarWrapper({children}: Readonly<{children: React
       <div
         className={`${
           isSidebarOpen ? "w-80 border-r-2" : "w-0"
-        } absolute overflow-hidden z-20 bg-gray-50 dark:bg-dark-4 transition-all`}
+        } absolute overflow-hidden z-20 bg-gray-50 dark:bg-gray-950 transition-all `}
       >
         {/* Menu buttons */}
         <div className="px-6 flex justify-between h-10 items-center border-b-2 bg-white dark:bg-dark-4">
@@ -67,7 +67,7 @@ export default function ChatSidebarWrapper({children}: Readonly<{children: React
           </Link>
         </div>
         {/* Chats List */}
-        <div className="flex flex-col pl-6 py-2 pr-2 gap-2 h-[calc(100vh-104px)] overflow-auto">
+        <div className="flex flex-col pl-6 py-4 pb-9 pr-2 gap-2 h-[calc(100vh-104px)] overflow-auto">
           {children}
         </div>
       </div>

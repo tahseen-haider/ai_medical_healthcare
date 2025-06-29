@@ -10,6 +10,17 @@ export default function NewChatSection() {
   const [imageBase64, setImageBase64] = useState<string | undefined>();
 
   const imageUploaderRef = useRef<HTMLInputElement | null>(null);
+  const buttonRef = useRef<HTMLButtonElement | null>(null);
+  const submitOnDefaultQuestionsClick = useRef(false);
+
+  const defaultMedicalQuestions = [
+    "Why do I feel tired?",
+    "What causes headaches?",
+    "How to check blood pressure?",
+    "Why can't I sleep?",
+    "How to stop a cough?",
+    "Why am I losing weight?",
+  ];
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -24,14 +35,20 @@ export default function NewChatSection() {
   };
 
   useEffect(() => {
-    console.log(imageBase64);
-  }, [imageBase64]);
+    buttonRef.current?.click();
+  }, [submitOnDefaultQuestionsClick.current]);
   return (
-    <section className="flex flex-col gap-4 w-full h-[calc(100vh-65px)] items-center justify-center">
-      <h2 className="font-ubuntu text-4xl tracking-tight leading-12">
-        What can I help with?
-      </h2>
+    <section className="flex flex-col gap-2 w-full h-[calc(100vh-65px)] items-center justify-center">
+      <div className="text-center">
+        <h2 className="font-ubuntu text-4xl tracking-tight leading-12">
+          What can I help with?
+        </h2>
+        <p className="text-gray-500 dark:text-gray-300">
+          Ask anything about medical or upload your medical report
+        </p>
+      </div>
       <ChatInputBox
+        buttonRef={buttonRef}
         pending={pending}
         action={action}
         prompt={prompt}
@@ -80,6 +97,22 @@ export default function NewChatSection() {
           </>
         }
       />
+      {/* Extra options to choose from */}
+      <div className="w-full md:w-4/6 flex flex-wrap">
+        {defaultMedicalQuestions.map((ele, index) => (
+          <div
+            key={index}
+            onClick={() => {
+              if (pending) return;
+              setPrompt(ele);
+              submitOnDefaultQuestionsClick.current = true
+            }}
+            className={`bg-white dark:bg-gray-950 shadow-dark dark:shadow-light px-3 py-1 m-2 rounded-lg ${pending?'cursor-not-allowed':' cursor-pointer hover:bg-light-4 hover:text-white hover:dark:bg-dark-4'}`}
+          >
+            {ele}
+          </div>
+        ))}
+      </div>
       {state?.message && <p className="text-red-400">{state?.message}</p>}
     </section>
   );

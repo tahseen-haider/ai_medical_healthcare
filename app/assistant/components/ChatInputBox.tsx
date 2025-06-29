@@ -12,9 +12,11 @@ export default function ChatInputBox({
   action,
   isGenerating,
   imageBase64,
-  additionalFormsElements
+  additionalFormsElements,
+  buttonRef,
 }: {
-  additionalFormsElements?: React.ReactNode
+  buttonRef: React.RefObject<HTMLButtonElement | null>;
+  additionalFormsElements?: React.ReactNode;
   imageBase64?: string;
   isNewChat?: boolean;
   additionalInputElement?: React.ReactNode;
@@ -41,7 +43,6 @@ export default function ChatInputBox({
       buttonRef.current?.click();
     }
   }
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
 
   return (
     <div className="lg:w-4/6 w-5/6 bottom-0 bg-gray-50 dark:bg-gray-950">
