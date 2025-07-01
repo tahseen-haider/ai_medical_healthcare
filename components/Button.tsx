@@ -16,7 +16,7 @@ export default function Btn({
     <Button
       onClick={onClick}
       className={clsx(
-        " text-black shadow-[0,0,0, 1] dark:shadow-dark",
+        " bg-light-4 dark:bg-white text-white dark:text-black shadow-dark dark:shadow-dark text-lg",
         className
       )}
     >

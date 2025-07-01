@@ -22,7 +22,7 @@ const ubuntu = Ubuntu({
 
 export const metadata: Metadata = {
   title: "Medical & Wellfare Companion",
-  description: "Medical & Wellfare Companion",
+  description: "Medical and Wellfare Companion Ai assistant for your medical queries.",
 };
 
 export default async function RootLayout({
