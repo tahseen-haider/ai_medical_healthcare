@@ -8,22 +8,26 @@ import { Toaster } from "sonner";
 interface LayoutWrapperProps {
   children: React.ReactNode;
   role: string | undefined;
-  imageUrl?: string
+  imageUrl?: string;
 }
 
-export default function LayoutWrapper({ children, role, imageUrl }: LayoutWrapperProps) {
+export default function LayoutWrapper({
+  children,
+  role,
+  imageUrl,
+}: LayoutWrapperProps) {
   const pathname = usePathname();
 
-  const hideFooterRoutes = /^\/(assistant(\/.*)?|admin(\/.*)?)$/; 
+  const hideFooterRoutes = /^\/(assistant(\/.*)?|admin(\/.*)?)$/;
 
   const showFooter = !hideFooterRoutes.test(pathname);
 
   return (
     <>
       <Toaster richColors position="top-center" />
-      <Navbar role={role} imageUrl={imageUrl}/>
+      <Navbar role={role} imageUrl={imageUrl} />
       <div className="h-16" />
-      {children}
+      <div className="min-h-[60vh]">{children}</div>
       {showFooter && <Footer />}
     </>
   );

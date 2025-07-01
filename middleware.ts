@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
-  const restrictedRoutes = /^\/(login|signup|verify-email(?:\/.*)?|dashboard)$/;
+  const restrictedRoutes = /^\/(login|signup|verify-email(?:\/.*)?)$/;
   const isRestrictedRoute = restrictedRoutes.test(pathname);
 
   const sessionToken = req.cookies.get("session")?.value;

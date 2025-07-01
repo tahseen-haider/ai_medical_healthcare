@@ -1,14 +1,11 @@
-"use client"
+"use client";
 
-import Btn from '@/components/Button'
+import Btn from "@/components/Button";
 
 export default function DashManageUsersBtn() {
   return (
-    <Btn
-          onClick={() => {}}
-          className=""
-        >
-          Manage Users
-        </Btn>
-  )
+    <Btn onClick={() => {}} className="">
+      Manage Users
+    </Btn>
+  );
 }

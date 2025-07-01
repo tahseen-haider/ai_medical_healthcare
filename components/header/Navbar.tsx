@@ -39,14 +39,14 @@ function Navbar({
     },
   ];
   const AdminNavLinks = [
-    {
-      title: "Home",
-      link: "/",
-    },
-    {
-      title: "Ai Assistant",
-      link: "/assistant",
-    },
+    // {
+    //   title: "Home",
+    //   link: "/",
+    // },
+    // {
+    //   title: "Ai Assistant",
+    //   link: "/assistant",
+    // },
     {
       title: "Dashboard",
       link: "/admin/dashboard",
@@ -86,7 +86,6 @@ function Navbar({
   const isAdmin = role === "admin";
   const isDoctor = role === "doctor";
 
-
   return (
     <header
       className={`fixed z-30 w-screen h-14 sm:h-16 dark:bg-dark-4 bg-light-4  flex justify-center border-b-2`}
@@ -94,7 +93,7 @@ function Navbar({
       <div className="max-w-[1920px] w-full flex items-center justify-between h-full px-2 lg:px-6">
         <div className="absolute -z-10 w-screen h-full left-0 dark:bg-dark-4 bg-light-4" />
         {/* LOGO */}
-        <Link href="/" className="flex items-center">
+        <Link href={`${isAdmin? '/admin/dashboard': '/'}`} className="flex items-center">
           <Image src={logo} width={52} height={52} alt="Logo of MediTech" />
           <h3 className={`text-2xl font-bold font-ubuntu text-white`}>
             MediTech

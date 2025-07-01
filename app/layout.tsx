@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 import { isUserAuthenticated } from "@/lib/session";
 import LayoutWrapper from "@/components/LayoutWrapper";
 import { getPfp } from "@/actions";
+import { redirect } from "next/navigation";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -22,7 +23,8 @@ const ubuntu = Ubuntu({
 
 export const metadata: Metadata = {
   title: "Medical & Wellfare Companion",
-  description: "Medical and Wellfare Companion Ai assistant for your medical queries.",
+  description:
+    "Medical and Wellfare Companion Ai assistant for your medical queries.",
 };
 
 export default async function RootLayout({
@@ -31,9 +33,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const cookieStore = await cookies();
-  const role = await isUserAuthenticated(
-    cookieStore.get("session")?.value
-  );
+  const role = await isUserAuthenticated(cookieStore.get("session")?.value);
+  
   const imageUrl = await getPfp();
   return (
     <html lang="en" suppressHydrationWarning>
@@ -46,9 +47,7 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <LayoutWrapper role={role} 
-          imageUrl={imageUrl}
-          >
+          <LayoutWrapper role={role} imageUrl={imageUrl}>
             {children}
           </LayoutWrapper>
         </ThemeProvider>
