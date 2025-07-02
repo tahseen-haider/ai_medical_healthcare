@@ -5,3 +5,10 @@ export type GetAllVerifiedUsersDTO = {
   email: string;
   createdAt: string;
 }[]
+
+export type GetInquiriesDTO = {
+  name: string,
+  email: string,
+  message: string,
+  is_read: boolean,
+}[]

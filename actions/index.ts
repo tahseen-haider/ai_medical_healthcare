@@ -33,6 +33,7 @@ export const contactUs = async (
 
   if (!validatedFields.success)
     return {
+      is_submitted:false,
       errors: validatedFields.error.flatten().fieldErrors,
     };
 
@@ -41,9 +42,17 @@ export const contactUs = async (
       ...validatedFields.data,
     });
 
-    return { message: "Message sent Sucessfully" };
+    return {
+      submitted: {
+        fullname: submitted.fullname,
+        email: submitted.email,
+        message: submitted.inquiry,
+      },
+      is_submitted: true,
+      message: "Message sent Sucessfully",
+    };
   } catch {
-    return { message: "Something went wrong" };
+    return { is_submitted:false, message: "Something went wrong" };
   }
 };
 
@@ -111,15 +120,12 @@ export const saveProfileChanges = async (
     const base64 = buffer.toString("base64");
     const dataUri = `data:${file.type};base64,${base64}`;
 
-    
     if (user.pfp) {
       await cloudinary.uploader.destroy(user.pfp);
     }
 
-    
     const newPublicId = `profile_images/${user.id}-${uuidv4()}`;
 
-    
     const uploadResult = await cloudinary.uploader.upload(dataUri, {
       folder: "profile_images",
       public_id: newPublicId,
@@ -131,8 +137,6 @@ export const saveProfileChanges = async (
     }
   }
 
-
-  
   const changed = await uploadProfileChanges({
     name,
     email,

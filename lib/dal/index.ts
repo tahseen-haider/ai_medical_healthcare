@@ -42,6 +42,7 @@ export const uploadInquiry = cache(async (data: ContactFormType) => {
       inquiry: data.inquiry,
     },
   });
+  return submitted;
 });
 
 export const uploadProfileChanges = cache(

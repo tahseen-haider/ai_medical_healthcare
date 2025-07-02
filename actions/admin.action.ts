@@ -1,9 +1,17 @@
 "use server";
 
-import { getAllVerifiedUsersFromDB } from "@/lib/dal/admin.dal";
-import { GetAllVerifiedUsersDTO } from "@/lib/dto/admin.dto";
+import {
+  getAllVerifiedUsersFromDB,
+  getInquiriesFromDB,
+} from "@/lib/dal/admin.dal";
+import { GetAllVerifiedUsersDTO, GetInquiriesDTO } from "@/lib/dto/admin.dto";
 
-export const getAllVerifiedUsers = async (): Promise<GetAllVerifiedUsersDTO> => {
+export const delayInMs = async (time: number) => {
+  return new Promise((resolve) => setTimeout(resolve, time));
+};
+
+export const getAllVerifiedUsers =
+  async (): Promise<GetAllVerifiedUsersDTO> => {
     const users = await getAllVerifiedUsersFromDB();
 
     const usersToReturn = users.map((user) => {
@@ -16,5 +24,22 @@ export const getAllVerifiedUsers = async (): Promise<GetAllVerifiedUsersDTO> => 
       };
     });
 
+    await delayInMs(2000);
+
     return usersToReturn;
   };
+
+export const getInquiries = async (): Promise<GetInquiriesDTO> => {
+  const inquiries = await getInquiriesFromDB();
+
+  // await delayInMs(2000);
+
+  return inquiries.map((inquiry) => {
+    return {
+      name: inquiry.fullname,
+      email: inquiry.email,
+      message: inquiry.inquiry,
+      is_read: inquiry.is_read,
+    };
+  });
+};

@@ -14,10 +14,20 @@ export const getAllVerifiedUsersFromDB = async() => {
       createdAt:true,
       role:true
     },
+    take: 10,
     orderBy: {
       createdAt: 'desc'
     }
   })
 
   return users;
+ }
+
+export const getInquiriesFromDB = async () => { 
+  return await prisma.inquiries.findMany({
+    take: 10,
+    orderBy: {
+      createdAt: 'desc'
+    }
+  })
  }

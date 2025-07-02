@@ -77,10 +77,18 @@ model Appointments {
   id              String  @id @default(auto()) @map("_id") @db.ObjectId
   fullname        String
   email           String
-  phone           String? // safer for formatting
+  phone           String?
   reasonForVisit  String
   preferredDate   String
   preferredTime   String
+  status          AppointmentStatus @default(PENDING)       
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  CANCELLED
+  COMPLETED
 }
 
 model Inquiries {
@@ -88,4 +96,6 @@ model Inquiries {
   fullname        String
   email           String
   inquiry         String
+  is_read         Boolean @default(false)
+  createdAt       DateTime @default(now())
 }

@@ -8,13 +8,14 @@ import { useActionState, useEffect, useState } from "react";
 
 export default function ContactUsPage() {
   const [state, action, pending] = useActionState(contactUs, undefined);
-  const [submitted, setSubmitted] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
-    const responseSucess = state?.message;
+  if (state?.is_submitted) {
+    setShowPopup(true);
+  }
+}, [state]);
 
-    if (responseSucess) setSubmitted(true);
-  }, [state]);
   return (
     <main className="flex flex-col items-center">
       <section className="px-2 sm:px-6 py-4 flex items-center flex-col  gap-6 max-w-[500px] w-full">
@@ -47,7 +48,7 @@ export default function ContactUsPage() {
                 name="fullname"
                 placeholder="John Doe"
                 required
-                minLength={8}
+                minLength={3}
                 className="input-field"
               />
             </div>
@@ -90,8 +91,8 @@ export default function ContactUsPage() {
         {pending && <LoadingScreen message={"Uploading Your Message..."} />}
 
         {/* Sucess Pop Up */}
-        {submitted && (
-          <PopUpCard>
+        {state?.is_submitted && showPopup && (
+          <PopUpCard setState={setShowPopup}>
             <h1 className="font-bold font-ubuntu text-2xl">
               {state?.message || "Submitted"}
             </h1>
@@ -110,10 +111,8 @@ export default function ContactUsPage() {
             </div>
 
             <Btn
-              className="bg-light-4 dark:bg-dark-4 text-white w-2/4 text-lg"
-              onClick={() => {
-                setSubmitted(false);
-              }}
+              className=" w-2/4 text-lg"
+              onClick={() => setShowPopup(false)}
             >
               Close
             </Btn>

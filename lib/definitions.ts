@@ -115,6 +115,7 @@ export type ContactFormState =
         email?: string[];
         message?: string[];
       };
+      is_submitted: boolean;
       submitted?: {
         fullname: string;
         email: string;

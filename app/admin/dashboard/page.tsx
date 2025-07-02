@@ -1,7 +1,9 @@
-import React from "react";
+import React, { Suspense } from "react";
 import AdminDashboardNumbersInfo from "../components/AdminDashboardNumbersInfo";
 import AdminDashboardGraph from "../components/AdminDashboardGraph";
 import AdminDashboardRecentUsers from "../components/AdminDashboardRecentUsers";
+import RecentMembersFallback from "../components/suspense/RecentUsersSuspense";
+import AdminDashboardRecentInquiries from "../components/AdminDashboardRecentInquiries";
 
 export default function DashboardPage() {
   return (
@@ -23,7 +25,18 @@ export default function DashboardPage() {
 
         {/* Recent Users */}
         <div className="w-full">
-          <AdminDashboardRecentUsers/>
+          <Suspense fallback={<RecentMembersFallback />}>
+            <AdminDashboardRecentUsers />
+          </Suspense>
+        </div>
+
+        <div className="w-full flex gap-4 flex-col md:flex-row">
+          {/* Recent Inquiries */}
+          <div className="w-full">
+            <AdminDashboardRecentInquiries />
+          </div>
+          {/* Recent Appointments */}
+          <div className="w-full"></div>
         </div>
       </section>
     </main>
