@@ -7,10 +7,12 @@ export const setAppointmentToDB = cache(
   async (data: {
     fullname: string;
     email: string;
-    phone: string;
+    phone?: string | undefined;
     reasonForVisit: string;
     preferredDate: string;
     preferredTime: string;
+    patientId?: string;
+    doctorId: string;
   }) => {
     const {
       fullname,
@@ -19,6 +21,8 @@ export const setAppointmentToDB = cache(
       reasonForVisit,
       preferredDate,
       preferredTime,
+      patientId,
+      doctorId,
     } = data;
     const appointment = await prisma.appointments.create({
       data: {
@@ -28,6 +32,14 @@ export const setAppointmentToDB = cache(
         reasonForVisit,
         preferredDate,
         preferredTime,
+        doctor: {
+          connect: { id: doctorId },
+        },
+        ...(patientId && {
+          patient: {
+            connect: { id: patientId },
+          },
+        }),
       },
     });
     return appointment;
@@ -58,15 +70,15 @@ export const uploadProfileChanges = cache(
     const filteredData = Object.fromEntries(
       Object.entries(rest).filter(([_, value]) => value !== "")
     );
-    
+
     const updateData: any = {
       ...filteredData,
     };
-    
+
     if (imageUploadUrl !== "") {
       updateData.pfp = imageUploadUrl;
     }
-    
+
     try {
       const updatedUser = await prisma.user.update({
         where: { email },
@@ -79,4 +91,3 @@ export const uploadProfileChanges = cache(
     }
   }
 );
-

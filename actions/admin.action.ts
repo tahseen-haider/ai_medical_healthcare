@@ -32,7 +32,7 @@ export const getAllVerifiedUsers =
 export const getInquiries = async (): Promise<GetInquiriesDTO> => {
   const inquiries = await getInquiriesFromDB();
 
-  // await delayInMs(2000);
+  await delayInMs(2000);
 
   return inquiries.map((inquiry) => {
     return {

@@ -12,6 +12,7 @@ datasource db {
 enum UserRole {
   admin
   user
+  doctor
 }
 
 model User {
@@ -27,9 +28,50 @@ model User {
   role       UserRole @default(user)
   is_verified Boolean @default(false)
   token      Int?
+  doctorProfile DoctorProfile?
 
   chats      ChatSession[]
   accounts    Account[]
+  
+  appointmentsAsDoctor Appointments[] @relation("DoctorAppointments")
+  appointmentsAsPatient Appointments[] @relation("PatientAppointments")
+}
+
+model DoctorProfile {
+  id            String      @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String      @unique @db.ObjectId
+  user          User        @relation(fields: [userId], references: [id])
+
+  doctorType    DoctorType
+  specialization String?     // More specific than type (e.g. “Heart Surgeon”)
+  qualifications String?     // Degrees, certifications
+  experience     Int?        // Years of experience
+  bio            String?     // Doctor’s about section
+  clinicName     String?
+  clinicAddress  String?
+  consultationFee Int?       // Fee in PKR or relevant currency
+  availableDays  String[]    // e.g. ["Monday", "Wednesday", "Friday"]
+  availableTimes String?     // e.g. "10:00 AM - 4:00 PM"
+  isApproved     Boolean     @default(false) // Admin approval
+  
+  ratings        Float?      // Avg rating
+  totalReviews   Int?        // Total number of reviews
+
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+}
+
+enum DoctorType {
+  general
+  cardiologist
+  dermatologist
+  pediatrician
+  neurologist
+  psychiatrist
+  dentist
+  surgeon
+  gynecologist
+  orthopedist
 }
 
 model Account {
@@ -81,7 +123,15 @@ model Appointments {
   reasonForVisit  String
   preferredDate   String
   preferredTime   String
-  status          AppointmentStatus @default(PENDING)       
+  status          AppointmentStatus @default(PENDING)   
+
+
+  doctorId        String?
+  doctor          User?             @relation("DoctorAppointments", fields: [doctorId], references: [id])
+
+  patientId       String?
+  patient         User?             @relation("PatientAppointments", fields: [patientId], references: [id])
+    
 }
 
 enum AppointmentStatus {

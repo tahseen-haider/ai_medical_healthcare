@@ -28,7 +28,7 @@ export const AppointmentFormSchema = z.object({
     .min(2, { message: "Name must be least 2 characters" })
     .trim(),
   email: z.string().email({ message: "Please input a valid email" }),
-  phone: z.string(),
+  phone: z.string().optional(),
   reasonForVisit: z.string(),
   preferredDate: z.string(),
   preferredTime: z.string(),
@@ -196,7 +196,7 @@ export type SessionPayload = {
   expiresAt: Date;
 };
 
-export type UserRole = "user" | "admin";
+export type UserRole = "user" | "admin"| "doctor";
 
 export type ChatState =
   | {

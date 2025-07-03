@@ -13,11 +13,7 @@ import {
   uploadProfileChanges,
 } from "@/lib/dal";
 import cloudinary from "@/lib/cloudinary";
-import {
-  getUser,
-  getUserByEmailPassword,
-  getUserCredentialsByEmail,
-} from "@/lib/dal/user.dal";
+import { getUser, getUserCredentialsByEmail } from "@/lib/dal/user.dal";
 import { v4 as uuidv4 } from "uuid";
 import { redirect } from "next/navigation";
 
@@ -33,7 +29,7 @@ export const contactUs = async (
 
   if (!validatedFields.success)
     return {
-      is_submitted:false,
+      is_submitted: false,
       errors: validatedFields.error.flatten().fieldErrors,
     };
 
@@ -52,7 +48,7 @@ export const contactUs = async (
       message: "Message sent Sucessfully",
     };
   } catch {
-    return { is_submitted:false, message: "Something went wrong" };
+    return { is_submitted: false, message: "Something went wrong" };
   }
 };
 
@@ -70,15 +66,20 @@ export const setAppointment = async (
       preferredDate: formData.get("preferredDate"),
     });
 
-    if (!validatedFields.success) {
-      return {
-        errors: validatedFields.error.flatten().fieldErrors,
-      };
+    const patientId = formData.get("patientId") as string|undefined;
+    const doctorId = formData.get("doctorId") as string;
+
+    if (!validatedFields.success || !doctorId) {
+      return;
     }
 
     const appointment = await setAppointmentToDB({
       ...validatedFields.data,
+      patientId,
+      doctorId,
     });
+
+    if (!appointment) throw new Error("");
 
     return {
       appointment,

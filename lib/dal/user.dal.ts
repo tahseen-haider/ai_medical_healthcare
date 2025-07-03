@@ -14,6 +14,10 @@ import bcrypt from "bcryptjs";
 import cloudinary from "../cloudinary";
 import { redirect } from "next/navigation";
 
+export const getUserIdnRoleIfAuthenticatedAction = async () => {
+  return await getUserIdnRoleIfAuthenticated();
+};
+
 export const getUser = async (): Promise<UserProfileDTO | undefined> => {
   const session = await getUserIdnRoleIfAuthenticated();
   if (!session) return;
@@ -295,7 +299,7 @@ export const deleteUserFromDB = async () => {
     deleteSession();
     return 1;
   } catch (error) {
-    console.log("Catching")
+    console.log("Catching");
     return 0;
   } finally {
     redirect("/");

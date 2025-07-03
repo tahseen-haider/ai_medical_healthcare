@@ -1,9 +1,11 @@
 import React, { Suspense } from "react";
-import AdminDashboardNumbersInfo from "../components/AdminDashboardNumbersInfo";
-import AdminDashboardGraph from "../components/AdminDashboardGraph";
-import AdminDashboardRecentUsers from "../components/AdminDashboardRecentUsers";
-import RecentMembersFallback from "../components/suspense/RecentUsersSuspense";
-import AdminDashboardRecentInquiries from "../components/AdminDashboardRecentInquiries";
+import AdminDashboardNumbersInfo from "./components/AdminDashboardNumbersInfo";
+import AdminDashboardGraph from "./components/AdminDashboardGraph";
+import AdminDashboardRecentUsers from "./components/AdminDashboardRecentUsers";
+import RecentMembersFallback from "./components/suspense/RecentUsersSuspense";
+import AdminDashboardRecentInquiries from "./components/AdminDashboardRecentInquiries";
+import RecentInquiriesFallback from "./components/suspense/DashboardInquirySuspense";
+import AdminDashboardRecentAppointments from "./components/AdminDashboardRecentAppointments";
 
 export default function DashboardPage() {
   return (
@@ -33,10 +35,16 @@ export default function DashboardPage() {
         <div className="w-full flex gap-4 flex-col md:flex-row">
           {/* Recent Inquiries */}
           <div className="w-full">
-            <AdminDashboardRecentInquiries />
+            <Suspense fallback={<RecentInquiriesFallback />}>
+              <AdminDashboardRecentInquiries />
+            </Suspense>
           </div>
           {/* Recent Appointments */}
-          <div className="w-full"></div>
+          <div className="w-full">
+            <Suspense fallback={<RecentInquiriesFallback />}>
+              {/* <AdminDashboardRecentAppointments/> */}
+            </Suspense>
+          </div>
         </div>
       </section>
     </main>

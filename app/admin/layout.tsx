@@ -1,5 +1,5 @@
 import DashboardSidebarWrapper from "../assistant/components/DashboardSidebarWrapper";
-import DashboardLinks from "./components/DashboardLinks";
+import DashboardLinks from "./dashboard/components/DashboardLinks";
 
 export default function AdminLayout({
   children,
