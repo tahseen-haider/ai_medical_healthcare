@@ -24,8 +24,8 @@ export type GetInquiriesForDashboardDTO = {
 
 export type GetAppointmentsForDashboardDTO = {
   patientName: string,
-  doctorName: string,
+  doctorName?: string,
   reasonForVisit: string,
   dateForVisit: string,
   status: string
-}[]
+}[]|[]

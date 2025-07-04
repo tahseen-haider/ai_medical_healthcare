@@ -1,0 +1,67 @@
+"use client";
+
+import { changeUserRole } from "@/actions/admin.action";
+import LoadingScreen from "@/components/LoadingScreen";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { UserRole } from "@prisma/client/edge";
+import { Check, X } from "lucide-react";
+import { useActionState, useState } from "react";
+
+export default function EditRoleOfUser({
+  userId,
+  currentPage,
+  currentRole,
+}: {
+  currentRole: UserRole;
+  userId: string;
+  currentPage: number;
+}) {
+  const [role, setRole] = useState<string>(currentRole);
+  const [state, action, pending] = useActionState(changeUserRole, undefined);
+
+  return (
+    <>
+      {pending && <LoadingScreen message="Changing User Role..." />}
+      <form action={action} className="relative w-fit">
+        <input name="currentPage" value={currentPage} readOnly hidden />
+        <input name="currentRole" value={currentRole} readOnly hidden />
+        <input name="userId" value={userId} readOnly hidden />
+        <Select value={role} onValueChange={setRole} name="role">
+          <SelectTrigger className="!text-black dark:!text-white">
+            <SelectValue placeholder={currentRole} />
+          </SelectTrigger>
+
+          <SelectContent>
+            <SelectItem value="user">User</SelectItem>
+            <SelectItem value="admin">Admin</SelectItem>
+            <SelectItem value="doctor">Doctor</SelectItem>
+          </SelectContent>
+        </Select>
+
+        {/* Submit Button */}
+        {role !== currentRole && (
+          <div className="absolute z-10 -top-8 -right-17 h-8 w-[70px] flex justify-between items-center">
+            <button
+              type="submit"
+              className="bg-light-4 dark:bg-white text-white dark:text-black h-8 w-8 flex justify-center items-center rounded-sm"
+            >
+              <Check />
+            </button>
+            <button
+              className="bg-red-600 dark:bg-red-500 text-white dark:text-black h-8 w-8 flex justify-center items-center rounded-sm"
+              onClick={() => setRole(currentRole)}
+            >
+              <X />
+            </button>
+          </div>
+        )}
+      </form>
+    </>
+  );
+}

@@ -2,6 +2,8 @@ import { getAllUsers } from "@/actions/admin.action";
 import React from "react";
 import DeleteUserBtn from "./Btns/DeleteUserBtn";
 import ProfilePicture from "@/components/ProfilePicture";
+import EditRoleOfUser from "./EditRoleOfUser";
+import EditVerification from "./EditVerification";
 
 export default async function UsersList({ paramPage }: { paramPage?: string }) {
   const page = parseInt(paramPage || "1", 10);
@@ -50,8 +52,8 @@ export default async function UsersList({ paramPage }: { paramPage?: string }) {
                   </td>
                   <td className="px-3">{user.name}</td>
                   <td className="px-3">{user.email}</td>
-                  <td className="px-3">{user.role}</td>
-                  <td className="px-3">{user.is_verified?"Verified":"Un-verified"}</td>
+                  <td className="px-3"><EditRoleOfUser userId={user.id} currentPage={page} currentRole={user.role}/></td>
+                  <td className="px-3"><EditVerification userId={user.id} currentPage={page} currStatus={user.is_verified}/></td>
                   <td className="px-3">{user.createdAt.toLocaleDateString().split("T")[0]}</td>
                   <td className="px-3">
                     <DeleteUserBtn userId={user.id} />

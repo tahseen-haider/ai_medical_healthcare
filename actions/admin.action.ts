@@ -2,6 +2,8 @@
 
 import {
   addNewDoctorToDB,
+  changeUserRoleFromDB,
+  changeUserVerificationStatusFromDB,
   deleteDoctorFromDB,
   deleteUserFromDB,
   getAllDoctorsFromDB,
@@ -16,7 +18,7 @@ import {
   GetAppointmentsForDashboardDTO,
   GetInquiriesForDashboardDTO,
 } from "@/lib/dto/admin.dto";
-import { DoctorType } from "@prisma/client/edge";
+import { DoctorType, UserRole } from "@prisma/client/edge";
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
 
@@ -55,13 +57,14 @@ export const getAppointments =
     return appointments.map((appointment) => {
       return {
         patientName: appointment.fullname,
-        doctorName: appointment.doctor!.name,
+        doctorName: appointment.doctor?.name || "Unassigned",
         reasonForVisit: appointment.reasonForVisit,
         dateForVisit: appointment.preferredDate,
         status: appointment.status,
       };
     });
   };
+
 export const getInquiries = async (): Promise<GetInquiriesForDashboardDTO> => {
   const inquiries = await getInquiriesFromDB();
 
@@ -80,7 +83,7 @@ export const getInquiries = async (): Promise<GetInquiriesForDashboardDTO> => {
 export const getAllDoctors = async (page = 1, limit = 10) => {
   return await getAllDoctorsFromDB(page, limit);
 };
-``
+
 export const addNewDoctor = async (
   state: { message: string; success?: boolean } | undefined,
   formData: FormData
@@ -108,17 +111,51 @@ export const deleteDoctor = async (
   state: { message: string; success?: boolean } | undefined,
   formData: FormData
 ) => {
-  const doctorId = formData.get("doctorId") as string;
-  const res = await deleteDoctorFromDB(doctorId);
+  const userId = formData.get("doctorId") as string;
+  const res = await deleteDoctorFromDB(userId);
   if (!res) return { message: "Error deleting", success: false };
   revalidatePath("/admin/doctors");
   return { message: "", success: true };
 };
 
-export const deleteUser = async (state:{}|undefined, formData:FormData) => {
+export const deleteUser = async (state: {} | undefined, formData: FormData) => {
   const userId = formData.get("userId") as string;
-  const res = await deleteUserFromDB(userId)
-  if(!res) return;
-  revalidatePath("/admin/user-management")
-  return {}
-}
+  const res = await deleteUserFromDB(userId);
+  if (!res) return;
+  revalidatePath("/admin/user-management");
+  return {};
+};
+
+export const changeUserRole = async (
+  state: {} | undefined,
+  formData: FormData
+) => {
+  const userId = formData.get("userId") as string;
+  const role = formData.get("role") as UserRole;
+  const currentPage = formData.get("currentPage") as string;
+  const currentRole = formData.get("currentRole") as UserRole;
+
+  if (!userId || !role || currentRole === role) return;
+
+  await changeUserRoleFromDB(userId, role, currentRole);
+
+  revalidatePath(`/admin/user-management?page=${currentPage}`);
+  return {};
+};
+
+export const changeUserVerificationStatus = async (
+  state: {} | undefined,
+  formData: FormData
+) => {
+  const userId = formData.get("userId") as string;
+  const status = formData.get("status") as "0" | "1";
+  const currentPage = formData.get("currentPage") as string;
+  const currentStatus = formData.get("currentStatus") as "0" | "1";
+
+  if (!userId || currentStatus === status) return;
+
+  await changeUserVerificationStatusFromDB(userId, status);
+
+  revalidatePath(`/admin/user-management?page=${currentPage}`);
+  return {};
+};
