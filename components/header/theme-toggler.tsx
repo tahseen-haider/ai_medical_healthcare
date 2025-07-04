@@ -14,7 +14,7 @@ export function ThemeToggler() {
     return () => {};
   }, []);
 
-  if (!hasMounted) return;
+  if (!hasMounted) return<div className="w-16"/>;
 
   return (
     <Button
