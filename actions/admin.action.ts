@@ -5,9 +5,10 @@ import {
   deleteDoctorFromDB,
   getAllDoctorsFromDB,
   getAllVerifiedUsersFromDB,
+  getAppointmentsFromDB,
   getInquiriesFromDB,
 } from "@/lib/dal/admin.dal";
-import { GetAllVerifiedUsersDTO, GetInquiriesDTO } from "@/lib/dto/admin.dto";
+import { GetAllVerifiedUsersDTO, GetAppointmentsForDashboardDTO, GetInquiriesForDashboardDTO } from "@/lib/dto/admin.dto";
 import { DoctorType } from "@prisma/client/edge";
 import bcrypt from "bcryptjs";
 import { revalidatePath } from "next/cache";
@@ -30,15 +31,29 @@ export const getAllVerifiedUsers =
       };
     });
 
-    await delayInMs(2000);
+    await delayInMs(1000);
 
     return usersToReturn;
   };
 
-export const getInquiries = async (): Promise<GetInquiriesDTO> => {
+export const getAppointments = async (): Promise<GetAppointmentsForDashboardDTO> => {
+  const appointments = await getAppointmentsFromDB()
+  if(!appointments) return [];
+  await delayInMs(1000);
+  return appointments.map(appointment=>{
+    return {
+      patientName: appointment.fullname,
+      doctorName: appointment.doctor!.name,
+      reasonForVisit: appointment.reasonForVisit,
+      dateForVisit: appointment.preferredDate,
+      status: appointment.status
+    }
+  })
+}
+export const getInquiries = async (): Promise<GetInquiriesForDashboardDTO> => {
   const inquiries = await getInquiriesFromDB();
 
-  await delayInMs(2000);
+  await delayInMs(1000);
 
   return inquiries.map((inquiry) => {
     return {

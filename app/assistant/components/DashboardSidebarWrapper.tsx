@@ -15,7 +15,7 @@ export default function DashboardSidebarWrapper({children}: Readonly<{children: 
       {isSidebarOpen && (
         <div
           onClick={() => setIsSidebarOpen(false)}
-          className="absolute top-0 left-0 lg:hidden h-full w-full backdrop-blur-sm z-10"
+          className="absolute top-0 left-0 lg:hidden h-full w-full backdrop-blur-sm z-20"
         />
       )}
 

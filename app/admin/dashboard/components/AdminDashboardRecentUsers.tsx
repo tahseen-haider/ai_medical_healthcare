@@ -12,14 +12,14 @@ export default async function AdminDashboardRecentUsers() {
       {/* Table */}
       <div className="max-h-[210px] overflow-y-auto">
         <table className="min-w-full text-sm text-left">
-          <thead className="bg-gray-50 dark:bg-gray-950 sticky top-0 z-10">
+          <thead className="border-b-2 font-semibold sticky top-0 z-10 bg-white dark:bg-dark-4">
             <tr>
-              <th className="font-semibold p-2 py-3 pr-4">#</th>
-              <th className="font-semibold">Avatar</th>
-              <th className="font-semibold">Name</th>
-              <th className="font-semibold">Role</th>
-              <th className="font-semibold">Email</th>
-              <th className="font-semibold">Created At</th>
+              <th className="p-2 py-3 pr-4">#</th>
+              <th className="px-3">Avatar</th>
+              <th className="px-3">Name</th>
+              <th className="px-3">Role</th>
+              <th className="px-3">Email</th>
+              <th className="px-3">Created At</th>
             </tr>
           </thead>
           <tbody className="divide-y gap-4">
@@ -28,8 +28,8 @@ export default async function AdminDashboardRecentUsers() {
                 key={index}
                 className="hover:bg-gray-200 hover:dark:bg-gray-950 p-2"
               >
-                <td className="p-2 py-4">{index + 1}</td>
-                <td className="">
+                <td className="p-2 py-4 font-bold">{index + 1}</td>
+                <td className="px-3">
                   <ProfilePicture
                     size={30}
                     image={
@@ -39,10 +39,10 @@ export default async function AdminDashboardRecentUsers() {
                     }
                   />
                 </td>
-                <td className="">{user.name}</td>
-                <td className="">{user.role}</td>
-                <td className="">{user.email}</td>
-                <td className="">{user.createdAt}</td>
+                <td className="px-3">{user.name}</td>
+                <td className="px-3">{user.role}</td>
+                <td className="px-3">{user.email}</td>
+                <td className="px-3">{user.createdAt}</td>
               </tr>
             ))}
           </tbody>

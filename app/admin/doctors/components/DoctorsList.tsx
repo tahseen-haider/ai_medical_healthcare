@@ -15,41 +15,45 @@ export default async function DoctorsList({
 
   return (
     <div className="w-full py-4 bg-white dark:bg-dark-4 shadow-dark dark:shadow-light rounded-md p-3 min-h-[calc(100vh-170px)] flex flex-col justify-between">
-      <div>
+      <div className="flex-1 flex flex-col">
         <div className="w-full flex justify-between">
           <h2 className="font-bold font-ubuntu pb-2">All Doctors:</h2>
           <AddNewDoctorBtn />
         </div>
 
-        <table className="min-w-full text-sm text-left">
-          <thead>
-            <tr>
-              <th className="font-semibold p-2 py-3 pr-4">#</th>
-              <th className="font-semibold">Name</th>
-              <th className="font-semibold">Email</th>
-              <th className="font-semibold">Type</th>
-              <th className="font-semibold">Created At</th>
-              <th className="font-semibold"></th>
-            </tr>
-          </thead>
-          <tbody className="divide-y gap-4">
-            {doctors.map((doc, index) => (
-              <tr
-                key={doc.id}
-                className="hover:bg-gray-100 dark:hover:bg-gray-950 h-14"
-              >
-                <td className="p-2">{(page - 1) * limit + index + 1}</td>
-                <td>{doc.name}</td>
-                <td>{doc.email}</td>
-                <td className="capitalize">{doc.doctorProfile?.doctorType}</td>
-                <td>{new Date(doc.createdAt).toLocaleDateString()}</td>
-                <td>
-                  <DeleteDoctorBtn doctorId={doc.id} />
-                </td>
+        <div className="overflow-x-auto flex-1">
+          <table className="min-w-full text-sm text-left">
+            <thead className="border-b-2 bg-white dark:bg-dark-4 sticky top-0 z-10">
+              <tr>
+                <th className="font-semibold p-2 py-3 pr-4">#</th>
+                <th className="font-semibold px-3">Name</th>
+                <th className="font-semibold px-3">Email</th>
+                <th className="font-semibold px-3">Type</th>
+                <th className="font-semibold px-3">Created At</th>
+                <th className="font-semibold px-3"></th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody className="divide-y gap-4">
+              {doctors.map((doc, index) => (
+                <tr
+                  key={doc.id}
+                  className="hover:bg-gray-100 dark:hover:bg-gray-950 h-14"
+                >
+                  <td className="p-2">{(page - 1) * limit + index + 1}</td>
+                  <td className="px-3">{doc.name}</td>
+                  <td className="px-3">{doc.email}</td>
+                  <td className="capitalize px-3">
+                    {doc.doctorProfile?.doctorType}
+                  </td>
+                  <td className="px-3">{new Date(doc.createdAt).toLocaleDateString()}</td>
+                  <td className="px-3">
+                    <DeleteDoctorBtn doctorId={doc.id} />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
 
       {/* Pagination */}

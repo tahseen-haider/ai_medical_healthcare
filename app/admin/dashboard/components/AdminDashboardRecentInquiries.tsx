@@ -8,18 +8,18 @@ export default async function AdminDashboardRecentInquiries() {
       {/* Heading */}
       <h2 className="font-bold font-ubuntu pb-2 pl-2">Recent Messages:</h2>
       {/* Table */}
-      <div className="max-h-[210px] overflow-y-auto">
+      <div className="h-[210px] max-h-[210px] overflow-y-auto">
         {inquiries.map((inquiry, index) => (
           <div
             key={index}
-            className="w-full border-b-[1px] flex gap-2 justify-between hover:bg-gray-200 hover:dark:bg-gray-950 p-2"
+            className="w-full border-b-[1px] flex justify-between hover:bg-gray-200 hover:dark:bg-gray-950 p-2"
           >
-            <div className="flex gap-4 w-full">
+            <div className="flex gap-4 w-full mr-3">
               <div className="text-lg font-bold">{index + 1}</div>
               <div>
                 <div className="flex gap-2 items-center">
                   <div className="text-lg font-bold">{inquiry.name}</div>
-                  <p className="text-gray-700 dark:text-gray-400">
+                  <p className="text-gray-700 dark:text-gray-400 px-3">
                     @{inquiry.email}
                   </p>
                 </div>

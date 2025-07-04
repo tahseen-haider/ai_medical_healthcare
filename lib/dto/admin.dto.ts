@@ -6,9 +6,17 @@ export type GetAllVerifiedUsersDTO = {
   createdAt: string;
 }[]
 
-export type GetInquiriesDTO = {
+export type GetInquiriesForDashboardDTO = {
   name: string,
   email: string,
   message: string,
   is_read: boolean,
+}[]
+
+export type GetAppointmentsForDashboardDTO = {
+  patientName: string,
+  doctorName: string,
+  reasonForVisit: string,
+  dateForVisit: string,
+  status: string
 }[]

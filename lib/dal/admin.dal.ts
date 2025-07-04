@@ -34,6 +34,21 @@ export const getInquiriesFromDB = async () => {
   });
 };
 
+export const getAppointmentsFromDB = async () => {
+  return await prisma.appointments.findMany({
+    orderBy:{
+      preferredDate: 'desc'
+    },
+    include:{
+      doctor:{
+        select:{
+          name:true
+        }
+      }
+    }
+  })
+};
+
 export const getAllDoctorsFromDB = async (page = 1, limit = 10) => {
   const skip = (page - 1) * limit;
 
@@ -110,29 +125,29 @@ export const deleteDoctorFromDB = async (doctorId: string) => {
   // For cloudinary Deleting Images
   const doc = await prisma.user.findUnique({
     where: {
-      id: doctorId
+      id: doctorId,
     },
-    select:{
-      pfp:true
-    }
-  })
+    select: {
+      pfp: true,
+    },
+  });
 
-  if(doc?.pfp){
-    await cloudinary.uploader.destroy(doc.pfp)
+  if (doc?.pfp) {
+    await cloudinary.uploader.destroy(doc.pfp);
   }
 
   // Deleting accounts
   const deleteRes = await prisma.$transaction([
     prisma.doctorProfile.delete({
-      where:{
-        userId: doctorId
-      }
+      where: {
+        userId: doctorId,
+      },
     }),
     prisma.user.delete({
-      where:{
-        id: doctorId
-      }
-    })
-  ])
-  return deleteRes
+      where: {
+        id: doctorId,
+      },
+    }),
+  ]);
+  return deleteRes;
 };

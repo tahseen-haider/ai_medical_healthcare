@@ -34,15 +34,15 @@ export default function DashboardPage() {
 
         <div className="w-full flex gap-4 flex-col md:flex-row">
           {/* Recent Inquiries */}
-          <div className="w-full">
+          <div className="w-full lg:w-1/2">
             <Suspense fallback={<RecentInquiriesFallback />}>
               <AdminDashboardRecentInquiries />
             </Suspense>
           </div>
           {/* Recent Appointments */}
-          <div className="w-full">
+          <div className="w-full lg:w-1/2">
             <Suspense fallback={<RecentInquiriesFallback />}>
-              {/* <AdminDashboardRecentAppointments/> */}
+              <AdminDashboardRecentAppointments/>
             </Suspense>
           </div>
         </div>
