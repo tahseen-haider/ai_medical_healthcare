@@ -165,7 +165,7 @@ export default function AppointmentPage({
                 type="hidden"
                 name="preferredDate"
                 value={
-                  selectedDate ? selectedDate.toISOString().split("T")[0] : ""
+                  selectedDate ? selectedDate.toLocaleDateString().split("T")[0] : ""
                 }
               />
               <p>{state?.errors.preferredDate}</p>

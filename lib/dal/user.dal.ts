@@ -235,7 +235,7 @@ export const resetPasswordInDB = async ({
   return updatedUser.email;
 };
 
-export const deleteUserFromDB = async () => {
+export const deleteLoggedInUserFromDB = async () => {
   const user = await getUserIdnRoleIfAuthenticated();
   try {
     // Get all messages that have images

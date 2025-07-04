@@ -24,6 +24,40 @@ export const getAllVerifiedUsersFromDB = async () => {
 
   return users;
 };
+export const getAllUsersFromDB = async (page:number, limit:number) => {
+  const skip = (page - 1) * limit;
+
+  const [users, total] = await Promise.all([
+    prisma.user.findMany({
+      where: { role: "user" },
+      select: {
+        id: true,
+        pfp: true,
+        name: true,
+        email: true,
+        createdAt: true,
+        role: true,
+        is_verified: true,
+      },
+      skip,
+      take: limit,
+      orderBy: {
+        createdAt: "desc",
+      },
+    }),
+    prisma.user.count({
+      where: {
+        role: "user",
+      },
+    }),
+  ]);
+
+  return {
+    users,
+    total,
+    totalPages: Math.ceil(total / limit),
+  };
+};
 
 export const getInquiriesFromDB = async () => {
   return await prisma.inquiries.findMany({
@@ -36,17 +70,17 @@ export const getInquiriesFromDB = async () => {
 
 export const getAppointmentsFromDB = async () => {
   return await prisma.appointments.findMany({
-    orderBy:{
-      preferredDate: 'desc'
+    orderBy: {
+      preferredDate: "desc",
     },
-    include:{
-      doctor:{
-        select:{
-          name:true
-        }
-      }
-    }
-  })
+    include: {
+      doctor: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
 };
 
 export const getAllDoctorsFromDB = async (page = 1, limit = 10) => {
@@ -150,4 +184,70 @@ export const deleteDoctorFromDB = async (doctorId: string) => {
     }),
   ]);
   return deleteRes;
+};
+
+export const deleteUserFromDB = async (userId: string) => {
+  try {
+    // Get all messages that have images
+    const messagesWithImages = await prisma.message.findMany({
+      where: {
+        chat: {
+          userId,
+        },
+        NOT: {
+          image: null,
+        },
+      },
+      select: {
+        image: true,
+      },
+    });
+    const imageUrls = messagesWithImages.map((m) => m.image).filter(Boolean);
+
+    // Get profile Image and delete it
+    const activeUser = await prisma.user.findFirst({
+      where: {
+        id: userId,
+      },
+    });
+    const profilePicture = activeUser?.pfp;
+    if (profilePicture) await cloudinary.uploader.destroy(profilePicture);
+
+    // Delete messages and chats
+    await prisma.$transaction(async (tx) => {
+      await tx.message.deleteMany({
+        where: {
+          chat: {
+            userId,
+          },
+        },
+      });
+
+      await tx.chatSession.deleteMany({
+        where: {
+          userId,
+        },
+      });
+
+      await tx.account.deleteMany({
+        where: {
+          userId,
+        },
+      });
+
+      await tx.user.delete({
+        where: {
+          id: userId,
+        },
+      });
+    });
+
+    for (const id of imageUrls) {
+      await cloudinary.uploader.destroy(id!);
+    }
+    return 1;
+  } catch (error) {
+    console.log("Catching");
+    return 0;
+  }
 };

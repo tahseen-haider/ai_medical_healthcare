@@ -1,7 +1,7 @@
 "use server";
 
 import {
-  deleteUserFromDB,
+  deleteLoggedInUserFromDB,
   getUser,
   getUserCredentialsByEmail,
   insertUserToDB,
@@ -395,7 +395,7 @@ export async function deleteUserAccount(
   state: { message: string } | undefined,
   formData: FormData
 ) {
-  const res = await deleteUserFromDB();
+  const res = await deleteLoggedInUserFromDB();
   if (!res) {
     console.log("error")
     return { message: "Error while deleting account" };
