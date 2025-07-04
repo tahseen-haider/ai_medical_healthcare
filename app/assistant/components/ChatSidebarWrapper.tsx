@@ -24,7 +24,7 @@ export default function ChatSidebarWrapper({children}: Readonly<{children: React
       <div
         className={`${
           isSidebarOpen ? "-left-42" : "left-0"
-        } absolute p-2 bg-white dark:bg-dark-4 opacity-90 hover:opacity-100 backdrop-blur-sm flex flex-col gap-4 rounded-br-lg justify-between items-center border-b-2 border-r-2 z-10 transition-all duration-300`}
+        } absolute top-14 sm:top-16  p-2 bg-white dark:bg-dark-4 opacity-90 hover:opacity-100 backdrop-blur-sm flex flex-col gap-4 rounded-br-lg justify-between items-center border-b-2 border-r-2 z-10 transition-all duration-300`}
       >
         <button
           className="p-2"
@@ -50,7 +50,7 @@ export default function ChatSidebarWrapper({children}: Readonly<{children: React
       <div
         className={`${
           isSidebarOpen ? "w-80 border-r-2" : "w-0"
-        } absolute overflow-hidden z-20 bg-gray-50 dark:bg-gray-950 transition-all `}
+        } absolute overflow-hidden z-20 bg-gray-50 dark:bg-gray-950 transition-all top-14 sm:top-16 `}
       >
         {/* Menu buttons */}
         <div className="px-6 flex justify-between h-10 items-center border-b-2 bg-white dark:bg-dark-4">

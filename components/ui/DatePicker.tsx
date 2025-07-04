@@ -31,9 +31,10 @@ export function DatePickerWithPresets({
     <Popover>
       <PopoverTrigger asChild>
         <Button
+          id="selectDate"
           variant={"outline"}
           className={cn(
-            "w-full dark:border-white border-2 hover:dark:bg-gray-950 bg-gray-200 dark:bg-gray-950 border-gray-200 flex h-14 p-4 rounded-sm mt-2  justify-start text-left font-normal",
+            "w-full border-2 hover:dark:bg-gray-950 bg-gray-200 dark:bg-gray-950 border-gray-400 dark:border-gray-200 flex h-14 p-4 rounded-sm mt-2  justify-start text-left font-normal",
             !date && "text-muted-foreground"
           )}
         >
@@ -46,6 +47,7 @@ export function DatePickerWithPresets({
         className="flex w-auto flex-col space-y-2 p-2"
       >
         <Select
+          required
           onValueChange={(value) =>
             setDate(addDays(new Date(), parseInt(value)))
           }
@@ -70,7 +72,6 @@ export function DatePickerWithPresets({
               today.setHours(0, 0, 0, 0);
               return date < today;
             }}
-            
           />
         </div>
       </PopoverContent>

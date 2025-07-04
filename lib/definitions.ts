@@ -192,7 +192,7 @@ export type LoginFormState =
 
 export type SessionPayload = {
   userId: string;
-  role: "admin" | "user";
+  role: UserRole
   expiresAt: Date;
 };
 

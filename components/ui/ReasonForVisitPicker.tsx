@@ -27,9 +27,9 @@ export function VisitReasonPicker({
   setReason: React.Dispatch<React.SetStateAction<string>>;
 }) {
   return (
-    <div className="relative flex items-center border-2 bg-gray-200 dark:bg-gray-950 border-gray-200 h-14 w-full rounded-sm mt-2">
-      <Select onValueChange={setReason}>
-        <SelectTrigger className="w-full h-14 bg-transparent px-4 cursor-pointer">
+    <div className="relative flex items-center border-2 border-gray-400 bg-gray-200 dark:bg-gray-950 dark:border-gray-200 h-14 w-full rounded-sm mt-2">
+      <Select onValueChange={setReason} required>
+        <SelectTrigger id="selectReason" className="w-full h-14 bg-transparent px-4 cursor-pointer">
           <SelectValue placeholder="Select a reason" />
         </SelectTrigger>
         <SelectContent>

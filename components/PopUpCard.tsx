@@ -9,7 +9,7 @@ export default function PopUpCard({
 }>) {
   return (
     <div
-      className="fixed top-0 z-50 flex justify-center items-center w-full h-full backdrop-blur-xs"
+      className="fixed inset-0 z-30 flex justify-center items-center w-full h-full backdrop-blur-xs"
       onClick={() => {
         setState!(false)
       }}
@@ -18,7 +18,7 @@ export default function PopUpCard({
         onClick={(e) => {
           e.stopPropagation();
         }}
-        className=" rounded-2xl bg-light-1 dark:bg-dark-1 shadow-light dark:shadow-dark text-black dark:text-white 
+        className=" rounded-2xl bg-light-1 dark:bg-dark-4 shadow-light dark:shadow-dark text-black dark:text-white 
       flex flex-col gap-6 items-center justify-between p-6"
       >
         {children}

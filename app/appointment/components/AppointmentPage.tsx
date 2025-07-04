@@ -8,8 +8,26 @@ import { DatePickerWithPresets } from "@/components/ui/DatePicker";
 import { VisitReasonPicker } from "@/components/ui/ReasonForVisitPicker";
 import { TimePicker } from "@/components/ui/TimePicker";
 import { useActionState, useEffect, useState } from "react";
+import SelectDoctor from "./SelectDoctor";
+import { $Enums } from "@prisma/client/edge";
 
-export default function AppointmentPage({patientId}:{patientId:string|undefined}) {
+export default function AppointmentPage({
+  patientId,
+  doctors,
+}: {
+  doctors: {
+    name: string;
+    email: string;
+    id: string;
+    role: $Enums.UserRole;
+    doctorProfile: {
+      doctorType: $Enums.DoctorType;
+    } | null;
+    createdAt: Date;
+    pfp: string | null;
+  }[];
+  patientId: string | undefined;
+}) {
   const [state, action, pending] = useActionState(setAppointment, undefined);
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(() => {
     const tomorrow = new Date();
@@ -26,7 +44,7 @@ export default function AppointmentPage({patientId}:{patientId:string|undefined}
     ampm: "AM",
   });
   const [reason, setReason] = useState("General Checkup");
-  const [doctorId, setDoctorId] = useState<string | undefined>(undefined);
+  const [doctorId, setDoctorId] = useState<string>("");
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
@@ -102,7 +120,6 @@ export default function AppointmentPage({patientId}:{patientId:string|undefined}
                 placeholder="+92 000 0000000"
                 inputMode="numeric"
                 pattern="\d*"
-                required
                 minLength={10}
                 maxLength={13}
                 className="input-field"
@@ -111,15 +128,23 @@ export default function AppointmentPage({patientId}:{patientId:string|undefined}
             </div>
             {/* Select Doctor */}
             <div className="w-full">
-              <label className="font-ubuntu font-bold text-lg">
+              <label
+                htmlFor="selectDoctor"
+                className="font-ubuntu font-bold text-lg"
+              >
                 Select a Doctor
               </label>
-
+              <SelectDoctor setDoctorId={setDoctorId} doctors={doctors} />
+              <input name="doctorId" hidden readOnly value={doctorId} />
             </div>
             {/* Patient Id */}
-            <input hidden readOnly value={patientId}/>
+            <input name="patientId" hidden readOnly value={patientId} />
+
             <div className="w-full">
-              <label className="font-ubuntu font-bold text-lg">
+              <label
+                htmlFor="selectReason"
+                className="font-ubuntu font-bold text-lg"
+              >
                 Reason for Visit
               </label>
               <VisitReasonPicker setReason={setReason} />
@@ -129,7 +154,10 @@ export default function AppointmentPage({patientId}:{patientId:string|undefined}
           </div>
           <div className="flex flex-col gap-6 w-full">
             <div className="w-full">
-              <label className="font-ubuntu font-bold text-lg">
+              <label
+                htmlFor="selectDate"
+                className="font-ubuntu font-bold text-lg"
+              >
                 Preferred Date
               </label>
               <DatePickerWithPresets setSelectedDate={setSelectedDate} />
@@ -143,7 +171,10 @@ export default function AppointmentPage({patientId}:{patientId:string|undefined}
               <p>{state?.errors.preferredDate}</p>
             </div>
             <div className="w-full">
-              <label className="font-ubuntu font-bold text-lg">
+              <label
+                htmlFor="selectTime"
+                className="font-ubuntu font-bold text-lg"
+              >
                 Preferred Time
               </label>
               <TimePicker value={selectedTime} onChange={setSelectedTime} />
@@ -202,7 +233,7 @@ export default function AppointmentPage({patientId}:{patientId:string|undefined}
             </div>
 
             <Btn
-              className="bg-light-4 dark:bg-dark-4 text-white w-2/4 text-lg"
+              className=""
               onClick={() => {
                 setSubmitted(false);
                 window.location.reload();

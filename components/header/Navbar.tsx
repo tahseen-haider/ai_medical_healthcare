@@ -16,7 +16,7 @@ function Navbar({
   role: string | undefined;
   imageUrl?: string;
 }) {
-  const UserNavLinks = [
+  const userNavLinks = [
     {
       title: "Home",
       link: "/",
@@ -38,6 +38,7 @@ function Navbar({
       link: "/contact-us",
     },
   ];
+  const emptyLinks:[] = []
   const isActiveLink = (pathname: string, link: string) => {
     if (link === "/") {
       return pathname === "/";
@@ -79,7 +80,7 @@ function Navbar({
           </h3>
         </Link>
         {/* UserNavLinks */}
-        {!hideLinks && !isDoctor && !isAdmin && (
+        {!hideLinks && (
           <nav>
             <ul
               className={`   lg:relative lg:flex-row lg:w-fit lg:top-0 lg:z-0
@@ -87,7 +88,7 @@ function Navbar({
                           isNavbarDown ? "top-14" : "-top-60"
                         } transition-all duration-300 -z-20`}
             >
-              {UserNavLinks.map((ele) => (
+              {isAdmin?emptyLinks:isDoctor?emptyLinks:userNavLinks.map((ele) => (
                 <li key={ele.title} className="py-3">
                   <Link
                     onClick={() => {

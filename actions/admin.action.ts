@@ -1,10 +1,16 @@
 "use server";
 
 import {
+  addNewDoctorToDB,
+  deleteDoctorFromDB,
+  getAllDoctorsFromDB,
   getAllVerifiedUsersFromDB,
   getInquiriesFromDB,
 } from "@/lib/dal/admin.dal";
 import { GetAllVerifiedUsersDTO, GetInquiriesDTO } from "@/lib/dto/admin.dto";
+import { DoctorType } from "@prisma/client/edge";
+import bcrypt from "bcryptjs";
+import { revalidatePath } from "next/cache";
 
 export const delayInMs = async (time: number) => {
   return new Promise((resolve) => setTimeout(resolve, time));
@@ -43,3 +49,39 @@ export const getInquiries = async (): Promise<GetInquiriesDTO> => {
     };
   });
 };
+
+export const getAllDoctors = async (page = 1, limit = 10) => {
+  return await getAllDoctorsFromDB(page, limit);
+};
+
+
+export const addNewDoctor = async (
+  state: { message: string; success?: boolean } | undefined,
+  formData: FormData
+) => {
+  const name = formData.get("username") as string;
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+  const hashedPassword = await bcrypt.hash(password,10);
+  const docType = formData.get("docType") as DoctorType;
+
+  const newDoc = await addNewDoctorToDB(name,email,hashedPassword,docType);
+
+  if(!newDoc) return {message:"Error while adding new Doctor."};
+  if(newDoc===2) return {message: "User already exists. Change his role in User management."}
+
+  revalidatePath("/admin/doctors")
+
+  return { message: "", success: true };
+};
+
+export const deleteDoctor = async (
+  state: { message: string; success?: boolean } | undefined,
+  formData: FormData
+) => {
+  const doctorId = formData.get("doctorId") as string;
+  const res = await deleteDoctorFromDB(doctorId);
+  if(!res) return {message:"Error deleting", success:false}
+  revalidatePath("/admin/doctors")
+  return {message:"",success:true}
+}

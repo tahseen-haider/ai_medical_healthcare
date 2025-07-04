@@ -48,7 +48,7 @@ export default async function AdminDashboardRecentUsers() {
           </tbody>
         </table>
       </div>
-      {/* Table */}
+      {/* Button */}
       <div className="w-fit mx-auto mt-4">
         <DashManageUsersBtn />
       </div>
