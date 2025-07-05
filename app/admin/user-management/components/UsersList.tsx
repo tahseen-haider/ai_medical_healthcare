@@ -4,6 +4,7 @@ import DeleteUserBtn from "./Btns/DeleteUserBtn";
 import ProfilePicture from "@/components/ProfilePicture";
 import EditRoleOfUser from "./EditRoleOfUser";
 import EditVerification from "./EditVerification";
+import AddNewUserBtn from "./Btns/AddNewUserBtn";
 
 export default async function UsersList({ paramPage }: { paramPage?: string }) {
   const page = parseInt(paramPage || "1", 10);
@@ -16,7 +17,7 @@ export default async function UsersList({ paramPage }: { paramPage?: string }) {
       <div className="flex-1 flex flex-col">
         <div className="w-full flex justify-between">
           <h2 className="font-bold font-ubuntu pb-2">All Users:</h2>
-          {/* <AddNewUserBtn /> */}
+          <AddNewUserBtn />
         </div>
 
         <div className="overflow-x-auto flex-1">

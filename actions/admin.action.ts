@@ -12,6 +12,8 @@ import {
   getAppointmentsFromDB,
   getInquiriesFromDB,
 } from "@/lib/dal/admin.dal";
+import { insertUserToDB } from "@/lib/dal/user.dal";
+import { SignupFormSchema } from "@/lib/definitions";
 import {
   GetAllUsersDTO,
   GetAllVerifiedUsersDTO,
@@ -106,6 +108,38 @@ export const addNewDoctor = async (
 
   return { message: "", success: true };
 };
+
+export async function addNewUser(
+  state: { message?: string; success?: boolean } | undefined,
+  formData: FormData
+) {
+  const validatedFields = SignupFormSchema.safeParse({
+    name: formData.get("username"),
+    email: formData.get("email"),
+    password: formData.get("password"),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+    };
+  }
+
+  const { name, email, password } = validatedFields.data;
+
+  const hashedPassword = await bcrypt.hash(password, 10);
+
+  const userToken = await insertUserToDB(name, email, hashedPassword);
+
+  if (!userToken) {
+    return {
+      message: "User with this email already exist.",
+    };
+  }
+
+  revalidatePath(`/admin/user-management`)
+  return { success: true };
+}
 
 export const deleteDoctor = async (
   state: { message: string; success?: boolean } | undefined,

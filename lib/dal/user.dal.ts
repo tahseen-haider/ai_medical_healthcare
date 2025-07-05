@@ -262,7 +262,7 @@ export const deleteLoggedInUserFromDB = async () => {
     });
     const profilePicture = activeUser?.pfp;
     if (profilePicture) await cloudinary.uploader.destroy(profilePicture);
-
+    
     // Delete messages and chats
     await prisma.$transaction(async (tx) => {
       await tx.message.deleteMany({
@@ -285,6 +285,18 @@ export const deleteLoggedInUserFromDB = async () => {
         },
       });
 
+      await tx.doctorProfile.deleteMany({
+        where: {
+          userId: user?.userId,
+        },
+      });
+
+      await tx.appointments.deleteMany({
+        where: {
+          patientId: user?.userId,
+        },
+      });
+
       await tx.user.delete({
         where: {
           id: user?.userId,
@@ -292,10 +304,12 @@ export const deleteLoggedInUserFromDB = async () => {
       });
     });
 
+    
     for (const id of imageUrls) {
       await cloudinary.uploader.destroy(id!);
     }
 
+    
     deleteSession();
     return 1;
   } catch (error) {
