@@ -358,3 +358,38 @@ export const changeUserVerificationStatusFromDB = async (
 
   return;
 };
+
+export const getAdminDashboardNumbersFromDB = async () => {
+  const [verifiedUsers, verifiedDoctors, unreadInquiries, pendingAppointments] =
+    await Promise.all([
+      prisma.user.count({
+        where: {
+          is_verified: true,
+        },
+      }),
+      prisma.user.count({
+        where: {
+          doctorProfile: {
+            isApproved: true,
+          },
+        },
+      }),
+      prisma.inquiries.count({
+        where: {
+          is_read: false,
+        },
+      }),
+      prisma.appointments.count({
+        where: {
+          status: "PENDING",
+        },
+      }),
+    ]);
+
+  return {
+    verifiedUsers,
+    verifiedDoctors,
+    unreadInquiries,
+    pendingAppointments,
+  };
+};

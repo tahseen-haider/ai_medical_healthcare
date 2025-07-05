@@ -6,6 +6,7 @@ import {
   changeUserVerificationStatusFromDB,
   deleteDoctorFromDB,
   deleteUserFromDB,
+  getAdminDashboardNumbersFromDB,
   getAllDoctorsFromDB,
   getAllUsersFromDB,
   getAllVerifiedUsersFromDB,
@@ -27,6 +28,10 @@ import { revalidatePath } from "next/cache";
 export const delayInMs = async (time: number) => {
   return new Promise((resolve) => setTimeout(resolve, time));
 };
+
+export const getAdminDashboardNumbers = async () => {
+  return await getAdminDashboardNumbersFromDB();
+}
 
 export const getAllUsers = async (page: number, limit: number) => {
   return await getAllUsersFromDB(page, limit);
