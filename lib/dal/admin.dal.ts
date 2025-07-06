@@ -35,14 +35,14 @@ export const getAllAppointmentsFromDB = async (page: number, limit: number) => {
         preferredDate: "desc",
       },
       select: {
-        fullname:true,
-        id:true,
-        email:true,
-        preferredDate:true,
-        preferredTime:true,
-        reasonForVisit:true,
-        doctorId:true,
-        status:true,
+        fullname: true,
+        id: true,
+        email: true,
+        preferredDate: true,
+        preferredTime: true,
+        reasonForVisit: true,
+        doctorId: true,
+        status: true,
         doctor: {
           select: {
             name: true,
@@ -302,9 +302,9 @@ export const deleteDoctorFromDB = async (userId: string) => {
 
 export const deleteAppointmentFromDB = async (appId: string) => {
   return await prisma.appointments.delete({
-    where:{ id: appId}
-  })
-}
+    where: { id: appId },
+  });
+};
 
 export const deleteUserFromDB = async (userId: string) => {
   // Get all messages that have images
@@ -479,4 +479,40 @@ export const changeInquiryStatusFromDB = async (id: string) => {
       is_read: !inquiry.is_read,
     },
   });
+};
+
+import { subDays, format, eachDayOfInterval } from "date-fns";
+
+export const getNewUserInfoFromDB = async () => {
+  const start = subDays(new Date(), 90);
+
+  const users = await prisma.user.findMany({
+    where: {
+      createdAt: {
+        gte: start,
+      },
+    },
+    orderBy: {
+      createdAt: "asc",
+    },
+  });
+
+  // Group by date
+  const grouped: Record<string, number> = {};
+  users.forEach((user) => {
+    const dateStr = format(user.createdAt, "yyyy-MM-dd");
+    grouped[dateStr] = (grouped[dateStr] || 0) + 1;
+  });
+
+  // Fill in missing days
+  const allDates = eachDayOfInterval({ start, end: new Date() });
+  const final = allDates.map((date) => {
+    const dateStr = format(date, "yyyy-MM-dd");
+    return {
+      date: dateStr,
+      number: grouped[dateStr] || 0,
+    };
+  });
+
+  return final;
 };

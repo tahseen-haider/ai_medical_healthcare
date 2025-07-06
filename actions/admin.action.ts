@@ -17,6 +17,7 @@ import {
   getAppointmentsFromDB,
   getInquiriesForPaginationFromDB,
   getInquiriesFromDB,
+  getNewUserInfoFromDB,
 } from "@/lib/dal/admin.dal";
 import { insertUserToDB } from "@/lib/dal/user.dal";
 import { SignupFormSchema } from "@/lib/definitions";
@@ -257,3 +258,7 @@ export const changeInquiryStatus = async (formData: FormData) => {
 
   await changeInquiryStatusFromDB(inquiryId);
 };
+
+export const getNewUserInfo = async () => { 
+  return await getNewUserInfoFromDB()
+ }

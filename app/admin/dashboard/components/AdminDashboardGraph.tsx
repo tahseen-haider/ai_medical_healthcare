@@ -1,7 +1,10 @@
 import React from 'react'
+import Chart from './Chart'
+import { getNewUserInfo } from '@/actions/admin.action'
 
-export default function AdminDashboardGraph() {
+export default async function AdminDashboardGraph() {
+  const chartData = await getNewUserInfo()
   return (
-    <div>AdminDashboardGraph</div>
+    <Chart chartData={chartData}/>
   )
 }
