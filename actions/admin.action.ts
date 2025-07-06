@@ -2,15 +2,18 @@
 
 import {
   addNewDoctorToDB,
+  changeInquiryStatusFromDB,
   changeUserRoleFromDB,
   changeUserVerificationStatusFromDB,
   deleteDoctorFromDB,
+  deleteInquiryFromDB,
   deleteUserFromDB,
   getAdminDashboardNumbersFromDB,
   getAllDoctorsFromDB,
   getAllUsersFromDB,
   getAllVerifiedUsersFromDB,
   getAppointmentsFromDB,
+  getInquiriesForPaginationFromDB,
   getInquiriesFromDB,
 } from "@/lib/dal/admin.dal";
 import { insertUserToDB } from "@/lib/dal/user.dal";
@@ -31,7 +34,7 @@ export const delayInMs = async (time: number) => {
 
 export const getAdminDashboardNumbers = async () => {
   return await getAdminDashboardNumbersFromDB();
-}
+};
 
 export const getAllUsers = async (page: number, limit: number) => {
   return await getAllUsersFromDB(page, limit);
@@ -85,6 +88,29 @@ export const getInquiries = async (): Promise<GetInquiriesForDashboardDTO> => {
       is_read: inquiry.is_read,
     };
   });
+};
+
+export const getInquiriesForPagination = async (
+  page: number,
+  limit: number
+): Promise<{
+  inquiries: {
+    email: string;
+    is_read: boolean;
+    id: string;
+    createdAt: Date;
+    fullname: string;
+    inquiry: string;
+  }[];
+  count: number;
+  totalPages: number;
+}> => {
+  const { inquiries, count } = await getInquiriesForPaginationFromDB(
+    page,
+    limit
+  );
+
+  return { inquiries, count, totalPages: Math.ceil(count / limit) };
 };
 
 export const getAllDoctors = async (page = 1, limit = 10) => {
@@ -142,7 +168,7 @@ export async function addNewUser(
     };
   }
 
-  revalidatePath(`/admin/user-management`)
+  revalidatePath(`/admin/user-management`);
   return { success: true };
 }
 
@@ -154,6 +180,18 @@ export const deleteDoctor = async (
   const res = await deleteDoctorFromDB(userId);
   if (!res) return { message: "Error deleting", success: false };
   revalidatePath("/admin/doctors");
+  return { message: "", success: true };
+};
+
+export const deleteInquiry = async (
+  state: { message: string; success?: boolean } | undefined,
+  formData: FormData
+) => {
+  const inquiryId = formData.get("inquiryId") as string;
+  const page = formData.get("page") as string;
+  const res = await deleteInquiryFromDB(inquiryId);
+  if (!res) return { message: "Error deleting", success: false };
+  revalidatePath(`/admin/inquiries/${page}`);
   return { message: "", success: true };
 };
 
@@ -197,4 +235,10 @@ export const changeUserVerificationStatus = async (
 
   revalidatePath(`/admin/user-management?page=${currentPage}`);
   return {};
+};
+
+export const changeInquiryStatus = async (formData: FormData) => {
+  const inquiryId = formData.get("inquiryId") as string;
+
+  await changeInquiryStatusFromDB(inquiryId);
 };

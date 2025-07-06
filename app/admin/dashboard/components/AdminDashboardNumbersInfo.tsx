@@ -12,14 +12,14 @@ export default async function AdminDashboardNumbersInfo() {
     <>
       <div className="flex gap-4 h-1/2 w-full">
         <div className="flex items-center justify-between w-1/2 p-2 rounded-sm h-full bg-white dark:bg-dark-4 shadow-dark dark:shadow-light">
-          <div className="h-full flex flex-col items-center justify-center gap-2 text-gray-700 dark:text-gray-300">
+          <div className="h-full flex flex-col items-start justify-center gap-2 text-gray-700 dark:text-gray-300">
             <Users2 size={60} />
             <p>Users</p>
           </div>
           <div className="text-5xl font-ubuntu font-bold">{verifiedUsers}</div>
         </div>
         <div className="flex items-center justify-between w-1/2 p-2 rounded-sm h-full bg-white dark:bg-dark-4 shadow-dark dark:shadow-light">
-          <div className="h-full flex flex-col items-center justify-center gap-2 text-gray-700 dark:text-gray-300">
+          <div className="h-full flex flex-col items-start justify-center gap-2 text-gray-700 dark:text-gray-300">
             <Stethoscope size={60} />
             <p>Doctors</p>
           </div>
@@ -39,7 +39,7 @@ export default async function AdminDashboardNumbersInfo() {
           </div>
         </div>
         <div className="flex items-center justify-between w-1/2 p-2 rounded-sm h-full bg-white dark:bg-dark-4 shadow-dark dark:shadow-light">
-          <div className="h-full flex flex-col items-center justify-center gap-2 text-gray-700 dark:text-gray-300">
+          <div className="h-full flex flex-col items-start justify-center gap-2 text-gray-700 dark:text-gray-300">
             <Clock size={60} />
             <p>Pending Appointments</p>
           </div>

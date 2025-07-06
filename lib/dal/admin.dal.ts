@@ -68,7 +68,32 @@ export const getInquiriesFromDB = async () => {
     orderBy: {
       createdAt: "desc",
     },
+    where: {
+      is_read: false,
+    },
   });
+};
+
+export const getInquiriesForPaginationFromDB = async (
+  page: number,
+  limit: number
+) => {
+  const [inquiries, count] = await Promise.all([
+    prisma.inquiries.findMany({
+      take: limit,
+      skip: (page - 1) * limit,
+      orderBy: {
+        createdAt: "desc",
+      },
+    }),
+
+    prisma.inquiries.count(),
+  ]);
+
+  return {
+    inquiries,
+    count,
+  };
 };
 
 export const getAppointmentsFromDB = async () => {
@@ -156,6 +181,14 @@ export const addNewDoctorToDB = async (
   });
 
   return newDoc;
+};
+
+export const deleteInquiryFromDB = async (inquiryId: string) => {
+  return await prisma.inquiries.delete({
+    where: {
+      id: inquiryId,
+    },
+  });
 };
 
 export const deleteDoctorFromDB = async (userId: string) => {
@@ -392,4 +425,20 @@ export const getAdminDashboardNumbersFromDB = async () => {
     unreadInquiries,
     pendingAppointments,
   };
+};
+
+export const changeInquiryStatusFromDB = async (id: string) => {
+  const inquiry = await prisma.inquiries.findUnique({
+    where: { id },
+    select: { is_read: true },
+  });
+
+  if (!inquiry) throw new Error("Inquiry not found");
+
+  await prisma.inquiries.update({
+    where: { id },
+    data: {
+      is_read: !inquiry.is_read,
+    },
+  });
 };
