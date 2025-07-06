@@ -266,81 +266,78 @@ export const deleteDoctorFromDB = async (userId: string) => {
 };
 
 export const deleteUserFromDB = async (userId: string) => {
-  try {
-    // Get all messages that have images
-    const messagesWithImages = await prisma.message.findMany({
+  // Get all messages that have images
+  const messagesWithImages = await prisma.message.findMany({
+    where: {
+      chat: {
+        userId,
+      },
+      NOT: {
+        image: null,
+      },
+    },
+    select: {
+      image: true,
+    },
+  });
+  const imageUrls = messagesWithImages.map((m) => m.image).filter(Boolean);
+
+  // Get profile Image and delete it
+  const activeUser = await prisma.user.findFirst({
+    where: {
+      id: userId,
+    },
+  });
+  const profilePicture = activeUser?.pfp;
+  if (profilePicture) await cloudinary.uploader.destroy(profilePicture);
+
+  // Delete messages and chats
+  // Delete messages and chats
+  const deleteRes = await prisma.$transaction([
+    prisma.message.deleteMany({
       where: {
         chat: {
           userId,
         },
-        NOT: {
-          image: null,
-        },
       },
-      select: {
-        image: true,
-      },
-    });
-    const imageUrls = messagesWithImages.map((m) => m.image).filter(Boolean);
+    }),
 
-    // Get profile Image and delete it
-    const activeUser = await prisma.user.findFirst({
+    prisma.chatSession.deleteMany({
+      where: {
+        userId,
+      },
+    }),
+
+    prisma.account.deleteMany({
+      where: {
+        userId,
+      },
+    }),
+
+    prisma.doctorProfile.deleteMany({
+      where: {
+        userId,
+      },
+    }),
+
+    prisma.appointments.deleteMany({
+      where: {
+        patientId: userId,
+      },
+    }),
+
+    prisma.user.delete({
       where: {
         id: userId,
       },
-    });
-    const profilePicture = activeUser?.pfp;
-    if (profilePicture) await cloudinary.uploader.destroy(profilePicture);
+    }),
+  ]);
 
-    // Delete messages and chats
-    await prisma.$transaction(async (tx) => {
-      await tx.message.deleteMany({
-        where: {
-          chat: {
-            userId,
-          },
-        },
-      });
-
-      await tx.chatSession.deleteMany({
-        where: {
-          userId,
-        },
-      });
-
-      await tx.account.deleteMany({
-        where: {
-          userId,
-        },
-      });
-
-      await tx.doctorProfile.deleteMany({
-        where: {
-          userId,
-        },
-      });
-
-      await tx.appointments.deleteMany({
-        where: {
-          patientId: userId,
-        },
-      });
-
-      await tx.user.delete({
-        where: {
-          id: userId,
-        },
-      });
-    });
-
-    for (const id of imageUrls) {
-      await cloudinary.uploader.destroy(id!);
-    }
-    return 1;
-  } catch (error) {
-    console.log("Catching");
-    return 0;
+  for (const id of imageUrls) {
+    await cloudinary.uploader.destroy(id!);
   }
+
+  return deleteRes;
 };
 
 export const changeUserRoleFromDB = async (

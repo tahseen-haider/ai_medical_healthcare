@@ -31,12 +31,16 @@ export default async function UsersList({ paramPage }: { paramPage?: string }) {
             <div className="w-full  flex justify-between gap-4 p-2">
               <div className="flex gap-4 w-full mr-3">
                 <div className="text-lg font-bold">{index + 1}</div>
-                <div className="flex flex-col gap-3">
-                  <div className="flex gap-2 items-center">
-                    <div className="text-lg font-bold">{inquiry.fullname}</div>
-                    <p className="text-gray-700 dark:text-gray-400 px-3">
-                      @{inquiry.email}
-                    </p>
+                <div className="flex flex-col gap-3 w-full">
+                  <div className="flex gap-2 items-center justify-between flex-1">
+                    <div className="flex gap-2 items-center">
+                      <div className="text-lg font-bold">
+                        {inquiry.fullname}
+                      </div>
+                      <p className="text-gray-700 dark:text-gray-400 px-3">
+                        @{inquiry.email}
+                      </p>
+                    </div>
                     <MessageReadButton
                       readStatus={inquiry.is_read}
                       inquiryId={inquiry.id}

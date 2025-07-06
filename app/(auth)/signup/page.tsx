@@ -44,9 +44,9 @@ export default function SignupPage() {
           <div className="w-full flex justify-between text-black font-bold">
             <button
               onClick={() => signInWithOAuth("google")}
-              className="flex items-center w-1/2 justify-between mr-4 bg-white p-4 rounded-lg shadow-dark dark:shadow-light"
+              className="flex items-center w-1/2 justify-between mr-4 bg-light-4 dark:bg-white p-4 text-white dark:text-black rounded-lg shadow-dark dark:shadow-light"
             >
-              Sign Up with Google{" "}
+              Sign Up with Google
               <Image
                 width={40}
                 height={40}
@@ -56,7 +56,7 @@ export default function SignupPage() {
             </button>
             <button
               onClick={() => signInWithOAuth("github")}
-              className="flex items-center w-1/2 justify-between mr-4 bg-white p-4 rounded-lg shadow-dark dark:shadow-light"
+              className="flex items-center w-1/2 justify-between mr-4 bg-light-4 dark:bg-white p-4 text-white dark:text-black rounded-lg shadow-dark dark:shadow-light"
             >
               Sign Up with GitHub
               <Image
@@ -146,14 +146,12 @@ export default function SignupPage() {
             >
               SignUp
             </button>
-            {state?.message && <p className="text-red-600">{state.message}</p>}
+            {state?.message && <p className="text-red-600 text-center">{state.message}</p>}
+            {(state?.errors?.email || state?.errors?.password) && (
+              <p className="text-red-600 text-center">{state.errors.email}</p>
+            )}
           </form>
         </div>
-
-        {(state?.errors?.email || state?.errors?.password) && (
-          <p>{state.errors.email}</p>
-        )}
-        {state?.message && <p>{state.message}</p>}
       </section>
       {/* Find Us */}
       <div className="w-full max-w-[1920px]">

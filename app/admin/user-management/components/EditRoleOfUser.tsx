@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select";
 import { UserRole } from "@prisma/client/edge";
 import { Check, X } from "lucide-react";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 
 export default function EditRoleOfUser({
   userId,
@@ -23,12 +23,16 @@ export default function EditRoleOfUser({
   currentPage: number;
 }) {
   const [role, setRole] = useState<string>(currentRole);
+  const [showBtns, setShowBtns] = useState<boolean>(false);
   const [state, action, pending] = useActionState(changeUserRole, undefined);
+
+  useEffect(() => {
+    if (role !== currentRole) setShowBtns(true);
+  }, [role]);
 
   return (
     <>
-      {pending && <LoadingScreen message="Changing User Role..." />}
-      <form action={action} className="relative w-fit">
+      <form action={action} onSubmit={()=>{setShowBtns(false)}} className="relative w-fit">
         <input name="currentPage" value={currentPage} readOnly hidden />
         <input name="currentRole" value={currentRole} readOnly hidden />
         <input name="userId" value={userId} readOnly hidden />
@@ -45,7 +49,7 @@ export default function EditRoleOfUser({
         </Select>
 
         {/* Submit Button */}
-        {role !== currentRole && (
+        {showBtns && (
           <div className="absolute z-10 -top-8 -right-17 h-8 w-[70px] flex justify-between items-center">
             <button
               type="submit"

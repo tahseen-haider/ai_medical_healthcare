@@ -1,5 +1,6 @@
 import { getInquiries } from "@/actions/admin.action";
 import DashManageMessagesBtn from "./Btns/DashManageMessagesBtn";
+import MessageReadButton from "../../inquiries/components/Btns/MessageReadButton";
 export default async function AdminDashboardRecentInquiries() {
   const inquiries = await getInquiries();
 
@@ -26,15 +27,7 @@ export default async function AdminDashboardRecentInquiries() {
                 <div>{inquiry.message}</div>
               </div>
             </div>
-            {inquiry.is_read ? (
-              <div className="px-2 py-1 text-sm font-semibold text-green-700 bg-green-100 h-fit rounded-md">
-                Read
-              </div>
-            ) : (
-              <div className=" px-2 py-1 text-sm font-semibold text-red-700 bg-red-100 h-fit rounded-md">
-                Unread
-              </div>
-            )}
+            <MessageReadButton inquiryId={inquiry.id} readStatus={inquiry.is_read}/>
           </div>
         ))}
       </div>

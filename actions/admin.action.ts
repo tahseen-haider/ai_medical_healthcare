@@ -86,6 +86,7 @@ export const getInquiries = async (): Promise<GetInquiriesForDashboardDTO> => {
       email: inquiry.email,
       message: inquiry.inquiry,
       is_read: inquiry.is_read,
+      id: inquiry.id
     };
   });
 };

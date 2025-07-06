@@ -1,6 +1,9 @@
 "use client";
 
-import { changeUserRole, changeUserVerificationStatus } from "@/actions/admin.action";
+import {
+  changeUserRole,
+  changeUserVerificationStatus,
+} from "@/actions/admin.action";
 import LoadingScreen from "@/components/LoadingScreen";
 import {
   Select,
@@ -10,7 +13,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Check, X } from "lucide-react";
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 
 export default function EditVerification({
   userId,
@@ -25,12 +28,20 @@ export default function EditVerification({
   const [status, setStatus] = useState<string>(
     currentStatus === "1" ? "1" : "0"
   );
-  const [state, action, pending] = useActionState(changeUserVerificationStatus, undefined);
+  const [state, action, pending] = useActionState(
+    changeUserVerificationStatus,
+    undefined
+  );
+
+  const [showBtns, setShowBtns] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (status !== currentStatus) setShowBtns(true);
+  }, [status]);
 
   return (
     <>
-      {pending && <LoadingScreen message="Changing Verification Status..." />}
-      <form action={action} className="relative w-fit">
+      <form action={action} onSubmit={()=>{setShowBtns(false)}} className="relative w-fit">
         <input name="currentPage" value={currentPage} readOnly hidden />
         <input
           name="currentStatus"
@@ -51,7 +62,7 @@ export default function EditVerification({
         </Select>
 
         {/* Submit Button */}
-        {status !== currentStatus && (
+        {showBtns && (
           <div className="absolute z-10 -top-8 -right-17 h-8 w-[70px] flex justify-between items-center">
             <button
               type="submit"

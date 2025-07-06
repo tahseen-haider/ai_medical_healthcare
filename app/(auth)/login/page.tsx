@@ -46,16 +46,37 @@ export default function LoginPage() {
         <div className="w-full rounded-lg shadow-light dark:shadow-dark py-16 px-5 flex flex-col items-center gap-12 max-w-[500px] dark:bg-dark-4">
           {/* OAuth */}
           <div className="w-full flex justify-between text-black font-bold">
-            <button onClick={() => signInWithOAuth("google")} className="flex items-center w-1/2 justify-between mr-4 bg-white p-4 rounded-lg shadow-dark dark:shadow-light">
-              Sign in with Google <Image width={40} height={40} src="/icons/google-brands.svg" alt="google-logo"/>
+            <button
+              onClick={() => signInWithOAuth("google")}
+              className="flex items-center w-1/2 justify-between mr-4 bg-light-4 dark:bg-white p-4 text-white dark:text-black rounded-lg shadow-dark dark:shadow-light"
+            >
+              Sign in with Google{" "}
+              <Image
+                width={40}
+                height={40}
+                className=""
+                src="/icons/google-brands.svg"
+                alt="google-logo"
+              />
             </button>
-            <button onClick={() => signInWithOAuth("github")} className="flex items-center w-1/2 justify-between mr-4 bg-white p-4 rounded-lg shadow-dark dark:shadow-light">
-              Sign in with GitHub<Image width={40} height={40} src="/icons/github-brands.svg" alt="github-logo"/>
+            <button
+              onClick={() => signInWithOAuth("github")}
+              className="flex items-center w-1/2 justify-between mr-4 bg-light-4 dark:bg-white p-4 text-white dark:text-black rounded-lg shadow-dark dark:shadow-light"
+            >
+              Sign in with GitHub
+              <Image
+                width={40}
+                height={40}
+                src="/icons/github-brands.svg"
+                alt="github-logo"
+              />
             </button>
           </div>
           {/* Separator */}
           <div className="w-full border-b-2 relative flex justify-center">
-            <div className="absolute text-center -top-6 text-lg bg-gray-50 dark:bg-dark-4 p-3">OR</div>
+            <div className="absolute text-center -top-6 text-lg bg-gray-50 dark:bg-dark-4 p-3">
+              OR
+            </div>
           </div>
           {/* Custom Auth */}
           <form
@@ -98,9 +119,11 @@ export default function LoginPage() {
               </div>
             </div>
             {(state?.errors?.email || state?.errors?.password) && (
-              <p className="text-red-600">{state.errors.email}</p>
+              <p className="text-red-600 text-center">{state.errors.email}</p>
             )}
-            {state?.message && <p className="text-red-600">{state.message}</p>}
+            {state?.message && (
+              <p className="text-red-600 text-center">{state.message}</p>
+            )}
             <button
               type="submit"
               className="px-6 py-3 bg-light-4 rounded-lg font-bold font-ubuntu text-2xl text-white shadow-light cursor-pointer hover:bg-black hover:text-white"
