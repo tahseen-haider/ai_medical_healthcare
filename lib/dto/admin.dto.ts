@@ -20,6 +20,7 @@ export type GetInquiriesForDashboardDTO = {
   email: string,
   message: string,
   is_read: boolean,
+  id:string
 }[]
 
 export type GetAppointmentsForDashboardDTO = {
