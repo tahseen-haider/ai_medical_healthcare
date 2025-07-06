@@ -5,10 +5,12 @@ import {
   changeInquiryStatusFromDB,
   changeUserRoleFromDB,
   changeUserVerificationStatusFromDB,
+  deleteAppointmentFromDB,
   deleteDoctorFromDB,
   deleteInquiryFromDB,
   deleteUserFromDB,
   getAdminDashboardNumbersFromDB,
+  getAllAppointmentsFromDB,
   getAllDoctorsFromDB,
   getAllUsersFromDB,
   getAllVerifiedUsersFromDB,
@@ -35,6 +37,10 @@ export const delayInMs = async (time: number) => {
 export const getAdminDashboardNumbers = async () => {
   return await getAdminDashboardNumbersFromDB();
 };
+
+export const getAllAppointments = async (page: number, limit: number) => {
+  return await getAllAppointmentsFromDB(page, limit);
+}
 
 export const getAllUsers = async (page: number, limit: number) => {
   return await getAllUsersFromDB(page, limit);
@@ -195,6 +201,14 @@ export const deleteInquiry = async (
   revalidatePath(`/admin/inquiries/${page}`);
   return { message: "", success: true };
 };
+
+export const deleteAppointment = async (state: {} | undefined, formData: FormData) => {
+  const appId = formData.get("appId") as string;
+  const res = await deleteAppointmentFromDB(appId);
+  if (!res) return;
+  revalidatePath("/admin/appointments");
+  return{}
+}
 
 export const deleteUser = async (state: {} | undefined, formData: FormData) => {
   const userId = formData.get("userId") as string;

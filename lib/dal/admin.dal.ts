@@ -25,6 +25,41 @@ export const getAllVerifiedUsersFromDB = async () => {
 
   return users;
 };
+
+export const getAllAppointmentsFromDB = async (page: number, limit: number) => {
+  const [appointments, count] = await Promise.all([
+    prisma.appointments.findMany({
+      skip: (page - 1) * limit,
+      take: limit,
+      orderBy: {
+        preferredDate: "desc",
+      },
+      select: {
+        fullname:true,
+        id:true,
+        email:true,
+        preferredDate:true,
+        preferredTime:true,
+        reasonForVisit:true,
+        doctorId:true,
+        status:true,
+        doctor: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    }),
+    prisma.appointments.count(),
+  ]);
+
+  return {
+    appointments,
+    count,
+    totalPages: Math.ceil(count / limit),
+  };
+};
+
 export const getAllUsersFromDB = async (page: number, limit: number) => {
   const skip = (page - 1) * limit;
 
@@ -264,6 +299,12 @@ export const deleteDoctorFromDB = async (userId: string) => {
 
   return deleteRes;
 };
+
+export const deleteAppointmentFromDB = async (appId: string) => {
+  return await prisma.appointments.delete({
+    where:{ id: appId}
+  })
+}
 
 export const deleteUserFromDB = async (userId: string) => {
   // Get all messages that have images
