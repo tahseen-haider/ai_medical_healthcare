@@ -35,11 +35,11 @@ export default function MessageBox({
     <section
       className={`flex flex-col my-3 ${
         !isUser ? "items-start lg:ml-0 -ml-6" : "items-end lg:ml-0 ml-6"
-      } gap-2 w-full `}
+      } gap-2 w-full`}
     >
       <div
-        className={`gap-4 flex w-full lg:w-5/6 ${
-          !isUser ? "flex-row" : "flex-row-reverse"
+        className={`gap-4 flex ${
+          !isUser ? "flex-row w-full" : "flex-row-reverse w-full lg:w-5/6"
         }`}
       >
         <div>
@@ -48,9 +48,9 @@ export default function MessageBox({
         <div
           className={` ${
             !isUser
-              ? "bg-light-1 dark:bg-gray-950"
-              : "text-white bg-light-4 dark:bg-dark-4"
-          } shadow-light dark:shadow-dark w-full rounded-lg py-2 px-4 whitespace-pre-line`}
+              ? "bg-transparent shadow-none"
+              : "text-white bg-light-4 dark:bg-dark-4 shadow-light dark:shadow-dark"
+          } w-full rounded-lg py-2 px-4 whitespace-pre-line`}
         >
           {message.image && (
             <>
@@ -92,8 +92,8 @@ export default function MessageBox({
         </div>
       </div>
       <div
-        className={`lg:w-5/6 w-full flex ${
-          isUser ? "justify-start" : "justify-end"
+        className={`flex ${
+          isUser ? "justify-start lg:w-5/6 w-full" : "hidden"
         } text-gray-400`}
       >
         {time}
