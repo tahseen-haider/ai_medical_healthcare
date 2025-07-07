@@ -123,7 +123,8 @@ model Appointments {
   reasonForVisit  String
   preferredDate   String
   preferredTime   String
-  status          AppointmentStatus @default(PENDING)   
+  status          AppointmentStatus @default(PENDING)
+  createdAt       DateTime @default(now())
 
 
   doctorId        String?

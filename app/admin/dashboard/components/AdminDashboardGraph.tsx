@@ -5,6 +5,6 @@ import { getNewUserInfo } from '@/actions/admin.action'
 export default async function AdminDashboardGraph() {
   const chartData = await getNewUserInfo()
   return (
-    <Chart chartData={chartData}/>
+    <Chart chartData={chartData} name='Users'/>
   )
 }

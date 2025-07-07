@@ -30,15 +30,16 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 export default function Chart({
+  name,
   chartData,
 }: {
+  name:string,
   chartData: {
     date: string;
     number: number;
   }[];
 }) {
   const [timeRange, setTimeRange] = React.useState("30d");
-  console.log(chartData)
 
   function fillMissingDates(data: any[], days: number) {
     const today = new Date();
@@ -130,7 +131,7 @@ export default function Chart({
             fill="var(--color-user)"
             stackId="a"
             radius={[2, 2, 0, 0]}
-            name="Users"
+            name={name}
           />
         </BarChart>
       </ChartContainer>

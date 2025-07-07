@@ -216,7 +216,6 @@ export default function Messages({
               setMessages((prev) => {
                 const last = prev[prev.length - 1];
                 if (last?.role !== "assistant") {
-                  console.log("first")
                   return [
                     ...prev,
                     {

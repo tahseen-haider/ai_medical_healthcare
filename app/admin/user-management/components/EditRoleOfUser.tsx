@@ -28,11 +28,20 @@ export default function EditRoleOfUser({
 
   useEffect(() => {
     if (role !== currentRole) setShowBtns(true);
+    else {
+      setShowBtns(false);
+    }
   }, [role]);
 
   return (
     <>
-      <form action={action} onSubmit={()=>{setShowBtns(false)}} className="relative w-fit">
+      <form
+        action={action}
+        onSubmit={() => {
+          setShowBtns(false);
+        }}
+        className="relative w-fit"
+      >
         <input name="currentPage" value={currentPage} readOnly hidden />
         <input name="currentRole" value={currentRole} readOnly hidden />
         <input name="userId" value={userId} readOnly hidden />

@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  changeUserRole,
-  changeUserVerificationStatus,
-} from "@/actions/admin.action";
-import LoadingScreen from "@/components/LoadingScreen";
+import { changeAppointmentStatus } from "@/actions/doctor.action";
 import {
   Select,
   SelectContent,
@@ -12,28 +8,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { AppointmentStatus, UserRole } from "@prisma/client/edge";
 import { Check, X } from "lucide-react";
 import { useActionState, useEffect, useState } from "react";
 
-export default function EditVerification({
-  userId,
+export default function EditAppointmentStatus({
+  appointmentId,
   currentPage,
-  currStatus,
+  currentStatus,
 }: {
-  currStatus: boolean;
-  userId: string;
+  currentStatus: AppointmentStatus;
+  appointmentId: string;
   currentPage: number;
 }) {
-  const currentStatus: string = currStatus ? "1" : "0";
-  const [status, setStatus] = useState<string>(
-    currentStatus === "1" ? "1" : "0"
-  );
-  const [state, action, pending] = useActionState(
-    changeUserVerificationStatus,
-    undefined
-  );
-
+  const [status, setStatus] = useState<string>(currentStatus);
   const [showBtns, setShowBtns] = useState<boolean>(false);
+  const [state, action, pending] = useActionState(changeAppointmentStatus, undefined);
 
   useEffect(() => {
     if (status !== currentStatus) setShowBtns(true);
@@ -44,29 +34,32 @@ export default function EditVerification({
 
   return (
     <>
-      <form action={action} onSubmit={()=>{setShowBtns(false)}} className="relative w-fit">
+      <form
+        action={action}
+        onSubmit={() => {
+          setShowBtns(false);
+        }}
+        className="relative w-fit"
+      >
         <input name="currentPage" value={currentPage} readOnly hidden />
-        <input
-          name="currentStatus"
-          value={currentStatus === "1" ? "1" : "0"}
-          readOnly
-          hidden
-        />
-        <input name="userId" value={userId} readOnly hidden />
+        <input name="currentStatus" value={currentStatus} readOnly hidden />
+        <input name="appointmentId" value={appointmentId} readOnly hidden />
         <Select value={status} onValueChange={setStatus} name="status">
           <SelectTrigger className="!text-black dark:!text-white">
             <SelectValue placeholder={currentStatus} />
           </SelectTrigger>
 
           <SelectContent>
-            <SelectItem value="1">Verified</SelectItem>
-            <SelectItem value="0">Un-Verified</SelectItem>
+            <SelectItem value="PENDING">PENDING</SelectItem>
+            <SelectItem value="CONFIRMED">CONFIRMED</SelectItem>
+            <SelectItem value="COMPLETED">COMPLETED</SelectItem>
+            <SelectItem value="CANCELLED">CANCELLED</SelectItem>
           </SelectContent>
         </Select>
 
         {/* Submit Button */}
         {showBtns && (
-          <div className="absolute z-10 -top-8 -right-17 h-8 w-[70px] flex justify-between items-center">
+          <div className="absolute z-10 -top-8 left-0 h-8 w-[70px] flex justify-between items-center">
             <button
               type="submit"
               className="bg-light-4 dark:bg-white text-white dark:text-black h-8 w-8 flex justify-center items-center rounded-sm"

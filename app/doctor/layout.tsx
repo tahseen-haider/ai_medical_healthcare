@@ -13,10 +13,10 @@ export default function DoctorLayout({
       title: "Appointments",
       link: "/doctor/appointments",
     },
-    {
-      title: "Admin Inquiries",
-      link: "/doctor/admin-inquiries",
-    },
+    // {
+    //   title: "Admin Inquiries",
+    //   link: "/doctor/admin-inquiries",
+    // },
   ];
 
   return (
