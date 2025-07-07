@@ -4,17 +4,8 @@ import * as React from "react";
 import { BarChart, Bar, CartesianGrid, XAxis } from "recharts";
 
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
   ChartConfig,
   ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
@@ -139,6 +130,7 @@ export default function Chart({
             fill="var(--color-user)"
             stackId="a"
             radius={[2, 2, 0, 0]}
+            name="Users"
           />
         </BarChart>
       </ChartContainer>

@@ -112,7 +112,7 @@ export default function page({
         </form>
 
         {/* Uploading */}
-        {pending && <LoadingScreen message="Sending verification email" />}
+        {pending && <LoadingScreen message="Resetting your Password..." />}
       </section>
     </main>
   );

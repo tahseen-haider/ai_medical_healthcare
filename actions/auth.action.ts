@@ -348,7 +348,15 @@ export async function login(state: LoginFormState, formData: FormData) {
     return { success: false, message: "Email or password is incorrect" };
 
   await createSession(user.id, user.role);
-  return redirect("/");
+  if (user.role === "user") {
+    return redirect("/");
+  }
+  if (user.role === "admin") {
+    return redirect("/admin/dashboard");
+  }
+  if (user.role === "doctor") {
+    return redirect("/doctor/dashboard");
+  }
 }
 
 export async function logout() {
@@ -397,7 +405,7 @@ export async function deleteUserAccount(
 ) {
   const res = await deleteLoggedInUserFromDB();
   if (!res) {
-    console.log("error")
+    console.log("error");
     return { message: "Error while deleting account" };
   }
   return { message: "User Deleted" };

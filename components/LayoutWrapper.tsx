@@ -18,7 +18,7 @@ export default function LayoutWrapper({
 }: LayoutWrapperProps) {
   const pathname = usePathname();
 
-  const hideFooterRoutes = /^\/(assistant(\/.*)?|admin(\/.*)?)$/;
+  const hideFooterRoutes = /^\/(assistant(\/.*)?|admin(\/.*)?|doctor(\/.*)?)$/;
 
   const showFooter = !hideFooterRoutes.test(pathname);
 

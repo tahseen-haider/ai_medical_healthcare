@@ -38,7 +38,7 @@ function Navbar({
       link: "/contact-us",
     },
   ];
-  const emptyLinks:[] = []
+  const emptyLinks: [] = [];
   const isActiveLink = (pathname: string, link: string) => {
     if (link === "/") {
       return pathname === "/";
@@ -71,7 +71,9 @@ function Navbar({
         <div className="absolute -z-10 w-screen h-full left-0 dark:bg-dark-4 bg-light-4" />
         {/* LOGO */}
         <Link
-          href={`${isAdmin ? "/admin/dashboard" : "/"}`}
+          href={`${
+            isAdmin ? "/admin/dashboard" : isDoctor ? "/doctor/dashboard" : "/"
+          }`}
           className="flex items-center"
         >
           <Image src={logo} width={52} height={52} alt="Logo of MediTech" />
@@ -88,23 +90,27 @@ function Navbar({
                           isNavbarDown ? "top-14" : "-top-60"
                         } transition-all duration-300 -z-20`}
             >
-              {isAdmin?emptyLinks:isDoctor?emptyLinks:userNavLinks.map((ele) => (
-                <li key={ele.title} className="py-3">
-                  <Link
-                    onClick={() => {
-                      setIsNavbarDown(false);
-                    }}
-                    href={ele.link}
-                    className={`text-[18px] ${
-                      isActiveLink(pathname, ele.link)
-                        ? "text-white dark:text-gray-300 border-b-4 border-white dark:border-gray-300 pb-1 font-bold"
-                        : "text-white hover:border-b-[1px] pb-[6px] border-gray-200 dark:border-gray-300 "
-                    } font-roboto leading-[22px] -tracking-[0.5px]`}
-                  >
-                    {ele.title}
-                  </Link>
-                </li>
-              ))}
+              {isAdmin
+                ? emptyLinks
+                : isDoctor
+                ? emptyLinks
+                : userNavLinks.map((ele) => (
+                    <li key={ele.title} className="py-3">
+                      <Link
+                        onClick={() => {
+                          setIsNavbarDown(false);
+                        }}
+                        href={ele.link}
+                        className={`text-[18px] ${
+                          isActiveLink(pathname, ele.link)
+                            ? "text-white dark:text-gray-300 border-b-4 border-white dark:border-gray-300 pb-1 font-bold"
+                            : "text-white hover:border-b-[1px] pb-[6px] border-gray-200 dark:border-gray-300 "
+                        } font-roboto leading-[22px] -tracking-[0.5px]`}
+                      >
+                        {ele.title}
+                      </Link>
+                    </li>
+                  ))}
               {/* Theme toggeler for smaller screens */}
               <div className="sm:hidden p-2 border-t-2 w-full flex justify-center items-center">
                 <div className="text-[18px] text-white  flex gap-4 items-center justify-center font-roboto font-bold leading-[22px] -tracking-[0.5px]">

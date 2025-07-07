@@ -12,6 +12,9 @@ export default async function Home() {
   if (role === "admin") {
     return redirect("/admin/dashboard");
   }
+  if (role === "doctor") {
+    return redirect("/doctor/dashboard");
+  }
   return (
     <main className="flex justify-center ">
       <div className="max-w-[1920px] w-full">

@@ -1,29 +1,21 @@
+import DashboardLinks from "../admin/dashboard/components/DashboardLinks";
 import DashboardSidebarWrapper from "../assistant/components/DashboardSidebarWrapper";
-import DashboardLinks from "./dashboard/components/DashboardLinks";
 
-export default function AdminLayout({
+export default function DoctorLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  const AdminSidebarLinks = [
+  const DoctorSidebarLinks = [
     {
       title: "Dashboard",
-      link: "/admin/dashboard",
-    },
-    {
-      title: "User Management",
-      link: "/admin/user-management",
+      link: "/doctor/dashboard",
     },
     {
       title: "Appointments",
-      link: "/admin/appointments",
+      link: "/doctor/appointments",
     },
     {
-      title: "Doctors",
-      link: "/admin/doctors",
-    },
-    {
-      title: "Inquiries",
-      link: "/admin/inquiries",
+      title: "Admin Inquiries",
+      link: "/doctor/admin-inquiries",
     },
   ];
 
@@ -32,7 +24,7 @@ export default function AdminLayout({
       <section className="w-full h-[calc(100vh-64px)] min-h-52 flex">
         {/* Sidebar */}
         <DashboardSidebarWrapper>
-          <DashboardLinks links={AdminSidebarLinks} />
+          <DashboardLinks links={DoctorSidebarLinks} />
         </DashboardSidebarWrapper>
         {/* Chat */}
         <div className="flex-1 h-[calc(100vh-65px)] overflow-auto w-full ">
