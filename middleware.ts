@@ -13,17 +13,28 @@ export async function middleware(req: NextRequest) {
     if (isRestrictedRoute) return NextResponse.next();
     return NextResponse.redirect(new URL("/login", req.url));
   }
-  
+
   // For Authenticated
   try {
     const isAuthRole = await getUserRoleFromSession(sessionToken);
+
     if (isAuthRole) {
+      // If user is logged in and tries to access login/signup, redirect them to home
       if (isRestrictedRoute) {
         return NextResponse.redirect(new URL("/", req.url));
       }
-      if(/^\/admin\/(.*)$/.test(pathname)){
-        if("admin" !== isAuthRole){
-          return NextResponse.redirect(new URL("/", req.url))
+
+      // Allow only admin to access /admin routes
+      if (/^\/admin\/(.*)$/.test(pathname)) {
+        if (isAuthRole !== "admin") {
+          return NextResponse.redirect(new URL("/", req.url));
+        }
+      }
+
+      // Allow only doctor to access /dashboard routes
+      if (/^\/doctor\/(.*)$/.test(pathname)) {
+        if (isAuthRole !== "doctor") {
+          return NextResponse.redirect(new URL("/", req.url));
         }
       }
       return NextResponse.next();
@@ -41,8 +52,9 @@ export const config = {
     "/signup",
     "/settings",
     "/your-profile",
-    "/verify-email(:/.*)?",
-    "/assistant(:/.*)?",
-    "/admin(:/.*)?"
+    "/verify-email/(.*)",
+    "/assistant/(.*)",
+    "/admin/(.*)",
+    "/doctor/(.*)",
   ],
 };

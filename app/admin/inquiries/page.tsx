@@ -11,7 +11,7 @@ export default async function page({
     <main className="w-full flex justify-center">
       <section className="flex flex-col gap-4 p-6 w-full max-w-[1920px]">
         {/* Heading */}
-        <h1 className="font-bold font-ubuntu text-2xl ml-9">User Management</h1>
+        <h1 className="font-bold font-ubuntu text-2xl ml-9">User Inquiries</h1>
         {/* Doctors Pagination List */}
         <InquiriesList paramPage={paramPage} />
       </section>

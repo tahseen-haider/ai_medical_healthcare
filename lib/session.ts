@@ -126,6 +126,6 @@ export const isUserAuthenticated = async (sessionToken: any) => {
 
 export const getUserRoleFromSession = async (sessionToken: any) => { 
   const session = await decrypt(sessionToken);
-  if(!session?.userId) return;
-  return session.userId
+  if(!session?.role) return;
+  return session.role
  }

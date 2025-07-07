@@ -395,11 +395,20 @@ export const changeUserRoleFromDB = async (
     },
   });
 
-  if (currentRole === "doctor") {
-    await prisma.doctorProfile.delete({
-      where: { userId },
-    });
-  }
+if (currentRole === "doctor") {
+  await prisma.doctorProfile.delete({
+    where: { userId },
+  });
+
+  await prisma.appointments.updateMany({
+    where: {
+      doctorId: user.id,
+    },
+    data: {
+      doctorId: null,
+    },
+  });
+}
 
   if (role === "doctor") {
     await prisma.doctorProfile.create({
@@ -513,6 +522,6 @@ export const getNewUserInfoFromDB = async () => {
       number: grouped[dateStr] || 0,
     };
   });
-
+await new Promise(res=>setTimeout(res,2000))
   return final;
 };

@@ -6,6 +6,7 @@ import RecentMembersFallback from "./components/suspense/RecentUsersSuspense";
 import AdminDashboardRecentInquiries from "./components/AdminDashboardRecentInquiries";
 import RecentInquiriesFallback from "./components/suspense/DashboardInquirySuspense";
 import AdminDashboardRecentAppointments from "./components/AdminDashboardRecentAppointments";
+import GraphSuspense from "./components/suspense/GraphSuspense";
 
 export default function DashboardPage() {
   return (
@@ -17,7 +18,9 @@ export default function DashboardPage() {
         <div className="w-full flex flex-col gap-4 lg:flex-row ">
           {/* Graph */}
           <div className="bg-white dark:bg-dark-4 rounded-sm w-full lg:w-2/3 h-80 shadow-dark dark:shadow-light">
-            <AdminDashboardGraph />
+            <Suspense fallback={<GraphSuspense/>}>
+              <AdminDashboardGraph />
+            </Suspense>
           </div>
           {/* Info */}
           <div className="w-full flex flex-col gap-4 lg:w-1/3 h-80">
@@ -42,7 +45,7 @@ export default function DashboardPage() {
           {/* Recent Appointments */}
           <div className="w-full lg:w-1/2">
             <Suspense fallback={<RecentInquiriesFallback />}>
-              <AdminDashboardRecentAppointments/>
+              <AdminDashboardRecentAppointments />
             </Suspense>
           </div>
         </div>
