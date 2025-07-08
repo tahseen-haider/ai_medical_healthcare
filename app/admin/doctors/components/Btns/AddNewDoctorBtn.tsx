@@ -12,11 +12,12 @@ export default function AddNewDoctorBtn() {
   const [selectedDocType, setSelectedDocType] = useState("");
   const [state, action, pending] = useActionState(addNewDoctor, undefined);
 
+
   useEffect(() => {
-  if (state?.success) {
-    setShowPopUp(false);
-  }
-}, [state]);
+    if (state?.success) {
+      setShowPopUp(false);
+    }
+  }, [state]);
 
   return (
     <div className="">
@@ -33,10 +34,7 @@ export default function AddNewDoctorBtn() {
           {/* Add new Doctor Form */}
           <div className="w-[300px] sm:w-[500px]">
             <h2 className="font-bold text-lg text-center">Add Doctor</h2>
-            <form
-              action={action}
-              className="flex flex-col gap-4"
-            >
+            <form action={action} className="flex flex-col gap-4">
               <div className="flex flex-col gap-6 w-full">
                 <div className="w-full">
                   <label htmlFor="username" className="">
@@ -92,7 +90,9 @@ export default function AddNewDoctorBtn() {
                   />
                 </div>
               </div>
-              {state?.message && <div className="text-red-500 text-center">{state?.message}</div>}
+              {state?.message && (
+                <div className="text-red-500 text-center">{state?.message}</div>
+              )}
               <div className="w-full">
                 <button
                   type="submit"

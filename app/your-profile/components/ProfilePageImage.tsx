@@ -3,7 +3,7 @@ import Image from "next/image";
 import PFP from "@/public/images/PFP.png";
 import { useState } from "react";
 
-export default function ProfilePicture({
+export default function ProfilePageImage({
   image,
   size = 32,
 }: {
@@ -13,7 +13,6 @@ export default function ProfilePicture({
   const [imgSrc, setImgSrc] = useState(image || PFP);
   return (
     <div
-      className="rounded-full overflow-hidden flex justify-center items-center cursor-pointer shadow-light dark:shadow-dark"
       style={{ width: size, height: size }}
     >
       <Image

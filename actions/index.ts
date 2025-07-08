@@ -66,7 +66,7 @@ export const setAppointment = async (
       preferredDate: formData.get("preferredDate"),
     });
 
-    const patientId = formData.get("patientId") as string|undefined;
+    const patientId = formData.get("patientId") as string | undefined;
     const doctorId = formData.get("doctorId") as string;
 
     if (!validatedFields.success || !doctorId) {

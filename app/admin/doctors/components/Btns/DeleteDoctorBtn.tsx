@@ -11,7 +11,7 @@ export default function DeleteDoctorBtn({doctorId}:{doctorId: string}) {
     <>
     <form action={action}>
       <input name='doctorId' value={doctorId} hidden readOnly/>
-      <button type='submit' className=" bg-light-4 dark:bg-white text-white dark:text-black shadow-dark dark:shadow-dark text-lg p-1 rounded-md">
+      <button disabled={pending} type='submit' className=" bg-light-4 dark:bg-white text-white dark:text-black shadow-dark dark:shadow-dark text-lg p-1 rounded-md">
         <Trash2/>
       </button>
     </form>

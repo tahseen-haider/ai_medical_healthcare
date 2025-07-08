@@ -58,7 +58,7 @@ export default function ProfileButton({ imageUrl }: { imageUrl?: string }) {
         <LoadingScreen message="Logging you out..." />
       )}
       <DropdownMenu open={open} onOpenChange={setOpen}>
-        <DropdownMenuTrigger>
+        <DropdownMenuTrigger className="rounded-full">
           <ProfilePicture image={imageUrl} />
         </DropdownMenuTrigger>
 

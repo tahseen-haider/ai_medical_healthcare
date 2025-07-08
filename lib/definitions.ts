@@ -1,3 +1,4 @@
+import { AppointmentStatus, DoctorType } from "@prisma/client/edge";
 import { number, z } from "zod";
 
 export const SignupFormSchema = z.object({
@@ -34,6 +35,69 @@ export const AppointmentFormSchema = z.object({
   preferredTime: z.string(),
 });
 
+export type UserType = {
+  id: string;
+  email: string;
+  phone?: string | null;
+  name: string;
+  dob?: string | null;
+  gender?: string | null;
+  pfp?: string | null;
+  createdAt: Date;
+  role: UserRole;
+  is_verified: boolean;
+  ai_tokens_used?: number | null;
+
+  // Included relations
+  doctorProfile?: {
+    id: string;
+    userId: string;
+    doctorType: DoctorType;
+    specialization?: string | null;
+    qualifications?: string | null;
+    experience?: number | null;
+    bio?: string | null;
+    clinicName?: string | null;
+    clinicAddress?: string | null;
+    consultationFee?: number | null;
+    availableDays: string[];
+    availableTimes?: string | null;
+    isApproved: boolean;
+    ratings?: number | null;
+    totalReviews?: number | null;
+    createdAt: Date;
+    updatedAt: Date;
+  } | null;
+
+  appointmentsAsDoctor: {
+    id: string;
+    fullname: string;
+    email: string;
+    phone?: string | null;
+    reasonForVisit: string;
+    preferredDate: string;
+    preferredTime: string;
+    status: AppointmentStatus;
+    createdAt: Date;
+    doctorId?: string | null;
+    patientId?: string | null;
+  }[];
+
+  appointmentsAsPatient: {
+    id: string;
+    fullname: string;
+    email: string;
+    phone?: string | null;
+    reasonForVisit: string;
+    preferredDate: string;
+    preferredTime: string;
+    status: AppointmentStatus;
+    createdAt: Date;
+    doctorId?: string | null;
+    patientId?: string | null;
+  }[];
+};
+
 export const LoginFormSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }).trim(),
   password: z
@@ -62,7 +126,7 @@ export const SaveProfileChangesState = z.object({
   phone: z.string().trim(),
   dob: z.string().trim(),
   gender: z.string().trim(),
-}) 
+});
 
 // Chat Zod Validations
 
@@ -192,11 +256,11 @@ export type LoginFormState =
 
 export type SessionPayload = {
   userId: string;
-  role: UserRole
+  role: UserRole;
   expiresAt: Date;
 };
 
-export type UserRole = "user" | "admin"| "doctor";
+export type UserRole = "user" | "admin" | "doctor";
 
 export type ChatState =
   | {

@@ -3,12 +3,8 @@ import React from "react";
 import AddNewDoctorBtn from "./Btns/AddNewDoctorBtn";
 import DeleteDoctorBtn from "./Btns/DeleteDoctorBtn";
 
-export default async function DoctorsList({
-  searchParams,
-}: {
-  searchParams?: { page?: string };
-}) {
-  const page = parseInt(searchParams?.page || "1", 10);
+export default async function DoctorsList({ paramPage }: { paramPage?: string }) {
+  const page = parseInt(paramPage || "1", 10);
   const limit = 10;
 
   const { doctors, totalPages } = await getAllDoctors(page, limit);
@@ -57,7 +53,7 @@ export default async function DoctorsList({
       </div>
 
       {/* Pagination */}
-      <div className="flex justify-end gap-3 mt-4">
+      <div className="flex justify-end items-center gap-3 mt-4">
         {page > 1 && (
           <a
             href={`?page=${page - 1}`}

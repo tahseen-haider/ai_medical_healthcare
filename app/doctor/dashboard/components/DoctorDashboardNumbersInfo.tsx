@@ -14,14 +14,14 @@ export default async function DoctorDashboardNumbersInfo({userId}:{userId: strin
     <>
       <div className="flex gap-4 h-1/2 w-full">
         <div className="flex items-center justify-between w-1/2 p-2 rounded-sm h-full bg-white dark:bg-dark-4 shadow-dark dark:shadow-light">
-          <div className="h-full font-bold flex flex-col items-start justify-center gap-2 text-gray-700 dark:text-gray-300">
+          <div className="h-full text-[14px] font-bold flex flex-col items-start justify-center gap-2 text-gray-600 dark:text-gray-300">
             <AlarmClock size={60} />
             <p>PENDING <br/>Appointments</p>
           </div>
           <div className="text-5xl font-ubuntu font-bold">{pending}</div>
         </div>
         <div className="flex items-center justify-between w-1/2 p-2 rounded-sm h-full bg-white dark:bg-dark-4 shadow-dark dark:shadow-light">
-          <div className="h-full font-bold flex flex-col items-start justify-center gap-2 text-gray-700 dark:text-gray-300">
+          <div className="h-full text-[14px] font-bold flex flex-col items-start justify-center gap-2 text-gray-600 dark:text-gray-300">
             <AlarmClockCheck size={60} />
             <p>CONFIRMED <br/>Appointments</p>
           </div>
@@ -32,9 +32,9 @@ export default async function DoctorDashboardNumbersInfo({userId}:{userId: strin
       </div>
       <div className="flex gap-4 h-1/2 w-full">
         <div className="flex items-center justify-between w-1/2 p-2 rounded-sm h-full bg-white dark:bg-dark-4 shadow-dark dark:shadow-light">
-          <div className="h-full font-bold text-left flex flex-col items-start justify-center gap-2 text-gray-700 dark:text-gray-300">
+          <div className="h-full text-[14px] font-bold text-left flex flex-col items-start justify-center gap-2 text-gray-600 dark:text-gray-300">
             
-            <CircleCheckBig size={60} />
+            <CircleCheckBig size={50} />
             <p>COMPLETED <br/>Appointments</p>
           </div>
           <div className="text-5xl font-ubuntu font-bold">
@@ -42,8 +42,8 @@ export default async function DoctorDashboardNumbersInfo({userId}:{userId: strin
           </div>
         </div>
         <div className="flex items-center justify-between w-1/2 p-2 rounded-sm h-full bg-white dark:bg-dark-4 shadow-dark dark:shadow-light">
-          <div className="h-full font-bold flex flex-col items-start justify-center gap-2 text-gray-700 dark:text-gray-300">
-            <Ban size={60} />
+          <div className="h-full text-[14px] font-bold flex flex-col items-start justify-center gap-2 text-gray-600 dark:text-gray-300">
+            <Ban size={50} />
             <p>CANCELLED <br/>Appointments</p>
           </div>
           <div className="text-5xl font-ubuntu font-bold">

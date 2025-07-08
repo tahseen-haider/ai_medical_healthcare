@@ -4,11 +4,12 @@ import { eachDayOfInterval, format, subDays } from "date-fns";
 import { prisma } from "../db/prisma";
 import { AppointmentStatus } from "@prisma/client/edge";
 
-export const getNewAppointmentsInfoFromDB = async () => {
+export const getNewAppointmentsInfoFromDB = async (doctorId: string) => {
   const start = subDays(new Date(), 90);
 
   const users = await prisma.appointments.findMany({
     where: {
+      doctorId,
       createdAt: {
         gte: start,
       },

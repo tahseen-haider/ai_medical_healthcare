@@ -162,7 +162,7 @@ export const addNewDoctor = async (
   if (!newDoc) return { message: "Error while adding new Doctor." };
   if (newDoc === 2)
     return {
-      message: "User already exists. Change his role in User management.",
+      message: "A user already exist with this email.",
     };
 
   revalidatePath("/admin/doctors");

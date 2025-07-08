@@ -4,8 +4,8 @@ import { changeAppointmentStatusFromDB, getAllAppointmentsForDashboardDoctorFrom
 import { AppointmentStatus } from "@prisma/client/edge";
 import { revalidatePath } from "next/cache";
 
-export const getNewAppointmentsInfo = async () => {
-  return await getNewAppointmentsInfoFromDB();
+export const getNewAppointmentsInfo = async (doctorId:string) => {
+  return await getNewAppointmentsInfoFromDB(doctorId);
 };
 
 export const getAllAppointmentsForDoctor = async (page: number, limit: number, id:string) => {

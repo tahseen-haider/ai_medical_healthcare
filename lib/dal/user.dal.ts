@@ -18,36 +18,24 @@ export const getUserIdnRoleIfAuthenticatedAction = async () => {
   return await getUserIdnRoleIfAuthenticated();
 };
 
-export const getUser = async (): Promise<UserProfileDTO | undefined> => {
+export const getUser = async () => {
   const session = await getUserIdnRoleIfAuthenticated();
   if (!session) return;
 
   try {
     const user = await prisma.user.findUnique({
       where: { id: session.userId },
-      select: {
-        name: true,
-        dob: true,
-        email: true,
-        phone: true,
-        gender: true,
-        role: true,
-        pfp: true,
-        ai_tokens_used: true
+      include: {
+        appointmentsAsDoctor: true,
+        appointmentsAsPatient: true,
+        doctorProfile: true,
       },
     });
     if (!user) return;
 
-    return {
-      name: user.name,
-      dob: user.dob ? user.dob : undefined,
-      email: user.email,
-      phone: user.phone ? user.phone : undefined,
-      gender: user.gender ? user.gender : undefined,
-      role: user.role,
-      pfp: user.pfp ? user.pfp : undefined,
-      ai_tokens_used: user.ai_tokens_used
-    };
+    const {password, token, ...restUser} = user || {}
+
+    return restUser;
   } catch (error) {
     console.log(error);
     return;
@@ -264,7 +252,7 @@ export const deleteLoggedInUserFromDB = async () => {
     });
     const profilePicture = activeUser?.pfp;
     if (profilePicture) await cloudinary.uploader.destroy(profilePicture);
-    
+
     // Delete messages and chats
     await prisma.$transaction(async (tx) => {
       await tx.message.deleteMany({
@@ -306,12 +294,10 @@ export const deleteLoggedInUserFromDB = async () => {
       });
     });
 
-    
     for (const id of imageUrls) {
       await cloudinary.uploader.destroy(id!);
     }
 
-    
     deleteSession();
     return 1;
   } catch (error) {
