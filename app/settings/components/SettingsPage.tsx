@@ -14,6 +14,7 @@ import { saveProfileChanges } from "@/actions";
 import LoadingScreen from "@/components/LoadingScreen";
 import { ArrowLeftToLineIcon, Pencil } from "lucide-react";
 import Link from "next/link";
+import { UserType } from "@/lib/definitions";
 
 const genderArray = ["Male", "Female"];
 
@@ -21,14 +22,13 @@ export default function SettingsPage({
   user,
   imageUrl,
 }: {
-  user: UserProfileDTO;
+  user: UserType;
   imageUrl?: string;
 }) {
-
   const [name, setName] = useState(user?.name);
   const [email, setEmail] = useState(user?.email);
-  const [phone, setPhone] = useState<string | undefined>(user.phone);
-  const [dob, setDob] = useState<string | undefined>(user.dob);
+  const [phone, setPhone] = useState<string | null | undefined>(user.phone);
+  const [dob, setDob] = useState<string | null | undefined>(user.dob);
   const [gender, setGender] = useState(user?.gender);
   const [image, setImage] = useState<File | undefined>();
 
@@ -40,12 +40,14 @@ export default function SettingsPage({
   return (
     <div className="w-full min-h-[550px] flex flex-col justify-center">
       {pending && <LoadingScreen message="Updating your profile" />}
-      <form
-        action={action}
-        className="w-full"
-      >
+      <form action={action} className="w-full">
         <section className="w-full flex flex-col md:flex-row p-6 gap-6">
-          <Link href="/your-profile" className="bg-light-4 dark:bg-gray-50 h-fit text-white dark:text-black rounded-sm p-2"><ArrowLeftToLineIcon/></Link>
+          <Link
+            href="/your-profile"
+            className="bg-light-4 dark:bg-gray-50 h-fit text-white dark:text-black rounded-sm p-2"
+          >
+            <ArrowLeftToLineIcon />
+          </Link>
           <div className="w-full md:w-1/3 p-4 flex flex-col items-center justify-center gap-3">
             <div className="relative flex flex-col items-center">
               <div className="w-[120px]">
@@ -124,7 +126,7 @@ export default function SettingsPage({
             </div>
             <div className="grid grid-cols-2 gap-4 items-center">
               <h3>Date of birth</h3>
-              <DateOfBirthPicker value={dob} onChange={setDob} />
+              <DateOfBirthPicker value={dob ?? undefined} onChange={setDob} />
               <input
                 name="dob"
                 type="text"
