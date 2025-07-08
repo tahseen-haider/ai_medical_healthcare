@@ -30,6 +30,7 @@ export default async function UsersList({ paramPage }: { paramPage?: string }) {
                 <th className="font-semibold px-3">Email</th>
                 <th className="font-semibold px-3">Role</th>
                 <th className="font-semibold px-3">Verified</th>
+                <th className="font-semibold px-3">Tokens Used</th>
                 <th className="font-semibold px-3">Created At</th>
                 <th className="font-semibold px-3"></th>
               </tr>
@@ -55,6 +56,7 @@ export default async function UsersList({ paramPage }: { paramPage?: string }) {
                   <td className="px-3">{user.email}</td>
                   <td className="px-3"><EditRoleOfUser userId={user.id} currentPage={page} currentRole={user.role}/></td>
                   <td className="px-3"><EditVerification userId={user.id} currentPage={page} currStatus={user.is_verified}/></td>
+                  <td className="px-3">{user.ai_tokens_used || 0}</td>
                   <td className="px-3">{user.createdAt.toLocaleDateString().split("T")[0]}</td>
                   <td className="px-3">
                     <DeleteUserBtn userId={user.id} />

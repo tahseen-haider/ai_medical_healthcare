@@ -12,7 +12,8 @@ import {
 } from "@/components/ui/select";
 import { saveProfileChanges } from "@/actions";
 import LoadingScreen from "@/components/LoadingScreen";
-import { Pencil } from "lucide-react";
+import { ArrowLeftToLineIcon, Pencil } from "lucide-react";
+import Link from "next/link";
 
 const genderArray = ["Male", "Female"];
 
@@ -44,6 +45,7 @@ export default function SettingsPage({
         className="w-full"
       >
         <section className="w-full flex flex-col md:flex-row p-6 gap-6">
+          <Link href="/your-profile" className="bg-light-4 dark:bg-gray-50 h-fit text-white dark:text-black rounded-sm p-2"><ArrowLeftToLineIcon/></Link>
           <div className="w-full md:w-1/3 p-4 flex flex-col items-center justify-center gap-3">
             <div className="relative flex flex-col items-center">
               <div className="w-[120px]">
@@ -165,7 +167,7 @@ export default function SettingsPage({
         <div className="w-full flex md:flex-row flex-col items-center justify-center mb-10 mt-2 gap-5">
           <button
             type="submit"
-            className="bg-light-3 cursor-pointer dark:bg-dark-1 px-4 py-1 shadow-light dark:shadow-dark hover:shadow-none hover:dark:shadow-none font-bold text-lg rounded-lg"
+            className=" bg-light-4 dark:bg-white text-white dark:text-black shadow-dark dark:shadow-dark text-lg px-4 py-2 font-bold rounded-lg"
             onClick={(e) => {
               if (
                 name === user.name &&
@@ -181,7 +183,7 @@ export default function SettingsPage({
             Save Changes
           </button>
           <div
-            className="bg-light-1 cursor-pointer dark:bg-dark-4 px-4 py-1 shadow-light border-2 dark:shadow-dark hover:shadow-none hover:dark:shadow-none font-bold text-lg rounded-lg"
+            className="bg-red-500 text-white cursor-pointer  shadow-dark dark:shadow-dark text-lg px-4 py-2 font-bold rounded-lg"
             onClick={(e) => {
               e.preventDefault();
               // setDob(user.dob);

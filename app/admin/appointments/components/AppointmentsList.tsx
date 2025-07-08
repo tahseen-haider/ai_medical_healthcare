@@ -1,5 +1,6 @@
-import { getAllAppointments, getAllUsers } from "@/actions/admin.action";
+import { getAllAppointments, getAllApprovedDoctors } from "@/actions/admin.action";
 import DeleteAppointmentBtn from "./Btns/DeleteAppointmentBtn";
+import EditAppointmentDoctor from "./EditAppointmentDoctor";
 
 export default async function AppointmentsList({
   paramPage,
@@ -10,6 +11,7 @@ export default async function AppointmentsList({
   const limit = 10;
 
   const { appointments, totalPages } = await getAllAppointments(page, limit);
+  const doctors = await getAllApprovedDoctors();
 
   return (
     <div className="w-full py-4 bg-white dark:bg-dark-4 shadow-dark dark:shadow-light rounded-md p-3 min-h-[calc(100vh-170px)] flex flex-col justify-between">
@@ -57,12 +59,21 @@ export default async function AppointmentsList({
                   <td className="p-2">{(page - 1) * limit + index + 1}</td>
                   <td className="px-3">{appointment.fullname}</td>
                   <td className="px-3">{appointment.email}</td>
-                  <td className="px-3">{appointment.doctor?.name ?? "Unassigned"}</td>
+                  <td className="px-3">
+                    <EditAppointmentDoctor
+                      currentPage={page}
+                      appointmentId={appointment.id}
+                      currentDoctor={appointment.doctorId ?? "Unassigned"}
+                      doctors={doctors}
+                    />
+                  </td>
                   <td className="px-3">{appointment.reasonForVisit}</td>
                   <td className="px-3">{appointment.preferredTime}</td>
                   <td className="px-3">{appointment.preferredDate}</td>
                   <td className="px-3">{appointment.status}</td>
-                  <td className="px-1"><DeleteAppointmentBtn appId={appointment.id}/></td>
+                  <td className="px-1">
+                    <DeleteAppointmentBtn appId={appointment.id} />
+                  </td>
                 </tr>
               ))}
             </tbody>

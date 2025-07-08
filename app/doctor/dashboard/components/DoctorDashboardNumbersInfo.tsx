@@ -16,14 +16,14 @@ export default async function DoctorDashboardNumbersInfo({userId}:{userId: strin
         <div className="flex items-center justify-between w-1/2 p-2 rounded-sm h-full bg-white dark:bg-dark-4 shadow-dark dark:shadow-light">
           <div className="h-full font-bold flex flex-col items-start justify-center gap-2 text-gray-700 dark:text-gray-300">
             <AlarmClock size={60} />
-            <p>PENDING Appointments</p>
+            <p>PENDING <br/>Appointments</p>
           </div>
           <div className="text-5xl font-ubuntu font-bold">{pending}</div>
         </div>
         <div className="flex items-center justify-between w-1/2 p-2 rounded-sm h-full bg-white dark:bg-dark-4 shadow-dark dark:shadow-light">
           <div className="h-full font-bold flex flex-col items-start justify-center gap-2 text-gray-700 dark:text-gray-300">
             <AlarmClockCheck size={60} />
-            <p>CONFIRMED Appointments</p>
+            <p>CONFIRMED <br/>Appointments</p>
           </div>
           <div className="text-5xl font-ubuntu font-bold">
             {confirmed}
@@ -35,7 +35,7 @@ export default async function DoctorDashboardNumbersInfo({userId}:{userId: strin
           <div className="h-full font-bold text-left flex flex-col items-start justify-center gap-2 text-gray-700 dark:text-gray-300">
             
             <CircleCheckBig size={60} />
-            <p>COMPLETED Appointments</p>
+            <p>COMPLETED <br/>Appointments</p>
           </div>
           <div className="text-5xl font-ubuntu font-bold">
             {completed}
@@ -44,7 +44,7 @@ export default async function DoctorDashboardNumbersInfo({userId}:{userId: strin
         <div className="flex items-center justify-between w-1/2 p-2 rounded-sm h-full bg-white dark:bg-dark-4 shadow-dark dark:shadow-light">
           <div className="h-full font-bold flex flex-col items-start justify-center gap-2 text-gray-700 dark:text-gray-300">
             <Ban size={60} />
-            <p>CANCELLED Appointments</p>
+            <p>CANCELLED <br/>Appointments</p>
           </div>
           <div className="text-5xl font-ubuntu font-bold">
             {cancelled}

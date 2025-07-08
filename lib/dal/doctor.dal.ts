@@ -136,13 +136,34 @@ export const getDoctorDashboardNumbersFromDB = async (doctorId: string) => {
   };
 };
 
-export const getAllAppointmentsForDashboardDoctorFromDB = async (doctorId:string) => {
+export const getAllAppointmentsForDashboardDoctorFromDB = async (
+  doctorId: string
+) => {
   return await prisma.appointments.findMany({
-    where:{
-      doctorId
+    where: {
+      doctorId,
     },
-    orderBy:{
-      createdAt:"desc"
-    }
-  })
-}
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};
+
+export const getAllApprovedDoctorsFromDB = async () => {
+  return await prisma.doctorProfile.findMany({
+    where: {
+      isApproved: true,
+    },
+    select: {
+      doctorType: true,
+      clinicName: true,
+      user: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+        },
+      },
+    },
+  });
+};

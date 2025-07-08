@@ -1,0 +1,90 @@
+"use client";
+
+import { changeAppointmentDoctor } from "@/actions/admin.action";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { DoctorType } from "@prisma/client/edge";
+import { Check, X } from "lucide-react";
+import { useActionState, useEffect, useState } from "react";
+
+export default function EditAppointmentDoctor({
+  appointmentId,
+  currentDoctor,
+  currentPage,
+  doctors
+}: {
+  doctors: {
+    user: {
+        name: string;
+        id: string;
+        email: string;
+    };
+    doctorType: DoctorType;
+    clinicName: string | null;
+  }[]
+  currentDoctor: string;
+  appointmentId: string;
+  currentPage: number;
+}) {
+  const [doctor, setDoctor] = useState<string>(currentDoctor);
+  const [showBtns, setShowBtns] = useState<boolean>(false);
+  const [state, action, pending] = useActionState(changeAppointmentDoctor, undefined);
+
+  useEffect(() => {
+    if (doctor !== currentDoctor) setShowBtns(true);
+    else {
+      setShowBtns(false);
+    }
+  }, [doctor]);
+
+  return (
+    <>
+      <form
+        action={action}
+        onSubmit={() => {
+          setShowBtns(false);
+        }}
+        className="relative w-fit"
+      >
+        <input name="currentPage" value={currentPage} readOnly hidden />
+        <input name="currentDoctor" value={currentDoctor} readOnly hidden />
+        <input name="appointmentId" value={appointmentId} readOnly hidden />
+        <Select value={doctor} onValueChange={setDoctor} name="doctor">
+          <SelectTrigger className="!text-black dark:!text-white">
+            <SelectValue placeholder={currentDoctor} />
+          </SelectTrigger>
+
+          <SelectContent>
+            <SelectItem value="Unassigned">Unassigned</SelectItem>
+            {doctors.map((doctor, index)=>(
+              <SelectItem key={index} value={doctor.user.id}>{doctor.user.name}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+
+        {/* Submit Button */}
+        {showBtns && (
+          <div className="absolute z-10 -top-8 -right-17 h-8 w-[70px] flex justify-between items-center">
+            <button
+              type="submit"
+              className="bg-light-4 dark:bg-white text-white dark:text-black h-8 w-8 flex justify-center items-center rounded-sm"
+            >
+              <Check />
+            </button>
+            <button
+              className="bg-red-600 dark:bg-red-500 text-white dark:text-black h-8 w-8 flex justify-center items-center rounded-sm"
+              onClick={() => setDoctor(currentDoctor)}
+            >
+              <X />
+            </button>
+          </div>
+        )}
+      </form>
+    </>
+  );
+}

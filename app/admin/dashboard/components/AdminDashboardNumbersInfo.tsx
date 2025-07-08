@@ -32,7 +32,7 @@ export default async function AdminDashboardNumbersInfo() {
         <div className="flex items-center justify-between w-1/2 p-2 rounded-sm h-full bg-white dark:bg-dark-4 shadow-dark dark:shadow-light">
           <div className="h-full text-left flex flex-col items-start justify-center gap-2 text-gray-700 dark:text-gray-300">
             <MailWarning size={60} />
-            <p>Unread Inquiries</p>
+            <p>Unread <br/>Inquiries</p>
           </div>
           <div className="text-5xl font-ubuntu font-bold">
             {unreadInquiries}
@@ -41,7 +41,7 @@ export default async function AdminDashboardNumbersInfo() {
         <div className="flex items-center justify-between w-1/2 p-2 rounded-sm h-full bg-white dark:bg-dark-4 shadow-dark dark:shadow-light">
           <div className="h-full flex flex-col items-start justify-center gap-2 text-gray-700 dark:text-gray-300">
             <Clock size={60} />
-            <p>Pending Appointments</p>
+            <p>Pending <br/>Appointments</p>
           </div>
           <div className="text-5xl font-ubuntu font-bold">
             {pendingAppointments}

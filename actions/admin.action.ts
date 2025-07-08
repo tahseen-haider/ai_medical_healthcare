@@ -2,6 +2,7 @@
 
 import {
   addNewDoctorToDB,
+  changeAppointmentDoctorFromDB,
   changeInquiryStatusFromDB,
   changeUserRoleFromDB,
   changeUserVerificationStatusFromDB,
@@ -19,6 +20,7 @@ import {
   getInquiriesFromDB,
   getNewUserInfoFromDB,
 } from "@/lib/dal/admin.dal";
+import { getAllApprovedDoctorsFromDB } from "@/lib/dal/doctor.dal";
 import { insertUserToDB } from "@/lib/dal/user.dal";
 import { SignupFormSchema } from "@/lib/definitions";
 import {
@@ -41,7 +43,24 @@ export const getAdminDashboardNumbers = async () => {
 
 export const getAllAppointments = async (page: number, limit: number) => {
   return await getAllAppointmentsFromDB(page, limit);
-}
+};
+
+export const changeAppointmentDoctor = async (
+  state: {} | undefined,
+  formData: FormData
+) => {
+  const appointmentId = formData.get("appointmentId") as string;
+  const doctor = formData.get("doctor") as DoctorType;
+  const currentPage = formData.get("currentPage") as string;
+  const currentDoctor = formData.get("currentDoctor") as DoctorType;
+
+  if (!appointmentId || !doctor || currentDoctor === doctor) return;
+
+  await changeAppointmentDoctorFromDB(appointmentId, doctor);
+
+  revalidatePath(`/admin/user-management?page=${currentPage}`);
+  return {};
+};
 
 export const getAllUsers = async (page: number, limit: number) => {
   return await getAllUsersFromDB(page, limit);
@@ -93,7 +112,7 @@ export const getInquiries = async (): Promise<GetInquiriesForDashboardDTO> => {
       email: inquiry.email,
       message: inquiry.inquiry,
       is_read: inquiry.is_read,
-      id: inquiry.id
+      id: inquiry.id,
     };
   });
 };
@@ -125,6 +144,9 @@ export const getAllDoctors = async (page = 1, limit = 10) => {
   return await getAllDoctorsFromDB(page, limit);
 };
 
+export const getAllApprovedDoctors = async () => {
+  return await getAllApprovedDoctorsFromDB();
+};
 export const addNewDoctor = async (
   state: { message: string; success?: boolean } | undefined,
   formData: FormData
@@ -203,13 +225,16 @@ export const deleteInquiry = async (
   return { message: "", success: true };
 };
 
-export const deleteAppointment = async (state: {} | undefined, formData: FormData) => {
+export const deleteAppointment = async (
+  state: {} | undefined,
+  formData: FormData
+) => {
   const appId = formData.get("appId") as string;
   const res = await deleteAppointmentFromDB(appId);
   if (!res) return;
   revalidatePath("/admin/appointments");
-  return{}
-}
+  return {};
+};
 
 export const deleteUser = async (state: {} | undefined, formData: FormData) => {
   const userId = formData.get("userId") as string;
@@ -259,6 +284,6 @@ export const changeInquiryStatus = async (formData: FormData) => {
   await changeInquiryStatusFromDB(inquiryId);
 };
 
-export const getNewUserInfo = async () => { 
-  return await getNewUserInfoFromDB()
- }
+export const getNewUserInfo = async () => {
+  return await getNewUserInfoFromDB();
+};

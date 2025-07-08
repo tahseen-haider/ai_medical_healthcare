@@ -26,6 +26,19 @@ export const getAllVerifiedUsersFromDB = async () => {
   return users;
 };
 
+export const changeAppointmentDoctorFromDB = async (appointmentId:string, doctor:string) =>{
+  const doctorId = doctor === "Unassigned"? null : doctor;
+  return await prisma.appointments.update({
+    where:{
+      id: appointmentId
+    },
+    data:{
+      doctorId
+    }
+  })
+}
+
+
 export const getAllAppointmentsFromDB = async (page: number, limit: number) => {
   const [appointments, count] = await Promise.all([
     prisma.appointments.findMany({
@@ -46,6 +59,7 @@ export const getAllAppointmentsFromDB = async (page: number, limit: number) => {
         doctor: {
           select: {
             name: true,
+            id: true,
           },
         },
       },
@@ -80,6 +94,7 @@ export const getAllUsersFromDB = async (page: number, limit: number) => {
         createdAt: true,
         role: true,
         is_verified: true,
+        ai_tokens_used: true,
       },
       skip,
       take: limit,
@@ -395,20 +410,20 @@ export const changeUserRoleFromDB = async (
     },
   });
 
-if (currentRole === "doctor") {
-  await prisma.doctorProfile.delete({
-    where: { userId },
-  });
+  if (currentRole === "doctor") {
+    await prisma.doctorProfile.delete({
+      where: { userId },
+    });
 
-  await prisma.appointments.updateMany({
-    where: {
-      doctorId: user.id,
-    },
-    data: {
-      doctorId: null,
-    },
-  });
-}
+    await prisma.appointments.updateMany({
+      where: {
+        doctorId: user.id,
+      },
+      data: {
+        doctorId: null,
+      },
+    });
+  }
 
   if (role === "doctor") {
     await prisma.doctorProfile.create({
@@ -522,6 +537,6 @@ export const getNewUserInfoFromDB = async () => {
       number: grouped[dateStr] || 0,
     };
   });
-await new Promise(res=>setTimeout(res,2000))
+  await new Promise((res) => setTimeout(res, 2000));
   return final;
 };
