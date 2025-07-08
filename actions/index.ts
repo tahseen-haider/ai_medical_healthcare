@@ -16,6 +16,7 @@ import cloudinary from "@/lib/cloudinary";
 import { getUser, getUserCredentialsByEmail } from "@/lib/dal/user.dal";
 import { v4 as uuidv4 } from "uuid";
 import { redirect } from "next/navigation";
+import { getUserIdnRoleIfAuthenticated } from "@/lib/session";
 
 export const contactUs = async (
   state: ContactFormState,
@@ -153,7 +154,10 @@ export const saveProfileChanges = async (
 };
 
 export const getPfp = async () => {
-  const user = await getUser();
+  const session = await getUserIdnRoleIfAuthenticated();
+    if (!session) return;
+
+  const user = await getUser(session.userId);
   if (!user?.pfp) return;
 
   return `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/${user.pfp}`;

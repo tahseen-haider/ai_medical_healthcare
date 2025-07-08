@@ -17,13 +17,14 @@ import ProfilePicture from "../ProfilePicture";
 import LoadingScreen from "../LoadingScreen";
 import { UserProfileDTO } from "@/lib/dto/user.dto";
 import Link from "next/link";
+import { UserType } from "@/lib/definitions";
 
 export default function ProfileButton({ imageUrl }: { imageUrl?: string }) {
   const [state, action, pending] = useActionState(logout, undefined);
   const [stateDeletingAccount, deleteAccountAction, pendingDeletingAccount] =
     useActionState(deleteUserAccount, undefined);
 
-  const [user, setUser] = useState<UserProfileDTO | undefined>();
+  const [user, setUser] = useState<UserType | undefined>();
   const [open, setOpen] = useState(false);
   const [showDeleteAccountPopUp, setShowDeleteAccountPopUp] = useState(false);
 

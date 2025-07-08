@@ -1,18 +1,18 @@
 import { getCurrentlyAuthenticatedUser } from "@/actions/auth.action";
-import { getPfp } from "@/actions";
 import UserProfile from "./components/UserProfile";
 import AdminProfile from "./components/AdminProfile";
 import DoctorProfile from "./components/DoctorProfile";
+import { redirect } from "next/navigation";
 
 export default async function page() {
   const user = await getCurrentlyAuthenticatedUser();
-  const pfp = await getPfp();
+  if (!user) return redirect("/");
 
   return user.role === "admin" ? (
-    <AdminProfile user={user} pfp={pfp}/>
+    <AdminProfile user={user} />
   ) : user.role === "doctor" ? (
-    <DoctorProfile user={user} pfp={pfp}/>
+    <DoctorProfile user={user} />
   ) : (
-    <UserProfile user={user} pfp={pfp} />
+    <UserProfile user={user} />
   );
 }

@@ -13,18 +13,16 @@ import {
 import bcrypt from "bcryptjs";
 import cloudinary from "../cloudinary";
 import { redirect } from "next/navigation";
+import { UserType } from "../definitions";
 
 export const getUserIdnRoleIfAuthenticatedAction = async () => {
   return await getUserIdnRoleIfAuthenticated();
 };
 
-export const getUser = async () => {
-  const session = await getUserIdnRoleIfAuthenticated();
-  if (!session) return;
-
+export const getUser = async (userId: string): Promise<UserType | undefined> => {
   try {
     const user = await prisma.user.findUnique({
-      where: { id: session.userId },
+      where: { id: userId },
       include: {
         appointmentsAsDoctor: true,
         appointmentsAsPatient: true,
@@ -33,7 +31,7 @@ export const getUser = async () => {
     });
     if (!user) return;
 
-    const {password, token, ...restUser} = user || {}
+    const { password, token, ...restUser } = user || {};
 
     return restUser;
   } catch (error) {

@@ -25,7 +25,7 @@ import {
   ResetPasswordFormState,
   ResetPasswordFormSchema,
 } from "@/lib/definitions";
-import { createSession, deleteSession } from "@/lib/session";
+import { createSession, deleteSession, getUserIdnRoleIfAuthenticated } from "@/lib/session";
 import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
 import nodemailer from "nodemailer";
@@ -391,7 +391,10 @@ export async function verifyEmail(
 }
 
 export async function getCurrentlyAuthenticatedUser() {
-  const user = await getUser();
+  const session = await getUserIdnRoleIfAuthenticated();
+  if (!session) return;
+
+  const user = await getUser(session.userId);
   if (!user) {
     await deleteSession();
     redirect("/login");

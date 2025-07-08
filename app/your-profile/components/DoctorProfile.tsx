@@ -15,19 +15,16 @@ import {
   GraduationCap,
   Building,
   DollarSign,
-  MessageCircle,
-  UserPlus,
 } from "lucide-react";
 import EditButton from "./editButton";
 import ProfilePageImage from "./ProfilePageImage";
 
 export default function DoctorProfile({
   user,
-  pfp,
 }: {
   user: UserType;
-  pfp: string | undefined;
 }) {
+  const pfp = `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/${user.pfp}`
   const doctorProfile = user.doctorProfile;
   const totalAppointments = user.appointmentsAsDoctor.length;
   const pendingAppointments = user.appointmentsAsDoctor.filter(
@@ -70,13 +67,7 @@ export default function DoctorProfile({
               {/* Profile Image */}
               <div className="flex-shrink-0">
                 <div className="w-32 h-32 rounded-lg overflow-hidden bg-gray-200">
-                  {pfp ? (
-                    <ProfilePageImage image={pfp} size={128} />
-                  ) : (
-                    <div className="w-full h-full flex items-center justify-center bg-blue-100">
-                      <User className="w-16 h-16 text-blue-400" />
-                    </div>
-                  )}
+                  {pfp && <ProfilePageImage image={pfp} size={128} />}
                 </div>
               </div>
 
@@ -297,7 +288,9 @@ export default function DoctorProfile({
                       )}
                       {user.gender && (
                         <div className="flex justify-between">
-                          <span className="text-sm text-gray-600 dark:text-gray-400">Gender</span>
+                          <span className="text-sm text-gray-600 dark:text-gray-400">
+                            Gender
+                          </span>
                           <span className="text-sm text-gray-900 dark:text-gray-100">
                             {user.gender}
                           </span>
@@ -350,7 +343,9 @@ export default function DoctorProfile({
                         <div className="text-2xl font-bold text-yellow-600">
                           {pendingAppointments}
                         </div>
-                        <div className="text-sm text-gray-600 dark:text-gray-400">Pending</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                          Pending
+                        </div>
                       </CardContent>
                     </Card>
                     <Card>
@@ -358,7 +353,9 @@ export default function DoctorProfile({
                         <div className="text-2xl font-bold text-green-600">
                           {completedAppointments}
                         </div>
-                        <div className="text-sm text-gray-600 dark:text-gray-400">Completed</div>
+                        <div className="text-sm text-gray-600 dark:text-gray-400">
+                          Completed
+                        </div>
                       </CardContent>
                     </Card>
                   </div>
