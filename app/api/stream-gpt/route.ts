@@ -53,6 +53,10 @@ export async function GET(req: NextRequest) {
 
         messages.push({ role: "user", content: userContent });
 
+        // To count tokens used
+        let tokensUsed = 0;
+
+        // LLM invoke
         const completion = await openai.chat.completions.create({
           model: "gpt-4o-mini",
           stream: true,
@@ -66,6 +70,8 @@ export async function GET(req: NextRequest) {
           const cleanedToken = token.replace(/\n+/g, "\n");
 
           fullResponse += cleanedToken;
+
+          tokensUsed++;
 
           const data = JSON.stringify({ token: cleanedToken });
           controller.enqueue(encoder.encode(`data: ${data}\n\n`));
@@ -104,6 +110,26 @@ export async function GET(req: NextRequest) {
             });
           }
         }
+
+        // Save TokensUsed in this response
+        const user = await prisma.chatSession.findFirst({
+          where: {
+            id: chatId!,
+          },
+          select: {
+            user: true,
+          },
+        });
+        await prisma.user.update({
+          where: {
+            id: user?.user.id,
+          },
+          data: {
+            ai_tokens_used: user?.user.ai_tokens_used
+              ? user?.user.ai_tokens_used + tokensUsed
+              : tokensUsed,
+          },
+        });
 
         // Save assistant message
         if (chatId) {

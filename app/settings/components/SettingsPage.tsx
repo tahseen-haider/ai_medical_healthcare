@@ -10,7 +10,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useRouter } from "next/navigation";
 import { saveProfileChanges } from "@/actions";
 import LoadingScreen from "@/components/LoadingScreen";
 import { Pencil } from "lucide-react";
@@ -24,7 +23,6 @@ export default function SettingsPage({
   user: UserProfileDTO;
   imageUrl?: string;
 }) {
-  const router = useRouter();
 
   const [name, setName] = useState(user?.name);
   const [email, setEmail] = useState(user?.email);

@@ -41,6 +41,10 @@ export default async function page() {
             <h3>Gender</h3>
             <p>{user?.gender || "N/A"}</p>
           </div>
+          <div className="grid grid-cols-2 gap-4">
+            <h3>Tokens User</h3>
+            <p>{user?.ai_tokens_used || "N/A"}</p>
+          </div>
         </div>
       </section>
     </div>

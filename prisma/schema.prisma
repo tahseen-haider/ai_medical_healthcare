@@ -29,6 +29,7 @@ model User {
   is_verified Boolean @default(false)
   token      Int?
   doctorProfile DoctorProfile?
+  ai_tokens_used Int?
 
   chats      ChatSession[]
   accounts    Account[]

@@ -149,7 +149,7 @@ export const saveProfileChanges = async (
 
   if (!changed) return { message: "Something went wrong." };
 
-  return redirect("/");
+  return redirect("/your-profile");
 };
 
 export const getPfp = async () => {

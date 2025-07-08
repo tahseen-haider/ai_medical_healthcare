@@ -33,6 +33,7 @@ export const getUser = async (): Promise<UserProfileDTO | undefined> => {
         gender: true,
         role: true,
         pfp: true,
+        ai_tokens_used: true
       },
     });
     if (!user) return;
@@ -45,6 +46,7 @@ export const getUser = async (): Promise<UserProfileDTO | undefined> => {
       gender: user.gender ? user.gender : undefined,
       role: user.role,
       pfp: user.pfp ? user.pfp : undefined,
+      ai_tokens_used: user.ai_tokens_used
     };
   } catch (error) {
     console.log(error);

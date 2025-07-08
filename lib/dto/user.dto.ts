@@ -8,7 +8,8 @@ export type UserProfileDTO = {
   email: string | null;
   phone: string | undefined;
   role: UserRole;
-  pfp: string | undefined
+  pfp: string | undefined;
+  ai_tokens_used: number | null
 };
 
 export type UserCredentialDTO = {
