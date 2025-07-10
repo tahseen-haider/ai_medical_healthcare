@@ -10,12 +10,11 @@ import {
   Calendar,
   Clock,
   Heart,
-  Activity,
   FileText,
   Shield,
+  Edit3,
 } from "lucide-react";
 import ProfilePageImage from "./ProfilePageImage";
-import EditButton from "./editButton";
 import Link from "next/link";
 
 export default function UserProfile({ user }: { user: UserType }) {
@@ -116,7 +115,13 @@ export default function UserProfile({ user }: { user: UserType }) {
 
                   {/* Action Buttons */}
                   <div className="flex flex-col gap-2">
-                    <EditButton />
+                    <Link
+                      href="/settings"
+                      className="rounded-lg p-2 flex items-center justify-center font-bold text-[14px] text-white dark:text-black text-center bg-light-4 dark:bg-white"
+                    >
+                      <Edit3 className="inline mr-2" />
+                      Edit Profile
+                    </Link>
                   </div>
                 </div>
               </div>
@@ -207,8 +212,8 @@ export default function UserProfile({ user }: { user: UserType }) {
 
                     <div className="space-y-3">
                       {user.appointmentsAsPatient.map((appointment) => (
-                        <Card key={appointment.id}>
-                          <CardContent className="p-4">
+                        <Card key={appointment.id} className="py-4">
+                          <CardContent>
                             <div className="flex justify-between items-start">
                               <div className="flex items-start gap-4">
                                 <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
@@ -456,9 +461,36 @@ export default function UserProfile({ user }: { user: UserType }) {
                           Last Checkup
                         </span>
                         <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                          {user.lastCheckUp
-                            ?.toLocaleDateString()
-                            .split("T")[1] || "N/A"}
+                          {(() => {
+                            if (!user.lastLogin) return "N/A";
+
+                            const loginDate = new Date(user.lastLogin);
+                            const now = new Date();
+
+                            const login = new Date(
+                              loginDate.getFullYear(),
+                              loginDate.getMonth(),
+                              loginDate.getDate()
+                            );
+                            const today = new Date(
+                              now.getFullYear(),
+                              now.getMonth(),
+                              now.getDate()
+                            );
+
+                            const diffInMs = today.getTime() - login.getTime();
+                            const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+
+                            if (diffInDays === 0) return "Today";
+                            if (diffInDays === 1) return "Yesterday";
+                            if (diffInDays < 7) return `${diffInDays} days ago`;
+
+                            return loginDate.toLocaleDateString(undefined, {
+                              year: "numeric",
+                              month: "short",
+                              day: "numeric",
+                            });
+                          })()}
                         </span>
                       </div>
                     </CardContent>
@@ -498,8 +530,36 @@ export default function UserProfile({ user }: { user: UserType }) {
                           Last Login
                         </span>
                         <span className="text-sm font-medium text-gray-900 dark:text-gray-100">
-                          {user.lastLogin?.toLocaleDateString().split("T")[1] ||
-                            "N/A"}
+                          {(() => {
+                            if (!user.lastLogin) return "N/A";
+
+                            const loginDate = new Date(user.lastLogin);
+                            const now = new Date();
+
+                            const login = new Date(
+                              loginDate.getFullYear(),
+                              loginDate.getMonth(),
+                              loginDate.getDate()
+                            );
+                            const today = new Date(
+                              now.getFullYear(),
+                              now.getMonth(),
+                              now.getDate()
+                            );
+
+                            const diffInMs = today.getTime() - login.getTime();
+                            const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+
+                            if (diffInDays === 0) return "Today";
+                            if (diffInDays === 1) return "Yesterday";
+                            if (diffInDays < 7) return `${diffInDays} days ago`;
+
+                            return loginDate.toLocaleDateString(undefined, {
+                              year: "numeric",
+                              month: "short",
+                              day: "numeric",
+                            });
+                          })()}
                         </span>
                       </div>
                     </CardContent>

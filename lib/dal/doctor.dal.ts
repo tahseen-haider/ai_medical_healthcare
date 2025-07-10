@@ -90,6 +90,20 @@ export const changeAppointmentStatusFromDB = async (
   appointmentId: string,
   status: AppointmentStatus
 ) => {
+  if (status === "COMPLETED") {
+    await prisma.appointments.update({
+      where: {
+        id: appointmentId,
+      },
+      data: {
+        patient: {
+          update: {
+            lastCheckUp: new Date(Date.now()),
+          },
+        },
+      },
+    });
+  }
   const user = await prisma.appointments.update({
     where: {
       id: appointmentId,

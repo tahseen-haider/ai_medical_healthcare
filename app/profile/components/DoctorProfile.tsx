@@ -10,14 +10,14 @@ import {
   Mail,
   Calendar,
   Clock,
-  User,
   Stethoscope,
   GraduationCap,
   Building,
   DollarSign,
+  Edit3,
 } from "lucide-react";
-import EditButton from "./editButton";
 import ProfilePageImage from "./ProfilePageImage";
+import Link from "next/link";
 
 export default function DoctorProfile({ user }: { user: UserType }) {
   const pfp = `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${user.pfp}`;
@@ -129,7 +129,13 @@ export default function DoctorProfile({ user }: { user: UserType }) {
 
                   {/* Action Buttons */}
                   <div className="flex flex-col gap-2">
-                    <EditButton />
+                    <Link
+                      href="/settings"
+                      className="rounded-lg p-2 flex items-center justify-center font-bold text-[14px] text-white dark:text-black text-center bg-light-4 dark:bg-white"
+                    >
+                      <Edit3 className="inline mr-2" />
+                      Edit Profile
+                    </Link>
                   </div>
                 </div>
               </div>

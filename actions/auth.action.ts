@@ -7,6 +7,7 @@ import {
   insertUserToDB,
   isUserVerified,
   resetPasswordInDB,
+  setLoginDate,
   setUserToken,
   verifyEmailTokenfromDB,
   verifyToken,
@@ -25,7 +26,11 @@ import {
   ResetPasswordFormState,
   ResetPasswordFormSchema,
 } from "@/lib/definitions";
-import { createSession, deleteSession, getUserIdnRoleIfAuthenticated } from "@/lib/session";
+import {
+  createSession,
+  deleteSession,
+  getUserIdnRoleIfAuthenticated,
+} from "@/lib/session";
 import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
 import nodemailer from "nodemailer";
@@ -347,6 +352,8 @@ export async function login(state: LoginFormState, formData: FormData) {
   if (!isPasswordMatched)
     return { success: false, message: "Email or password is incorrect" };
 
+  await setLoginDate(user.id);
+  
   await createSession(user.id, user.role);
   if (user.role === "user") {
     return redirect("/");

@@ -349,3 +349,14 @@ export async function updateUserProfileInDB(userData: {
     },
   });
 }
+
+export async function setLoginDate(userId: string) {
+  await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      lastLogin: new Date(Date.now()),
+    },
+  });
+}

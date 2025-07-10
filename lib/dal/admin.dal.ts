@@ -540,3 +540,36 @@ export const getNewUserInfoFromDB = async () => {
   await new Promise((res) => setTimeout(res, 2000));
   return final;
 };
+
+export async function updateAdminProfileInDB(adminData: {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  dob: string;
+  gender: string;
+  pfp: string;
+}) {
+  const { id, name, email, phone, dob, gender, pfp } = adminData;
+
+  const existingAdmin = await prisma.user.findUnique({
+    where: { id },
+    select: { pfp: true },
+  });
+
+  if (existingAdmin?.pfp && existingAdmin.pfp !== pfp) {
+    await cloudinary.uploader.destroy(existingAdmin.pfp);
+  }
+
+  return await prisma.user.update({
+    where: { id },
+    data: {
+      name,
+      email,
+      phone,
+      dob,
+      gender,
+      pfp,
+    },
+  });
+}

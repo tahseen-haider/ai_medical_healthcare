@@ -19,6 +19,7 @@ import {
   getInquiriesForPaginationFromDB,
   getInquiriesFromDB,
   getNewUserInfoFromDB,
+  updateAdminProfileInDB,
 } from "@/lib/dal/admin.dal";
 import { getAllApprovedDoctorsFromDB } from "@/lib/dal/doctor.dal";
 import { insertUserToDB } from "@/lib/dal/user.dal";
@@ -287,3 +288,26 @@ export const changeInquiryStatus = async (formData: FormData) => {
 export const getNewUserInfo = async () => {
   return await getNewUserInfoFromDB();
 };
+
+export async function updateAdminProfile(_prevState: any, formData: FormData) {
+  try {
+    const updatedAdmin = {
+      id: formData.get("id") as string,
+      name: formData.get("name") as string,
+      email: formData.get("email") as string,
+      phone: formData.get("phone") as string,
+      dob: formData.get("dob") as string,
+      gender: formData.get("gender") as string,
+      pfp: formData.get("pfp") as string,
+    };
+
+    const res = await updateAdminProfileInDB(updatedAdmin);
+    if (!res) return { success: false };
+
+    revalidatePath("/admin/your-profile");
+    return { success: true };
+  } catch (error) {
+    console.error("Error updating admin profile:", error);
+    return { success: false };
+  }
+}

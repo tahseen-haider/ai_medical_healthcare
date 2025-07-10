@@ -91,6 +91,10 @@ export default function UserProfileEdit({ user }: EditUserProfileProps) {
   };
 
   useEffect(() => {
+      if (state.success) window.location.href = "/profile";
+    }, [state.success]);
+    
+  useEffect(() => {
     const handleUnload = () => {
       if (!state.success && uploadedPublicId) {
         navigator.sendBeacon(
