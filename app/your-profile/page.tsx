@@ -1,11 +1,10 @@
-import { ReactElement } from "react";
 import { getCurrentlyAuthenticatedUser } from "@/actions/auth.action";
-import UserProfile from "./components/UserProfile";
+import { redirect } from "next/navigation";
 import AdminProfile from "./components/AdminProfile";
 import DoctorProfile from "./components/DoctorProfile";
-import { redirect } from "next/navigation";
+import UserProfile from "./components/UserProfile";
 
-export default async function Page(): Promise<ReactElement> {
+export default async function Page() {
   const user = await getCurrentlyAuthenticatedUser();
   if (!user) redirect("/");
 
