@@ -1,7 +1,6 @@
 "use client";
 import { setAppointment } from "@/actions";
 import Btn from "@/components/Button";
-import FindUsHereSection from "@/components/FindUsHereSection";
 import LoadingScreen from "@/components/LoadingScreen";
 import PopUpCard from "@/components/PopUpCard";
 import { DatePickerWithPresets } from "@/components/ui/DatePicker";
@@ -10,6 +9,7 @@ import { TimePicker } from "@/components/ui/TimePicker";
 import { useActionState, useEffect, useState } from "react";
 import SelectDoctor from "./SelectDoctor";
 import { $Enums } from "@prisma/client/edge";
+import { Calendar } from "lucide-react";
 
 export default function AppointmentPage({
   patientId,
@@ -55,16 +55,17 @@ export default function AppointmentPage({
 
   return (
     <main className="flex flex-col items-center">
-      <section className="px-2 sm:px-6 py-4 flex items-center flex-col  gap-6 max-w-[500px] w-full">
-        <div className="flex justify-between w-full">
-          <div className="flex flex-col gap-3">
-            <h1 className="font-ubuntu font-bold text-4xl text-dark-4 dark:text-white -tracking-[0.5px]">
-              Appointment
-            </h1>
-            <h5 className="font-bold font-ubuntu text-base text-gray-600 dark:text-gray-400">
-              Arrange a meeting with a real doctor for checkup
-            </h5>
+      <section className="px-2 sm:px-6 py-4 flex items-center flex-col mb-20 gap-6 max-w-[500px] w-full">
+        <div className="w-full text-center">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-full">
+              <Calendar className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+            </div>
           </div>
+          <h1 className="font-ubuntu font-bold text-3xl text-dark-4 dark:text-white mb-2">Book Appointment</h1>
+          <p className="font-ubuntu text-lg text-gray-600 dark:text-gray-400">
+            Schedule a consultation with our qualified doctors
+          </p>
         </div>
         {/* Form */}
         <form
@@ -246,7 +247,6 @@ export default function AppointmentPage({
       </section>
       {/* Find Us */}
       <div className="w-full max-w-[1920px]">
-        <FindUsHereSection />
       </div>
     </main>
   );

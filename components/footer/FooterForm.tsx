@@ -6,7 +6,7 @@ export default function FooterForm() {
   return (
     <form
       action=""
-      className="border-2 border-gray-300 dark:border-white bg-gray-200 dark:bg-gray-950 rounded-lg p-[4px] max-w-[400px] flex justify-between"
+      className="border-[1px] border-gray-300 dark:border-white bg-gray-200 dark:bg-gray-950 rounded-lg p-[4px] max-w-[400px] flex justify-between"
     >
       <input
         type="email"

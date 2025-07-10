@@ -28,7 +28,7 @@ export default function ChatList({ chatsList }: { chatsList: chatsListType }) {
         <Link
           href={`/assistant/${ele.id}`}
           key={index}
-          className={`h-10 w-full border-2 ${
+          className={`h-10 w-full border-[1px] ${
             ele.id === chatId
               ? "bg-light-4 dark:bg-dark-4 font-bold text-white dark:text-white"
               : "bg-light-1 dark:bg-gray-950 font-normal"

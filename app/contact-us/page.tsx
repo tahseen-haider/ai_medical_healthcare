@@ -4,6 +4,7 @@ import Btn from "@/components/Button";
 import FindUsHereSection from "@/components/FindUsHereSection";
 import LoadingScreen from "@/components/LoadingScreen";
 import PopUpCard from "@/components/PopUpCard";
+import { PhoneCallIcon } from "lucide-react";
 import { useActionState, useEffect, useState } from "react";
 
 export default function ContactUsPage() {
@@ -11,23 +12,26 @@ export default function ContactUsPage() {
   const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
-  if (state?.is_submitted) {
-    setShowPopup(true);
-  }
-}, [state]);
+    if (state?.is_submitted) {
+      setShowPopup(true);
+    }
+  }, [state]);
 
   return (
     <main className="flex flex-col items-center">
       <section className="px-2 sm:px-6 py-4 flex items-center flex-col  gap-6 max-w-[500px] w-full">
-        <div className="flex justify-between w-full">
-          <div className="flex flex-col gap-3">
-            <h1 className="font-ubuntu font-bold text-4xl text-dark-4 dark:text-white -tracking-[0.5px] ">
-              Contact Us
-            </h1>
-            <h5 className="font-bold font-ubuntu text-base text-gray-600 dark:text-gray-400">
-              Kindly reach us to get the fastest response and treatment
-            </h5>
+        <div className="w-full text-center">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-full">
+              <PhoneCallIcon className="w-8 h-8 text-blue-600 dark:text-blue-400" />
+            </div>
           </div>
+          <h1 className="font-ubuntu font-bold text-3xl text-dark-4 dark:text-white mb-2">
+            Contact Us
+          </h1>
+          <p className="font-ubuntu text-lg text-gray-600 dark:text-gray-400">
+            Have a question or suggestion? We're here to help.
+          </p>
         </div>
         {/* Form */}
         <form
@@ -75,7 +79,7 @@ export default function ContactUsPage() {
               name="inquiry"
               placeholder="Enter your message here"
               required
-              className="block border-2 h-40 bg-gray-200 dark:bg-gray-950 border-gray-200 w-full p-4 rounded-sm mt-2 focus:bg-gray-100 dark:focus:bg-gray-800"
+              className="block border-[1px] h-40 bg-gray-200 dark:bg-gray-950 border-gray-200 w-full p-4 rounded-sm mt-2 focus:bg-gray-100 dark:focus:bg-gray-800"
             />
           </div>
           <button
@@ -110,10 +114,7 @@ export default function ContactUsPage() {
               </div>
             </div>
 
-            <Btn
-              className=" w-2/4 text-lg"
-              onClick={() => setShowPopup(false)}
-            >
+            <Btn className=" w-2/4 text-lg" onClick={() => setShowPopup(false)}>
               Close
             </Btn>
           </PopUpCard>

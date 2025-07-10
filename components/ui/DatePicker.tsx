@@ -34,7 +34,7 @@ export function DatePickerWithPresets({
           id="selectDate"
           variant={"outline"}
           className={cn(
-            "w-full border-2 hover:dark:bg-gray-950 bg-gray-200 dark:bg-gray-950 border-gray-400 dark:border-gray-200 flex h-14 p-4 rounded-sm mt-2  justify-start text-left font-normal",
+            "w-full border-[1px] hover:dark:bg-gray-950 bg-gray-200 dark:bg-gray-950 border-gray-400 dark:border-gray-200 flex h-14 p-4 rounded-sm mt-2  justify-start text-left font-normal",
             !date && "text-muted-foreground"
           )}
         >
