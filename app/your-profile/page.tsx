@@ -4,7 +4,7 @@ import AdminProfile from "./components/AdminProfile";
 import DoctorProfile from "./components/DoctorProfile";
 import { redirect } from "next/navigation";
 
-export default async function page() {
+export default async function Page() {
   const user = await getCurrentlyAuthenticatedUser();
   if (!user) return redirect("/");
 
