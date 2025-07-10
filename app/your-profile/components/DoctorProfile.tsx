@@ -19,12 +19,8 @@ import {
 import EditButton from "./editButton";
 import ProfilePageImage from "./ProfilePageImage";
 
-export default function DoctorProfile({
-  user,
-}: {
-  user: UserType;
-}) {
-  const pfp = `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${user.pfp}`
+export default function DoctorProfile({ user }: { user: UserType }) {
+  const pfp = `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${user.pfp}`;
   const doctorProfile = user.doctorProfile;
   const totalAppointments = user.appointmentsAsDoctor.length;
   const pendingAppointments = user.appointmentsAsDoctor.filter(
@@ -57,6 +53,20 @@ export default function DoctorProfile({
       </div>
     );
   };
+
+  const daysOfWeekOrder = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday",
+  ];
+
+  const sortedAvailableDays = doctorProfile?.availableDays
+    ?.slice()
+    .sort((a, b) => daysOfWeekOrder.indexOf(a) - daysOfWeekOrder.indexOf(b));
 
   return (
     <div className="min-h-screen p-4">
@@ -301,27 +311,26 @@ export default function DoctorProfile({
                 </div>
 
                 {/* Availability */}
-                {doctorProfile?.availableDays &&
-                  doctorProfile.availableDays.length > 0 && (
-                    <div>
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2 mb-4">
-                        <Calendar className="w-5 h-5" />
-                        Availability
-                      </h3>
-                      <div className="flex flex-wrap gap-2">
-                        {doctorProfile.availableDays.map((day) => (
-                          <Badge key={day} variant="outline">
-                            {day}
-                          </Badge>
-                        ))}
-                      </div>
-                      {doctorProfile.availableTimes && (
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
-                          Times: {doctorProfile.availableTimes}
-                        </p>
-                      )}
+                {sortedAvailableDays && sortedAvailableDays.length > 0 && (
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2 mb-4">
+                      <Calendar className="w-5 h-5" />
+                      Availability
+                    </h3>
+                    <div className="flex flex-wrap gap-2">
+                      {sortedAvailableDays.map((day) => (
+                        <Badge key={day} variant="outline">
+                          {day}
+                        </Badge>
+                      ))}
                     </div>
-                  )}
+                    {doctorProfile!.availableTimes && (
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mt-2">
+                        Times: {doctorProfile!.availableTimes}
+                      </p>
+                    )}
+                  </div>
+                )}
               </TabsContent>
 
               <TabsContent value="appointments" className="p-6">
