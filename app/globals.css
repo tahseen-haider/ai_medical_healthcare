@@ -134,7 +134,7 @@
     @apply bg-background text-foreground;
   }
   .input-field {
-    @apply block border-2 bg-gray-200 dark:bg-gray-950 border-gray-400 dark:border-gray-200 h-14 w-full p-4 rounded-sm mt-2 outline-0 focus:bg-gray-100 dark:focus:bg-gray-800
+    @apply block border-[1px] bg-gray-200 dark:bg-gray-950 border-gray-400 dark:border-gray-200 h-14 w-full p-4 rounded-sm mt-2 outline-0 focus:bg-gray-100 dark:focus:bg-gray-800
   }
 }
 

@@ -39,9 +39,6 @@ export default function UserProfileEdit({ user }: EditUserProfileProps) {
     gender: user.gender || "",
     bloodType: user.bloodType || "",
     allergies: user.allergies || [],
-    emailNotifications: user.emailNotifications ?? true,
-    smsReminders: user.smsReminders ?? true,
-    twoFactorEnabled: user.twoFactorEnabled ?? false,
   };
 
   const initialPfp = pfp;
@@ -72,9 +69,6 @@ export default function UserProfileEdit({ user }: EditUserProfileProps) {
     gender: user.gender || "",
     bloodType: user.bloodType || "",
     allergies: user.allergies || [],
-    emailNotifications: user.emailNotifications ?? true,
-    smsReminders: user.smsReminders ?? true,
-    twoFactorEnabled: user.twoFactorEnabled ?? false,
   });
 
   const initialState = { success: false };
@@ -200,9 +194,6 @@ export default function UserProfileEdit({ user }: EditUserProfileProps) {
     form.append("pfp", profileImage?.split("/image/upload/")[1] || "");
     form.append("bloodType", formData.bloodType);
     form.append("allergies", JSON.stringify(formData.allergies));
-    form.append("emailNotifications", formData.emailNotifications.toString());
-    form.append("smsReminders", formData.smsReminders.toString());
-    form.append("twoFactorEnabled", formData.twoFactorEnabled.toString());
 
     startTransition(() => {
       formAction(form);
@@ -299,6 +290,7 @@ export default function UserProfileEdit({ user }: EditUserProfileProps) {
                       Email
                     </Label>
                     <Input
+                    readOnly
                       id="email"
                       type="email"
                       value={formData.email}

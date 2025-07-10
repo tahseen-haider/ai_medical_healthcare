@@ -318,9 +318,6 @@ export async function updateUserProfileInDB(userData: {
   pfp: string;
   bloodType: string;
   allergies: string[];
-  emailNotifications: boolean;
-  smsReminders: boolean;
-  twoFactorEnabled: boolean;
 }) {
   const { id, name, email, phone, dob, gender, pfp, bloodType, allergies } =
     userData;

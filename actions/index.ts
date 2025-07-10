@@ -176,9 +176,6 @@ export async function updateUserProfile(_prevState: any, formData: FormData) {
       pfp: formData.get("pfp") as string,
       bloodType: formData.get("bloodType") as string,
       allergies: JSON.parse(formData.get("allergies") as string),
-      emailNotifications: formData.get("emailNotifications") === "true",
-      smsReminders: formData.get("smsReminders") === "true",
-      twoFactorEnabled: formData.get("twoFactorEnabled") === "true",
     };
 
     const res = await updateUserProfileInDB(updatedUser);

@@ -39,7 +39,7 @@ export default function SignupPage() {
           </div>
         </div>
         {/* Form */}
-        <div className="w-full rounded-lg shadow-light dark:shadow-dark py-16 px-5 flex flex-col items-center gap-12 max-w-[500px] dark:bg-dark-4">
+        <div className="w-full rounded-sm shadow-light dark:shadow-dark py-16 px-5 flex flex-col items-center gap-12 max-w-[500px] dark:bg-dark-4">
           {/* OAuth */}
           <div className="w-full flex justify-between text-black font-bold">
             <button

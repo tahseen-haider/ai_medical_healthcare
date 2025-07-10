@@ -117,9 +117,9 @@ export default function DoctorProfileEdit({ user }: EditProfileProps) {
   };
 
   useEffect(() => {
-      if (state.success) window.location.href = "/profile";
-    }, [state.success]);
-    
+    if (state.success) window.location.href = "/profile";
+  }, [state.success]);
+
   useEffect(() => {
     const handleUnload = () => {
       if (!state.success && uploadedPublicId) {
@@ -492,6 +492,7 @@ export default function DoctorProfileEdit({ user }: EditProfileProps) {
                       Email
                     </Label>
                     <Input
+                      readOnly
                       id="email"
                       type="email"
                       value={formData.email}
