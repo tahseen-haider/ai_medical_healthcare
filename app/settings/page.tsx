@@ -5,9 +5,9 @@ import AdminProfileEdit from './components/AdminProfileEdit';
 import UserProfileEdit from './components/UserProfileEdit';
 import DoctorProfileEdit from './components/DoctorProfileEdit';
 
-export default async function page() {
+export default async function Page() {
   const user = await getCurrentlyAuthenticatedUser();
-  if (!user) return redirect("/");
+  if (!user) redirect("/");
 
   return user.role === "admin" ? (
     <AdminProfileEdit user={user} />

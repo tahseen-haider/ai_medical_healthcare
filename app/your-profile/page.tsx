@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 
 export default async function Page() {
   const user = await getCurrentlyAuthenticatedUser();
-  if (!user) return redirect("/");
+  if (!user) redirect("/");
 
   return user.role === "admin" ? (
     <AdminProfile user={user} />
