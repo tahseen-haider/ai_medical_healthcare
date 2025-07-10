@@ -1,7 +1,7 @@
 import { cache } from "react";
 import "server-only";
 import { prisma } from "../db/prisma";
-import { ContactFormType } from "../definitions";
+import { ContactFormType, UserType } from "../definitions";
 
 export const setAppointmentToDB = cache(
   async (data: {
@@ -91,3 +91,67 @@ export const uploadProfileChanges = cache(
     }
   }
 );
+
+export async function getDoctorsForDoctorSectionFromDB() {
+  return await prisma.user.findMany({
+    where: {
+      role: "doctor",
+      is_verified: true,
+      doctorProfile: {
+        isApproved: true,
+      },
+    },
+    orderBy: {
+      doctorProfile: {
+        ratings: "desc",
+      },
+    },
+    take: 4,
+    select: {
+      id: true,
+      email: true,
+      name: true,
+      pfp: true,
+      doctorProfile: {
+        select: {
+          doctorType: true,
+          specialization: true,
+          qualifications: true,
+          experience: true,
+          bio: true,
+          clinicName: true,
+          clinicAddress: true,
+          consultationFee: true,
+          availableDays: true,
+          availableTimes: true,
+          ratings: true,
+          totalReviews: true,
+          isApproved: true,
+        },
+      },
+    },
+  });
+}
+
+export const getDoctorFromDB = async (
+  userId: string
+): Promise<UserType | undefined> => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        appointmentsAsDoctor: true,
+        appointmentsAsPatient: true,
+        doctorProfile: true,
+      },
+    });
+    if (!user) return;
+
+    const { password, token, ...restUser } = user || {};
+
+    return restUser;
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+};

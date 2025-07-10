@@ -8,6 +8,8 @@ import {
   SaveProfileChangesState,
 } from "@/lib/definitions";
 import {
+  getDoctorFromDB,
+  getDoctorsForDoctorSectionFromDB,
   setAppointmentToDB,
   uploadInquiry,
   uploadProfileChanges,
@@ -187,4 +189,12 @@ export async function updateUserProfile(_prevState: any, formData: FormData) {
     console.error("Error updating user profile:", error);
     return { success: false };
   }
+}
+
+export async function getDoctorsForDoctorSection() {
+  return await getDoctorsForDoctorSectionFromDB();
+}
+
+export async function getDoctor(doctorId: string){
+return await getDoctorFromDB(doctorId)
 }
