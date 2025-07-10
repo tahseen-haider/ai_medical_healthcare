@@ -13,10 +13,11 @@ import {
   uploadProfileChanges,
 } from "@/lib/dal";
 import cloudinary from "@/lib/cloudinary";
-import { getUser, getUserCredentialsByEmail } from "@/lib/dal/user.dal";
+import { getUser, getUserCredentialsByEmail, updateUserProfileInDB } from "@/lib/dal/user.dal";
 import { v4 as uuidv4 } from "uuid";
 import { redirect } from "next/navigation";
 import { getUserIdnRoleIfAuthenticated } from "@/lib/session";
+import { revalidatePath } from "next/cache";
 
 export const contactUs = async (
   state: ContactFormState,
@@ -150,7 +151,7 @@ export const saveProfileChanges = async (
 
   if (!changed) return { message: "Something went wrong." };
 
-  return redirect("/your-profile");
+  return redirect("/profile");
 };
 
 export const getPfp = async () => {
@@ -162,3 +163,31 @@ export const getPfp = async () => {
 
   return `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${user.pfp}`;
 };
+
+export async function updateUserProfile(_prevState: any, formData: FormData) {
+  try {
+    const updatedUser = {
+      id: formData.get("id") as string,
+      name: formData.get("name") as string,
+      email: formData.get("email") as string,
+      phone: formData.get("phone") as string,
+      dob: formData.get("dob") as string,
+      gender: formData.get("gender") as string,
+      pfp: formData.get("pfp") as string,
+      bloodType: formData.get("bloodType") as string,
+      allergies: JSON.parse(formData.get("allergies") as string),
+      emailNotifications: formData.get("emailNotifications") === "true",
+      smsReminders: formData.get("smsReminders") === "true",
+      twoFactorEnabled: formData.get("twoFactorEnabled") === "true",
+    };
+
+    const res = await updateUserProfileInDB(updatedUser);
+    if (!res) return { success: false };
+
+    revalidatePath("/profile");
+    return { success: true };
+  } catch (error) {
+    console.error("Error updating user profile:", error);
+    return { success: false };
+  }
+}

@@ -34,7 +34,7 @@ import {
   X,
   Loader2,
 } from "lucide-react";
-import ProfilePageImage from "@/app/your-profile/components/ProfilePageImage";
+import ProfilePageImage from "@/app/profile/components/ProfilePageImage";
 import { updateDoctorProfile } from "@/actions/doctor.action";
 import { redirect } from "next/navigation";
 import LoadingScreen from "@/components/LoadingScreen";
@@ -84,7 +84,7 @@ export default function DoctorProfileEdit({ user }: EditProfileProps) {
       });
     }
 
-    redirect("/your-profile");
+    redirect("/profile");
   };
 
   const [formData, setFormData] = useState({

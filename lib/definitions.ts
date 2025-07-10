@@ -47,6 +47,15 @@ export type UserType = {
   role: UserRole;
   is_verified: boolean;
   ai_tokens_used?: number | null;
+  bloodType?: string | null;
+  allergies?: string[];
+
+  // Preferences
+  emailNotifications?: Boolean | null;
+  smsReminders?: Boolean | null;
+  twoFactorEnabled?: Boolean | null;
+  lastLogin?: Date | null;
+  lastCheckUp?: Date | null;
 
   // Included relations
   doctorProfile?: {

@@ -74,6 +74,6 @@ export async function updateDoctorProfile(_prevState: any, formData: FormData) {
   const res = await updateDoctorProfileInDB(updatedUser);
   if (!res) return { success: false };
 
-  revalidatePath("/your-profile");
+  revalidatePath("/profile");
   return { success: true };
 }

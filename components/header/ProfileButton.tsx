@@ -38,7 +38,7 @@ export default function ProfileButton({ imageUrl }: { imageUrl?: string }) {
   const navLinks = [
     {
       title: "Your Profile",
-      link: "/your-profile",
+      link: "/profile",
     },
     {
       title: "Reset Password",
@@ -67,7 +67,7 @@ export default function ProfileButton({ imageUrl }: { imageUrl?: string }) {
           <DropdownMenuLabel>
             <Link
               className="text-lg"
-              href="/your-profile"
+              href="/profile"
               onClick={() => setOpen(false)}
             >
               {user?.name}

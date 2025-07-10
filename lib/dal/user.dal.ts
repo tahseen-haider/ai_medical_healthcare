@@ -19,7 +19,9 @@ export const getUserIdnRoleIfAuthenticatedAction = async () => {
   return await getUserIdnRoleIfAuthenticated();
 };
 
-export const getUser = async (userId: string): Promise<UserType | undefined> => {
+export const getUser = async (
+  userId: string
+): Promise<UserType | undefined> => {
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -305,3 +307,45 @@ export const deleteLoggedInUserFromDB = async () => {
     redirect("/");
   }
 };
+
+export async function updateUserProfileInDB(userData: {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  dob: string;
+  gender: string;
+  pfp: string;
+  bloodType: string;
+  allergies: string[];
+  emailNotifications: boolean;
+  smsReminders: boolean;
+  twoFactorEnabled: boolean;
+}) {
+  const { id, name, email, phone, dob, gender, pfp, bloodType, allergies } =
+    userData;
+
+  const existingUser = await prisma.user.findUnique({
+    where: { id },
+    select: { pfp: true },
+  });
+
+  // If the profile picture changed, delete the old one from Cloudinary
+  if (existingUser?.pfp && existingUser.pfp !== pfp) {
+    await cloudinary.uploader.destroy(existingUser.pfp);
+  }
+
+  return await prisma.user.update({
+    where: { id },
+    data: {
+      name,
+      email,
+      phone,
+      dob,
+      gender,
+      pfp,
+      bloodType,
+      allergies,
+    },
+  });
+}

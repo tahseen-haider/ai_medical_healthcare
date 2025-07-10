@@ -1,4 +1,4 @@
-import { getUserRoleFromSession, isUserAuthenticated } from "@/lib/session";
+import { getUserRoleFromSession } from "@/lib/session";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function middleware(req: NextRequest) {

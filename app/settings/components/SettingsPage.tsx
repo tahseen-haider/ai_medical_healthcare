@@ -42,7 +42,7 @@ export default function SettingsPage({
       <form action={action} className="w-full">
         <section className="w-full flex flex-col md:flex-row p-6 gap-6">
           <Link
-            href="/your-profile"
+            href="/profile"
             className="bg-light-4 dark:bg-gray-50 h-fit text-white dark:text-black rounded-sm p-2"
           >
             <ArrowLeftToLineIcon />

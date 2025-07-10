@@ -31,6 +31,17 @@ model User {
   doctorProfile DoctorProfile?
   ai_tokens_used Int?
 
+  // Patient-specific fields
+  bloodType     String?
+  allergies     String[]  @default([])
+  lastCheckUp   DateTime?
+    
+  // Preferences
+  emailNotifications Boolean @default(true)
+  smsReminders      Boolean @default(true)
+  twoFactorEnabled  Boolean @default(false)
+  lastLogin         DateTime?
+
   chats      ChatSession[]
   accounts    Account[]
   
