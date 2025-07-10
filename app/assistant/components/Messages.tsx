@@ -55,7 +55,10 @@ export default function Messages({
   const uploadToCloudinary = async (file: File) => {
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", "image_upload"); // Must be unsigned
+    formData.append(
+      "upload_preset",
+      process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET as string
+    );
 
     const res = await fetch(
       "https://api.cloudinary.com/v1_1/dydu5o7ny/image/upload",
@@ -91,9 +94,9 @@ export default function Messages({
     public_id,
     onData,
     onDone,
-    isOldMessage
+    isOldMessage,
   }: {
-    isOldMessage:boolean,
+    isOldMessage: boolean;
     chatId: string;
     message?: string;
     public_id?: string;
@@ -102,7 +105,7 @@ export default function Messages({
   }) => {
     const params = new URLSearchParams({
       chatId,
-      isOldMessage: isOldMessage.toString()
+      isOldMessage: isOldMessage.toString(),
     });
 
     if (message) params.set("message", message);
@@ -163,7 +166,6 @@ export default function Messages({
     }
   }, []);
 
-
   return (
     <section className="flex flex-col items-center">
       <div className="w-full h-[calc(100vh-65px-120px)] overflow-y-auto">
@@ -208,7 +210,7 @@ export default function Messages({
           ]);
 
           streamGPTMessage({
-            isOldMessage:false,
+            isOldMessage: false,
             chatId,
             message: prompt,
             public_id: uploadedImgID || undefined,
@@ -239,7 +241,7 @@ export default function Messages({
             onDone: () => setIsGenerating(false),
           });
           setImageBase64("");
-          setUploadedImgID("")
+          setUploadedImgID("");
           setPrompt("");
           setIsGenerating(true);
         }}

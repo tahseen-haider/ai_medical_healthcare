@@ -1,6 +1,5 @@
 "use client";
 import ProfilePicture from "@/components/ProfilePicture";
-import { UserProfileDTO } from "@/lib/dto/user.dto";
 import { useActionState, useState } from "react";
 import { DateOfBirthPicker } from "./DOBPicker";
 import {

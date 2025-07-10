@@ -155,10 +155,10 @@ export const saveProfileChanges = async (
 
 export const getPfp = async () => {
   const session = await getUserIdnRoleIfAuthenticated();
-    if (!session) return;
+  if (!session) return;
 
   const user = await getUser(session.userId);
   if (!user?.pfp) return;
 
-  return `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/${user.pfp}`;
+  return `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${user.pfp}`;
 };

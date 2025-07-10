@@ -50,8 +50,6 @@ export const config = {
   matcher: [
     "/login",
     "/signup",
-    "/settings",
-    "/your-profile",
     "/verify-email/(.*)",
     "/assistant/(.*)",
     "/admin/(.*)",

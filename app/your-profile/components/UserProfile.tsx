@@ -8,7 +8,7 @@ export default function UserProfile({
 }: {
   user: UserType;
 }) {
-  const pfp = `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/${user.pfp}`
+  const pfp = `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${user.pfp}`
   return (
     <div className="min-h-[550px] w-full flex items-center">
       <section className="w-full flex flex-col md:flex-row p-6 gap-6">

@@ -36,7 +36,7 @@ export async function GET(req: NextRequest) {
         if (public_id) {
           const url = image
             ? image
-            : `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/${public_id}`;
+            : `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${public_id}`;
           userContent.push({
             type: "image_url",
             image_url: { url },

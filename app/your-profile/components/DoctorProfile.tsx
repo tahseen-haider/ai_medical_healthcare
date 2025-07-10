@@ -24,7 +24,7 @@ export default function DoctorProfile({
 }: {
   user: UserType;
 }) {
-  const pfp = `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/${user.pfp}`
+  const pfp = `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${user.pfp}`
   const doctorProfile = user.doctorProfile;
   const totalAppointments = user.appointmentsAsDoctor.length;
   const pendingAppointments = user.appointmentsAsDoctor.filter(

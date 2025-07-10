@@ -2,7 +2,8 @@ import "server-only";
 
 import { eachDayOfInterval, format, subDays } from "date-fns";
 import { prisma } from "../db/prisma";
-import { AppointmentStatus } from "@prisma/client/edge";
+import { AppointmentStatus, DoctorType } from "@prisma/client/edge";
+import cloudinary from "../cloudinary";
 
 export const getNewAppointmentsInfoFromDB = async (doctorId: string) => {
   const start = subDays(new Date(), 90);
@@ -163,6 +164,87 @@ export const getAllApprovedDoctorsFromDB = async () => {
           id: true,
           name: true,
           email: true,
+        },
+      },
+    },
+  });
+};
+
+export const updateDoctorProfileInDB = async (data: {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  dob: string;
+  gender: string;
+  pfp: string;
+  doctorProfile: {
+    doctorType: DoctorType;
+    specialization: string;
+    qualifications: string;
+    experience: number;
+    bio: string;
+    clinicName: string;
+    clinicAddress: string;
+    consultationFee: number;
+    availableDays: string[];
+    availableTimes: string;
+  };
+}) => {
+  const {
+    id,
+    name,
+    email,
+    phone,
+    dob,
+    gender,
+    pfp,
+    doctorProfile: {
+      doctorType,
+      specialization,
+      qualifications,
+      experience,
+      bio,
+      clinicAddress,
+      clinicName,
+      consultationFee,
+      availableDays,
+      availableTimes,
+    },
+  } = data;
+
+  const existingUser = await prisma.user.findUnique({
+    where: { id },
+    select: { pfp: true },
+  });
+
+  if (existingUser?.pfp && existingUser.pfp !== pfp) {
+    await cloudinary.uploader.destroy(existingUser.pfp);
+  }
+
+  return await prisma.user.update({
+    where: {
+      id,
+    },
+    data: {
+      name,
+      email,
+      phone,
+      dob,
+      gender,
+      pfp,
+      doctorProfile: {
+        update: {
+          doctorType,
+          specialization,
+          qualifications,
+          experience,
+          bio,
+          clinicAddress,
+          clinicName,
+          consultationFee,
+          availableDays,
+          availableTimes,
         },
       },
     },

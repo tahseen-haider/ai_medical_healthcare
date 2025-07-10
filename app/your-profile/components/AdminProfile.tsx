@@ -5,7 +5,7 @@ export default function AdminProfile({
 }: {
   user: UserType;
 }) {
-  const pfp = `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/${user.pfp}`
+  const pfp = `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${user.pfp}`
   return (
     <div>AdminProfile</div>
   )
