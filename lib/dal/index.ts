@@ -3,6 +3,48 @@ import "server-only";
 import { prisma } from "../db/prisma";
 import { ContactFormType, UserType } from "../definitions";
 
+export async function getDoctorsForLoadMoreFromDB(skip: number, take: number) {
+  return await prisma.user.findMany({
+    skip,
+    take,
+    where: {
+      role: "doctor",
+      is_verified: true,
+      doctorProfile: {
+        isApproved: true,
+      },
+    },
+    orderBy: {
+      doctorProfile: {
+        ratings: "desc",
+      },
+    },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      pfp: true,
+      doctorProfile: {
+        select: {
+          doctorType: true,
+          specialization: true,
+          qualifications: true,
+          experience: true,
+          bio: true,
+          clinicName: true,
+          clinicAddress: true,
+          consultationFee: true,
+          availableDays: true,
+          availableTimes: true,
+          ratings: true,
+          totalReviews: true,
+          isApproved: true,
+        },
+      },
+    },
+  });
+}
+
 export const setAppointmentToDB = cache(
   async (data: {
     fullname: string;

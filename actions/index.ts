@@ -10,6 +10,7 @@ import {
 import {
   getDoctorFromDB,
   getDoctorsForDoctorSectionFromDB,
+  getDoctorsForLoadMoreFromDB,
   setAppointmentToDB,
   uploadInquiry,
   uploadProfileChanges,
@@ -197,4 +198,8 @@ export async function getDoctorsForDoctorSection() {
 
 export async function getDoctor(doctorId: string){
 return await getDoctorFromDB(doctorId)
+}
+
+export async function getDoctorsForLoadMore(skip = 0, take = 8){
+  return await getDoctorsForLoadMoreFromDB(skip, take)
 }

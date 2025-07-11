@@ -33,7 +33,7 @@ export default function HeroSectionMinimal() {
                 <Button
                   variant="outline"
                   size="lg"
-                  className="w-full sm:w-auto border-2 border-gray-300 dark:border-gray-600 hover:border-blue-600 dark:hover:border-blue-400 font-semibold px-8 py-6 text-lg transition-all duration-200 hover:shadow-lg bg-transparent"
+                  className="w-full sm:w-auto border-2 border-gray-300 dark:border-gray-600 hover:border-blue-600 dark:hover:border-blue-400 font-semibold px-8 py-6 text-lg transition-all duration-200 hover:shadow-lg bg-gray-50"
                 >
                   Book Appointment
                   <ArrowRight className="w-5 h-5 ml-2" />

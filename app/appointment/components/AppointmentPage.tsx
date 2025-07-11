@@ -55,7 +55,7 @@ export default function AppointmentPage({
 
   return (
     <main className="flex flex-col items-center">
-      <section className="px-2 sm:px-6 py-4 flex items-center flex-col mb-20 gap-6 max-w-[500px] w-full">
+      <section className="px-2 sm:px-6 py-4 flex items-center flex-col mb-8 gap-6 max-w-[500px] w-full">
         <div className="w-full text-center">
           <div className="flex items-center justify-center gap-3 mb-4">
             <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-full">

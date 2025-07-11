@@ -4,9 +4,9 @@ import YouTubeEmbed from "./YouTubeEmbed";
 
 export default function WhyChooseUsSection() {
   return (
-    <section className="flex lg:flex-row flex-col justify-between items-center px-2 sm:px-6 py-10 sm:py-16 bg-light-4 dark:bg-dark-4 mb-1 ">
+    <section className="flex lg:flex-row flex-col justify-between items-center px-2 sm:px-6 py-10 sm:py-16 bg-white dark:bg-dark-4 mb-1 ">
       <div className="w-full h-full pb-8 lg:pb-0 lg:w-1/2  flex flex-col justify-between">
-        <h2 className="font-ubuntu font-bold text-2xl sm:text-4xl -tracking-[0.5px] text-white">
+        <h2 className="font-ubuntu font-bold text-2xl sm:text-4xl -tracking-[0.5px]">
           Why Choose Us?
         </h2>
         <div className="my-4 pb-4 sm:my-12 flex flex-wrap justify-between gap-4">
@@ -14,7 +14,7 @@ export default function WhyChooseUsSection() {
             We Made Health Care Easy <br />
             for your family
           </h3>
-          <p className="text-base text-gray-50 dark:text-white leading-[19px] tracking-tight pr-5">
+          <p className="text-base text-gray-800 dark:text-white leading-[19px] tracking-tight pr-5">
             Our AI-powered medical assistant delivers fast, accurate health
             insights anytime you need them. From symptom checks to appointment
             booking and report analysis, we simplify your healthcare journey
