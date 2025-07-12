@@ -1,12 +1,9 @@
-import { getChatList } from "@/actions/chat.action";
-import ChatList from "./ChatList";
+import ChatListWrapper from "./ChatList";
 
-export default async function ChatsList() {
-  const chatsList = await getChatList();
-
+export default function ChatsList() {
   return (
     <div className="flex flex-col gap-2">
-      <ChatList chatsList={chatsList}/>
+      <ChatListWrapper />
     </div>
   );
 }

@@ -4,75 +4,96 @@ import { prisma } from "../db/prisma";
 import { DoctorType, UserRole } from "@prisma/client/edge";
 import cloudinary from "../cloudinary";
 import { getUserIdnRoleIfAuthenticated } from "../session";
+import { subDays, format, eachDayOfInterval } from "date-fns";
 
-export const getAllVerifiedUsersFromDB = async () => {
-  const users = await prisma.user.findMany({
-    where: {
-      is_verified: true,
-    },
-    select: {
-      pfp: true,
-      name: true,
-      email: true,
-      createdAt: true,
-      role: true,
-    },
-    take: 10,
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-
-  return users;
-};
-
-export const changeAppointmentDoctorFromDB = async (appointmentId:string, doctor:string) =>{
-  const doctorId = doctor === "Unassigned"? null : doctor;
-  return await prisma.appointments.update({
-    where:{
-      id: appointmentId
-    },
-    data:{
-      doctorId
-    }
-  })
+function handleError(error: unknown, context: string) {
+  console.error(`Error in ${context}:`, error);
+  throw new Error("Something went wrong.");
 }
 
 
-export const getAllAppointmentsFromDB = async (page: number, limit: number) => {
-  const [appointments, count] = await Promise.all([
-    prisma.appointments.findMany({
-      skip: (page - 1) * limit,
-      take: limit,
-      orderBy: {
-        preferredDate: "desc",
+export const getAllVerifiedUsersFromDB = async () => {
+  try {
+    const users = await prisma.user.findMany({
+      where: {
+        is_verified: true,
       },
       select: {
-        fullname: true,
-        id: true,
+        pfp: true,
+        name: true,
         email: true,
-        preferredDate: true,
-        preferredTime: true,
-        reasonForVisit: true,
-        doctorId: true,
-        status: true,
-        doctor: {
-          select: {
-            name: true,
-            id: true,
+        createdAt: true,
+        role: true,
+      },
+      take: 10,
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+
+    return users;
+  } catch (error) {
+    console.error("Error in getAllVerifiedUsersFromDB:", error);
+    throw new Error("Failed to fetch verified users");
+  }
+};
+
+
+export const changeAppointmentDoctorFromDB = async (appointmentId: string, doctor: string) => {
+  try {
+    const doctorId = doctor === "Unassigned" ? null : doctor;
+    return await prisma.appointments.update({
+      where: { id: appointmentId },
+      data: { doctorId },
+    });
+  } catch (error) {
+    console.error("Error in changeAppointmentDoctorFromDB:", error);
+    throw new Error("Failed to change appointment doctor");
+  }
+};
+
+
+
+export const getAllAppointmentsFromDB = async (page: number, limit: number) => {
+  try {
+    const [appointments, count] = await Promise.all([
+      prisma.appointments.findMany({
+        skip: (page - 1) * limit,
+        take: limit,
+        orderBy: {
+          preferredDate: "desc",
+        },
+        select: {
+          fullname: true,
+          id: true,
+          email: true,
+          preferredDate: true,
+          preferredTime: true,
+          reasonForVisit: true,
+          doctorId: true,
+          status: true,
+          doctor: {
+            select: {
+              name: true,
+              id: true,
+            },
           },
         },
-      },
-    }),
-    prisma.appointments.count(),
-  ]);
+      }),
+      prisma.appointments.count(),
+    ]);
 
-  return {
-    appointments,
-    count,
-    totalPages: Math.ceil(count / limit),
-  };
+    return {
+      appointments,
+      count,
+      totalPages: Math.ceil(count / limit),
+    };
+  } catch (error) {
+    console.error("Error in getAllAppointmentsFromDB:", error);
+    throw new Error("Failed to fetch appointments");
+  }
 };
+
 
 export const getAllUsersFromDB = async (page: number, limit: number) => {
   const skip = (page - 1) * limit;
@@ -505,7 +526,6 @@ export const changeInquiryStatusFromDB = async (id: string) => {
   });
 };
 
-import { subDays, format, eachDayOfInterval } from "date-fns";
 
 export const getNewUserInfoFromDB = async () => {
   const start = subDays(new Date(), 90);

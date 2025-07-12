@@ -11,7 +11,7 @@ export async function GET(req: NextRequest) {
 
   const message = searchParams.get("message");
   const image = searchParams.get("image");
-  const chatId = searchParams.get("chatId");
+  const chatId = searchParams.get("chatId") || undefined;
   const public_id = searchParams.get("public_id");
   const isOldMessage = searchParams.get("isOldMessage") === "true";
 
@@ -23,8 +23,19 @@ export async function GET(req: NextRequest) {
         const messages: any[] = [
           {
             role: "system",
-            content:
-              "You are a medical assistant. Be friendly and charming. If the user message is irrelevant (not medical), respond with: 'Please ask medical questions.' If an image is uploaded, analyze it and provide medical insights. If the image is unrelated to medical, say: 'Image is not medical related.' ",
+            content: `
+                    You are a friendly and helpful AI medical assistant. Respond in a warm, clear, and easy-to-understand manner.
+
+                    Guidelines:
+                    - Prioritize medical or personal health-related questions.
+                    - If the user asks something unrelated to health or medicine, reply with: "Please ask medical questions."
+                    - If the message refers to the current conversation context, respond appropriately.
+                    - If the user uploads an image:
+                      - Analyze it and offer helpful medical insights if relevant.
+                      - If the image is not related to health, respond with: "The uploaded image does not appear to be medical-related."
+
+                    Keep responses concise, reassuring, and informative.
+                   `.trim(),
           },
         ];
 
@@ -42,6 +53,22 @@ export async function GET(req: NextRequest) {
             image_url: { url },
           });
         }
+
+        // For chat history
+        const summary = await prisma.chatSession.findFirst({
+          where: {
+            id: chatId,
+          },
+          select: {
+            summary: true,
+          },
+        });
+        userContent.push({
+          type: "text",
+          text: `This is the previous history of this chat: ${summary?.summary}`,
+        });
+
+        console.log(summary);
 
         if (userContent.length === 0) {
           controller.enqueue(
@@ -79,6 +106,43 @@ export async function GET(req: NextRequest) {
 
         controller.enqueue(encoder.encode("event: done\ndata: done\n\n"));
         controller.close();
+
+        // Save summary of previous chat to DB
+        let newSummary = "";
+        if (chatId) {
+          try {
+            const summaryCompletion = await openai.chat.completions.create({
+              model: "gpt-4o-mini",
+              messages: [
+                {
+                  role: "system",
+                  content: `Summarize the following medical conversation. Include all important details, such as:
+                          - User's name (if provided)
+                          - Symptoms or conditions discussed
+                          - Medications mentioned
+                          - Uploaded images and your interpretations
+                          - Any specific questions the user asked
+                          - Any important personal context (age, gender, history, etc.)
+                          Be concise but preserve all medically relevant and identifying context. This will be reused in future conversations.`,
+                },
+                { role: "user", content: `Previous summary: ${summary?.summary}. \n new User Message:${message}. \n new Response: ${fullResponse}` },
+              ],
+            });
+
+            newSummary = summaryCompletion.choices[0].message.content || "";
+
+            await prisma.chatSession.update({
+              where: {
+                id: chatId,
+              },
+              data: {
+                summary: newSummary,
+              },
+            });
+          } catch (error) {
+            console.log(error);
+          }
+        }
 
         // Save user message only if it's a new message
         if (!isOldMessage && chatId) {
@@ -141,6 +205,27 @@ export async function GET(req: NextRequest) {
             },
           });
         }
+
+        // Update Chat title based on summary
+        const newTitleResponse = await openai.chat.completions.create({
+          model: "gpt-4o-mini",
+          messages: [
+            {
+              role: "system",
+              content:
+                "Summarize the conversation to make a title of 25 characters",
+            },
+            { role: "user", content: newSummary },
+          ],
+        });
+        let rawTitle =
+          newTitleResponse.choices[0].message.content?.trim() || "";
+        const cleanedTitle = rawTitle.replace(/^["']|["']$/g, "");
+
+        await prisma.chatSession.update({
+          where: { id: chatId },
+          data: { title: cleanedTitle },
+        });
       } catch (err: any) {
         console.error("SSE Error:", err);
         controller.enqueue(

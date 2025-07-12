@@ -70,20 +70,28 @@ export const sendPrompt = async (chatId: string, userPrompt: string) => {
 };
 
 export const getChatListOfUser = async (userId: string) => {
-  const currentUser = await prisma.user.findUnique({
-    where: {
-      id: userId,
-    },
-    include: { chats: true },
-  });
+  try {
+    const currentUser = await prisma.user.findUnique({
+      where: {
+        id: userId,
+      },
+      include: { chats: true },
+    });
 
-  return currentUser?.chats;
+    return currentUser?.chats;
+  } catch (error) {
+    return;
+  }
 };
 
 const getAllImgsOfChatId = async (chatId: string) => {
   try {
     const messages = await getMessages(chatId);
-    return messages?.map((ele) => ele.image).filter((img): img is string => typeof img === 'string') || [];
+    return (
+      messages
+        ?.map((ele) => ele.image)
+        .filter((img): img is string => typeof img === "string") || []
+    );
   } catch (error) {
     console.log("Error while getting Images ids: ", error);
   }
@@ -112,11 +120,16 @@ export const deleteChatFromDB = async (chatId: string) => {
 };
 
 export const getMessagesUsingChatId = async (chatId: string) => {
-  const messages = await prisma.message.findMany({
-    where: {
-      chatId,
-    },
-  });
-  if (!messages || messages.length === 0) return null;
-  return messages;
+  try {
+    const messages = await prisma.message.findMany({
+      where: {
+        chatId,
+      },
+    });
+    if (!messages || messages.length === 0) return null;
+    return messages;
+  } catch (error) {
+    console.log(error);
+    return;
+  }
 };

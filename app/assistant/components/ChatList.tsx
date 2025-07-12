@@ -1,41 +1,40 @@
 "use client";
+
+import useSWR from "swr";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import React, { useActionState } from "react";
+import { deleteChat, getChatList } from "@/actions/chat.action";
 import DeleteChatBtn from "./DeleteChatBtn";
-import { deleteChat } from "@/actions/chat.action";
 import LoadingScreen from "@/components/LoadingScreen";
-type chatsListType =
-  | {
-      userId: string;
-      id: string;
-      createdAt: Date;
-      title: string | null;
-      updatedAt: Date;
-    }[]
-  | undefined;
+import { useActionState } from "react";
 
-export default function ChatList({ chatsList }: { chatsList: chatsListType }) {
-  const pathname = usePathname() ?? "";
-  const chatId = pathname.length > 0 ? pathname.split("/assistant/")[1] : "";
+const fetcher = () => getChatList();
+
+export default function ChatListWrapper() {
+  const { data: chatsList, isLoading } = useSWR("chat-list", fetcher, {
+    refreshInterval: 5000,
+  });
   const [stateOfDeleteChat, actionToDeleteChat, pendingOfDeleteChat] =
     useActionState(deleteChat, undefined);
 
+  const pathname = usePathname();
+  const chatId = pathname?.split("/assistant/")[1];
+
   return (
     <>
-      {pendingOfDeleteChat && <LoadingScreen message="Deleting this chat..."/>}
-      {chatsList?.map((ele, index) => (
+      {isLoading && <LoadingScreen message="Loading chats..." />}
+      {chatsList?.map((ele) => (
         <Link
           href={`/assistant/${ele.id}`}
-          key={index}
+          key={ele.id}
           className={`h-10 w-full border-[1px] ${
             ele.id === chatId
-              ? "bg-light-4 dark:bg-dark-4 font-bold text-white dark:text-white"
-              : "bg-light-1 dark:bg-gray-950 font-normal"
+              ? "bg-light-4 dark:bg-dark-4 font-normal text-white"
+              : "bg-light-1 dark:bg-gray-950"
           } rounded-lg flex items-center font-ubuntu cursor-pointer`}
         >
           <div className="flex justify-between w-full pl-3 items-center">
-            {ele.title?.slice(0, 30)}
+            {ele.title?.slice(0, 30) || "Untitled Chat"}
             <div className="z-10 rounded-md hover:bg-light-3/40 hover:dark:bg-dark-2/40">
               <DeleteChatBtn
                 chatId={ele.id}
