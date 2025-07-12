@@ -15,11 +15,32 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 import { useActionState, useEffect, useState, useTransition } from "react";
-import { User, Heart, Camera, Save, X, Loader2 } from "lucide-react";
+import {
+  User,
+  Heart,
+  Camera,
+  Save,
+  X,
+  Loader2,
+  Shield,
+  Pill,
+  Stethoscope,
+  Scale,
+  Thermometer,
+  Brain,
+  Cigarette,
+  Wine,
+  Dumbbell,
+  AlertCircle,
+  FileText,
+  Activity,
+} from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Textarea } from "@/components/ui/textarea";
 import { redirect } from "next/navigation";
 import LoadingScreen from "@/components/LoadingScreen";
-import ProfilePageImage from "@/app/profile/components/ProfilePageImage";
 import { updateUserProfile } from "@/actions";
+import ProfilePageImage from "@/app/profile/components/ProfilePageImage";
 
 interface EditUserProfileProps {
   user: UserType;
@@ -39,6 +60,24 @@ export default function UserProfileEdit({ user }: EditUserProfileProps) {
     gender: user.gender || "",
     bloodType: user.bloodType || "",
     allergies: user.allergies || [],
+    chronicConditions: user.chronicConditions || [],
+    medications: user.medications || [],
+    surgeries: user.surgeries || [],
+    immunizations: user.immunizations || [],
+    bloodPressure: user.bloodPressure || "",
+    heartRate: user.heartRate || "",
+    respiratoryRate: user.respiratoryRate || "",
+    temperature: user.temperature || "",
+    height: user.height || "",
+    weight: user.weight || "",
+    smoker: user.smoker,
+    alcoholUse: user.alcoholUse,
+    exerciseFrequency: user.exerciseFrequency || "",
+    mentalHealthConcerns: user.mentalHealthConcerns || [],
+    notes: user.notes || "",
+    emailNotifications: user.emailNotifications,
+    smsReminders: user.smsReminders,
+    twoFactorEnabled: user.twoFactorEnabled,
   };
 
   const initialPfp = pfp;
@@ -69,6 +108,24 @@ export default function UserProfileEdit({ user }: EditUserProfileProps) {
     gender: user.gender || "",
     bloodType: user.bloodType || "",
     allergies: user.allergies || [],
+    chronicConditions: user.chronicConditions || [],
+    medications: user.medications || [],
+    surgeries: user.surgeries || [],
+    immunizations: user.immunizations || [],
+    bloodPressure: user.bloodPressure || "",
+    heartRate: user.heartRate || "",
+    respiratoryRate: user.respiratoryRate || "",
+    temperature: user.temperature || "",
+    height: user.height || "",
+    weight: user.weight || "",
+    smoker: user.smoker,
+    alcoholUse: user.alcoholUse,
+    exerciseFrequency: user.exerciseFrequency || "",
+    mentalHealthConcerns: user.mentalHealthConcerns || [],
+    notes: user.notes || "",
+    emailNotifications: user.emailNotifications,
+    smsReminders: user.smsReminders,
+    twoFactorEnabled: user.twoFactorEnabled,
   });
 
   const initialState = { success: false };
@@ -76,18 +133,23 @@ export default function UserProfileEdit({ user }: EditUserProfileProps) {
   const [profileImage, setProfileImage] = useState<string | undefined>(pfp);
   const [uploadedPublicId, setUploadedPublicId] = useState<string | null>(null);
   const [allergyInput, setAllergyInput] = useState("");
+  const [chronicConditionInput, setChronicConditionInput] = useState("");
+  const [medicationInput, setMedicationInput] = useState("");
+  const [surgeryInput, setSurgeryInput] = useState("");
+  const [immunizationInput, setImmunizationInput] = useState("");
+  const [mentalHealthInput, setMentalHealthInput] = useState("");
 
   const handleInputChange = (
     field: string,
-    value: string | boolean | string[]
+    value: string | boolean | string[] | null
   ) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   useEffect(() => {
-      if (state.success) window.location.href = "/profile";
-    }, [state.success]);
-    
+    if (state.success) window.location.href = "/profile";
+  }, [state.success]);
+
   useEffect(() => {
     const handleUnload = () => {
       if (!state.success && uploadedPublicId) {
@@ -99,7 +161,7 @@ export default function UserProfileEdit({ user }: EditUserProfileProps) {
     };
     window.addEventListener("beforeunload", handleUnload);
     return () => window.removeEventListener("beforeunload", handleUnload);
-  }, [uploadedPublicId, state.success]);
+  }, []);
 
   const handleImageUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -163,10 +225,123 @@ export default function UserProfileEdit({ user }: EditUserProfileProps) {
     }));
   };
 
+  const addChronicCondition = () => {
+    if (
+      chronicConditionInput.trim() &&
+      !formData.chronicConditions.includes(chronicConditionInput.trim())
+    ) {
+      setFormData((prev) => ({
+        ...prev,
+        chronicConditions: [
+          ...prev.chronicConditions,
+          chronicConditionInput.trim(),
+        ],
+      }));
+      setChronicConditionInput("");
+    }
+  };
+
+  const removeChronicCondition = (condition: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      chronicConditions: prev.chronicConditions.filter((c) => c !== condition),
+    }));
+  };
+
+  const addMedication = () => {
+    if (
+      medicationInput.trim() &&
+      !formData.medications.includes(medicationInput.trim())
+    ) {
+      setFormData((prev) => ({
+        ...prev,
+        medications: [...prev.medications, medicationInput.trim()],
+      }));
+      setMedicationInput("");
+    }
+  };
+
+  const removeMedication = (medication: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      medications: prev.medications.filter((m) => m !== medication),
+    }));
+  };
+
+  const addSurgery = () => {
+    if (
+      surgeryInput.trim() &&
+      !formData.surgeries.includes(surgeryInput.trim())
+    ) {
+      setFormData((prev) => ({
+        ...prev,
+        surgeries: [...prev.surgeries, surgeryInput.trim()],
+      }));
+      setSurgeryInput("");
+    }
+  };
+
+  const removeSurgery = (surgery: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      surgeries: prev.surgeries.filter((s) => s !== surgery),
+    }));
+  };
+
+  const addImmunization = () => {
+    if (
+      immunizationInput.trim() &&
+      !formData.immunizations.includes(immunizationInput.trim())
+    ) {
+      setFormData((prev) => ({
+        ...prev,
+        immunizations: [...prev.immunizations, immunizationInput.trim()],
+      }));
+      setImmunizationInput("");
+    }
+  };
+
+  const removeImmunization = (immunization: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      immunizations: prev.immunizations.filter((i) => i !== immunization),
+    }));
+  };
+
+  const addMentalHealthConcern = () => {
+    if (
+      mentalHealthInput.trim() &&
+      !formData.mentalHealthConcerns.includes(mentalHealthInput.trim())
+    ) {
+      setFormData((prev) => ({
+        ...prev,
+        mentalHealthConcerns: [
+          ...prev.mentalHealthConcerns,
+          mentalHealthInput.trim(),
+        ],
+      }));
+      setMentalHealthInput("");
+    }
+  };
+
+  const removeMentalHealthConcern = (concern: string) => {
+    setFormData((prev) => ({
+      ...prev,
+      mentalHealthConcerns: prev.mentalHealthConcerns.filter(
+        (c) => c !== concern
+      ),
+    }));
+  };
+
   const handleSave = () => {
     const currentFormData = {
       ...formData,
       allergies: [...formData.allergies],
+      chronicConditions: [...formData.chronicConditions],
+      medications: [...formData.medications],
+      surgeries: [...formData.surgeries],
+      immunizations: [...formData.immunizations],
+      mentalHealthConcerns: [...formData.mentalHealthConcerns],
     };
     const currentPfp = profileImage;
 
@@ -194,6 +369,27 @@ export default function UserProfileEdit({ user }: EditUserProfileProps) {
     form.append("pfp", profileImage?.split("/image/upload/")[1] || "");
     form.append("bloodType", formData.bloodType);
     form.append("allergies", JSON.stringify(formData.allergies));
+    form.append(
+      "chronicConditions",
+      JSON.stringify(formData.chronicConditions)
+    );
+    form.append("medications", JSON.stringify(formData.medications));
+    form.append("surgeries", JSON.stringify(formData.surgeries));
+    form.append("immunizations", JSON.stringify(formData.immunizations));
+    form.append("bloodPressure", formData.bloodPressure);
+    form.append("heartRate", formData.heartRate.toString());
+    form.append("respiratoryRate", formData.respiratoryRate.toString());
+    form.append("temperature", formData.temperature.toString());
+    form.append("height", formData.height.toString());
+    form.append("weight", formData.weight.toString());
+    form.append("smoker", formData.smoker?.toString() || "");
+    form.append("alcoholUse", formData.alcoholUse?.toString() || "");
+    form.append("exerciseFrequency", formData.exerciseFrequency);
+    form.append(
+      "mentalHealthConcerns",
+      JSON.stringify(formData.mentalHealthConcerns)
+    );
+    form.append("notes", formData.notes);
 
     startTransition(() => {
       formAction(form);
@@ -290,7 +486,6 @@ export default function UserProfileEdit({ user }: EditUserProfileProps) {
                       Email
                     </Label>
                     <Input
-                    readOnly
                       id="email"
                       type="email"
                       value={formData.email}
@@ -390,7 +585,7 @@ export default function UserProfileEdit({ user }: EditUserProfileProps) {
                       handleInputChange("bloodType", value)
                     }
                   >
-                    <SelectTrigger className="mt-1 h-10!">
+                    <SelectTrigger className="mt-1 h-10! w-full">
                       <SelectValue placeholder="Select blood type" />
                     </SelectTrigger>
                     <SelectContent>
@@ -442,6 +637,493 @@ export default function UserProfileEdit({ user }: EditUserProfileProps) {
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            <Separator />
+
+            {/* Medical History Section */}
+            <div className="space-y-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                <FileText className="w-5 h-5" />
+                Medical History
+              </h3>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                {/* Chronic Conditions */}
+                <div>
+                  <Label className="text-sm font-medium text-gray-950 dark:text-gray-300 flex items-center gap-2">
+                    <AlertCircle className="w-4 h-4 text-red-500" />
+                    Chronic Conditions
+                  </Label>
+                  <div className="mt-1 space-y-2">
+                    <div className="flex gap-2">
+                      <Input
+                        value={chronicConditionInput}
+                        onChange={(e) =>
+                          setChronicConditionInput(e.target.value)
+                        }
+                        placeholder="Add chronic condition"
+                        onKeyPress={(e) =>
+                          e.key === "Enter" && addChronicCondition()
+                        }
+                      />
+                      <Button
+                        type="button"
+                        onClick={addChronicCondition}
+                        variant="outline"
+                      >
+                        Add
+                      </Button>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {formData.chronicConditions.map((condition) => (
+                        <div
+                          key={condition}
+                          className="bg-red-100 text-red-800 px-2 py-1 rounded-md text-sm flex items-center gap-1"
+                        >
+                          {condition}
+                          <button
+                            type="button"
+                            onClick={() => removeChronicCondition(condition)}
+                            className="text-red-600 hover:text-red-800"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Current Medications */}
+                <div>
+                  <Label className="text-sm font-medium text-gray-950 dark:text-gray-300 flex items-center gap-2">
+                    <Pill className="w-4 h-4 text-blue-500" />
+                    Current Medications
+                  </Label>
+                  <div className="mt-1 space-y-2">
+                    <div className="flex gap-2">
+                      <Input
+                        value={medicationInput}
+                        onChange={(e) => setMedicationInput(e.target.value)}
+                        placeholder="Add medication"
+                        onKeyPress={(e) => e.key === "Enter" && addMedication()}
+                      />
+                      <Button
+                        type="button"
+                        onClick={addMedication}
+                        variant="outline"
+                      >
+                        Add
+                      </Button>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {formData.medications.map((medication) => (
+                        <div
+                          key={medication}
+                          className="bg-blue-100 text-blue-800 px-2 py-1 rounded-md text-sm flex items-center gap-1"
+                        >
+                          {medication}
+                          <button
+                            type="button"
+                            onClick={() => removeMedication(medication)}
+                            className="text-blue-600 hover:text-blue-800"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Surgery History */}
+                <div>
+                  <Label className="text-sm font-medium text-gray-950 dark:text-gray-300 flex items-center gap-2">
+                    <Stethoscope className="w-4 h-4 text-purple-500" />
+                    Surgery History
+                  </Label>
+                  <div className="mt-1 space-y-2">
+                    <div className="flex gap-2">
+                      <Input
+                        value={surgeryInput}
+                        onChange={(e) => setSurgeryInput(e.target.value)}
+                        placeholder="Add surgery"
+                        onKeyPress={(e) => e.key === "Enter" && addSurgery()}
+                      />
+                      <Button
+                        type="button"
+                        onClick={addSurgery}
+                        variant="outline"
+                      >
+                        Add
+                      </Button>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {formData.surgeries.map((surgery) => (
+                        <div
+                          key={surgery}
+                          className="bg-purple-100 text-purple-800 px-2 py-1 rounded-md text-sm flex items-center gap-1"
+                        >
+                          {surgery}
+                          <button
+                            type="button"
+                            onClick={() => removeSurgery(surgery)}
+                            className="text-purple-600 hover:text-purple-800"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                {/* Immunizations */}
+                <div>
+                  <Label className="text-sm font-medium text-gray-950 dark:text-gray-300 flex items-center gap-2">
+                    <Shield className="w-4 h-4 text-green-500" />
+                    Immunizations
+                  </Label>
+                  <div className="mt-1 space-y-2">
+                    <div className="flex gap-2">
+                      <Input
+                        value={immunizationInput}
+                        onChange={(e) => setImmunizationInput(e.target.value)}
+                        placeholder="Add immunization"
+                        onKeyPress={(e) =>
+                          e.key === "Enter" && addImmunization()
+                        }
+                      />
+                      <Button
+                        type="button"
+                        onClick={addImmunization}
+                        variant="outline"
+                      >
+                        Add
+                      </Button>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {formData.immunizations.map((immunization) => (
+                        <div
+                          key={immunization}
+                          className="bg-green-100 text-green-800 px-2 py-1 rounded-md text-sm flex items-center gap-1"
+                        >
+                          {immunization}
+                          <button
+                            type="button"
+                            onClick={() => removeImmunization(immunization)}
+                            className="text-green-600 hover:text-green-800"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <Separator />
+
+            {/* Vital Signs Section */}
+            <div className="space-y-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                <Activity className="w-5 h-5" />
+                Vital Signs & Physical Measurements
+              </h3>
+
+              <div className="grid md:grid-cols-3 gap-6">
+                {/* Physical Measurements */}
+                <div>
+                  <Label
+                    htmlFor="height"
+                    className="text-sm font-medium text-gray-950 dark:text-gray-300 flex items-center gap-2"
+                  >
+                    <Scale className="w-4 h-4" />
+                    Height (cm)
+                  </Label>
+                  <Input
+                    id="height"
+                    type="number"
+                    value={formData.height}
+                    onChange={(e) =>
+                      handleInputChange("height", e.target.value)
+                    }
+                    placeholder="170"
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label
+                    htmlFor="weight"
+                    className="text-sm font-medium text-gray-950 dark:text-gray-300 flex items-center gap-2"
+                  >
+                    <Scale className="w-4 h-4" />
+                    Weight (kg)
+                  </Label>
+                  <Input
+                    id="weight"
+                    type="number"
+                    value={formData.weight}
+                    onChange={(e) =>
+                      handleInputChange("weight", e.target.value)
+                    }
+                    placeholder="70"
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label
+                    htmlFor="bloodPressure"
+                    className="text-sm font-medium text-gray-950 dark:text-gray-300"
+                  >
+                    Blood Pressure
+                  </Label>
+                  <Input
+                    id="bloodPressure"
+                    value={formData.bloodPressure}
+                    onChange={(e) =>
+                      handleInputChange("bloodPressure", e.target.value)
+                    }
+                    placeholder="120/80"
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label
+                    htmlFor="heartRate"
+                    className="text-sm font-medium text-gray-950 dark:text-gray-300"
+                  >
+                    Heart Rate (bpm)
+                  </Label>
+                  <Input
+                    id="heartRate"
+                    type="number"
+                    value={formData.heartRate}
+                    onChange={(e) =>
+                      handleInputChange("heartRate", e.target.value)
+                    }
+                    placeholder="72"
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label
+                    htmlFor="respiratoryRate"
+                    className="text-sm font-medium text-gray-950 dark:text-gray-300"
+                  >
+                    Respiratory Rate (/min)
+                  </Label>
+                  <Input
+                    id="respiratoryRate"
+                    type="number"
+                    value={formData.respiratoryRate}
+                    onChange={(e) =>
+                      handleInputChange("respiratoryRate", e.target.value)
+                    }
+                    placeholder="16"
+                    className="mt-1"
+                  />
+                </div>
+
+                <div>
+                  <Label
+                    htmlFor="temperature"
+                    className="text-sm font-medium text-gray-950 dark:text-gray-300 flex items-center gap-2"
+                  >
+                    <Thermometer className="w-4 h-4" />
+                    Temperature (°C)
+                  </Label>
+                  <Input
+                    id="temperature"
+                    type="number"
+                    step="0.1"
+                    value={formData.temperature}
+                    onChange={(e) =>
+                      handleInputChange("temperature", e.target.value)
+                    }
+                    placeholder="36.5"
+                    className="mt-1"
+                  />
+                </div>
+              </div>
+            </div>
+
+            <Separator />
+
+            {/* Lifestyle Factors Section */}
+            <div className="space-y-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                <Dumbbell className="w-5 h-5" />
+                Lifestyle Factors
+              </h3>
+
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <div>
+                    <Label className="text-sm font-medium text-gray-950 dark:text-gray-300 flex items-center gap-2">
+                      <Cigarette className="w-4 h-4" />
+                      Smoking Status
+                    </Label>
+                    <Select
+                      value={
+                        formData.smoker === null
+                          ? "Not specified"
+                          : formData.smoker?.toString()
+                      }
+                      onValueChange={(value) =>
+                        handleInputChange(
+                          "smoker",
+                          value === "Not specified" ? null : value === "true"
+                        )
+                      }
+                    >
+                      <SelectTrigger className="mt-1 w-full">
+                        <SelectValue placeholder="Select smoking status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Not specified">
+                          Not specified
+                        </SelectItem>
+                        <SelectItem value="false">Non-smoker</SelectItem>
+                        <SelectItem value="true">Smoker</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <Label className="text-sm font-medium text-gray-950 dark:text-gray-300 flex items-center gap-2">
+                      <Wine className="w-4 h-4" />
+                      Alcohol Use
+                    </Label>
+                    <Select
+                      value={
+                        formData.alcoholUse === null
+                          ? "Not specified"
+                          : formData.alcoholUse?.toString()
+                      }
+                      onValueChange={(value) =>
+                        handleInputChange(
+                          "alcoholUse",
+                          value === "Not specified" ? null : value === "true"
+                        )
+                      }
+                    >
+                      <SelectTrigger className="mt-1 w-full">
+                        <SelectValue placeholder="Select alcohol use" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Not specified">
+                          Not specified
+                        </SelectItem>
+                        <SelectItem value="false">No</SelectItem>
+                        <SelectItem value="true">Yes</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+
+                  <div>
+                    <Label
+                      htmlFor="exerciseFrequency"
+                      className="text-sm font-medium text-gray-950 dark:text-gray-300"
+                    >
+                      Exercise Frequency
+                    </Label>
+                    <Select
+                      value={formData.exerciseFrequency}
+                      onValueChange={(value) =>
+                        handleInputChange("exerciseFrequency", value)
+                      }
+                    >
+                      <SelectTrigger className="mt-1 w-full">
+                        <SelectValue placeholder="Select exercise frequency" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Daily">Daily</SelectItem>
+                        <SelectItem value="Weekly">Weekly</SelectItem>
+                        <SelectItem value="Monthly">Monthly</SelectItem>
+                        <SelectItem value="Rarely">Rarely</SelectItem>
+                        <SelectItem value="Never">Never</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+
+                <div>
+                  <Label className="text-sm font-medium text-gray-950 dark:text-gray-300 flex items-center gap-2">
+                    <Brain className="w-4 h-4" />
+                    Mental Health Concerns
+                  </Label>
+                  <div className="mt-1 space-y-2">
+                    <div className="flex gap-2">
+                      <Input
+                        value={mentalHealthInput}
+                        onChange={(e) => setMentalHealthInput(e.target.value)}
+                        placeholder="Add mental health concern"
+                        onKeyPress={(e) =>
+                          e.key === "Enter" && addMentalHealthConcern()
+                        }
+                      />
+                      <Button
+                        type="button"
+                        onClick={addMentalHealthConcern}
+                        variant="outline"
+                      >
+                        Add
+                      </Button>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      {formData.mentalHealthConcerns.map((concern) => (
+                        <div
+                          key={concern}
+                          className="bg-orange-100 text-orange-800 px-2 py-1 rounded-md text-sm flex items-center gap-1"
+                        >
+                          {concern}
+                          <button
+                            type="button"
+                            onClick={() => removeMentalHealthConcern(concern)}
+                            className="text-orange-600 hover:text-orange-800"
+                          >
+                            ×
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <Separator />
+
+            {/* Medical Notes Section */}
+            <div className="space-y-6">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100 flex items-center gap-2">
+                <FileText className="w-5 h-5" />
+                Medical Notes
+              </h3>
+
+              <div>
+                <Label
+                  htmlFor="notes"
+                  className="text-sm font-medium text-gray-950 dark:text-gray-300"
+                >
+                  Additional Notes
+                </Label>
+                <Textarea
+                  id="notes"
+                  value={formData.notes}
+                  onChange={(e) => handleInputChange("notes", e.target.value)}
+                  placeholder="Any additional medical information, symptoms, or notes..."
+                  className="mt-1 min-h-[100px]"
+                />
               </div>
             </div>
 

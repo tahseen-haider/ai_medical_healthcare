@@ -318,16 +318,54 @@ export async function updateUserProfileInDB(userData: {
   pfp: string;
   bloodType: string;
   allergies: string[];
+  chronicConditions: string[];
+  medications: string[];
+  surgeries: string[];
+  immunizations: string[];
+  bloodPressure: string;
+  heartRate: number | null;
+  respiratoryRate: number | null;
+  temperature: number | null;
+  height: number | null;
+  weight: number | null;
+  smoker: boolean | null;
+  alcoholUse: boolean | null;
+  exerciseFrequency: string;
+  mentalHealthConcerns: string[];
+  notes: string;
 }) {
-  const { id, name, email, phone, dob, gender, pfp, bloodType, allergies } =
-    userData;
+  const {
+    id,
+    name,
+    email,
+    phone,
+    dob,
+    gender,
+    pfp,
+    bloodType,
+    allergies,
+    chronicConditions,
+    medications,
+    surgeries,
+    immunizations,
+    bloodPressure,
+    heartRate,
+    respiratoryRate,
+    temperature,
+    height,
+    weight,
+    smoker,
+    alcoholUse,
+    exerciseFrequency,
+    mentalHealthConcerns,
+    notes,
+  } = userData;
 
   const existingUser = await prisma.user.findUnique({
     where: { id },
     select: { pfp: true },
   });
 
-  // If the profile picture changed, delete the old one from Cloudinary
   if (existingUser?.pfp && existingUser.pfp !== pfp) {
     await cloudinary.uploader.destroy(existingUser.pfp);
   }
@@ -343,6 +381,21 @@ export async function updateUserProfileInDB(userData: {
       pfp,
       bloodType,
       allergies,
+      chronicConditions,
+      medications,
+      surgeries,
+      immunizations,
+      bloodPressure,
+      heartRate,
+      respiratoryRate,
+      temperature,
+      height,
+      weight,
+      smoker,
+      alcoholUse,
+      exerciseFrequency,
+      mentalHealthConcerns,
+      notes,
     },
   });
 }

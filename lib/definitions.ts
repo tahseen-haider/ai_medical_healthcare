@@ -49,6 +49,22 @@ export type UserType = {
   ai_tokens_used?: number | null;
   bloodType?: string | null;
   allergies?: string[];
+  chronicConditions?: string[] | null;
+  medications?: string[];
+  surgeries?: string[];
+  immunizations?: string[];
+  bloodPressure?: string | null;
+  heartRate?: number | null;
+  mentalHealthConcerns?: string[]; // default: []
+  notes?: string | null;
+
+  respiratoryRate?: number | null;
+  temperature?: number | null;
+  height?: number | null; // in cm or inches
+  weight?: number | null; // in kg
+  smoker?: boolean | null;
+  alcoholUse?: boolean | null;
+  exerciseFrequency?: string | null; // e.g., "Daily", "Weekly", "Rarely"
 
   // Preferences
   emailNotifications?: Boolean | null;

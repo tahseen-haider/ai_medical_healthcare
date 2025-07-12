@@ -247,7 +247,7 @@ export async function GET(req: NextRequest) {
             {
               role: "system",
               content:
-                "Summarize the conversation to make a title of 25 characters",
+                "Summarize the conversation to make a title of 22 characters maximum",
             },
             { role: "user", content: newSummary },
           ],

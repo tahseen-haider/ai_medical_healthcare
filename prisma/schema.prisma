@@ -32,8 +32,26 @@ model User {
   ai_tokens_used Int?
 
   // Patient-specific fields
+  chronicConditions String[] @default([])
+  medications String[] @default([])
+  surgeries String[] @default([])
+  immunizations String[] @default([])
+
+  bloodPressure String?
+  heartRate Int?
+  respiratoryRate Int?
+  temperature Float?
   bloodType     String?
   allergies     String[]  @default([])
+
+  smoker Boolean?
+  alcoholUse Boolean?
+  exerciseFrequency String?
+  mentalHealthConcerns String[] @default([])
+
+  notes String?
+  height        Int?
+  weight        Int?
   lastCheckUp   DateTime?
     
   // Preferences

@@ -169,16 +169,62 @@ export const getPfp = async () => {
 
 export async function updateUserProfile(_prevState: any, formData: FormData) {
   try {
+    const id = formData.get("id") as string;
+    const name = formData.get("name") as string;
+    const email = formData.get("email") as string;
+    const phone = formData.get("phone") as string;
+    const dob = formData.get("dob") as string;
+    const gender = formData.get("gender") as string;
+    const pfp = formData.get("pfp") as string;
+    const bloodType = formData.get("bloodType") as string;
+    const allergies = JSON.parse(formData.get("allergies") as string);
+
+    // New medical fields
+    const chronicConditions = JSON.parse(formData.get("chronicConditions") as string);
+    const medications = JSON.parse(formData.get("medications") as string);
+    const surgeries = JSON.parse(formData.get("surgeries") as string);
+    const immunizations = JSON.parse(formData.get("immunizations") as string);
+    const bloodPressure = formData.get("bloodPressure") as string;
+    const heartRate = Number.parseInt(formData.get("heartRate") as string) || null;
+    const respiratoryRate = Number.parseInt(formData.get("respiratoryRate") as string) || null;
+    const temperature = Number.parseFloat(formData.get("temperature") as string) || null;
+    const height = Number.parseInt(formData.get("height") as string) || null;
+    const weight = Number.parseInt(formData.get("weight") as string) || null;
+
+    // Lifestyle factors
+    const smokerValue = formData.get("smoker") as string;
+    const smoker = smokerValue === "" ? null : smokerValue === "true";
+    const alcoholUseValue = formData.get("alcoholUse") as string;
+    const alcoholUse = alcoholUseValue === "" ? null : alcoholUseValue === "true";
+    const exerciseFrequency = formData.get("exerciseFrequency") as string;
+    const mentalHealthConcerns = JSON.parse(formData.get("mentalHealthConcerns") as string);
+    const notes = formData.get("notes") as string;
+
     const updatedUser = {
-      id: formData.get("id") as string,
-      name: formData.get("name") as string,
-      email: formData.get("email") as string,
-      phone: formData.get("phone") as string,
-      dob: formData.get("dob") as string,
-      gender: formData.get("gender") as string,
-      pfp: formData.get("pfp") as string,
-      bloodType: formData.get("bloodType") as string,
-      allergies: JSON.parse(formData.get("allergies") as string),
+      id,
+      name,
+      email,
+      phone,
+      dob,
+      gender,
+      pfp,
+      bloodType,
+      allergies,
+      chronicConditions,
+      medications,
+      surgeries,
+      immunizations,
+      bloodPressure,
+      heartRate,
+      respiratoryRate,
+      temperature,
+      height,
+      weight,
+      smoker,
+      alcoholUse,
+      exerciseFrequency,
+      mentalHealthConcerns,
+      notes,
     };
 
     const res = await updateUserProfileInDB(updatedUser);
@@ -191,6 +237,7 @@ export async function updateUserProfile(_prevState: any, formData: FormData) {
     return { success: false };
   }
 }
+
 
 export async function getDoctorsForDoctorSection() {
   return await getDoctorsForDoctorSectionFromDB();
