@@ -7,6 +7,7 @@ import { deleteChat, getChatList } from "@/actions/chat.action";
 import DeleteChatBtn from "./DeleteChatBtn";
 import LoadingScreen from "@/components/LoadingScreen";
 import { useActionState } from "react";
+import ChatListSuspenseFallback from "./fallback/ChatListSuspenseFallback";
 
 const fetcher = () => getChatList();
 
@@ -22,7 +23,8 @@ export default function ChatListWrapper() {
 
   return (
     <>
-      {isLoading && <LoadingScreen message="Loading chats..." />}
+      {pendingOfDeleteChat && <LoadingScreen message="Deleting your chat..." />}
+      {isLoading && <ChatListSuspenseFallback />}
       {chatsList?.map((ele) => (
         <Link
           href={`/assistant/${ele.id}`}

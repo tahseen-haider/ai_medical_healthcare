@@ -14,11 +14,14 @@ import { $Enums } from "@prisma/client/edge";
 import { v4 as uuidv4 } from "uuid";
 import { deleteImageFromCloudinary } from "@/actions/chat.action";
 import { Camera, X } from "lucide-react";
+import { UserType } from "@/lib/definitions";
 
 export default function Messages({
+  userData,
   initialMessages,
   pfpUrl,
 }: {
+  userData: UserType;
   initialMessages: {
     content: string;
     chatId: string;
@@ -89,6 +92,7 @@ export default function Messages({
 
   // Server Sent Event Declaration
   const streamGPTMessage = ({
+    userData,
     chatId,
     message,
     public_id,
@@ -96,6 +100,7 @@ export default function Messages({
     onDone,
     isOldMessage,
   }: {
+    userData: UserType;
     isOldMessage: boolean;
     chatId: string;
     message?: string;
@@ -106,6 +111,11 @@ export default function Messages({
     const params = new URLSearchParams({
       chatId,
       isOldMessage: isOldMessage.toString(),
+      username: userData.name,
+      dob: userData.dob || "",
+      bloodType: userData.bloodType || "",
+      allergies: userData.allergies?.join(",") || "",
+      gender: userData.gender || "",
     });
 
     if (message) params.set("message", message);
@@ -147,6 +157,7 @@ export default function Messages({
       setIsGenerating(true);
 
       streamGPTMessage({
+        userData,
         isOldMessage: true,
         chatId,
         message: lastMessage.content,
@@ -210,6 +221,7 @@ export default function Messages({
           ]);
 
           streamGPTMessage({
+            userData,
             isOldMessage: false,
             chatId,
             message: prompt,

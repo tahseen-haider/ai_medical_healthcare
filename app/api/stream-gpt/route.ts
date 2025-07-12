@@ -9,6 +9,27 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
 
+  const calculateAge = (dob: string | null | undefined) => {
+    if (!dob) return null;
+    const today = new Date();
+    const birthDate = new Date(dob);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (
+      monthDiff < 0 ||
+      (monthDiff === 0 && today.getDate() < birthDate.getDate())
+    ) {
+      age--;
+    }
+    return age;
+  };
+
+  const username = searchParams.get("username");
+  const age = calculateAge(searchParams.get("dob"));
+  const gender = searchParams.get("gender");
+  const bloodType = searchParams.get("bloodType");
+  const allergies = searchParams.get("allergies");
+
   const message = searchParams.get("message");
   const image = searchParams.get("image");
   const chatId = searchParams.get("chatId") || undefined;
@@ -68,8 +89,6 @@ export async function GET(req: NextRequest) {
           text: `This is the previous history of this chat: ${summary?.summary}`,
         });
 
-        console.log(summary);
-
         if (userContent.length === 0) {
           controller.enqueue(
             encoder.encode(`data: Please send a message or an image.\n\n`)
@@ -77,6 +96,12 @@ export async function GET(req: NextRequest) {
           controller.close();
           return;
         }
+
+        // For User Information
+        userContent.push({
+          type: "text",
+          text: `User Information stored in user profile account: name: "${username}", age: "${age}", gender: "${gender}", allergies: "${allergies}", blood type: "${bloodType}"`,
+        });
 
         messages.push({ role: "user", content: userContent });
 
@@ -125,12 +150,21 @@ export async function GET(req: NextRequest) {
                           - Any important personal context (age, gender, history, etc.)
                           Be concise but preserve all medically relevant and identifying context. This will be reused in future conversations.`,
                 },
-                { role: "user", content: `Previous summary: ${summary?.summary}. \n new User Message:${message}. \n new Response: ${fullResponse}` },
+                {
+                  role: "user",
+                  content: `
+                          Previous summary: ${summary?.summary}.
+                          User Info stored in account's user profile: Name: ${username}, Age: ${age}, Gender: ${gender}, Blood Type: ${bloodType}, Allergies: ${allergies}.
+                          New User Message: ${message}
+                          New Assistant Response: ${fullResponse}
+                          `.trim(),
+                },
               ],
             });
 
             newSummary = summaryCompletion.choices[0].message.content || "";
 
+            console.log(newSummary);
             await prisma.chatSession.update({
               where: {
                 id: chatId,
