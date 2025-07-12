@@ -45,7 +45,7 @@ export default function ChatInputBox({
   }
 
   return (
-    <div className="lg:w-4/6 w-5/6 bottom-0 bg-gray-50 dark:bg-gray-950">
+    <div className="lg:w-4/6 w-11/12 bottom-0 bg-gray-50 dark:bg-gray-950">
       <div className="relative border-[1px] border-gray-400 p-1 mb-4 w-full mx-auto rounded-2xl">
         {/* Prompt Form */}
         <form onSubmit={onSubmit} action={action}>

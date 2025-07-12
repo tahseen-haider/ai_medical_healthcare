@@ -10,13 +10,13 @@ export default function MessageBox({
   message,
   pfpUrl,
 }: {
-  uploadedImgID: string | null;
   index: number;
   message: {
     content: string;
     role: $Enums.MessageRole;
     createdAt: Date;
     image: string | null;
+    base64?: string
   };
   pfpUrl?: string;
 }) {
@@ -52,6 +52,20 @@ export default function MessageBox({
               : "text-white bg-light-4 dark:bg-dark-4 shadow-light dark:shadow-dark"
           } w-full rounded-sm py-2 px-4 whitespace-pre-line`}
         >
+          {message.base64 && (
+            <Image
+              src={message.base64}
+              alt="uploaded image"
+              height={80}
+              width={80}
+              quality={40}
+              className="rounded-sm cursor-pointer w-[80px] h-auto mb-3"
+              onClick={() => {
+                setMaximizedImg(true);
+              }}
+            />
+          )}
+
           {message.image && (
             <>
               <Image
@@ -86,9 +100,7 @@ export default function MessageBox({
               )}
             </>
           )}
-          <Markdown>
-            {message.content}
-          </Markdown>
+          <Markdown>{message.content}</Markdown>
         </div>
       </div>
       <div

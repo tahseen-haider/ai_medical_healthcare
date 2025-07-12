@@ -210,7 +210,6 @@ export default function Messages({
               index={i}
               message={ele}
               pfpUrl={pfpUrl}
-              uploadedImgID={uploadedImgID}
             />
           ))}
         </div>

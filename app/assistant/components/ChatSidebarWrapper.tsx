@@ -5,7 +5,7 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 export default function ChatSidebarWrapper({children}: Readonly<{children: React.ReactNode}>) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   useEffect(() => {
     const isSmallScreen = window.innerWidth < 1024;
     setIsSidebarOpen(!isSmallScreen)

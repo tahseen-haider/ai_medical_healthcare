@@ -14,7 +14,6 @@ import {
 } from "@/lib/definitions";
 import { getAuthenticateUserIdnRole } from "@/lib/session";
 import { redirect } from "next/navigation";
-import { v4 as uuidv4 } from "uuid";
 
 export async function startNewChat(state: ChatState, formData: FormData) {
   const validatedFields = NewChatInputSchema.safeParse({
@@ -25,10 +24,10 @@ export async function startNewChat(state: ChatState, formData: FormData) {
 
   const { userPrompt } = validatedFields.data;
   const imageBase64 = formData.get("imageBase64") as string | null;
+  const userId = formData.get("userId") as string;
 
-  const authenticateUser = await getAuthenticateUserIdnRole();
   const newChatSession = await startNewChatInDB(
-    authenticateUser.userId,
+    userId,
     userPrompt,
     imageBase64
   );
@@ -66,7 +65,10 @@ export async function deleteChat(state: ChatState, formData: FormData) {
   redirect("/assistant");
 }
 
-export const uploadChatImageToCloudinary = async(base64: string, publicId: string) => {
+export const uploadChatImageToCloudinary = async (
+  base64: string,
+  publicId: string
+) => {
   const res = await cloudinary.uploader.upload(base64, {
     folder: "chat_images",
     public_id: publicId,
