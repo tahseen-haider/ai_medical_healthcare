@@ -67,7 +67,7 @@ export default function ChatSidebarWrapper({children}: Readonly<{children: React
           </Link>
         </div>
         {/* Chats List */}
-        <div className="flex flex-col pl-6 py-4 pb-9 pr-2 gap-2 h-[calc(100vh-104px)] overflow-auto">
+        <div className="flex flex-col pl-2 py-4 pb-9 pr-2 gap-1 h-[calc(100vh-104px)] overflow-auto">
           {children}
         </div>
       </div>

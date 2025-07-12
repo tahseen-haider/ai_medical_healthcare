@@ -116,6 +116,22 @@ export default function Messages({
       bloodType: userData.bloodType || "",
       allergies: userData.allergies?.join(",") || "",
       gender: userData.gender || "",
+      chronicConditions: userData.chronicConditions?.join(",") || "",
+      medication: userData.medications?.join(",") || "",
+      surgeries: userData.surgeries?.join(",") || "",
+      immunizations: userData.immunizations?.join(",") || "",
+      bloodPressure: userData.bloodPressure || "",
+      heartRate: userData.heartRate?.toString() || "",
+      respiratoryRate: userData.respiratoryRate?.toString() || "",
+      temperature: userData.temperature?.toString() || "",
+      smoker: userData.smoker?.toString() || "",
+      alcoholUse: userData.alcoholUse?.toString() || "",
+      exerciseFrequency: userData.exerciseFrequency || "",
+      mentalHealthConcerns: userData.mentalHealthConcerns?.join(",") || "",
+      notes: userData.notes || "",
+      height: userData.height?.toString() || "",
+      weight: userData.weight?.toString() || "",
+      lastCheckUp: userData.lastCheckUp?.toISOString() || "",
     });
 
     if (message) params.set("message", message);

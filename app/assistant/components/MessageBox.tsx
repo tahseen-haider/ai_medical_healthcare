@@ -50,7 +50,7 @@ export default function MessageBox({
             !isUser
               ? "bg-transparent shadow-none"
               : "text-white bg-light-4 dark:bg-dark-4 shadow-light dark:shadow-dark"
-          } w-full rounded-lg py-2 px-4 whitespace-pre-line`}
+          } w-full rounded-sm py-2 px-4 whitespace-pre-line`}
         >
           {message.image && (
             <>

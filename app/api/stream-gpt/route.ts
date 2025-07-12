@@ -24,11 +24,28 @@ export async function GET(req: NextRequest) {
     return age;
   };
 
-  const username = searchParams.get("username");
-  const age = calculateAge(searchParams.get("dob"));
-  const gender = searchParams.get("gender");
-  const bloodType = searchParams.get("bloodType");
-  const allergies = searchParams.get("allergies");
+  const username = searchParams.get("username") || "";
+  const age = calculateAge(searchParams.get("dob") || "");
+  const gender = searchParams.get("gender") || "";
+  const bloodType = searchParams.get("bloodType") || "";
+  const allergies = searchParams.get("allergies") || "";
+  const chronicConditions = searchParams.get("chronicConditions") || "";
+  const medications = searchParams.get("medication") || "";
+  const surgeries = searchParams.get("surgeries") || "";
+  const immunizations = searchParams.get("immunizations") || "";
+
+  const bloodPressure = searchParams.get("bloodPressure") || "";
+  const heartRate = searchParams.get("heartRate") || "";
+  const respiratoryRate = searchParams.get("respiratoryRate") || "";
+  const temperature = searchParams.get("temperature") || "";
+  const smoker = searchParams.get("smoker") || "";
+  const alcoholUse = searchParams.get("alcoholUse") || "";
+  const exerciseFrequency = searchParams.get("exerciseFrequency") || "";
+  const mentalHealthConcerns = searchParams.get("mentalHealthConcerns") || "";
+  const notes = searchParams.get("notes") || "";
+  const height = searchParams.get("height") || "";
+  const weight = searchParams.get("weight") || "";
+  const lastCheckUp = searchParams.get("lastCheckUp") || "";
 
   const message = searchParams.get("message");
   const image = searchParams.get("image");
@@ -41,22 +58,77 @@ export async function GET(req: NextRequest) {
   const stream = new ReadableStream({
     async start(controller) {
       try {
+        const userProfileInfo = `User Information stored in user profile account:
+              - Name: "${username}"
+              - Age: "${age}"
+              - Gender: "${gender}"
+              - Blood Type: "${bloodType}"
+              - Allergies: "${allergies}"
+              - Chronic Conditions: "${chronicConditions}"
+              - Medications: "${medications}"
+              - Surgeries: "${surgeries}"
+              - Immunizations: "${immunizations}"
+              - Blood Pressure: "${bloodPressure}"
+              - Heart Rate: "${heartRate}"
+              - Respiratory Rate: "${respiratoryRate}"
+              - Temperature: "${temperature}"
+              - Smoker: "${smoker}"
+              - Alcohol Use: "${alcoholUse}"
+              - Exercise Frequency: "${exerciseFrequency}"
+              - Mental Health Concerns: "${mentalHealthConcerns}"
+              - Notes: "${notes}"
+              - Height: "${height}"
+              - Weight: "${weight}"
+              - Last Check-Up: "${lastCheckUp}"`;
         const messages: any[] = [
           {
             role: "system",
             content: `
-                    You are a friendly and helpful AI medical assistant. Respond in a warm, clear, and easy-to-understand manner.
+                    You are a compassionate and knowledgeable AI medical assistant designed to help users with their personal health concerns.
 
-                    Guidelines:
-                    - Prioritize medical or personal health-related questions.
-                    - If the user asks something unrelated to health or medicine, reply with: "Please ask medical questions."
-                    - If the message refers to the current conversation context, respond appropriately.
-                    - If the user uploads an image:
-                      - Analyze it and offer helpful medical insights if relevant.
-                      - If the image is not related to health, respond with: "The uploaded image does not appear to be medical-related."
+                    🎯 **Primary Objectives:**
+                    - Provide medically sound, easy-to-understand responses.
+                    - Use the user's health profile and conversation history to tailor your answers.
+                    - Actively help the user feel safe, heard, and supported.
+                    - Keep responses short, empathetic, and medically accurate.
 
-                    Keep responses concise, reassuring, and informative.
-                   `.trim(),
+                    👤 **User Context:**
+                    You have access to the user's health profile, which includes:
+                    - Basic info: Name, age, gender
+                    - Vital signs and metrics: Height, weight, blood pressure, heart rate, respiratory rate, temperature
+                    - Health history: Allergies, chronic conditions, medications, surgeries, immunizations
+                    - Lifestyle data: Smoking, alcohol use, exercise habits
+                    - Mental health concerns and previous notes
+                    - Last medical check-up date
+
+                    🧠 **Chat History Use:**
+                    If a previous summary is present, use it to avoid repeating questions and to maintain continuity. Be aware of ongoing concerns or treatments already mentioned.
+
+                    🖼️ **Uploaded Images:**
+                    If the user provides a medical image (e.g., skin rash, X-ray), analyze and provide insights. If the image seems irrelevant to health, reply:
+                    > "The uploaded image does not appear to be medically relevant. Please share a medical-related image or ask a health question."
+
+                    ⚠️ **Boundaries:**
+                    If the user asks something clearly unrelated to personal health or medicine, politely decline:
+                    > "I'm here to help with health-related questions. Please ask something related to your health."
+
+                    💡 **Best Practices:**
+                    - Greet users kindly, especially on first interaction.
+                    - Avoid diagnosing but give strong, informative suggestions.
+                    - Recommend follow-ups with doctors when needed.
+                    - Speak in plain, human language. Avoid robotic tone.
+                    - Respect privacy. Don't assume more than what's provided.
+                    - If something is missing (e.g., age or vitals), gently prompt the user to update their profile for better assistance.
+
+                    ✨ **Response Style:**
+                    - Friendly and reassuring tone
+                    - Concise (2-4 sentences per reply unless more is needed)
+                    - Easy to read and understand, suitable for non-medical users
+
+                    You are now ready to help the user. Always be proactive in using the provided health data to tailor your answer.
+
+                    User Profile Information: ${userProfileInfo}
+  `.trim(),
           },
         ];
 
@@ -96,12 +168,6 @@ export async function GET(req: NextRequest) {
           controller.close();
           return;
         }
-
-        // For User Information
-        userContent.push({
-          type: "text",
-          text: `User Information stored in user profile account: name: "${username}", age: "${age}", gender: "${gender}", allergies: "${allergies}", blood type: "${bloodType}"`,
-        });
 
         messages.push({ role: "user", content: userContent });
 
@@ -154,7 +220,6 @@ export async function GET(req: NextRequest) {
                   role: "user",
                   content: `
                           Previous summary: ${summary?.summary}.
-                          User Info stored in account's user profile: Name: ${username}, Age: ${age}, Gender: ${gender}, Blood Type: ${bloodType}, Allergies: ${allergies}.
                           New User Message: ${message}
                           New Assistant Response: ${fullResponse}
                           `.trim(),
@@ -247,7 +312,7 @@ export async function GET(req: NextRequest) {
             {
               role: "system",
               content:
-                "Summarize the conversation to make a title of 22 characters maximum",
+                "Generate a short, catchy title summarizing the conversation. Limit to 20 characters max. Avoid punctuation."
             },
             { role: "user", content: newSummary },
           ],
