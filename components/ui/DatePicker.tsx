@@ -27,17 +27,15 @@ export function DatePickerWithPresets({
 }) {
   const [date, setDate] = React.useState<Date>();
 
+  // ✅ Sync internal date with parent
+  React.useEffect(() => {
+    setSelectedDate(date);
+  }, [date, setSelectedDate]);
+
   return (
     <Popover>
-      <PopoverTrigger asChild>
-        <Button
-          id="selectDate"
-          variant={"outline"}
-          className={cn(
-            "w-full border-[1px] hover:dark:bg-gray-950 bg-gray-200 dark:bg-gray-950 border-gray-400 dark:border-gray-200 flex h-14 p-4 rounded-sm mt-2  justify-start text-left font-normal",
-            !date && "text-muted-foreground"
-          )}
-        >
+      <PopoverTrigger asChild className={cn("w-full flex justify-start gap-2")}>
+        <Button id="selectDate" variant={"outline"}>
           <CalendarIcon />
           {date ? format(date, "PPP") : <span>Pick a date</span>}
         </Button>
@@ -47,10 +45,10 @@ export function DatePickerWithPresets({
         className="flex w-auto flex-col space-y-2 p-2"
       >
         <Select
-          required
-          onValueChange={(value) =>
-            setDate(addDays(new Date(), parseInt(value)))
-          }
+          onValueChange={(value) => {
+            const selected = addDays(new Date(), parseInt(value));
+            setDate(selected);
+          }}
         >
           <SelectTrigger>
             <SelectValue placeholder="Select" />

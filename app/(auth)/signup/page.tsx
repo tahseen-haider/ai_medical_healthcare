@@ -1,164 +1,229 @@
 "use client";
+
 import { signup } from "@/actions/auth.action";
-import Btn from "@/components/Button";
+import { signInWithOAuth } from "@/lib/oauth-client";
 import FindUsHereSection from "@/components/FindUsHereSection";
 import LoadingScreen from "@/components/LoadingScreen";
-import { signInWithOAuth } from "@/lib/oauth-client";
-import Image from "next/image";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { useActionState } from "react";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle, Mail, Lock, User } from "lucide-react";
 
 export default function SignupPage() {
   const [state, action, pending] = useActionState(signup, undefined);
 
   return (
-    <main className="flex flex-col items-center">
-      {/* Login Section */}
-      <section className="px-2 sm:px-6 py-4 flex items-center flex-col  gap-6 w-full max-w-[500px]">
-        <div className="flex justify-between gap-8 w-full">
-          <div className="flex flex-col gap-3">
-            <h1 className="font-ubuntu font-bold text-4xl text-dark-4 dark:text-white -tracking-[0.5px] ">
-              Sign Up
+    <main className="flex flex-col items-center min-h-screen bg-background">
+      {/* Loading Screen */}
+      {pending && <LoadingScreen message="Signing you Up..." />}
+
+      {/* Signup Section */}
+      <section className="px-4 sm:px-6 py-8 flex items-center flex-col gap-8 max-w-[500px] w-full">
+        {/* Header */}
+        <div className="flex justify-between w-full gap-5 items-start">
+          <div className="flex flex-col gap-2">
+            <h1 className="font-bold text-4xl text-foreground">
+              Create Account
             </h1>
-            <h5 className="font-bold font-ubuntu text-base text-gray-600 dark:text-gray-400">
+            <p className="text-muted-foreground">
               Make an account to save your chats
-            </h5>
+            </p>
           </div>
-          <div className="flex flex-col gap-3 justify-between">
-            <h5 className="font-bold font-ubuntu text-base text-gray-600 dark:text-gray-400">
+          <div className="flex flex-col gap-3 items-end">
+            <p className="text-sm text-muted-foreground">
               Already have an account?
-            </h5>
-            <Btn
-              onClick={(e) => {
-                redirect("/login");
-              }}
-              className="bg-light-4 text-white font-bold font-ubuntu text-base p-3"
+            </p>
+            <Button
+              variant="outline"
+              onClick={() => redirect("/login")}
+              className="whitespace-nowrap bg-light-4 text-white dark:text-black dark:bg-white"
             >
-              Log in
-            </Btn>
+              Log In
+            </Button>
           </div>
         </div>
-        {/* Form */}
-        <div className="w-full rounded-sm shadow-light dark:shadow-dark py-16 px-5 flex flex-col items-center gap-12 max-w-[500px] dark:bg-dark-4">
-          {/* OAuth */}
-          <div className="w-full flex justify-between text-black font-bold">
-            <button
-              onClick={() => signInWithOAuth("google")}
-              className="flex items-center w-1/2 justify-between mr-4 bg-light-4 dark:bg-white p-4 text-white dark:text-black rounded-lg shadow-dark dark:shadow-light"
-            >
-              Sign Up with Google
-              <Image
-                width={40}
-                height={40}
-                src="/icons/google-brands.svg"
-                alt="google-logo"
-              />
-            </button>
-            <button
-              onClick={() => signInWithOAuth("github")}
-              className="flex items-center w-1/2 justify-between mr-4 bg-light-4 dark:bg-white p-4 text-white dark:text-black rounded-lg shadow-dark dark:shadow-light"
-            >
-              Sign Up with GitHub
-              <Image
-                width={40}
-                height={40}
-                src="/icons/github-brands.svg"
-                alt="github-logo"
-              />
-            </button>
-          </div>
-          {/* Separator */}
-          <div className="w-full border-b-2 relative flex justify-center">
-            <div className="absolute text-center -top-6 text-lg bg-gray-50 dark:bg-dark-4 p-3">
-              OR
+
+        {/* Signup Card */}
+        <Card className="w-full bg-white dark:bg-dark-4">
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-2xl text-center">Sign Up</CardTitle>
+            <CardDescription className="text-center">
+              Choose your preferred sign up method
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* OAuth Buttons */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Button
+                variant="outline"
+                onClick={() => signInWithOAuth("google")}
+                className="w-full"
+                disabled={pending}
+              >
+                <Image
+                  width={20}
+                  height={20}
+                  src="/icons/google-brands.svg"
+                  alt="Google"
+                  className="mr-2"
+                />
+                Google
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => signInWithOAuth("github")}
+                className="w-full"
+                disabled={pending}
+              >
+                <Image
+                  width={20}
+                  height={20}
+                  src="/icons/github-brands.svg"
+                  alt="GitHub"
+                  className="mr-2"
+                />
+                GitHub
+              </Button>
             </div>
-          </div>
-          {/* Custom Auth */}
-          <form
-            action={action}
-            className="w-full flex flex-col items-center gap-6"
-          >
-            <div className="flex flex-col gap-6 w-full">
-              <div className="w-full">
-                <label
-                  htmlFor="username"
-                  className="font-ubuntu font-bold text-lg"
-                >
+
+            {/* Separator */}
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <Separator className="w-full" />
+              </div>
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-white dark:bg-dark-4 px-2 text-muted-foreground">
+                  Or continue with
+                </span>
+              </div>
+            </div>
+
+            {/* Email/Password Form */}
+            <form action={action} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="username" className="text-sm font-medium">
                   Username
-                </label>
-                <input
-                  id="username"
-                  type="username"
-                  name="username"
-                  placeholder="John Doe"
-                  required
-                  className="input-field"
-                />
-              </div>
-              <div className="w-full">
-                <label
-                  htmlFor="email"
-                  className="font-ubuntu font-bold text-lg"
-                >
-                  Email
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  name="email"
-                  placeholder="example@mail.com"
-                  required
-                  className="input-field "
-                />
-              </div>
-              <div className="w-full">
-                <label
-                  htmlFor="password"
-                  className="font-ubuntu font-bold text-lg"
-                >
-                  Password
-                </label>
-                <input
-                  id="password"
-                  type="password"
-                  name="password"
-                  placeholder="********"
-                  required
-                  minLength={8}
-                  maxLength={15}
-                  className="input-field"
-                />
-              </div>
-              {state?.errors?.password && (
-                <div>
-                  <p>Password must:</p>
-                  <ul>
-                    {state.errors.password.map((error) => (
-                      <li key={error}>- {error}</li>
-                    ))}
-                  </ul>
+                </Label>
+                <div className="relative">
+                  <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="username"
+                    type="text"
+                    name="username"
+                    placeholder="John Doe"
+                    required
+                    disabled={pending}
+                    className="pl-10"
+                  />
                 </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-sm font-medium">
+                  Email Address
+                </Label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="email"
+                    type="email"
+                    name="email"
+                    placeholder="example@mail.com"
+                    required
+                    disabled={pending}
+                    className="pl-10"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="password" className="text-sm font-medium">
+                  Password
+                </Label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="password"
+                    type="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    required
+                    minLength={8}
+                    maxLength={15}
+                    disabled={pending}
+                    className="pl-10"
+                  />
+                </div>
+              </div>
+
+              {/* Password Requirements */}
+              {state?.errors?.password && (
+                <Alert variant="destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>
+                    <div>
+                      <p className="font-medium mb-2">Password must:</p>
+                      <ul className="list-disc list-inside space-y-1">
+                        {state.errors.password.map((error) => (
+                          <li key={error} className="text-sm">
+                            {error}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </AlertDescription>
+                </Alert>
               )}
-            </div>
-            <button
-              type="submit"
-              className="px-6 py-3 bg-light-4 rounded-lg font-bold font-ubuntu text-2xl text-white shadow-light cursor-pointer hover:bg-black hover:text-white"
-            >
-              SignUp
-            </button>
-            {state?.message && <p className="text-red-600 text-center">{state.message}</p>}
-            {(state?.errors?.email || state?.errors?.password) && (
-              <p className="text-red-600 text-center">{state.errors.email}</p>
-            )}
-          </form>
-        </div>
+              <Separator />
+              {/* General Error Messages */}
+              {(state?.errors?.email || state?.message) && (
+                <Alert variant="destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>
+                    {state?.errors?.email || state?.message}
+                  </AlertDescription>
+                </Alert>
+              )}
+
+              <Button type="submit" className="w-full" disabled={pending}>
+                {pending ? "Creating Account..." : "Create Account"}
+              </Button>
+            </form>
+
+            {/* Terms and Privacy */}
+            {/* <p className="text-xs text-center text-muted-foreground">
+              By creating an account, you agree to our{" "}
+              <Button variant="link" asChild className="h-auto p-0 text-xs">
+                <Link href="#">Terms of Service</Link>
+              </Button>{" "}
+              and{" "}
+              <Button variant="link" asChild className="h-auto p-0 text-xs">
+                <Link href="#">Privacy Policy</Link>
+              </Button>
+            </p> */}
+          </CardContent>
+        </Card>
       </section>
-      {/* Find Us */}
-      <div className="w-full max-w-[1920px]">
+
+      <Separator />
+
+      {/* Find Us Section */}
+      <div className="w-full max-w-[1920px] mt-auto">
         <FindUsHereSection />
       </div>
-      {/* Uploading */}
-      {pending && <LoadingScreen message="Signing you Up..." />}
     </main>
   );
 }

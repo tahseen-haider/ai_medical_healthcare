@@ -1,22 +1,24 @@
-"use client"
+"use client";
 
-import { contactUs } from "@/actions"
-import Btn from "@/components/Button"
-import FindUsHereSection from "@/components/FindUsHereSection"
-import LoadingScreen from "@/components/LoadingScreen"
-import PopUpCard from "@/components/PopUpCard"
-import { PhoneCallIcon, User, Mail, MessageSquare } from "lucide-react"
-import { useActionState, useEffect, useState } from "react"
+import { contactUs } from "@/actions";
+import Btn from "@/components/Button";
+import FindUsHereSection from "@/components/FindUsHereSection";
+import LoadingScreen from "@/components/LoadingScreen";
+import PopUpCard from "@/components/PopUpCard";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { PhoneCallIcon, User, Mail, MessageSquare } from "lucide-react";
+import { useActionState, useEffect, useState } from "react";
 
 export default function ContactUsPage() {
-  const [state, action, pending] = useActionState(contactUs, undefined)
-  const [showPopup, setShowPopup] = useState(false)
+  const [state, action, pending] = useActionState(contactUs, undefined);
+  const [showPopup, setShowPopup] = useState(false);
 
   useEffect(() => {
     if (state?.is_submitted) {
-      setShowPopup(true)
+      setShowPopup(true);
     }
-  }, [state])
+  }, [state]);
 
   return (
     <main className="min-h-screen flex flex-col items-center bg-gray-50 dark:bg-gray-950">
@@ -32,7 +34,8 @@ export default function ContactUsPage() {
             Contact Us
           </h1>
           <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Have a question or suggestion? We're here to help and would love to hear from you.
+            Have a question or suggestion? We're here to help and would love to
+            hear from you.
           </p>
         </div>
 
@@ -47,38 +50,45 @@ export default function ContactUsPage() {
                   <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
                     <User className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                   </div>
-                  <h3 className="font-ubuntu font-bold text-xl text-dark-4 dark:text-white">Your Information</h3>
+                  <h3 className="font-ubuntu font-bold text-xl text-dark-4 dark:text-white">
+                    Your Information
+                  </h3>
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <div className="space-y-3">
-                    <label htmlFor="fullname" className="font-ubuntu font-bold text-lg text-dark-4 dark:text-white">
+                    <label
+                      htmlFor="fullname"
+                      className="font-ubuntu font-bold text-sm text-dark-4 dark:text-white"
+                    >
                       Full Name
                     </label>
-                    <input
+                    <Input
                       id="fullname"
                       type="text"
                       name="fullname"
                       placeholder="Enter your full name"
                       required
                       minLength={3}
-                      className="input-field"
                     />
                   </div>
 
                   <div className="space-y-3">
-                    <label htmlFor="email" className="font-ubuntu font-bold text-lg text-dark-4 dark:text-white">
+                    <label
+                      htmlFor="email"
+                      className="font-ubuntu font-bold text-sm text-dark-4 dark:text-white"
+                    >
                       Email Address
                     </label>
                     <div className="relative">
                       <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                      <input
+                      <Input
+                      className="pl-12"
                         id="email"
                         type="email"
                         name="email"
                         placeholder="your.email@example.com"
                         required
-                        className="input-field pl-12"
                       />
                     </div>
                   </div>
@@ -91,20 +101,24 @@ export default function ContactUsPage() {
                   <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
                     <MessageSquare className="w-5 h-5 text-gray-600 dark:text-gray-400" />
                   </div>
-                  <h3 className="font-ubuntu font-bold text-xl text-dark-4 dark:text-white">Your Message</h3>
+                  <h3 className="font-ubuntu font-bold text-xl text-dark-4 dark:text-white">
+                    Your Message
+                  </h3>
                 </div>
 
                 <div className="space-y-3">
-                  <label htmlFor="inquiry" className="font-ubuntu font-bold text-lg text-dark-4 dark:text-white">
+                  <label
+                    htmlFor="inquiry"
+                    className="font-ubuntu font-bold text-sm text-dark-4 dark:text-white"
+                  >
                     Message
                   </label>
-                  <textarea
+                  <Textarea
                     id="inquiry"
                     name="inquiry"
                     placeholder="Tell us how we can help you..."
                     required
                     rows={6}
-                    className="w-full p-4 border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent resize-none font-ubuntu"
                   />
                 </div>
               </div>
@@ -147,23 +161,36 @@ export default function ContactUsPage() {
                 {state?.message || "Message Sent Successfully!"}
               </h1>
               <p className="font-ubuntu text-gray-600 dark:text-gray-400">
-                Thank you for reaching out. We'll get back to you as soon as possible.
+                Thank you for reaching out. We'll get back to you as soon as
+                possible.
               </p>
             </div>
 
             <div className="w-full bg-gray-50 dark:bg-gray-800 rounded-lg p-6 mb-6">
-              <h3 className="font-ubuntu font-bold text-lg text-dark-4 dark:text-white mb-4">Message Summary</h3>
+              <h3 className="font-ubuntu font-bold text-lg text-dark-4 dark:text-white mb-4">
+                Message Summary
+              </h3>
               <div className="space-y-4 font-ubuntu text-base">
                 <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
-                  <span className="font-semibold text-gray-600 dark:text-gray-400">Full Name:</span>
-                  <span className="text-dark-4 dark:text-white">{state?.submitted?.fullname}</span>
+                  <span className="font-semibold text-gray-600 dark:text-gray-400">
+                    Full Name:
+                  </span>
+                  <span className="text-dark-4 dark:text-white">
+                    {state?.submitted?.fullname}
+                  </span>
                 </div>
                 <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
-                  <span className="font-semibold text-gray-600 dark:text-gray-400">Email:</span>
-                  <span className="text-dark-4 dark:text-white">{state?.submitted?.email}</span>
+                  <span className="font-semibold text-gray-600 dark:text-gray-400">
+                    Email:
+                  </span>
+                  <span className="text-dark-4 dark:text-white">
+                    {state?.submitted?.email}
+                  </span>
                 </div>
                 <div className="flex flex-col gap-2">
-                  <span className="font-semibold text-gray-600 dark:text-gray-400">Message:</span>
+                  <span className="font-semibold text-gray-600 dark:text-gray-400">
+                    Message:
+                  </span>
                   <div className="bg-white dark:bg-gray-700 p-3 rounded-lg max-h-32 overflow-y-auto text-dark-4 dark:text-white text-sm leading-relaxed">
                     {state?.submitted?.message}
                   </div>
@@ -183,5 +210,5 @@ export default function ContactUsPage() {
         <FindUsHereSection />
       </div>
     </main>
-  )
+  );
 }

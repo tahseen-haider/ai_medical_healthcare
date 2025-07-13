@@ -411,7 +411,7 @@ export default function UserProfileEdit({ user }: EditUserProfileProps) {
               <div className="flex gap-2">
                 <Button
                   onClick={handleSave}
-                  className="bg-blue-600 hover:bg-blue-700"
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
                 >
                   <Save className="w-4 h-4 mr-2" />
                   Save Changes
@@ -1141,7 +1141,7 @@ export default function UserProfileEdit({ user }: EditUserProfileProps) {
               </Button>
               <Button
                 onClick={handleSave}
-                className="bg-blue-600 hover:bg-blue-700"
+                className="bg-blue-600 text-white hover:bg-blue-700"
               >
                 <Save className="w-4 h-4 mr-2" />
                 Save Changes

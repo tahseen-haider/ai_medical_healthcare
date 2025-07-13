@@ -1,155 +1,188 @@
 "use client";
+
 import { login } from "@/actions/auth.action";
-import Btn from "@/components/Button";
+import { signInWithOAuth } from "@/lib/oauth-client";
 import FindUsHereSection from "@/components/FindUsHereSection";
 import LoadingScreen from "@/components/LoadingScreen";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { useActionState } from "react";
-import { signInWithOAuth } from "@/lib/oauth-client";
 import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle, Mail, Lock } from "lucide-react";
 
 export default function LoginPage() {
   const [state, action, pending] = useActionState(login, undefined);
 
   return (
-    <main className=" flex flex-col items-center">
-      {/* Uploading */}
+    <main className="flex flex-col items-center min-h-screen bg-background">
+      {/* Loading Screen */}
       {pending && <LoadingScreen message="Logging In..." />}
 
       {/* Login Section */}
-      <section className="px-2 sm:px-6 py-4 flex items-center flex-col  gap-6 max-w-[500px] w-full">
-        <div className="flex justify-between w-full gap-5">
-          <div className="flex flex-col gap-3">
-            <h1 className="font-ubuntu font-bold text-4xl text-dark-4 dark:text-white -tracking-[0.5px] ">
-              Login
-            </h1>
-            <h5 className="font-bold font-ubuntu text-base text-gray-600 dark:text-gray-400">
-              Login to see your chats
-            </h5>
+      <section className="px-4 sm:px-6 py-8 flex items-center flex-col gap-8 max-w-[500px] w-full">
+        {/* Header */}
+        <div className="flex justify-between w-full gap-5 items-start">
+          <div className="flex flex-col gap-2">
+            <h1 className="font-bold text-4xl text-foreground">Welcome Back</h1>
+            <p className="text-muted-foreground">
+              Sign in to access your profile
+            </p>
           </div>
-          <div className="flex flex-col gap-3 justify-between">
-            <h5 className="font-bold font-ubuntu text-base text-gray-600 dark:text-gray-400">
+          <div className="flex flex-col gap-3 items-end">
+            <p className="text-sm text-muted-foreground">
               Don't have an account?
-            </h5>
-            <Btn
-              onClick={(e) => {
-                redirect("/signup");
-              }}
-              className="bg-light-4 text-white font-bold font-ubuntu text-base p-3"
+            </p>
+            <Button
+              variant="outline"
+              onClick={() => redirect("/signup")}
+              className="whitespace-nowrap bg-light-4 text-white dark:text-black dark:bg-white "
             >
-              Create an account
-            </Btn>
+              Create Account
+            </Button>
           </div>
         </div>
-        {/* Form */}
-        <div className="w-full rounded-sm shadow-light dark:shadow-dark py-16 px-5 flex flex-col items-center gap-12 max-w-[500px] dark:bg-dark-4">
-          {/* OAuth */}
-          <div className="w-full flex justify-between text-black font-bold">
-            <button
-              onClick={() => signInWithOAuth("google")}
-              className="flex items-center w-1/2 justify-between mr-4 bg-light-4 dark:bg-white p-4 text-white dark:text-black rounded-lg shadow-dark dark:shadow-light"
-            >
-              Sign in with Google{" "}
-              <Image
-                width={40}
-                height={40}
-                className=""
-                src="/icons/google-brands.svg"
-                alt="google-logo"
-              />
-            </button>
-            <button
-              onClick={() => signInWithOAuth("github")}
-              className="flex items-center w-1/2 justify-between mr-4 bg-light-4 dark:bg-white p-4 text-white dark:text-black rounded-lg shadow-dark dark:shadow-light"
-            >
-              Sign in with GitHub
-              <Image
-                width={40}
-                height={40}
-                src="/icons/github-brands.svg"
-                alt="github-logo"
-              />
-            </button>
-          </div>
-          {/* Separator */}
-          <div className="w-full border-b-2 relative flex justify-center">
-            <div className="absolute text-center -top-6 text-lg bg-gray-50 dark:bg-dark-4 p-3">
-              OR
-            </div>
-          </div>
-          {/* Custom Auth */}
-          <form
-            action={action}
-            className="w-full flex flex-col items-center gap-6"
-          >
-            <div className="flex flex-col gap-4 w-full">
-              <div className="w-full">
-                <label
-                  htmlFor="email"
-                  className="font-ubuntu font-bold text-lg"
-                >
-                  Email
-                </label>
-                <input
-                  id="email"
-                  type="email"
-                  name="email"
-                  placeholder="example@mail.com"
-                  required
-                  className="input-field"
+
+        {/* Login Card */}
+        <Card className="w-full bg-white dark:bg-dark-4">
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-2xl text-center">Sign In</CardTitle>
+            <CardDescription className="text-center">
+              Choose your preferred sign in method
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            {/* OAuth Buttons */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Button
+                variant="outline"
+                onClick={() => signInWithOAuth("google")}
+                className="w-full"
+                disabled={pending}
+              >
+                <Image
+                  width={20}
+                  height={20}
+                  src="/icons/google-brands.svg"
+                  alt="Google"
+                  className="mr-2"
                 />
+                Google
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => signInWithOAuth("github")}
+                className="w-full"
+                disabled={pending}
+              >
+                <Image
+                  width={20}
+                  height={20}
+                  src="/icons/github-brands.svg"
+                  alt="GitHub"
+                  className="mr-2"
+                />
+                GitHub
+              </Button>
+            </div>
+
+            {/* Separator */}
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <Separator className="w-full" />
               </div>
-              <div className="w-full">
-                <label
-                  htmlFor="password"
-                  className="font-ubuntu font-bold text-lg"
-                >
+              <div className="relative flex justify-center text-xs uppercase">
+                <span className="bg-white dark:bg-dark-4 px-2 text-muted-foreground">
+                  Or continue with
+                </span>
+              </div>
+            </div>
+
+            {/* Email/Password Form */}
+            <form action={action} className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-sm font-medium">
+                  Email Address
+                </Label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="email"
+                    type="email"
+                    name="email"
+                    placeholder="example@mail.com"
+                    required
+                    disabled={pending}
+                    className="pl-10"
+                  />
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="password" className="text-sm font-medium">
                   Password
-                </label>
-                <input
-                  id="password"
-                  type="password"
-                  name="password"
-                  placeholder="********"
-                  required
-                  minLength={8}
-                  className="input-field"
-                />
+                </Label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                  <Input
+                    id="password"
+                    type="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    required
+                    minLength={8}
+                    disabled={pending}
+                    className="pl-10"
+                  />
+                </div>
               </div>
+              <Separator />
+              {/* Error Messages */}
+              {(state?.errors?.email ||
+                state?.errors?.password ||
+                state?.message) && (
+                <Alert variant="destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>
+                    {state?.errors?.email ||
+                      state?.errors?.password ||
+                      state?.message}
+                  </AlertDescription>
+                </Alert>
+              )}
+
+              <Button type="submit" className="w-full" disabled={pending}>
+                {pending ? "Signing In..." : "Sign In"}
+              </Button>
+            </form>
+
+            {/* Additional Links */}
+            <div className="flex flex-col sm:flex-row gap-2 justify-center text-sm">
+              <Button variant="link" asChild className="h-auto p-0">
+                <Link href="/reset-password">Forgot your password?</Link>
+              </Button>
+              <span className="hidden sm:inline text-muted-foreground">•</span>
+              <Button variant="link" asChild className="h-auto p-0">
+                <Link href="/verify-email">Verify email address</Link>
+              </Button>
             </div>
-            {(state?.errors?.email || state?.errors?.password) && (
-              <p className="text-red-600 text-center">{state.errors.email}</p>
-            )}
-            {state?.message && (
-              <p className="text-red-600 text-center">{state.message}</p>
-            )}
-            <button
-              type="submit"
-              className="px-6 py-3 bg-light-4 rounded-lg font-bold font-ubuntu text-2xl text-white shadow-light cursor-pointer hover:bg-black hover:text-white"
-            >
-              Login
-            </button>
-            {/* Links */}
-            <div className="max-w-[1000px flex flex-col gap-5 text-center justify-between font-bold text-white">
-              <Link
-                href="/reset-password"
-                className="bg-light-4 py-1 px-3 shadow-light dark:shadow-dark rounded-lg"
-              >
-                Forgot Password?
-              </Link>
-              <Link
-                href="/verify-email"
-                className="bg-light-4 py-1 px-3 shadow-light dark:shadow-dark rounded-lg"
-              >
-                Verify your email address
-              </Link>
-            </div>
-          </form>
-        </div>
+          </CardContent>
+        </Card>
       </section>
-      {/* Find Us */}
-      <div className="w-full max-w-[1920px]">
+      <Separator />
+      {/* Find Us Section */}
+      <div className="w-full max-w-[1920px] mt-auto">
         <FindUsHereSection />
       </div>
     </main>

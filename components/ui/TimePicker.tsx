@@ -30,7 +30,7 @@ export const TimePicker: React.FC<TimePickerProps> = ({ value, onChange }) => {
   );
 
   return (
-    <div className="relative flex items-center gap-2 border-[1px] bg-gray-200 dark:bg-gray-950 border-gray-400 dark:border-gray-200 h-14 w-full p-4 rounded-sm mt-2 ">
+    <div className="flex w-full max-w-[260px] justify-between">
       {/* Hour */}
       <Select
         value={value.hour}

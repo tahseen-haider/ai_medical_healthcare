@@ -27,7 +27,7 @@ export default function SelectDoctor({
   setDoctorId: React.Dispatch<React.SetStateAction<string>>;
 }) {
   return (
-    <div className="relative flex items-center gap-2 border-[1px] bg-gray-200 dark:bg-gray-950 border-gray-400 dark:border-gray-200 h-14 w-full rounded-sm mt-2 ">
+    <div className="">
       <Select onValueChange={setDoctorId} required>
         <SelectTrigger className="h-full w-full" id="selectDoctor">
           <SelectValue placeholder="Select your doctor" />

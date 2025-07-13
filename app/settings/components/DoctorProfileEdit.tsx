@@ -268,7 +268,7 @@ export default function DoctorProfileEdit({ user }: EditProfileProps) {
               <div className="flex gap-2">
                 <Button
                   onClick={handleSave}
-                  className="bg-blue-600 hover:bg-blue-700"
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
                 >
                   <Save className="w-4 h-4 mr-2" />
                   Save Changes
@@ -677,7 +677,7 @@ export default function DoctorProfileEdit({ user }: EditProfileProps) {
               </Button>
               <Button
                 onClick={handleSave}
-                className="bg-blue-600 hover:bg-blue-700"
+                className="bg-blue-600 hover:bg-blue-700 text-white"
               >
                 <Save className="w-4 h-4 mr-2" />
                 Save Changes
