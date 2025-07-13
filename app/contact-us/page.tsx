@@ -1,129 +1,187 @@
-"use client";
-import { contactUs } from "@/actions";
-import Btn from "@/components/Button";
-import FindUsHereSection from "@/components/FindUsHereSection";
-import LoadingScreen from "@/components/LoadingScreen";
-import PopUpCard from "@/components/PopUpCard";
-import { PhoneCallIcon } from "lucide-react";
-import { useActionState, useEffect, useState } from "react";
+"use client"
+
+import { contactUs } from "@/actions"
+import Btn from "@/components/Button"
+import FindUsHereSection from "@/components/FindUsHereSection"
+import LoadingScreen from "@/components/LoadingScreen"
+import PopUpCard from "@/components/PopUpCard"
+import { PhoneCallIcon, User, Mail, MessageSquare } from "lucide-react"
+import { useActionState, useEffect, useState } from "react"
 
 export default function ContactUsPage() {
-  const [state, action, pending] = useActionState(contactUs, undefined);
-  const [showPopup, setShowPopup] = useState(false);
+  const [state, action, pending] = useActionState(contactUs, undefined)
+  const [showPopup, setShowPopup] = useState(false)
 
   useEffect(() => {
     if (state?.is_submitted) {
-      setShowPopup(true);
+      setShowPopup(true)
     }
-  }, [state]);
+  }, [state])
 
   return (
-    <main className="flex flex-col items-center">
-      <section className="px-2 sm:px-6 py-4 flex items-center flex-col  gap-6 max-w-[500px] w-full">
-        <div className="w-full text-center">
-          <div className="flex items-center justify-center gap-3 mb-4">
+    <main className="min-h-screen flex flex-col items-center bg-gray-50 dark:bg-gray-950">
+      <div className="w-full max-w-6xl px-2 md:px-4 py-2 md:py-8">
+        {/* Header */}
+        <div className="text-center mb-4 md:mb-12">
+          <div className="flex items-center justify-center gap-3 mb-2 md:mb-4">
             <div className="p-3 bg-blue-100 dark:bg-blue-900 rounded-full">
               <PhoneCallIcon className="w-8 h-8 text-blue-600 dark:text-blue-400" />
             </div>
           </div>
-          <h1 className="font-ubuntu font-bold text-3xl text-dark-4 dark:text-white mb-2">
+          <h1 className="font-ubuntu font-bold text-3xl sm:text-4xl text-gray-900 dark:text-white mb-1 md:mb-4">
             Contact Us
           </h1>
-          <p className="font-ubuntu text-lg text-gray-600 dark:text-gray-400">
-            Have a question or suggestion? We're here to help.
+          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            Have a question or suggestion? We're here to help and would love to hear from you.
           </p>
         </div>
-        {/* Form */}
-        <form
-          action={action}
-          className=" w-full rounded-lg shadow-light dark:shadow-dark py-16 px-5 flex flex-col items-center gap-12 max-w-[1000px] dark:bg-dark-4"
-        >
-          <div className="flex flex-col gap-6 w-full">
-            <div className="w-full">
-              <label
-                htmlFor="fullname"
-                className="font-ubuntu font-bold text-lg"
-              >
-                Full Name
-              </label>
-              <input
-                id="fullname"
-                type="fullname"
-                name="fullname"
-                placeholder="John Doe"
-                required
-                minLength={3}
-                className="input-field"
-              />
-            </div>
-            <div className="w-full">
-              <label htmlFor="email" className="font-ubuntu font-bold text-lg">
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                name="email"
-                placeholder="example@mail.com"
-                required
-                className="input-field"
-              />
-            </div>
+
+        {/* Main Form Container */}
+        <div className="max-w-4xl mx-auto mb-12">
+          <div className="bg-white dark:bg-dark-4 rounded-2xl shadow-light dark:shadow-dark overflow-hidden">
+            {/* Form Content */}
+            <form action={action} className="p-8 space-y-10">
+              {/* Personal Information Section */}
+              <div className="space-y-6">
+                <div className="flex items-center gap-3 pb-4 border-b border-gray-200 dark:border-gray-700">
+                  <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
+                    <User className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                  </div>
+                  <h3 className="font-ubuntu font-bold text-xl text-dark-4 dark:text-white">Your Information</h3>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  <div className="space-y-3">
+                    <label htmlFor="fullname" className="font-ubuntu font-bold text-lg text-dark-4 dark:text-white">
+                      Full Name
+                    </label>
+                    <input
+                      id="fullname"
+                      type="text"
+                      name="fullname"
+                      placeholder="Enter your full name"
+                      required
+                      minLength={3}
+                      className="input-field"
+                    />
+                  </div>
+
+                  <div className="space-y-3">
+                    <label htmlFor="email" className="font-ubuntu font-bold text-lg text-dark-4 dark:text-white">
+                      Email Address
+                    </label>
+                    <div className="relative">
+                      <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <input
+                        id="email"
+                        type="email"
+                        name="email"
+                        placeholder="your.email@example.com"
+                        required
+                        className="input-field pl-12"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Message Section */}
+              <div className="space-y-6">
+                <div className="flex items-center gap-3 pb-4 border-b border-gray-200 dark:border-gray-700">
+                  <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
+                    <MessageSquare className="w-5 h-5 text-gray-600 dark:text-gray-400" />
+                  </div>
+                  <h3 className="font-ubuntu font-bold text-xl text-dark-4 dark:text-white">Your Message</h3>
+                </div>
+
+                <div className="space-y-3">
+                  <label htmlFor="inquiry" className="font-ubuntu font-bold text-lg text-dark-4 dark:text-white">
+                    Message
+                  </label>
+                  <textarea
+                    id="inquiry"
+                    name="inquiry"
+                    placeholder="Tell us how we can help you..."
+                    required
+                    rows={6}
+                    className="w-full p-4 border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 dark:focus:ring-blue-400 focus:border-transparent resize-none font-ubuntu"
+                  />
+                </div>
+              </div>
+
+              {/* Submit Button */}
+              <div className="pt-8 border-t border-gray-200 dark:border-gray-700">
+                <button
+                  type="submit"
+                  disabled={pending}
+                  className="w-full px-8 py-4 bg-light-4 dark:bg-dark-1 rounded-xl font-ubuntu font-bold text-xl text-white shadow-light dark:shadow-dark hover:bg-black hover:text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:-translate-y-1"
+                >
+                  {pending ? (
+                    <div className="flex items-center justify-center gap-3">
+                      <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                      <span>Sending Message...</span>
+                    </div>
+                  ) : (
+                    <div className="flex items-center justify-center gap-3">
+                      <MessageSquare className="w-6 h-6" />
+                      <span>Send Message</span>
+                    </div>
+                  )}
+                </button>
+              </div>
+            </form>
           </div>
-          <div className="w-full">
-            <label htmlFor="inquiry" className="font-ubuntu font-bold text-lg">
-              Message
-            </label>
-            <textarea
-              id="inquiry"
-              name="inquiry"
-              placeholder="Enter your message here"
-              required
-              className="block border-[1px] h-40 bg-gray-200 dark:bg-gray-950 border-gray-200 w-full p-4 rounded-sm mt-2 focus:bg-gray-100 dark:focus:bg-gray-800"
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={pending}
-            className="px-6 py-3 bg-light-4 rounded-lg font-bold font-ubuntu text-2xl text-white shadow-light cursor-pointer hover:bg-black hover:text-white"
-          >
-            Submit
-          </button>
-        </form>
+        </div>
 
         {/* Loading while Uploading */}
         {pending && <LoadingScreen message={"Uploading Your Message..."} />}
 
-        {/* Sucess Pop Up */}
+        {/* Success Pop Up */}
         {state?.is_submitted && showPopup && (
           <PopUpCard setState={setShowPopup}>
-            <h1 className="font-bold font-ubuntu text-2xl">
-              {state?.message || "Submitted"}
-            </h1>
+            <div className="text-center mb-6">
+              <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full mb-4">
+                <MessageSquare className="w-8 h-8 text-green-600 dark:text-green-400" />
+              </div>
+              <h1 className="font-ubuntu font-bold text-2xl text-dark-4 dark:text-white mb-2">
+                {state?.message || "Message Sent Successfully!"}
+              </h1>
+              <p className="font-ubuntu text-gray-600 dark:text-gray-400">
+                Thank you for reaching out. We'll get back to you as soon as possible.
+              </p>
+            </div>
 
-            <div className="grid grid-cols-2 gap-y-3 text-base">
-              <div className="font-semibold">Full Name:</div>
-              <div>{state?.submitted?.fullname}</div>
-
-              <div className="font-semibold">Email:</div>
-              <div>{state?.submitted?.email}</div>
-
-              <div className="font-semibold">Message:</div>
-              <div className="w-[200px] h-[150px] overflow-auto">
-                {state?.submitted?.message}
+            <div className="w-full bg-gray-50 dark:bg-gray-800 rounded-lg p-6 mb-6">
+              <h3 className="font-ubuntu font-bold text-lg text-dark-4 dark:text-white mb-4">Message Summary</h3>
+              <div className="space-y-4 font-ubuntu text-base">
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
+                  <span className="font-semibold text-gray-600 dark:text-gray-400">Full Name:</span>
+                  <span className="text-dark-4 dark:text-white">{state?.submitted?.fullname}</span>
+                </div>
+                <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
+                  <span className="font-semibold text-gray-600 dark:text-gray-400">Email:</span>
+                  <span className="text-dark-4 dark:text-white">{state?.submitted?.email}</span>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <span className="font-semibold text-gray-600 dark:text-gray-400">Message:</span>
+                  <div className="bg-white dark:bg-gray-700 p-3 rounded-lg max-h-32 overflow-y-auto text-dark-4 dark:text-white text-sm leading-relaxed">
+                    {state?.submitted?.message}
+                  </div>
+                </div>
               </div>
             </div>
 
-            <Btn className=" w-2/4 text-lg" onClick={() => setShowPopup(false)}>
+            <Btn className="w-full text-lg" onClick={() => setShowPopup(false)}>
               Close
             </Btn>
           </PopUpCard>
         )}
-      </section>
-      {/* Find Us */}
+      </div>
+
+      {/* Find Us Section */}
       <div className="w-full max-w-[1920px]">
         <FindUsHereSection />
       </div>
     </main>
-  );
+  )
 }
