@@ -26,7 +26,7 @@ export default function SignupPage() {
   const [state, action, pending] = useActionState(signup, undefined);
 
   return (
-    <main className="flex flex-col items-center min-h-screen bg-background">
+    <main className="flex flex-col items-center min-h-screen bg-gray-50 dark:bg-gray-950">
       {/* Loading Screen */}
       {pending && <LoadingScreen message="Signing you Up..." />}
 

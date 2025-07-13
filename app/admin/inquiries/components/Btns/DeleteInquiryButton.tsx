@@ -1,7 +1,7 @@
 
 "use client"
 import { deleteInquiry } from '@/actions/admin.action'
-import { Trash2 } from 'lucide-react'
+import { Loader2, Trash2 } from 'lucide-react'
 import React, { useActionState } from 'react'
 
 export default function DeleteInquiryButton({inquiryId, page}:{inquiryId: string, page:number}) {
@@ -13,7 +13,7 @@ export default function DeleteInquiryButton({inquiryId, page}:{inquiryId: string
       <input name='page' value={page} hidden readOnly/>
       <input name='inquiryId' value={inquiryId} hidden readOnly/>
       <button disabled={pending} type='submit' className=" bg-light-4 dark:bg-white text-white dark:text-black shadow-dark dark:shadow-dark text-lg p-1 rounded-md">
-        <Trash2/>
+        {pending?<Loader2 className='animate-spin'/>:<Trash2/>}
       </button>
     </form>
     </>

@@ -1,17 +1,27 @@
 "use client";
+
 import { addNewDoctor } from "@/actions/admin.action";
-import Btn from "@/components/Button";
+import { useActionState, useEffect, useState } from "react";
 import PopUpCard from "@/components/PopUpCard";
-import { UserPlus2 } from "lucide-react";
-import React, { useActionState, useEffect, useState } from "react";
-import SelectDoctorType from "./SelectDoctorType";
 import LoadingScreen from "@/components/LoadingScreen";
+import SelectDoctorType from "./SelectDoctorType";
+import { UserPlus2 } from "lucide-react";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle } from "lucide-react";
 
 export default function AddNewDoctorBtn() {
   const [showPopUp, setShowPopUp] = useState(false);
   const [selectedDocType, setSelectedDocType] = useState("");
   const [state, action, pending] = useActionState(addNewDoctor, undefined);
-
 
   useEffect(() => {
     if (state?.success) {
@@ -20,89 +30,101 @@ export default function AddNewDoctorBtn() {
   }, [state]);
 
   return (
-    <div className="">
-      <Btn
-        onClick={() => {
-          setShowPopUp(true);
-        }}
+    <div>
+      <Button
+        variant="outline"
+        onClick={() => setShowPopUp(true)}
+        className="p-2 bg-light-4 dark:bg-white text-white dark:text-black"
       >
-        <UserPlus2 />
-      </Btn>
+        <UserPlus2 className="w-5 h-5" />
+      </Button>
+
       {pending && <LoadingScreen message="Adding New Doctor..." />}
+
       {showPopUp && (
         <PopUpCard setState={setShowPopUp}>
-          {/* Add new Doctor Form */}
-          <div className="w-[300px] sm:w-[500px]">
-            <h2 className="font-bold text-lg text-center">Add Doctor</h2>
-            <form action={action} className="flex flex-col gap-4">
-              <div className="flex flex-col gap-6 w-full">
-                <div className="w-full">
-                  <label htmlFor="username" className="">
-                    Doctor Name
-                  </label>
-                  <input
-                    id="username"
-                    type="username"
-                    name="username"
-                    placeholder="Dr. John Doe"
-                    required
-                    className="input-field"
-                  />
+          <Card className="w-[320px] sm:w-[500px] bg-white dark:bg-dark-4">
+            <CardHeader>
+              <CardTitle className="text-center text-2xl font-bold">
+                Add Doctor
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <form action={action} className="space-y-6">
+                <div className="space-y-4">
+                  {/* Doctor Name */}
+                  <div className="space-y-2">
+                    <Label htmlFor="username">Doctor Name</Label>
+                    <Input
+                      id="username"
+                      name="username"
+                      type="text"
+                      placeholder="Dr. John Doe"
+                      required
+                      disabled={pending}
+                    />
+                  </div>
+
+                  {/* Email */}
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <Input
+                      id="email"
+                      name="email"
+                      type="email"
+                      placeholder="example@mail.com"
+                      required
+                      disabled={pending}
+                    />
+                  </div>
+
+                  {/* Password */}
+                  <div className="space-y-2">
+                    <Label htmlFor="password">Password</Label>
+                    <Input
+                      id="password"
+                      name="password"
+                      type="password"
+                      placeholder="********"
+                      required
+                      minLength={8}
+                      maxLength={15}
+                      disabled={pending}
+                    />
+                  </div>
+
+                  {/* Doctor Type */}
+                  <div className="space-y-2">
+                    <Label htmlFor="docType">Doctor Type</Label>
+                    <SelectDoctorType setDocType={setSelectedDocType} />
+                    <input
+                      type="hidden"
+                      name="docType"
+                      value={selectedDocType}
+                      readOnly
+                    />
+                  </div>
                 </div>
-                <div className="w-full">
-                  <label htmlFor="email" className="">
-                    Email
-                  </label>
-                  <input
-                    id="email"
-                    type="email"
-                    name="email"
-                    placeholder="example@mail.com"
-                    required
-                    className="input-field "
-                  />
-                </div>
-                <div className="w-full">
-                  <label htmlFor="password" className="">
-                    Password
-                  </label>
-                  <input
-                    id="password"
-                    type="password"
-                    name="password"
-                    placeholder="********"
-                    required
-                    minLength={8}
-                    maxLength={15}
-                    className="input-field"
-                  />
-                </div>
-                <div className="w-full">
-                  <label htmlFor="docType" className="">
-                    Doctor Type
-                  </label>
-                  <SelectDoctorType setDocType={setSelectedDocType} />
-                  <input
-                    name="docType"
-                    value={selectedDocType}
-                    readOnly
-                    hidden
-                  />
-                </div>
-              </div>
-              {state?.message && (
-                <div className="text-red-500 text-center">{state?.message}</div>
-              )}
-              <div className="w-full">
-                <button
+
+                {/* Error Message */}
+                {state?.message && (
+                  <Alert variant="destructive">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription>{state.message}</AlertDescription>
+                  </Alert>
+                )}
+
+                {/* Submit Button */}
+                <Button
                   type="submit"
-                  className="bg-light-4 dark:bg-white text-white dark:text-black shadow-dark dark:shadow-dark font-bold text-2xl px-4 py-1 rounded-sm mx-auto w-fit block"
+                  className="w-full text-base"
+                  disabled={pending}
                 >
-                  Add Doctor
-                </button>
-              </div>
-            </form>
-          </div>
+                  {pending ? "Adding..." : "Add Doctor"}
+                </Button>
+              </form>
+            </CardContent>
+          </Card>
         </PopUpCard>
       )}
     </div>

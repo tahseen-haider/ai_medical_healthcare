@@ -2,17 +2,17 @@ import { Home, Mail, Phone } from "lucide-react";
 
 const contactList = [
   {
-    icon: <Phone className="w-10 h-10 sm:w-16 sm:h-16"/>,
+    icon: <Phone className="w-10 h-10 sm:w-12 sm:h-12 text-primary" />,
     title: "Phone",
     detail: "+92 302 0620626",
   },
   {
-    icon: <Mail className="w-10 h-10 sm:w-16 sm:h-16"/>,
+    icon: <Mail className="w-10 h-10 sm:w-12 sm:h-12 text-primary" />,
     title: "Email",
     detail: "tahsin3194@gmail.com",
   },
   {
-    icon: <Home className="w-10 h-10 sm:w-16 sm:h-16"/>,
+    icon: <Home className="w-10 h-10 sm:w-12 sm:h-12 text-primary" />,
     title: "Location",
     detail: "University of Sahiwal, Punjab",
   },
@@ -20,35 +20,42 @@ const contactList = [
 
 export default function FindUsHereSection() {
   return (
-    <section className="flex flex-col px-2 sm:px-6 py-6 sm:py-10 gap-10">
-      <h2 className="font-ubuntu font-bold text-2xl sm:text-4xl -tracking-[0.5px]">
+    <section className="flex flex-col px-4 sm:px-6 py-10 sm:py-20 gap-10 max-w-screen-xl mx-auto">
+      {/* Section Title */}
+      <h2 className="font-bold text-3xl sm:text-4xl text-foreground tracking-tight">
         Find Us Here
       </h2>
-      {/* Contacts */}
-      <div className="flex flex-col lg:flex-row justify-between gap-4 sm:gap-12 text-white">
+
+      {/* Contact Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {contactList.map((ele) => (
           <div
             key={ele.title}
-            className="w-full h-[60px] sm:h-[120px] lg:w-1/3 bg-light-4 dark:bg-dark-4 flex items-center p-6 gap-4 rounded-[15px] shadow-light dark:shadow-dark "
+            className="flex items-center gap-5 p-6 bg-light-4 dark:bg-dark-4 rounded-2xl shadow-md transition hover:shadow-lg"
           >
-            <div>{ele.icon}</div>
+            <div className="flex-shrink-0">{ele.icon}</div>
             <div>
-              <h5 className="font-bold text-[18px]">{ele.title}</h5>
-              <p className="text-gray-200 text-base">{ele.detail}</p>
+              <h5 className="text-lg font-semibold text-white dark:text-white">
+                {ele.title}
+              </h5>
+              <p className="text-sm text-gray-200 dark:text-muted-foreground">
+                {ele.detail}
+              </p>
             </div>
           </div>
         ))}
       </div>
-      {/* Map */}
-      <div className="w-full">
+
+      {/* Embedded Map */}
+      <div className="w-full overflow-hidden rounded-3xl shadow-md border border-border">
         <iframe
+          title="Google Maps Location"
           src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3431.3123217833536!2d73.08693937610249!3d30.68148748810657!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3922b7fc5f65c751%3A0xb5f17e730625a55!2zVW5pdmVyc2l0eSBvZiBTYWhpd2FsINis2KfZhdi524Eg2LPYp9uB24zZiNin2YQ!5e0!3m2!1sen!2s!4v1748087085023!5m2!1sen!2s"
           allowFullScreen
           loading="lazy"
           referrerPolicy="no-referrer-when-downgrade"
-          style={{ border: 0, }}
-          className="w-full h-[600px] lg:h-96 rounded-4xl shadow-light dark:shadow-dark"
-          title="Google Maps Location"
+          className="w-full h-[350px] sm:h-[450px] lg:h-[500px]"
+          style={{ border: 0 }}
         />
       </div>
     </section>

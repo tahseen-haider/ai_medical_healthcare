@@ -154,7 +154,7 @@ export default function ContactUsPage() {
         {/* Success Pop Up */}
         {state?.is_submitted && showPopup && (
           <PopUpCard setState={setShowPopup}>
-            <div className="text-center mb-6">
+            <div className="text-center mb-6 p-6">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full mb-4">
                 <MessageSquare className="w-8 h-8 text-green-600 dark:text-green-400" />
               </div>

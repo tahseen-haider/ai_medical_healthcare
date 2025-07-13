@@ -55,7 +55,7 @@ export default function AppointmentPage({
   }, [state]);
 
   return (
-    <main className="min-h-screen flex flex-col items-center bg-gray-50 dark:bg-gray-900">
+    <main className="min-h-screen flex flex-col items-center bg-gray-50 dark:bg-gray-950">
       <div className="w-full max-w-6xl px-2 md:px-4 py-2 md:py-8">
         {/* Header */}
         <div className="text-center mb-4 md:mb-12">
@@ -312,7 +312,7 @@ export default function AppointmentPage({
         {/* Success Pop Up */}
         {submitted && (
           <PopUpCard>
-            <div className="text-center mb-6">
+            <div className="text-center mb-6 p-6">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full mb-4">
                 <Calendar className="w-8 h-8 text-green-600 dark:text-green-400" />
               </div>

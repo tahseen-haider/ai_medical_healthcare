@@ -22,7 +22,7 @@ export default function VerifyEmailPage() {
   const [state, action, pending] = useActionState(sendVerifyEmail, undefined);
 
   return (
-    <main className="flex flex-col items-center min-h-[600px] bg-background">
+    <main className="flex flex-col items-center min-h-[600px] bg-gray-50 dark:bg-gray-950">
       {/* Loading Screen */}
       {pending && <LoadingScreen message="Sending verification email" />}
 

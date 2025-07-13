@@ -35,18 +35,19 @@ import {
   FileText,
   Activity,
 } from "lucide-react";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Textarea } from "@/components/ui/textarea";
 import { redirect } from "next/navigation";
 import LoadingScreen from "@/components/LoadingScreen";
 import { updateUserProfile } from "@/actions";
 import ProfilePageImage from "@/app/profile/components/ProfilePageImage";
+import DeleteAccountConfirmation from "./DeleteAccount";
 
 interface EditUserProfileProps {
   user: UserType;
 }
 
 export default function UserProfileEdit({ user }: EditUserProfileProps) {
+  const [showDeleteAccountPopUp, setShowDeleteAccountPopUp] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [uploading, setUploading] = useState(false);
   const pfp = `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${user.pfp}`;
@@ -1133,23 +1134,39 @@ export default function UserProfileEdit({ user }: EditUserProfileProps) {
               </p>
             )}
 
+            <Separator />
             {/* Action Buttons */}
-            <div className="flex justify-end gap-4 pt-6 border-t">
-              <Button onClick={onCancel} variant="outline">
-                <X className="w-4 h-4 mr-2" />
-                Cancel
-              </Button>
+            <div className="w-full flex  gap-4 sm:flex-row flex-col justify-between items-center">
               <Button
-                onClick={handleSave}
-                className="bg-blue-600 text-white hover:bg-blue-700"
+                onClick={() => {
+                  setShowDeleteAccountPopUp(true);
+                }}
+                className="bg-red-500 w-full sm:w-fit order-last sm:order-first font-bold text-white"
               >
-                <Save className="w-4 h-4 mr-2" />
-                Save Changes
+                Delete Account
               </Button>
+              <div className="flex justify-end gap-4 items-center">
+                <Button onClick={onCancel} variant="outline">
+                  <X className="w-4 h-4 mr-2" />
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleSave}
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  <Save className="w-4 h-4 mr-2" />
+                  Save Changes
+                </Button>
+              </div>
             </div>
           </CardContent>
         </Card>
       </div>
+      {showDeleteAccountPopUp && (
+        <DeleteAccountConfirmation
+          onClose={() => setShowDeleteAccountPopUp(false)}
+        />
+      )}
     </div>
   );
 }

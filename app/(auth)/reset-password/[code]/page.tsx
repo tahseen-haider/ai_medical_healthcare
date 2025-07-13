@@ -33,7 +33,7 @@ export default function ResetPasswordPage({
   const [state, action, pending] = useActionState(resetPassword, undefined);
 
   return (
-    <main className="flex flex-col items-center min-h-[600px] bg-background">
+    <main className="flex flex-col items-center min-h-[600px] bg-gray-50 dark:bg-gray-950">
       {/* Loading Screen */}
       {pending && <LoadingScreen message="Resetting your Password..." />}
 

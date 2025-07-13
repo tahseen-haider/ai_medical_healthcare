@@ -54,12 +54,12 @@ export default async function OurDoctorsSection() {
       case "GENERAL":
         return "bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200"
       default:
-        return "bg-gray-100 text-gray-800 dark:bg-gray-900 dark:text-gray-200"
+        return "bg-gray-100 text-gray-800 dark:bg-gray-950 dark:text-gray-200"
     }
   }
 
   return (
-    <section className="px-2 sm:px-6 py-14 bg-gray-50 dark:bg-gray-900">
+    <section className="px-2 sm:px-6 py-14 bg-gray-50 dark:bg-gray-950">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">

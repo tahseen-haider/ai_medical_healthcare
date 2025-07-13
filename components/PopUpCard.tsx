@@ -19,7 +19,7 @@ export default function PopUpCard({
           e.stopPropagation();
         }}
         className=" rounded-2xl bg-light-1 dark:bg-dark-4 shadow-light dark:shadow-dark text-black dark:text-white 
-      flex flex-col gap-6 items-center justify-between p-6"
+      flex flex-col gap-6 items-center justify-between overflow-hidden"
       >
         {children}
       </div>

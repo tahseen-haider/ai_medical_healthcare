@@ -38,12 +38,14 @@ import ProfilePageImage from "@/app/profile/components/ProfilePageImage";
 import { updateDoctorProfile } from "@/actions/doctor.action";
 import { redirect } from "next/navigation";
 import LoadingScreen from "@/components/LoadingScreen";
+import DeleteAccountConfirmation from "./DeleteAccount";
 
 interface EditProfileProps {
   user: UserType;
 }
 
 export default function DoctorProfileEdit({ user }: EditProfileProps) {
+  const [showDeleteAccountPopUp, setShowDeleteAccountPopUp] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [uploading, setUploading] = useState(false);
 
@@ -669,23 +671,40 @@ export default function DoctorProfileEdit({ user }: EditProfileProps) {
                 Profile updated successfully!
               </p>
             )}
+
+            <Separator />
             {/* Action Buttons */}
-            <div className="flex justify-end gap-4 pt-6 border-t">
-              <Button onClick={onCancel} variant="outline">
-                <X className="w-4 h-4 mr-2" />
-                Cancel
-              </Button>
+            <div className="w-full flex  gap-4 sm:flex-row flex-col justify-between items-center">
               <Button
-                onClick={handleSave}
-                className="bg-blue-600 hover:bg-blue-700 text-white"
+                onClick={() => {
+                  setShowDeleteAccountPopUp(true);
+                }}
+                className="bg-red-500 w-full sm:w-fit order-last sm:order-first font-bold text-white"
               >
-                <Save className="w-4 h-4 mr-2" />
-                Save Changes
+                Delete Account
               </Button>
+              <div className="flex justify-end gap-4 items-center">
+                <Button onClick={onCancel} variant="outline">
+                  <X className="w-4 h-4 mr-2" />
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleSave}
+                  className="bg-blue-600 hover:bg-blue-700 text-white"
+                >
+                  <Save className="w-4 h-4 mr-2" />
+                  Save Changes
+                </Button>
+              </div>
             </div>
           </CardContent>
         </Card>
       </div>
+      {showDeleteAccountPopUp && (
+        <DeleteAccountConfirmation
+          onClose={() => setShowDeleteAccountPopUp(false)}
+        />
+      )}
     </div>
   );
 }

@@ -29,7 +29,7 @@ export default function VerifyEmailTokenPage({
   const [state, action, pending] = useActionState(verifyEmail, undefined);
 
   return (
-    <main className="flex flex-col items-center min-h-[600px] bg-background">
+    <main className="flex flex-col items-center min-h-[600px] bg-gray-50 dark:bg-gray-950">
       {pending && <LoadingScreen message="Verifying your email..." />}
 
       <section className="px-4 sm:px-6 py-8 flex items-center flex-col gap-8 max-w-[500px] w-full">

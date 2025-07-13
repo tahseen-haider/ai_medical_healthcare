@@ -26,7 +26,7 @@ export default function SelectDoctorType({
   ];
 
   return (
-    <div className="relative flex items-center border-[1px] bg-gray-200 dark:bg-gray-950 border-gray-400 dark:border-gray-200 h-14 w-full rounded-sm mt-2">
+    <div className="">
       <Select onValueChange={setDocType} required>
         <SelectTrigger id="docType" className="w-full h-14 bg-transparent px-4 cursor-pointer">
           <SelectValue placeholder="Doctor Type" />
