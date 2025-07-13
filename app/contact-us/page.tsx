@@ -6,6 +6,7 @@ import FindUsHereSection from "@/components/FindUsHereSection";
 import LoadingScreen from "@/components/LoadingScreen";
 import PopUpCard from "@/components/PopUpCard";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { PhoneCallIcon, User, Mail, MessageSquare } from "lucide-react";
 import { useActionState, useEffect, useState } from "react";
@@ -83,7 +84,7 @@ export default function ContactUsPage() {
                     <div className="relative">
                       <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                       <Input
-                      className="pl-12"
+                        className="pl-12"
                         id="email"
                         type="email"
                         name="email"
@@ -204,7 +205,7 @@ export default function ContactUsPage() {
           </PopUpCard>
         )}
       </div>
-
+      <Separator />
       {/* Find Us Section */}
       <div className="w-full max-w-[1920px]">
         <FindUsHereSection />
