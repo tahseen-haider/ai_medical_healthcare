@@ -5,6 +5,9 @@ import {
   getAllAppointmentsForDashboardDoctorFromDB,
   getAllAppointmentsForDoctorFromDB,
   getDoctorDashboardNumbersFromDB,
+  getDoctorFromDB,
+  getDoctorsForDoctorSectionFromDB,
+  getDoctorsForLoadMoreFromDB,
   getNewAppointmentsInfoFromDB,
   updateDoctorProfileInDB,
 } from "@/lib/dal/doctor.dal";
@@ -14,6 +17,18 @@ import { revalidatePath } from "next/cache";
 export const getNewAppointmentsInfo = async (doctorId: string) => {
   return await getNewAppointmentsInfoFromDB(doctorId);
 };
+
+export async function getDoctorsForDoctorSection() {
+  return await getDoctorsForDoctorSectionFromDB();
+}
+
+export async function getDoctor(doctorId: string){
+return await getDoctorFromDB(doctorId)
+}
+
+export async function getDoctorsForLoadMore(page:number, limit:number){
+  return await getDoctorsForLoadMoreFromDB(page, limit)
+}
 
 export const getAllAppointmentsForDoctor = async (
   page: number,

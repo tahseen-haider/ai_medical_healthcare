@@ -11,7 +11,7 @@ export default async function page() {
     <>
       <AppointmentPage
         patientId={patient?.userId}
-        doctors={allDoctors.doctors}
+        doctors={allDoctors}
       />
       <div className="w-full border-b-[1px] " />
       <DoctorSection />

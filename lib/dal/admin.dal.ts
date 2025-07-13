@@ -11,7 +11,6 @@ function handleError(error: unknown, context: string) {
   throw new Error("Something went wrong.");
 }
 
-
 export const getAllVerifiedUsersFromDB = async () => {
   try {
     const users = await prisma.user.findMany({
@@ -38,8 +37,10 @@ export const getAllVerifiedUsersFromDB = async () => {
   }
 };
 
-
-export const changeAppointmentDoctorFromDB = async (appointmentId: string, doctor: string) => {
+export const changeAppointmentDoctorFromDB = async (
+  appointmentId: string,
+  doctor: string
+) => {
   try {
     const doctorId = doctor === "Unassigned" ? null : doctor;
     return await prisma.appointments.update({
@@ -51,8 +52,6 @@ export const changeAppointmentDoctorFromDB = async (appointmentId: string, docto
     throw new Error("Failed to change appointment doctor");
   }
 };
-
-
 
 export const getAllAppointmentsFromDB = async (page: number, limit: number) => {
   try {
@@ -93,7 +92,6 @@ export const getAllAppointmentsFromDB = async (page: number, limit: number) => {
     throw new Error("Failed to fetch appointments");
   }
 };
-
 
 export const getAllUsersFromDB = async (page: number, limit: number) => {
   const skip = (page - 1) * limit;
@@ -182,40 +180,27 @@ export const getAppointmentsFromDB = async () => {
   });
 };
 
-export const getAllDoctorsFromDB = async (page:number , limit:number) => {
-  const skip = (page - 1) * limit;
-
-  const [doctors, total] = await Promise.all([
-    prisma.user.findMany({
-      where: {
-        role: "doctor",
-        doctorProfile: {
-          isApproved: true,
-        },
+export const getAllDoctorsFromDB = async () => {
+  const doctors = await prisma.user.findMany({
+    where: {
+      role: "doctor",
+      doctorProfile: {
+        isApproved: true,
       },
-      orderBy: { createdAt: "desc" },
-      skip,
-      take: limit,
-      select: {
-        id: true,
-        name: true,
-        email: true,
-        pfp: true,
-        role: true,
-        createdAt: true,
-        doctorProfile: true
-      },
-    }),
-    prisma.user.count({
-      where: { role: "doctor", doctorProfile: { isApproved: true } },
-    }),
-  ]);
+    },
+    orderBy: { createdAt: "desc" },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      pfp: true,
+      role: true,
+      createdAt: true,
+      doctorProfile: true,
+    },
+  });
 
-  return {
-    doctors,
-    total,
-    totalPages: Math.ceil(total / limit),
-  };
+  return doctors;
 };
 
 export const addNewDoctorToDB = async (
@@ -521,7 +506,6 @@ export const changeInquiryStatusFromDB = async (id: string) => {
     },
   });
 };
-
 
 export const getNewUserInfoFromDB = async () => {
   const start = subDays(new Date(), 90);

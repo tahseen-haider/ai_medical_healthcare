@@ -1,9 +1,9 @@
-import { getDoctorsForDoctorSection } from "@/actions"
 import Link from "next/link"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Star, MapPin, Stethoscope, User, Calendar } from "lucide-react"
 import ProfilePageImage from "@/app/profile/components/ProfilePageImage"
+import { getDoctorsForDoctorSection } from "@/actions/doctor.action"
 
 interface Doctor {
   id: string

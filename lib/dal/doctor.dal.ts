@@ -4,6 +4,141 @@ import { eachDayOfInterval, format, subDays } from "date-fns";
 import { prisma } from "../db/prisma";
 import { AppointmentStatus, DoctorType } from "@prisma/client/edge";
 import cloudinary from "../cloudinary";
+import { UserType } from "../definitions";
+
+export async function getDoctorsForLoadMoreFromDB(page: number, limit: number) {
+  try {
+    const skip = (page - 1) * limit;
+    const [doctors, totalDoctors] = await Promise.all([
+      prisma.user.findMany({
+        skip,
+        take: limit,
+        where: {
+          role: "doctor",
+          is_verified: true,
+          doctorProfile: {
+            isApproved: true,
+          },
+        },
+        orderBy: {
+          doctorProfile: {
+            ratings: "desc",
+          },
+        },
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          pfp: true,
+          createdAt: true,
+          doctorProfile: {
+            select: {
+              doctorType: true,
+              specialization: true,
+              qualifications: true,
+              experience: true,
+              bio: true,
+              clinicName: true,
+              clinicAddress: true,
+              consultationFee: true,
+              availableDays: true,
+              availableTimes: true,
+              ratings: true,
+              totalReviews: true,
+              isApproved: true,
+            },
+          },
+        },
+      }),
+
+      prisma.user.count({
+        where: {
+          role: "doctor",
+          is_verified: true,
+          doctorProfile: {
+            isApproved: true,
+          },
+        },
+      }),
+    ]);
+
+    return { doctors, totalPages: Math.ceil(totalDoctors / limit) };
+  } catch (error) {
+    console.error("Error fetching doctors from DB:", error);
+    throw new Error("Failed to fetch doctors");
+  }
+}
+
+export async function getDoctorsForDoctorSectionFromDB() {
+  try {
+    const doctors = await prisma.user.findMany({
+      where: {
+        role: "doctor",
+        is_verified: true,
+        doctorProfile: {
+          isApproved: true,
+        },
+      },
+      orderBy: {
+        doctorProfile: {
+          ratings: "desc",
+        },
+      },
+      take: 4,
+      select: {
+        id: true,
+        email: true,
+        name: true,
+        pfp: true,
+        doctorProfile: {
+          select: {
+            doctorType: true,
+            specialization: true,
+            qualifications: true,
+            experience: true,
+            bio: true,
+            clinicName: true,
+            clinicAddress: true,
+            consultationFee: true,
+            availableDays: true,
+            availableTimes: true,
+            ratings: true,
+            totalReviews: true,
+            isApproved: true,
+          },
+        },
+      },
+    });
+
+    return doctors;
+  } catch (error) {
+    console.error("Error fetching doctors for doctor section:", error);
+    throw new Error("Failed to fetch doctors for doctor section");
+  }
+}
+
+export const getDoctorFromDB = async (
+  userId: string
+): Promise<UserType | undefined> => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        appointmentsAsDoctor: true,
+        appointmentsAsPatient: true,
+        doctorProfile: true,
+      },
+    });
+    if (!user) return;
+
+    const { password, token, ...restUser } = user || {};
+
+    return restUser;
+  } catch (error) {
+    console.log(error);
+    return;
+  }
+};
 
 export const getNewAppointmentsInfoFromDB = async (doctorId: string) => {
   try {

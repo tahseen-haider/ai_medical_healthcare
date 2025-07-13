@@ -1,7 +1,8 @@
-import { getDoctor } from "@/actions";
+
 import React from "react";
 import DoctorProfile from "./components/DocProfile";
 import { redirect } from "next/navigation";
+import { getDoctor } from "@/actions/doctor.action";
 
 export default async function page({
   params,

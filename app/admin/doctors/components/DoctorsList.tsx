@@ -3,6 +3,7 @@ import React from "react";
 import AddNewDoctorBtn from "./Btns/AddNewDoctorBtn";
 import DeleteDoctorBtn from "./Btns/DeleteDoctorBtn";
 import ProfilePicture from "@/components/ProfilePicture";
+import { getDoctorsForLoadMore } from "@/actions/doctor.action";
 
 export default async function DoctorsList({
   paramPage,
@@ -12,7 +13,7 @@ export default async function DoctorsList({
   const page = parseInt(paramPage || "1", 10);
   const limit = 10;
 
-  const { doctors, totalPages } = await getAllDoctors(page, limit);
+  const { doctors, totalPages } = await getDoctorsForLoadMore(page, limit);
 
   return (
     <div className="w-full py-4 bg-white dark:bg-dark-4 shadow-dark dark:shadow-light rounded-md p-3 min-h-[calc(100vh-170px)] flex flex-col justify-between">

@@ -6,7 +6,6 @@ import { cookies } from "next/headers";
 import { isUserAuthenticated } from "@/lib/session";
 import LayoutWrapper from "@/components/LayoutWrapper";
 import { getPfp } from "@/actions";
-import { redirect } from "next/navigation";
 
 const roboto = Roboto({
   variable: "--font-roboto",

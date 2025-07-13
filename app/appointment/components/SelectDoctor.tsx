@@ -1,4 +1,3 @@
-import { getAllDoctors } from "@/actions/admin.action";
 import {
   Select,
   SelectContent,

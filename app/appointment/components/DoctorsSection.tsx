@@ -1,12 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {  getDoctorsForLoadMore } from "@/actions";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Star, MapPin, Stethoscope, User, Calendar } from "lucide-react";
 import ProfilePageImage from "@/app/profile/components/ProfilePageImage";
+import { getDoctorsForLoadMore } from "@/actions/doctor.action";
 
 const TAKE = 4;
 
@@ -33,22 +33,23 @@ interface Doctor {
 }
 
 export default function DoctorSection() {
-  const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [loadedDoctors, setLoadedDoctors] = useState<Doctor[]>([]);
   const [loading, setLoading] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-
+  
   useEffect(() => {
     loadDoctors();
   }, []);
-
+  
   async function loadDoctors() {
     setLoading(true);
-    const newDoctors: Doctor[] = await getDoctorsForLoadMore(
-      doctors.length,
+    const currentPage = Math.floor(loadedDoctors.length / TAKE) + 1;
+    const { doctors }: { doctors: Doctor[] } = await getDoctorsForLoadMore(
+      currentPage,
       TAKE
     );
-    setDoctors((prev) => [...prev, ...newDoctors]);
-    setHasMore(newDoctors.length === TAKE);
+    setLoadedDoctors((prev) => [...prev, ...doctors]);
+    setHasMore(doctors.length === TAKE);
     setLoading(false);
   }
 
@@ -107,7 +108,7 @@ export default function DoctorSection() {
 
         {/* Doctors Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {doctors.map((doctor) => (
+          {loadedDoctors.map((doctor) => (
             <Link
               key={doctor.id}
               href={`/profile/${doctor.id}`}
@@ -226,7 +227,7 @@ export default function DoctorSection() {
         )}
 
         {/* Empty State */}
-        {doctors.length === 0 && !loading && (
+        {loadedDoctors.length === 0 && !loading && (
           <div className="text-center py-12">
             <div className="w-24 h-24 bg-gray-100 dark:bg-gray-800 rounded-full flex items-center justify-center mx-auto mb-4">
               <Stethoscope className="w-12 h-12 text-gray-400" />

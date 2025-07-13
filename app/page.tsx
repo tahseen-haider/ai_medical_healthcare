@@ -1,15 +1,10 @@
 import FindUsHereSection from "@/components/FindUsHereSection";
 import HeroSectionImproved from "@/components/Hero";
-import HeroBtn from "@/components/homepage/HeroBtn";
 import OurDoctorsSection from "@/components/OurDoctorsSection";
 import ServicesSection from "@/components/ServicesSection";
-import { Button } from "@/components/ui/button";
 import WhyChooseUsSection from "@/components/WhyChooseUsSection";
 import { isUserAuthenticated } from "@/lib/session";
-import { Separator } from "@radix-ui/react-select";
-import { ArrowRight } from "lucide-react";
 import { cookies } from "next/headers";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
 export default async function Home() {
