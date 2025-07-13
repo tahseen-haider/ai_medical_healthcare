@@ -2,17 +2,17 @@ import { Home, Mail, Phone } from "lucide-react";
 
 const contactList = [
   {
-    icon: <Phone className="w-10 h-10 sm:w-12 sm:h-12 text-primary" />,
+    icon: <Phone className="w-10 h-10 sm:w-12 sm:h-12 text-white" />,
     title: "Phone",
     detail: "+92 302 0620626",
   },
   {
-    icon: <Mail className="w-10 h-10 sm:w-12 sm:h-12 text-primary" />,
+    icon: <Mail className="w-10 h-10 sm:w-12 sm:h-12 text-white" />,
     title: "Email",
     detail: "tahsin3194@gmail.com",
   },
   {
-    icon: <Home className="w-10 h-10 sm:w-12 sm:h-12 text-primary" />,
+    icon: <Home className="w-10 h-10 sm:w-12 sm:h-12 text-white" />,
     title: "Location",
     detail: "University of Sahiwal, Punjab",
   },

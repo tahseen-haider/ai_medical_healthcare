@@ -6,6 +6,7 @@ import FindUsHereSection from "@/components/FindUsHereSection";
 import LoadingScreen from "@/components/LoadingScreen";
 import PopUpCard from "@/components/PopUpCard";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { PhoneCallIcon, User, Mail, MessageSquare } from "lucide-react";
@@ -57,13 +58,13 @@ export default function ContactUsPage() {
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <label
+                  <div className="space-y-2">
+                    <Label
                       htmlFor="fullname"
-                      className="font-ubuntu font-bold text-sm text-dark-4 dark:text-white"
+                      className="font-ubuntu text-dark-4 dark:text-white"
                     >
                       Full Name
-                    </label>
+                    </Label>
                     <Input
                       id="fullname"
                       type="text"
@@ -74,13 +75,13 @@ export default function ContactUsPage() {
                     />
                   </div>
 
-                  <div className="space-y-3">
-                    <label
+                  <div className="space-y-2">
+                    <Label
                       htmlFor="email"
-                      className="font-ubuntu font-bold text-sm text-dark-4 dark:text-white"
+                      className="font-ubuntu text-dark-4 dark:text-white"
                     >
                       Email Address
-                    </label>
+                    </Label>
                     <div className="relative">
                       <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
                       <Input
@@ -107,13 +108,13 @@ export default function ContactUsPage() {
                   </h3>
                 </div>
 
-                <div className="space-y-3">
-                  <label
+                <div className="space-y-2">
+                  <Label
                     htmlFor="inquiry"
-                    className="font-ubuntu font-bold text-sm text-dark-4 dark:text-white"
+                    className="font-ubuntu text-dark-4 dark:text-white"
                   >
                     Message
-                  </label>
+                  </Label>
                   <Textarea
                     id="inquiry"
                     name="inquiry"
@@ -123,13 +124,12 @@ export default function ContactUsPage() {
                   />
                 </div>
               </div>
-
               {/* Submit Button */}
-              <div className="pt-8 border-t border-gray-200 dark:border-gray-700">
+              <div className="mx-auto w-fit">
                 <button
                   type="submit"
                   disabled={pending}
-                  className="w-full px-8 py-4 bg-light-4 dark:bg-dark-1 rounded-xl font-ubuntu font-bold text-xl text-white shadow-light dark:shadow-dark hover:bg-black hover:text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:-translate-y-1"
+                  className="w-fit mx-auto px-8 py-4 bg-light-4 dark:bg-dark-1 rounded-xl font-ubuntu font-bold text-xl text-white shadow-light dark:shadow-dark hover:bg-black hover:text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:-translate-y-1"
                 >
                   {pending ? (
                     <div className="flex items-center justify-center gap-3">

@@ -14,8 +14,8 @@
   --color-dark-2: #205295;
   --color-dark-3: #144272;
   --color-dark-4: #061A31;
-  --shadow-light: 0 0 0px 1px #6a7282;
-  --shadow-dark: 0 0 0px 1px #d1d5dc;
+  --shadow-light: 0 0 0px 1px #d1d5dc;
+  --shadow-dark: 0 0 0px 1px #4b5563;
   --font-roboto: var(--font-roboto), sans-serif;
   --font-ubuntu: var(--font-ubuntu), sans-serif;
   --color-background: var(--background);

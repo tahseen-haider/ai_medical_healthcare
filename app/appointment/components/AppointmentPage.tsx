@@ -7,11 +7,12 @@ import PopUpCard from "@/components/PopUpCard";
 import { DatePickerWithPresets } from "@/components/ui/DatePicker";
 import { VisitReasonPicker } from "@/components/ui/ReasonForVisitPicker";
 import { TimePicker } from "@/components/ui/TimePicker";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Calendar, User, Mail, Phone, Clock, Stethoscope } from "lucide-react";
 import { useActionState, useEffect, useState } from "react";
 import SelectDoctor from "./SelectDoctor";
 import type { $Enums } from "@prisma/client/edge";
-import { Calendar, User, Mail, Phone, Clock, Stethoscope } from "lucide-react";
-import { Input } from "@/components/ui/input";
 
 export default function AppointmentPage({
   patientId,
@@ -36,22 +37,18 @@ export default function AppointmentPage({
     tomorrow.setDate(tomorrow.getDate() + 1);
     return tomorrow;
   });
-  const [selectedTime, setSelectedTime] = useState<{
-    hour: string;
-    minute: string;
-    ampm: "AM" | "PM";
-  }>({
+
+  const [selectedTime, setSelectedTime] = useState({
     hour: "09",
     minute: "30",
-    ampm: "AM",
+    ampm: "AM" as "AM" | "PM",
   });
   const [reason, setReason] = useState("General Checkup");
-  const [doctorId, setDoctorId] = useState<string>("");
+  const [doctorId, setDoctorId] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
-    const responseSucess = state?.message;
-    if (responseSucess) setSubmitted(true);
+    if (state?.message) setSubmitted(true);
   }, [state]);
 
   return (
@@ -72,13 +69,12 @@ export default function AppointmentPage({
           </p>
         </div>
 
-        {/* Main Form Container */}
+        {/* Form Container */}
         <div className="max-w-4xl mx-auto">
           <div className="bg-white dark:bg-dark-4 rounded-2xl shadow-light dark:shadow-dark overflow-hidden">
-            {/* Form Content */}
             <form action={action} className="p-8 space-y-10">
-              {/* Personal Information Section */}
-              <div className="space-y-6">
+              {/* Personal Info */}
+              <section className="space-y-6">
                 <div className="flex items-center gap-3 pb-4 border-b border-gray-200 dark:border-gray-700">
                   <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
                     <User className="w-5 h-5 text-gray-600 dark:text-gray-400" />
@@ -87,90 +83,72 @@ export default function AppointmentPage({
                     Personal Information
                   </h3>
                 </div>
-
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <label
-                      htmlFor="fullname"
-                      className="font-ubuntu font-bold text-lg text-dark-4 dark:text-white"
-                    >
-                      Full Name
-                    </label>
+                  <div className="space-y-2">
+                    <Label htmlFor="fullname">Full Name</Label>
                     <Input
                       id="fullname"
-                      type="text"
                       name="fullname"
+                      type="text"
                       placeholder="Enter your full name"
                       required
                       minLength={2}
                     />
                     {state?.errors.fullname && (
-                      <p className="font-ubuntu text-sm text-red-500 mt-1">
+                      <p className="text-sm text-red-500">
                         {state.errors.fullname}
                       </p>
                     )}
                   </div>
-
-                  <div className="space-y-3">
-                    <label
-                      htmlFor="email"
-                      className="font-ubuntu font-bold text-lg text-dark-4 dark:text-white"
-                    >
-                      Email Address
-                    </label>
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email Address</Label>
                     <div className="relative">
-                      <Mail className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                      <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                       <Input
                         id="email"
-                        type="email"
                         name="email"
+                        type="email"
                         placeholder="your.email@example.com"
+                        className="pl-12"
                         required
-                        className=" pl-12"
                       />
                     </div>
                     {state?.errors.email && (
-                      <p className="font-ubuntu text-sm text-red-500 mt-1">
+                      <p className="text-sm text-red-500">
                         {state.errors.email}
                       </p>
                     )}
                   </div>
                 </div>
-
-                <div className="space-y-3">
-                  <label
-                    htmlFor="phone"
-                    className="font-ubuntu font-bold text-lg text-dark-4 dark:text-white"
-                  >
+                <div className="space-y-2">
+                  <Label htmlFor="phone">
                     Phone Number{" "}
-                    <span className="font-medium text-gray-500 dark:text-gray-400 text-base">
+                    <span className="text-sm font-normal text-gray-500">
                       (optional)
                     </span>
-                  </label>
+                  </Label>
                   <div className="relative">
-                    <Phone className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
+                    <Phone className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
                     <Input
                       id="phone"
-                      type="tel"
                       name="phone"
+                      type="tel"
                       placeholder="+92 000 0000000"
                       inputMode="numeric"
                       pattern="\d*"
                       minLength={10}
                       maxLength={13}
-                      className="input-field pl-12"
+                      className="pl-12"
                     />
                   </div>
                   {state?.errors.phone && (
-                    <p className="font-ubuntu text-sm text-red-500 mt-1">
-                      {state.errors.phone}
-                    </p>
+                    <p className="text-sm text-red-500">{state.errors.phone}</p>
                   )}
                 </div>
-              </div>
+              </section>
 
-              {/* Appointment Details Section */}
-              <div className="space-y-6">
+              {/* Appointment Info */}
+              <section className="space-y-6">
                 <div className="flex items-center gap-3 pb-4 border-b border-gray-200 dark:border-gray-700">
                   <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
                     <Stethoscope className="w-5 h-5 text-gray-600 dark:text-gray-400" />
@@ -181,37 +159,32 @@ export default function AppointmentPage({
                 </div>
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <label
-                      htmlFor="selectDoctor"
-                      className="font-ubuntu font-bold text-lg text-dark-4 dark:text-white"
-                    >
-                      Select Doctor
-                    </label>
+                  <div className="space-y-2">
+                    <Label htmlFor="selectDoctor">Select Doctor</Label>
                     <SelectDoctor setDoctorId={setDoctorId} doctors={doctors} />
-                    <input name="doctorId" hidden readOnly value={doctorId} />
+                    <input name="doctorId" value={doctorId} hidden readOnly />
                   </div>
 
-                  <div className="space-y-3">
-                    <label
-                      htmlFor="selectReason"
-                      className="font-ubuntu font-bold text-lg text-dark-4 dark:text-white"
-                    >
-                      Reason for Visit
-                    </label>
+                  <div className="space-y-2">
+                    <Label htmlFor="selectReason">Reason for Visit</Label>
                     <VisitReasonPicker setReason={setReason} />
-                    <input readOnly type="hidden" value={reason} name="reasonForVisit" />
+                    <input
+                      name="reasonForVisit"
+                      value={reason}
+                      hidden
+                      readOnly
+                    />
                     {state?.errors.reasonForVisit && (
-                      <p className="font-ubuntu text-sm text-red-500 mt-1">
+                      <p className="text-sm text-red-500">
                         {state.errors.reasonForVisit}
                       </p>
                     )}
                   </div>
                 </div>
-              </div>
+              </section>
 
-              {/* Schedule Section */}
-              <div className="space-y-6">
+              {/* Schedule */}
+              <section className="space-y-6">
                 <div className="flex items-center gap-3 pb-4 border-b border-gray-200 dark:border-gray-700">
                   <div className="p-2 bg-gray-100 dark:bg-gray-800 rounded-lg">
                     <Clock className="w-5 h-5 text-gray-600 dark:text-gray-400" />
@@ -220,72 +193,54 @@ export default function AppointmentPage({
                     Preferred Schedule
                   </h3>
                 </div>
-
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                  <div className="space-y-3">
-                    <label
-                      htmlFor="selectDate"
-                      className="font-ubuntu font-bold text-lg text-dark-4 dark:text-white"
-                    >
-                      Preferred Date
-                    </label>
+                  <div className="space-y-2">
+                    <Label htmlFor="preferredDate">Preferred Date</Label>
                     <DatePickerWithPresets setSelectedDate={setSelectedDate} />
                     <input
-                      readOnly
-                      type="hidden"
                       name="preferredDate"
+                      hidden
+                      readOnly
                       value={
-                        selectedDate
-                          ? selectedDate.toLocaleDateString().split("T")[0]
-                          : ""
+                        selectedDate ? selectedDate.toLocaleDateString() : ""
                       }
                     />
                     {state?.errors.preferredDate && (
-                      <p className="font-ubuntu text-sm text-red-500 mt-1">
+                      <p className="text-sm text-red-500">
                         {state.errors.preferredDate}
                       </p>
                     )}
                   </div>
-
-                  <div className="space-y-3">
-                    <label
-                      htmlFor="selectTime"
-                      className="font-ubuntu font-bold text-lg text-dark-4 dark:text-white"
-                    >
-                      Preferred Time
-                    </label>
+                  <div className="space-y-2">
+                    <Label htmlFor="preferredTime">Preferred Time</Label>
                     <TimePicker
                       value={selectedTime}
                       onChange={setSelectedTime}
                     />
                     <input
-                      readOnly
-                      type="hidden"
                       name="preferredTime"
-                      value={
-                        selectedTime
-                          ? `${selectedTime.hour}:${selectedTime.minute} ${selectedTime.ampm}`
-                          : ""
-                      }
+                      hidden
+                      readOnly
+                      value={`${selectedTime.hour}:${selectedTime.minute} ${selectedTime.ampm}`}
                     />
                     {state?.errors.preferredTime && (
-                      <p className="font-ubuntu text-sm text-red-500 mt-1">
+                      <p className="text-sm text-red-500">
                         {state.errors.preferredTime}
                       </p>
                     )}
                   </div>
                 </div>
-              </div>
+              </section>
 
-              {/* Hidden Fields */}
-              <input name="patientId" hidden readOnly value={patientId} />
+              {/* Hidden patient ID */}
+              <input name="patientId" value={patientId} hidden readOnly />
 
               {/* Submit Button */}
-              <div className="pt-8 border-t border-gray-200 dark:border-gray-700">
+              <div className="mx-auto w-fit ">
                 <button
                   type="submit"
                   disabled={pending}
-                  className="w-full px-8 py-4 bg-light-4 dark:bg-dark-1 rounded-xl font-ubuntu font-bold text-xl text-white shadow-light dark:shadow-dark hover:bg-black hover:text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:-translate-y-1"
+                  className="w-fit mx-auto px-8 py-4 bg-light-4 dark:bg-dark-1 rounded-xl font-ubuntu font-bold text-xl text-white shadow-light dark:shadow-dark hover:bg-black hover:text-white transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:-translate-y-1"
                 >
                   {pending ? (
                     <div className="flex items-center justify-center gap-3">
@@ -304,14 +259,14 @@ export default function AppointmentPage({
           </div>
         </div>
 
-        {/* Loading Screen for uploading */}
+        {/* Loading */}
         {pending && (
-          <LoadingScreen message={"Uploading Appointment Request..."} />
+          <LoadingScreen message="Uploading Appointment Request..." />
         )}
 
-        {/* Success Pop Up */}
+        {/* Success PopUp */}
         {submitted && (
-          <PopUpCard>
+          <PopUpCard setState={setSubmitted}>
             <div className="text-center mb-6 p-6">
               <div className="inline-flex items-center justify-center w-16 h-16 bg-green-100 dark:bg-green-900/30 rounded-full mb-4">
                 <Calendar className="w-8 h-8 text-green-600 dark:text-green-400" />
@@ -320,89 +275,12 @@ export default function AppointmentPage({
                 {state?.message || "Appointment Submitted Successfully!"}
               </h1>
               <p className="font-ubuntu text-gray-600 dark:text-gray-400">
-                Your appointment request has been received and will be processed
-                shortly.
+                Thank you for your request. Our team will reach out shortly.
               </p>
             </div>
-
-            <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 mb-6">
-              <h3 className="font-ubuntu font-bold text-lg text-dark-4 dark:text-white mb-4">
-                Appointment Summary
-              </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-6 font-ubuntu text-base">
-                <div className="flex justify-between sm:col-span-1">
-                  <span className="font-semibold text-gray-600 dark:text-gray-400">
-                    Full Name:
-                  </span>
-                  <span className="text-dark-4 dark:text-white">
-                    {state?.appointment?.fullname}
-                  </span>
-                </div>
-                <div className="flex justify-between sm:col-span-1">
-                  <span className="font-semibold text-gray-600 dark:text-gray-400">
-                    Email:
-                  </span>
-                  <span className="text-dark-4 dark:text-white">
-                    {state?.appointment?.email}
-                  </span>
-                </div>
-                <div className="flex justify-between sm:col-span-1">
-                  <span className="font-semibold text-gray-600 dark:text-gray-400">
-                    Phone:
-                  </span>
-                  <span className="text-dark-4 dark:text-white">
-                    {state?.appointment?.phone || "N/A"}
-                  </span>
-                </div>
-                <div className="flex justify-between sm:col-span-1">
-                  <span className="font-semibold text-gray-600 dark:text-gray-400">
-                    Reason for Visit:
-                  </span>
-                  <span className="text-dark-4 dark:text-white">
-                    {state?.appointment?.reasonForVisit}
-                  </span>
-                </div>
-                <div className="flex justify-between sm:col-span-1">
-                  <span className="font-semibold text-gray-600 dark:text-gray-400">
-                    Preferred Date:
-                  </span>
-                  <span className="text-dark-4 dark:text-white">
-                    {state?.appointment?.preferredDate}
-                  </span>
-                </div>
-                <div className="flex justify-between sm:col-span-1">
-                  <span className="font-semibold text-gray-600 dark:text-gray-400">
-                    Preferred Time:
-                  </span>
-                  <span className="text-dark-4 dark:text-white">
-                    {state?.appointment?.preferredTime}
-                  </span>
-                </div>
-                <div className="flex justify-between sm:col-span-2 pt-2 border-t border-gray-200 dark:border-gray-600">
-                  <span className="font-semibold text-gray-600 dark:text-gray-400">
-                    Appointment ID:
-                  </span>
-                  <span className="text-dark-4 dark:text-white font-mono text-sm">
-                    {state?.appointment?.id}
-                  </span>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex gap-4">
-              <Btn
-                className="flex-1 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 hover:bg-gray-300 dark:hover:bg-gray-600"
-                onClick={() => {
-                  setSubmitted(false);
-                  window.location.reload();
-                }}
-              >
-                Book Another
-              </Btn>
-              <Btn className="flex-1" onClick={() => setSubmitted(false)}>
-                Close
-              </Btn>
-            </div>
+            <Btn onClick={() => setSubmitted(false)} className="w-full">
+              Close
+            </Btn>
           </PopUpCard>
         )}
       </div>
