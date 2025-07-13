@@ -182,7 +182,7 @@ export const getAppointmentsFromDB = async () => {
   });
 };
 
-export const getAllDoctorsFromDB = async (page = 1, limit = 10) => {
+export const getAllDoctorsFromDB = async (page:number , limit:number) => {
   const skip = (page - 1) * limit;
 
   const [doctors, total] = await Promise.all([
@@ -203,11 +203,7 @@ export const getAllDoctorsFromDB = async (page = 1, limit = 10) => {
         pfp: true,
         role: true,
         createdAt: true,
-        doctorProfile: {
-          select: {
-            doctorType: true,
-          },
-        },
+        doctorProfile: true
       },
     }),
     prisma.user.count({

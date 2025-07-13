@@ -2,8 +2,13 @@ import { getAllDoctors } from "@/actions/admin.action";
 import React from "react";
 import AddNewDoctorBtn from "./Btns/AddNewDoctorBtn";
 import DeleteDoctorBtn from "./Btns/DeleteDoctorBtn";
+import ProfilePicture from "@/components/ProfilePicture";
 
-export default async function DoctorsList({ paramPage }: { paramPage?: string }) {
+export default async function DoctorsList({
+  paramPage,
+}: {
+  paramPage?: string;
+}) {
   const page = parseInt(paramPage || "1", 10);
   const limit = 10;
 
@@ -22,11 +27,14 @@ export default async function DoctorsList({ paramPage }: { paramPage?: string })
             <thead className="border-b-2 bg-white dark:bg-dark-4 sticky top-0 z-10">
               <tr>
                 <th className="font-semibold p-2 py-3 pr-4">#</th>
-                <th className="font-semibold px-3">Name</th>
+                <th className="font-semibold px-3">Avatar</th>
+                <th className="font-semibold px-3 min-w-[100px]">Name</th>
                 <th className="font-semibold px-3">Email</th>
                 <th className="font-semibold px-3">Type</th>
+                <th className="font-semibold px-3">Rating</th>
+                <th className="font-semibold px-3">Fee</th>
                 <th className="font-semibold px-3">Created At</th>
-                <th className="font-semibold px-3"></th>
+                <th className="font-semibold w-9"></th>
               </tr>
             </thead>
             <tbody className="divide-y gap-4">
@@ -36,13 +44,31 @@ export default async function DoctorsList({ paramPage }: { paramPage?: string })
                   className="hover:bg-gray-100 dark:hover:bg-gray-950 h-14"
                 >
                   <td className="p-2">{(page - 1) * limit + index + 1}</td>
+                  <td className="px-3">
+                    <ProfilePicture
+                      size={30}
+                      image={
+                        doc.pfp
+                          ? `${`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${doc.pfp}`}`
+                          : undefined
+                      }
+                    />
+                  </td>
                   <td className="px-3">{doc.name}</td>
                   <td className="px-3">{doc.email}</td>
                   <td className="capitalize px-3">
                     {doc.doctorProfile?.doctorType}
                   </td>
-                  <td className="px-3">{new Date(doc.createdAt).toLocaleDateString()}</td>
+                  <td className="capitalize px-3">
+                    {doc.doctorProfile?.ratings}
+                  </td>
+                  <td className="capitalize px-3">
+                    {doc.doctorProfile?.consultationFee}
+                  </td>
                   <td className="px-3">
+                    {new Date(doc.createdAt).toLocaleDateString()}
+                  </td>
+                  <td className="px-2">
                     <DeleteDoctorBtn doctorId={doc.id} />
                   </td>
                 </tr>

@@ -39,7 +39,7 @@ export default async function AppointmentsList({
                 <th scope="col" className="text-left font-semibold px-3">
                   Visit Reason
                 </th>
-                <th scope="col" className="text-left font-semibold px-3">
+                <th scope="col" className="text-left font-semibold px-3 min-w-[100px]">
                   Visit Time
                 </th>
                 <th scope="col" className="text-left font-semibold px-3">

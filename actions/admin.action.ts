@@ -141,7 +141,7 @@ export const getInquiriesForPagination = async (
   return { inquiries, count, totalPages: Math.ceil(count / limit) };
 };
 
-export const getAllDoctors = async (page = 1, limit = 10) => {
+export const getAllDoctors = async (page:number, limit:number) => {
   return await getAllDoctorsFromDB(page, limit);
 };
 
