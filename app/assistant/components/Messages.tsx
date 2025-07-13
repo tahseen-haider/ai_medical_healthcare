@@ -111,6 +111,7 @@ export default function Messages({
     const params = new URLSearchParams({
       chatId,
       isOldMessage: isOldMessage.toString(),
+      userId: userData.id,
       username: userData.name,
       dob: userData.dob || "",
       bloodType: userData.bloodType || "",
@@ -149,11 +150,21 @@ export default function Messages({
       onDone();
       eventSource.close();
     });
+    eventSource.addEventListener("error", (event) => {
+      const messageEvent = event as MessageEvent;
+      try {
+        const parsed = JSON.parse(messageEvent.data);
 
-    eventSource.onerror = (err) => {
-      console.error("SSE error", err);
+        onData(parsed.error);
+      } catch (e) {
+        console.error("Failed to parse event data", e);
+        onData("Something went wrong while generating your response. Kindly contact us for inquiry.");
+      }
+
+      setIsGenerating(false);
       eventSource.close();
-    };
+    });
+
   };
 
   // If last message is not answered run this
@@ -205,12 +216,7 @@ export default function Messages({
           </div>
           {/* Messages */}
           {messages.map((ele, i) => (
-            <MessageBox
-              key={i}
-              index={i}
-              message={ele}
-              pfpUrl={pfpUrl}
-            />
+            <MessageBox key={i} index={i} message={ele} pfpUrl={pfpUrl} />
           ))}
         </div>
         <div ref={bottomRef} />

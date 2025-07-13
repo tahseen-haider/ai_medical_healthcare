@@ -75,7 +75,7 @@ export const getChatListOfUser = async (userId: string) => {
       where: {
         id: userId,
       },
-      include: { chats: true },
+      include: { chats: { orderBy: { updatedAt: "desc" } } },
     });
 
     return currentUser?.chats;
@@ -124,6 +124,9 @@ export const getMessagesUsingChatId = async (chatId: string) => {
     const messages = await prisma.message.findMany({
       where: {
         chatId,
+      },
+      orderBy: {
+        createdAt: "asc",
       },
     });
     if (!messages || messages.length === 0) return null;

@@ -96,7 +96,7 @@ export default function UserProfile({ user }: { user: UserType }) {
   };
 
   const getBMICategory = (bmi: number) => {
-    if (bmi < 18.5) return { category: "Underweight", color: "text-blue-600" };
+    if (bmi < 18.5) return { category: "Underweight", color: "text-light-4" };
     if (bmi < 25) return { category: "Normal", color: "text-green-600" };
     if (bmi < 30) return { category: "Overweight", color: "text-yellow-600" };
     return { category: "Obese", color: "text-red-600" };
@@ -150,7 +150,7 @@ export default function UserProfile({ user }: { user: UserType }) {
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
                       {user.name}
                     </h1>
-                    <p className="text-blue-600 font-medium">Patient</p>
+                    <p className="text-light-4 dark:text-light-4 font-medium">Patient</p>
                     {age && (
                       <p className="text-gray-600 dark:text-gray-400 mt-1">
                         {age} years old
@@ -240,7 +240,7 @@ export default function UserProfile({ user }: { user: UserType }) {
                           <p className="text-sm font-medium text-gray-950 dark:text-gray-300">
                             Email
                           </p>
-                          <p className="text-sm text-blue-600">{user.email}</p>
+                          <p className="text-sm text-light-4 dark:text-light-4">{user.email}</p>
                         </div>
                       </div>
 
@@ -365,28 +365,7 @@ export default function UserProfile({ user }: { user: UserType }) {
                             {user.emailNotifications ? "Enabled" : "Disabled"}
                           </Badge>
                         </div>
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm text-gray-600 dark:text-gray-400">
-                            SMS Reminders
-                          </span>
-                          <Badge
-                            variant="outline"
-                            className="text-green-600 border-green-600"
-                          >
-                            {user.smsReminders ? "Enabled" : "Disabled"}
-                          </Badge>
-                        </div>
-                        <div className="flex justify-between items-center">
-                          <span className="text-sm text-gray-600 dark:text-gray-400">
-                            Two-Factor Auth
-                          </span>
-                          <Badge
-                            variant="outline"
-                            className="text-green-600 border-green-600"
-                          >
-                            {user.twoFactorEnabled ? "Enabled" : "Disabled"}
-                          </Badge>
-                        </div>
+                        
                       </div>
                     </div>
                   </div>
@@ -874,7 +853,7 @@ export default function UserProfile({ user }: { user: UserType }) {
                   <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                     <Card>
                       <CardContent className="p-4 text-center">
-                        <div className="text-2xl font-bold text-blue-600">
+                        <div className="text-2xl font-bold text-light-4 dark:text-light-4">
                           {totalAppointments}
                         </div>
                         <div className="text-sm text-gray-600 dark:text-gray-400">
@@ -940,7 +919,7 @@ export default function UserProfile({ user }: { user: UserType }) {
                             <div className="flex justify-between items-start">
                               <div className="flex items-start gap-4">
                                 <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
-                                  <FileText className="w-6 h-6 text-blue-600" />
+                                  <FileText className="w-6 h-6 text-light-4 dark:text-light-4" />
                                 </div>
                                 <div>
                                   <p className="font-medium text-gray-900 dark:text-gray-100">

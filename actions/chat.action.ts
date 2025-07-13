@@ -40,7 +40,7 @@ export async function getChatList() {
   const chatList = await getChatListOfUser(user.userId);
 
   if (chatList?.length === 0) return [];
-  return chatList?.reverse();
+  return chatList;
 }
 
 export async function getMessages(chatId: string) {
