@@ -9,11 +9,11 @@ import { redirect } from "next/navigation";
 
 export default async function Home() {
   const cookieStore = await cookies();
-  const role = await isUserAuthenticated(cookieStore.get("session")?.value);
-  if (role === "admin") {
+  const session = await isUserAuthenticated(cookieStore.get("session")?.value);
+  if (session?.role === "admin") {
     return redirect("/admin/dashboard");
   }
-  if (role === "doctor") {
+  if (session?.role === "doctor") {
     return redirect("/doctor/dashboard");
   }
   return (
@@ -21,16 +21,16 @@ export default async function Home() {
       <div className="max-w-[1920px] w-full">
         {/* Hero Section */}
         <HeroSectionImproved />
-        <div className="w-full border-b-[1px] "/>
+        <div className="w-full border-b-[1px] " />
         {/* Our Doctors */}
         <OurDoctorsSection />
-        <div className="w-full border-b-[1px] "/>
+        <div className="w-full border-b-[1px] " />
         {/* Why Choose Us */}
         <WhyChooseUsSection />
-        <div className="w-full border-b-[1px] "/>
+        <div className="w-full border-b-[1px] " />
         {/* Our Services */}
         <ServicesSection />
-        <div className="w-full border-b-[1px] "/>
+        <div className="w-full border-b-[1px] " />
         {/* Find Us */}
         <FindUsHereSection />
       </div>
