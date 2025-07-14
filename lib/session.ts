@@ -121,7 +121,7 @@ export async function deleteSession() {
 
 export const isUserAuthenticated = async (sessionToken: any) => {
   const session = await decrypt(sessionToken);
-  return session?.role
+  return session
 };
 
 export const getUserRoleFromSession = async (sessionToken: any) => { 

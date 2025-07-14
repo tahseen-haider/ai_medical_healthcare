@@ -51,13 +51,13 @@ export const changeAppointmentDoctor = async (
   formData: FormData
 ) => {
   const appointmentId = formData.get("appointmentId") as string;
-  const doctor = formData.get("doctor") as DoctorType;
+  const doctor = formData.get("doctor") as string;
   const currentPage = formData.get("currentPage") as string;
-  const currentDoctor = formData.get("currentDoctor") as DoctorType;
+  const currentDoctor = formData.get("currentDoctor") as string;
 
   if (!appointmentId || !doctor || currentDoctor === doctor) return;
 
-  await changeAppointmentDoctorFromDB(appointmentId, doctor);
+  await changeAppointmentDoctorFromDB(appointmentId, doctor, currentDoctor);
 
   revalidatePath(`/admin/user-management?page=${currentPage}`);
   return {};

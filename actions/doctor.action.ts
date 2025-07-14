@@ -49,7 +49,7 @@ export const changeAppointmentStatus = async (
 
   if (!appointmentId || !status || currentStatus === status) return;
 
-  await changeAppointmentStatusFromDB(appointmentId, status);
+  await changeAppointmentStatusFromDB(appointmentId, status, currentStatus);
 
   revalidatePath(`/admin/user-management?page=${currentPage}`);
   return {};

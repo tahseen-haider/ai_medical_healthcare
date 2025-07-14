@@ -26,13 +26,13 @@ export async function startNewChat(state: ChatState, formData: FormData) {
   const imageBase64 = formData.get("imageBase64") as string | null;
   const userId = formData.get("userId") as string;
 
-  const newChatSession = await startNewChatInDB(
+  const newChatSessionId = await startNewChatInDB(
     userId,
     userPrompt,
     imageBase64
   );
 
-  return redirect(`/assistant/${newChatSession?.id}`);
+  return redirect(`/assistant/${newChatSessionId}`);
 }
 
 export async function getChatList() {

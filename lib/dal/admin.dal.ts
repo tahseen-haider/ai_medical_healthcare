@@ -6,11 +6,6 @@ import cloudinary from "../cloudinary";
 import { getUserIdnRoleIfAuthenticated } from "../session";
 import { subDays, format, eachDayOfInterval } from "date-fns";
 
-function handleError(error: unknown, context: string) {
-  console.error(`Error in ${context}:`, error);
-  throw new Error("Something went wrong.");
-}
-
 export const getAllVerifiedUsersFromDB = async () => {
   try {
     const users = await prisma.user.findMany({
@@ -34,22 +29,6 @@ export const getAllVerifiedUsersFromDB = async () => {
   } catch (error) {
     console.error("Error in getAllVerifiedUsersFromDB:", error);
     throw new Error("Failed to fetch verified users");
-  }
-};
-
-export const changeAppointmentDoctorFromDB = async (
-  appointmentId: string,
-  doctor: string
-) => {
-  try {
-    const doctorId = doctor === "Unassigned" ? null : doctor;
-    return await prisma.appointments.update({
-      where: { id: appointmentId },
-      data: { doctorId },
-    });
-  } catch (error) {
-    console.error("Error in changeAppointmentDoctorFromDB:", error);
-    throw new Error("Failed to change appointment doctor");
   }
 };
 
@@ -318,9 +297,31 @@ export const deleteDoctorFromDB = async (userId: string) => {
 };
 
 export const deleteAppointmentFromDB = async (appId: string) => {
-  return await prisma.appointments.delete({
+  const deleted = await prisma.appointments.delete({
     where: { id: appId },
   });
+
+  // notification for patient
+  await prisma.notification.create({
+    data: {
+      userId: deleted.patientId!,
+      title: "Appointment Deleted By Admin",
+      message: `Appointment of patient "${deleted.fullname}" that was set to be on "${deleted.preferredDate}" is deleted by admin.`,
+      type: "APPOINTMENT_UPDATE",
+    },
+  });
+
+  // notification for doctor
+  await prisma.notification.create({
+    data: {
+      userId: deleted.doctorId!,
+      title: "Appointment Deleted By Admin",
+      message: `Appointment of patient "${deleted.fullname}" that was set to be on "${deleted.preferredDate}" is deleted by admin.`,
+      type: "APPOINTMENT_UPDATE",
+    },
+  });
+
+  return deleted;
 };
 
 export const deleteUserFromDB = async (userId: string) => {
@@ -412,6 +413,16 @@ export const changeUserRoleFromDB = async (
     },
   });
 
+  // notification for user
+  await prisma.notification.create({
+    data: {
+      userId: user.id!,
+      title: "Role changed by Admin",
+      message: `Your profile role is changed by Admin from "${currentRole}" to "${role}".`,
+      type: "GENERAL_ANNOUNCEMENT",
+    },
+  });
+
   if (currentRole === "doctor") {
     await prisma.doctorProfile.delete({
       where: { userId },
@@ -491,22 +502,6 @@ export const getAdminDashboardNumbersFromDB = async () => {
   };
 };
 
-export const changeInquiryStatusFromDB = async (id: string) => {
-  const inquiry = await prisma.inquiries.findUnique({
-    where: { id },
-    select: { is_read: true },
-  });
-
-  if (!inquiry) throw new Error("Inquiry not found");
-
-  await prisma.inquiries.update({
-    where: { id },
-    data: {
-      is_read: !inquiry.is_read,
-    },
-  });
-};
-
 export const getNewUserInfoFromDB = async () => {
   const start = subDays(new Date(), 90);
 
@@ -541,6 +536,22 @@ export const getNewUserInfoFromDB = async () => {
   return final;
 };
 
+export const changeInquiryStatusFromDB = async (id: string) => {
+  const inquiry = await prisma.inquiries.findUnique({
+    where: { id },
+    select: { is_read: true },
+  });
+
+  if (!inquiry) return;
+
+  await prisma.inquiries.update({
+    where: { id },
+    data: {
+      is_read: !inquiry.is_read,
+    },
+  });
+};
+
 export async function updateAdminProfileInDB(adminData: {
   id: string;
   name: string;
@@ -573,3 +584,53 @@ export async function updateAdminProfileInDB(adminData: {
     },
   });
 }
+
+export const changeAppointmentDoctorFromDB = async (
+  appointmentId: string,
+  doctor: string,
+  currentDoctor: string
+) => {
+  try {
+    const doctorId = doctor === "Unassigned" ? null : doctor;
+
+    const updatedAppointment = await prisma.appointments.update({
+      where: { id: appointmentId },
+      data: { doctorId },
+    });
+
+    // notification for patient
+    await prisma.notification.create({
+      data: {
+        userId: updatedAppointment.patientId!,
+        title: "Appointment Doctor Changed By Admin",
+        message: `Appointment of patient "${updatedAppointment.fullname}" that was set to be on "${updatedAppointment.preferredDate}" is updated by reassigning your Doctor.`,
+        type: "APPOINTMENT_UPDATE",
+      },
+    });
+
+    // notification for old doctor
+    await prisma.notification.create({
+      data: {
+        userId: currentDoctor!,
+        title: "Appointment Doctor Changed By Admin",
+        message: `Appointment of patient "${updatedAppointment.fullname}" that was set to be on "${updatedAppointment.preferredDate}" is updated by reassigning their Doctor.`,
+        type: "APPOINTMENT_UPDATE",
+      },
+    });
+
+    // notification for new doctor
+    await prisma.notification.create({
+      data: {
+        userId: updatedAppointment.doctorId!,
+        title: "New Appointment By Admin",
+        message: `New Appointment of patient "${updatedAppointment.fullname}" that is set to be on "${updatedAppointment.preferredDate}".`,
+        type: "APPOINTMENT_UPDATE",
+      },
+    });
+
+    return updatedAppointment;
+  } catch (error) {
+    console.error("Error in changeAppointmentDoctorFromDB:", error);
+    throw new Error("Failed to change appointment doctor");
+  }
+};

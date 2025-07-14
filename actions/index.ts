@@ -5,19 +5,32 @@ import {
   AppointmentFormType,
   ContactFormSchema,
   ContactFormState,
+  NotificationItem,
   SaveProfileChangesState,
 } from "@/lib/definitions";
 import {
+  deleteNotificationFromDB,
+  getAuthUserWithAppointmentsFromDB,
+  getTokensUsedFromDB,
+  getUserNotificationsFromDB,
+  markAllNotificationsAsReadInDB,
+  markNotificationAsReadInDB,
+  markNotificationAsUnreadInDB,
   setAppointmentToDB,
   uploadInquiry,
   uploadProfileChanges,
 } from "@/lib/dal";
 import cloudinary from "@/lib/cloudinary";
-import { getUser, getUserCredentialsByEmail, updateUserProfileInDB } from "@/lib/dal/user.dal";
+import {
+  getUser,
+  getUserCredentialsByEmail,
+  updateUserProfileInDB,
+} from "@/lib/dal/user.dal";
 import { v4 as uuidv4 } from "uuid";
 import { redirect } from "next/navigation";
 import { getUserIdnRoleIfAuthenticated } from "@/lib/session";
 import { revalidatePath } from "next/cache";
+import { NotificationType } from "@prisma/client/edge";
 
 export const contactUs = async (
   state: ContactFormState,
@@ -177,14 +190,19 @@ export async function updateUserProfile(_prevState: any, formData: FormData) {
     const allergies = JSON.parse(formData.get("allergies") as string);
 
     // New medical fields
-    const chronicConditions = JSON.parse(formData.get("chronicConditions") as string);
+    const chronicConditions = JSON.parse(
+      formData.get("chronicConditions") as string
+    );
     const medications = JSON.parse(formData.get("medications") as string);
     const surgeries = JSON.parse(formData.get("surgeries") as string);
     const immunizations = JSON.parse(formData.get("immunizations") as string);
     const bloodPressure = formData.get("bloodPressure") as string;
-    const heartRate = Number.parseInt(formData.get("heartRate") as string) || null;
-    const respiratoryRate = Number.parseInt(formData.get("respiratoryRate") as string) || null;
-    const temperature = Number.parseFloat(formData.get("temperature") as string) || null;
+    const heartRate =
+      Number.parseInt(formData.get("heartRate") as string) || null;
+    const respiratoryRate =
+      Number.parseInt(formData.get("respiratoryRate") as string) || null;
+    const temperature =
+      Number.parseFloat(formData.get("temperature") as string) || null;
     const height = Number.parseInt(formData.get("height") as string) || null;
     const weight = Number.parseInt(formData.get("weight") as string) || null;
 
@@ -192,9 +210,12 @@ export async function updateUserProfile(_prevState: any, formData: FormData) {
     const smokerValue = formData.get("smoker") as string;
     const smoker = smokerValue === "" ? null : smokerValue === "true";
     const alcoholUseValue = formData.get("alcoholUse") as string;
-    const alcoholUse = alcoholUseValue === "" ? null : alcoholUseValue === "true";
+    const alcoholUse =
+      alcoholUseValue === "" ? null : alcoholUseValue === "true";
     const exerciseFrequency = formData.get("exerciseFrequency") as string;
-    const mentalHealthConcerns = JSON.parse(formData.get("mentalHealthConcerns") as string);
+    const mentalHealthConcerns = JSON.parse(
+      formData.get("mentalHealthConcerns") as string
+    );
     const notes = formData.get("notes") as string;
 
     const updatedUser = {
@@ -233,4 +254,37 @@ export async function updateUserProfile(_prevState: any, formData: FormData) {
     console.error("Error updating user profile:", error);
     return { success: false };
   }
+}
+
+export async function getTokensUsed(userId: string) {
+  return (await getTokensUsedFromDB(userId))?.ai_tokens_used;
+}
+
+export async function getUserNotifications(
+  userId: string
+): Promise<NotificationItem[]> {
+  return getUserNotificationsFromDB(userId);
+}
+
+export async function markNotificationAsRead(
+  notificationId: string
+): Promise<NotificationItem> {
+  return markNotificationAsReadInDB(notificationId);
+}
+export async function markAllNotificationsAsRead(
+  userId: string,
+) {
+  await markAllNotificationsAsReadInDB(userId);
+}
+
+export async function getAuthUserWithAppointments(){
+  return getAuthUserWithAppointmentsFromDB()
+}
+
+export async function deleteNotification(id:string){
+  return await deleteNotificationFromDB(id);
+}
+
+export async function markNotificationAsUnread(id:string){
+  return await markNotificationAsUnreadInDB(id);
 }

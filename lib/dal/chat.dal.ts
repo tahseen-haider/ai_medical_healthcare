@@ -13,60 +13,42 @@ export const startNewChatInDB = async (
   imageBase64: string | null
 ) => {
   try {
-    let publicUploadedImageId = "";
-    if (imageBase64) {
-      const newPublicId = `chat_images/${userId}-${uuidv4()}`;
+    const uploadPromise = imageBase64
+      ? cloudinary.uploader.upload(imageBase64, {
+          folder: "chat_images",
+          public_id: `chat_images/${userId}-${uuidv4()}`,
+          overwrite: false,
+        })
+      : null;
 
-      const res = await cloudinary.uploader.upload(imageBase64, {
-        folder: "chat_images",
-        public_id: newPublicId,
-        overwrite: false,
-      });
+    const title = userPrompt?.trim()
+      ? userPrompt.slice(0, 50)
+      : "Image Uploaded";
 
-      publicUploadedImageId = res.public_id;
-    }
+    const content = userPrompt?.trim() ? userPrompt : "Image Uploaded";
+
+    const res = uploadPromise ? await uploadPromise : null;
+    const publicUploadedImageId = res?.public_id;
 
     const chatSession = await prisma.chatSession.create({
       data: {
         userId,
-        title: userPrompt
-          ? userPrompt !== ""
-            ? userPrompt?.slice(0, 50)
-            : "Image Uploaded"
-          : "Image Uploaded",
+        title,
         messages: {
           create: {
             role: "user",
-            content: userPrompt
-              ? userPrompt !== ""
-                ? userPrompt
-                : "Image Uploaded"
-              : "Image Uploaded",
-            image: publicUploadedImageId ? publicUploadedImageId : undefined,
+            content,
+            image: publicUploadedImageId,
           },
         },
       },
-      include: {
-        messages: true,
-      },
     });
 
-    return chatSession;
+    return chatSession.id;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return undefined;
   }
-};
-
-export const sendPrompt = async (chatId: string, userPrompt: string) => {
-  const messages = await prisma.message.create({
-    data: {
-      chatId: chatId,
-      role: "user",
-      content: userPrompt,
-    },
-  });
-  return messages;
 };
 
 export const getChatListOfUser = async (userId: string) => {

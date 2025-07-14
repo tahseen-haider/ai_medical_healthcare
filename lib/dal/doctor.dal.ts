@@ -227,16 +227,48 @@ export const getAllAppointmentsForDoctorFromDB = async (
   }
 };
 
+const getStatusMessage = (
+  status: AppointmentStatus,
+  currentStatus: AppointmentStatus,
+  doctorName: string,
+  patientName: string,
+  preferredDate: string
+): string => {
+  switch (status) {
+    case "PENDING":
+      return `Doctor "${doctorName}" marked the appointment of "${patientName}" (scheduled for "${preferredDate}") as pending. "${patientName}", please wait for further confirmation.`;
+
+    case "CONFIRMED":
+      return `Doctor "${doctorName}" confirmed the appointment of "${patientName}" scheduled for "${preferredDate}". "${patientName}", please be on time.`;
+
+    case "CANCELLED":
+      return `Doctor "${doctorName}" cancelled the appointment of "${patientName}" which was scheduled for "${preferredDate}". "${patientName}", you may book a new appointment if needed.`;
+
+    case "COMPLETED":
+      return `Doctor "${doctorName}" marked the appointment of "${patientName}" on "${preferredDate}" as completed. "${patientName}", we hope you're doing well!`;
+
+    case "RESCHEDULED":
+      return `Doctor "${doctorName}" rescheduled the appointment of "${patientName}". The original date was "${preferredDate}". "${patientName}", please check your updated appointment details.`;
+
+    case "PAYMENT_PENDING":
+      return `Doctor "${doctorName}" marked the appointment of "${patientName}" on "${preferredDate}" as payment pending. "${patientName}", please complete the payment to proceed.`;
+
+    default:
+      return `Doctor "${doctorName}" changed the appointment status of "${patientName}" on "${preferredDate}" from "${currentStatus}" to "${status}".`;
+  }
+};
+
 export const changeAppointmentStatusFromDB = async (
   appointmentId: string,
-  status: AppointmentStatus
+  status: AppointmentStatus,
+  currentStatus: AppointmentStatus
 ) => {
   try {
+    let app = undefined;
+
     if (status === "COMPLETED") {
-      await prisma.appointments.update({
-        where: {
-          id: appointmentId,
-        },
+      app = await prisma.appointments.update({
+        where: { id: appointmentId },
         data: {
           patient: {
             update: {
@@ -245,20 +277,61 @@ export const changeAppointmentStatusFromDB = async (
           },
         },
       });
+    } else {
+      app = await prisma.appointments.update({
+        where: { id: appointmentId },
+        data: { status },
+      });
     }
 
-    await prisma.appointments.update({
-      where: {
-        id: appointmentId,
-      },
-      data: {
-        status,
-      },
-    });
+    if (app) {
+      const admins = await prisma.user.findMany({
+        where: { role: "admin" },
+      });
 
-    return;
+      const doctor = app.doctorId
+        ? await prisma.user.findUnique({ where: { id: app.doctorId } })
+        : null;
+
+      const doctorName = doctor?.name ?? "Unknown Doctor";
+
+      const message = getStatusMessage(
+        status,
+        currentStatus,
+        doctorName,
+        app.fullname,
+        app.preferredDate
+      );
+
+      // appointments for patient
+      await prisma.notification.create({
+        data: {
+          userId: app.patientId!,
+          title: "Appointment Status Changed By Doctor",
+          message,
+          type: "APPOINTMENT_UPDATE",
+        },
+      });
+
+      // appointments for all admins
+      await Promise.all(
+        admins.map((admin) =>
+          prisma.notification.create({
+            data: {
+              userId: admin.id,
+              title: "Appointment Status Changed By Doctor",
+              message,
+              type: "APPOINTMENT_UPDATE",
+            },
+          })
+        )
+      );
+    }
+
+    return { success: true };
   } catch (error) {
-    throw new Error(`Failed to change appointment status: ${error}`);
+    console.error("Failed to change appointment status:", error);
+    throw new Error(`Failed to change appointment status`);
   }
 };
 

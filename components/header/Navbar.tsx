@@ -8,14 +8,12 @@ import { useEffect, useLayoutEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import Btn from "../Button";
 import ProfileButton from "./ProfileButton";
+import NotificationsButton from "./NotificationsButton";
+import { UserType } from "@/lib/definitions";
 
-function Navbar({
-  role,
-  imageUrl,
-}: {
-  role: string | undefined;
-  imageUrl?: string;
-}) {
+function Navbar({ user }: { user?: UserType }) {
+  const role = user?.role;
+  const imageUrl = `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${user?.pfp}`;
   const userNavLinks = [
     {
       title: "Home",
@@ -129,6 +127,12 @@ function Navbar({
               onClick={() => setIsNavbarDown(false)}
             />
           )}
+          {role && (
+            <NotificationsButton
+              user={user}
+            />
+          )}
+          {/* Auth Button */}
           {!role && (
             <Link
               href="/login"
@@ -146,10 +150,12 @@ function Navbar({
               </Btn>
             </Link>
           )}
-          {role && <ProfileButton imageUrl={imageUrl} />}
+          {/* Profile Button */}
+          {role && <ProfileButton imageUrl={imageUrl} name={user?.name} />}
           <div className="hidden sm:block">
             <ThemeToggler />
           </div>
+          {/* Menu Button for smaller screens */}
           <div className="lg:hidden">
             <Btn
               onClick={() => setIsNavbarDown(!isNavbarDown)}

@@ -1,4 +1,4 @@
-import { AppointmentStatus, DoctorType } from "@prisma/client/edge";
+import { AppointmentStatus, DoctorType, NotificationType } from "@prisma/client/edge";
 import { number, z } from "zod";
 
 export const SignupFormSchema = z.object({
@@ -292,3 +292,15 @@ export type ChatState =
       message?: string;
     }
   | undefined;
+
+export type NotificationItem = {
+  id: string;
+  userId: string;
+  type: NotificationType;
+  title: string;
+  message: string;
+  read: boolean;
+  createdAt: Date;
+  link?: string | null;
+  relatedId?: string | null;
+};

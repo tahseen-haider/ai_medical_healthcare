@@ -6,6 +6,7 @@ import { cookies } from "next/headers";
 import { isUserAuthenticated } from "@/lib/session";
 import LayoutWrapper from "@/components/LayoutWrapper";
 import { getPfp } from "@/actions";
+import { getUser } from "@/lib/dal/user.dal";
 
 const roboto = Roboto({
   variable: "--font-roboto",
@@ -32,9 +33,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const cookieStore = await cookies();
-  const role = await isUserAuthenticated(cookieStore.get("session")?.value);
-  
-  const imageUrl = await getPfp();
+  const session = await isUserAuthenticated(cookieStore.get("session")?.value);
+  const user = await getUser(session?.userId);
   return (
     <html lang="en" suppressHydrationWarning>
       <body
@@ -46,7 +46,7 @@ export default async function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <LayoutWrapper role={role} imageUrl={imageUrl}>
+          <LayoutWrapper user={user}>
             {children}
           </LayoutWrapper>
         </ThemeProvider>

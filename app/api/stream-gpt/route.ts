@@ -35,7 +35,7 @@ export async function GET(req: NextRequest) {
     }
     return age;
   };
-  const userId = searchParams.get("userId");
+  const userId = searchParams.get("userId") as string;
 
   // Checking rate limit if exceeded send limit response
   const { success } = await ratelimit.limit(`chat:${userId}`);
@@ -89,7 +89,7 @@ export async function GET(req: NextRequest) {
 
   const message = searchParams.get("message");
   const image = searchParams.get("image");
-  const chatId = searchParams.get("chatId") || undefined;
+  const chatId = searchParams.get("chatId") as string;
   const public_id = searchParams.get("public_id");
   const isOldMessage = searchParams.get("isOldMessage") === "true";
 
@@ -214,6 +214,9 @@ export async function GET(req: NextRequest) {
       // To count tokens used
       let tokensUsed = 0;
 
+      // First LLM input token count
+      const firstLLMInputTokens = JSON.stringify(messages).length / 4;
+
       // LLM invoke
       const completion = await openai.chat.completions.create({
         model: "gpt-4o-mini",
@@ -229,8 +232,6 @@ export async function GET(req: NextRequest) {
 
         fullResponse += cleanedToken;
 
-        tokensUsed++;
-
         const data = JSON.stringify({ token: cleanedToken });
         controller.enqueue(encoder.encode(`data: ${data}\n\n`));
       }
@@ -238,6 +239,8 @@ export async function GET(req: NextRequest) {
       controller.enqueue(encoder.encode("event: done\ndata: done\n\n"));
       const assistantMessageDate = new Date(Date.now());
       controller.close();
+
+      const firstLLMOutputTokens = fullResponse.length / 4;
 
       // Saving user message
       if (!isOldMessage && chatId) {
@@ -272,63 +275,6 @@ export async function GET(req: NextRequest) {
           });
         }
       }
-      // Save summary of previous chat to DB
-      let newSummary = "";
-      const summaryCompletion = await openai.chat.completions.create({
-        model: "gpt-3.5-turbo",
-        messages: [
-          {
-            role: "system",
-            content: `Summarize the following medical conversation. Include all important details, such as:
-                  - User's name (if provided)
-                          - Symptoms or conditions discussed
-                          - Medications mentioned
-                          - Uploaded images and your interpretations
-                          - Any specific questions the user asked
-                          - Any important personal context (age, gender, history, etc.)
-                          Be concise but preserve all medically relevant and identifying context. This will be reused in future conversations.`,
-          },
-          {
-            role: "user",
-            content: `
-                  Previous summary: ${summary?.summary}.
-                          New User Message: ${message}
-                          New Assistant Response: ${fullResponse}
-                          `.trim(),
-          },
-        ],
-      });
-
-      newSummary = summaryCompletion.choices[0].message.content || "";
-
-      await prisma.chatSession.update({
-        where: {
-          id: chatId,
-        },
-        data: {
-          summary: newSummary,
-        },
-      });
-
-      // Save TokensUsed in this response
-      const user = await prisma.chatSession.findFirst({
-        where: {
-          id: chatId!,
-        },
-        select: {
-          user: true,
-        },
-      });
-      await prisma.user.update({
-        where: {
-          id: user?.user.id,
-        },
-        data: {
-          ai_tokens_used: user?.user.ai_tokens_used
-            ? user?.user.ai_tokens_used + tokensUsed
-            : tokensUsed,
-        },
-      });
 
       // Save assistant message
       if (chatId) {
@@ -342,24 +288,104 @@ export async function GET(req: NextRequest) {
         });
       }
 
+      // Save summary of previous chat to DB
+      const summaryMessages: any = [
+        {
+          role: "system",
+          content: `Summarize the following medical conversation. Include all important details, such as:
+                  - User's name (if provided)
+                          - Symptoms or conditions discussed
+                          - Medications mentioned
+                          - Uploaded images and your interpretations
+                          - Any specific questions the user asked
+                          - Any important personal context (age, gender, history, etc.)
+                          Be concise but preserve all medically relevant and identifying context. This will be reused in future conversations.`,
+        },
+        {
+          role: "user",
+          content: `
+                  Previous summary: ${summary?.summary}.
+                          New User Message: ${message}
+                          New Assistant Response: ${fullResponse}
+                          `.trim(),
+        },
+      ];
+
+      const secondLLMInputTokens = JSON.stringify(summaryMessages).length / 4;
+
+      let newSummary = "";
+
+      const summaryCompletion = await openai.chat.completions.create({
+        model: "gpt-3.5-turbo",
+        messages: summaryMessages,
+      });
+
+      newSummary = summaryCompletion.choices[0].message.content || "";
+
+      const secondLLMOutputTokens = newSummary.length / 4;
+
+      await prisma.chatSession.update({
+        where: {
+          id: chatId,
+        },
+        data: {
+          summary: newSummary,
+        },
+      });
+
       // Update Chat title based on summary
+      const newTitleMessages: any = [
+        {
+          role: "system",
+          content:
+            "Generate a short, catchy title summarizing the conversation. Limit to 20 characters max. Avoid punctuation.",
+        },
+        { role: "user", content: newSummary },
+      ];
+
+      const thirdLLMInputTokens = JSON.stringify(newTitleMessages).length / 4;
+
       const newTitleResponse = await openai.chat.completions.create({
         model: "gpt-3.5-turbo",
-        messages: [
-          {
-            role: "system",
-            content:
-              "Generate a short, catchy title summarizing the conversation. Limit to 20 characters max. Avoid punctuation.",
-          },
-          { role: "user", content: newSummary },
-        ],
+        messages: newTitleMessages,
       });
       let rawTitle = newTitleResponse.choices[0].message.content?.trim() || "";
+      const thirdLLMOutputTokens = rawTitle.length / 4;
+
       const cleanedTitle = rawTitle.replace(/^["']|["']$/g, "");
 
       await prisma.chatSession.update({
         where: { id: chatId },
         data: { title: cleanedTitle, updatedAt: new Date(Date.now()) },
+      });
+
+      // Save TokensUsed in this response
+      const user = await prisma.chatSession.findFirst({
+        where: {
+          id: chatId!,
+        },
+        select: {
+          user: true,
+        },
+      });
+
+      tokensUsed =
+        firstLLMInputTokens +
+        firstLLMOutputTokens +
+        secondLLMInputTokens +
+        secondLLMOutputTokens +
+        thirdLLMInputTokens +
+        thirdLLMOutputTokens;
+        
+      await prisma.user.update({
+        where: {
+          id: user?.user.id,
+        },
+        data: {
+          ai_tokens_used: user?.user.ai_tokens_used
+            ? user?.user.ai_tokens_used + tokensUsed
+            : tokensUsed,
+        },
       });
     },
   });

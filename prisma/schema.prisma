@@ -16,79 +16,73 @@ enum UserRole {
 }
 
 model User {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  email      String   @unique
-  phone      String?
-  name       String
-  dob        String?
-  gender     String?
-  password   String?
-  pfp        String?
-  createdAt  DateTime @default(now())
-  role       UserRole @default(user)
-  is_verified Boolean @default(false)
-  token      Int?
-  doctorProfile DoctorProfile?
-  ai_tokens_used Int?
+  id                   String          @id @default(auto()) @map("_id") @db.ObjectId
+  email                String          @unique
+  phone                String?
+  name                 String
+  dob                  String?
+  gender               String?
+  password             String?
+  pfp                  String?
+  createdAt            DateTime        @default(now())
+  role                 UserRole        @default(user)
+  is_verified          Boolean         @default(false)
+  token                Int?
+  doctorProfile        DoctorProfile?
+  ai_tokens_used       Int?
 
   // Patient-specific fields
-  chronicConditions String[] @default([])
-  medications String[] @default([])
-  surgeries String[] @default([])
-  immunizations String[] @default([])
+  chronicConditions    String[]        @default([])
+  medications          String[]        @default([])
+  surgeries            String[]        @default([])
+  immunizations        String[]        @default([])
+  bloodPressure        String?
+  heartRate            Int?
+  respiratoryRate      Int?
+  temperature          Float?
+  bloodType            String?
+  allergies            String[]        @default([])
+  smoker               Boolean?
+  alcoholUse           Boolean?
+  exerciseFrequency    String?
+  mentalHealthConcerns String[]        @default([])
+  notes                String?
+  height               Int?
+  weight               Int?
+  lastCheckUp          DateTime?
 
-  bloodPressure String?
-  heartRate Int?
-  respiratoryRate Int?
-  temperature Float?
-  bloodType     String?
-  allergies     String[]  @default([])
-
-  smoker Boolean?
-  alcoholUse Boolean?
-  exerciseFrequency String?
-  mentalHealthConcerns String[] @default([])
-
-  notes String?
-  height        Int?
-  weight        Int?
-  lastCheckUp   DateTime?
-    
   // Preferences
-  emailNotifications Boolean @default(true)
-  smsReminders      Boolean @default(true)
-  twoFactorEnabled  Boolean @default(false)
-  lastLogin         DateTime?
+  emailNotifications   Boolean         @default(true)
+  smsReminders         Boolean         @default(true)
+  twoFactorEnabled     Boolean         @default(false)
+  lastLogin            DateTime?
 
-  chats      ChatSession[]
-  accounts    Account[]
-  
-  appointmentsAsDoctor Appointments[] @relation("DoctorAppointments")
+  chats                ChatSession[]
+  accounts             Account[]
+  appointmentsAsDoctor Appointments[]  @relation("DoctorAppointments")
   appointmentsAsPatient Appointments[] @relation("PatientAppointments")
+  notifications        Notification[]
 }
 
 model DoctorProfile {
-  id            String      @id @default(auto()) @map("_id") @db.ObjectId
-  userId        String      @unique @db.ObjectId
-  user          User        @relation(fields: [userId], references: [id])
-
-  doctorType    DoctorType
-  specialization String?     // More specific than type (e.g. “Heart Surgeon”)
-  qualifications String?     // Degrees, certifications
-  experience     Int?        // Years of experience
-  bio            String?     // Doctor’s about section
+  id             String     @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String     @unique @db.ObjectId
+  user           User       @relation(fields: [userId], references: [id])
+  doctorType     DoctorType
+  specialization String?    // More specific than type (e.g. “Heart Surgeon”)
+  qualifications String?    // Degrees, certifications
+  experience     Int?       // Years of experience
+  bio            String?    // Doctor’s about section
   clinicName     String?
   clinicAddress  String?
-  consultationFee Int?       // Fee in PKR or relevant currency
-  availableDays  String[]    // e.g. ["Monday", "Wednesday", "Friday"]
-  availableTimes String?     // e.g. "10:00 AM - 4:00 PM"
-  isApproved     Boolean     @default(false) // Admin approval
-  
-  ratings        Float?      // Avg rating
-  totalReviews   Int?        // Total number of reviews
-
-  createdAt      DateTime    @default(now())
-  updatedAt      DateTime    @updatedAt
+  consultationFee Int?      // Fee in PKR or relevant currency
+  availableDays  String[]   // e.g. ["Monday", "Wednesday", "Friday"]
+  availableTimes String?    // e.g. "10:00 AM - 4:00 PM"
+  isApproved     Boolean    @default(false) // Admin approval
+  ratings        Float?     // Avg rating
+  totalReviews   Int?       // Total number of reviews
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
 }
 
 enum DoctorType {
@@ -105,40 +99,38 @@ enum DoctorType {
 }
 
 model Account {
-  id                 String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId             String   @unique @db.ObjectId
-  provider           String
-  providerAccountId  String
-  access_token       String?
-  refresh_token      String?
-  expires_at         Int?
-  token_type         String?
-  id_token           String?
-
-  user User @relation(fields: [userId], references: [id])
-
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @unique @db.ObjectId
+  provider          String
+  providerAccountId String
+  access_token      String?
+  refresh_token     String?
+  expires_at        Int?
+  token_type        String?
+  id_token          String?
+  user              User    @relation(fields: [userId], references: [id])
   @@unique([provider, providerAccountId])
 }
 
 model ChatSession {
-  id          String      @id @default(auto()) @map("_id") @db.ObjectId
-  user        User        @relation(fields: [userId], references: [id])
-  userId      String      @db.ObjectId
-  title       String?     
-  summary     String?
-  messages    Message[]
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  user      User        @relation(fields: [userId], references: [id])
+  userId    String      @db.ObjectId
+  title     String?
+  summary   String?
+  messages  Message[]
+  createdAt DateTime    @default(now())
+  updatedAt DateTime    @updatedAt
 }
 
 model Message {
-  id          String       @id @default(auto()) @map("_id") @db.ObjectId
-  chat        ChatSession  @relation(fields: [chatId], references: [id])
-  chatId      String       @db.ObjectId
-  role        MessageRole  // "user" or "assistant"
-  content     String
-  image       String?
-  createdAt   DateTime     @default(now())
+  id        String      @id @default(auto()) @map("_id") @db.ObjectId
+  chat      ChatSession @relation(fields: [chatId], references: [id])
+  chatId    String      @db.ObjectId
+  role      MessageRole // "user" or "assistant"
+  content   String
+  image     String?
+  createdAt DateTime    @default(now())
 }
 
 enum MessageRole {
@@ -147,23 +139,19 @@ enum MessageRole {
 }
 
 model Appointments {
-  id              String  @id @default(auto()) @map("_id") @db.ObjectId
-  fullname        String
-  email           String
-  phone           String?
-  reasonForVisit  String
-  preferredDate   String
-  preferredTime   String
-  status          AppointmentStatus @default(PENDING)
-  createdAt       DateTime @default(now())
-
-
-  doctorId        String?
-  doctor          User?             @relation("DoctorAppointments", fields: [doctorId], references: [id])
-
-  patientId       String?
-  patient         User?             @relation("PatientAppointments", fields: [patientId], references: [id])
-    
+  id             String          @id @default(auto()) @map("_id") @db.ObjectId
+  fullname       String
+  email          String
+  phone          String?
+  reasonForVisit String
+  preferredDate  String
+  preferredTime  String
+  status         AppointmentStatus @default(PENDING)
+  createdAt      DateTime        @default(now())
+  doctorId       String?
+  doctor         User?           @relation("DoctorAppointments", fields: [doctorId], references: [id])
+  patientId      String?
+  patient        User?           @relation("PatientAppointments", fields: [patientId], references: [id])
 }
 
 enum AppointmentStatus {
@@ -171,13 +159,35 @@ enum AppointmentStatus {
   CONFIRMED
   CANCELLED
   COMPLETED
+  RESCHEDULED
+  PAYMENT_PENDING
 }
 
 model Inquiries {
-  id              String  @id @default(auto()) @map("_id") @db.ObjectId
-  fullname        String
-  email           String
-  inquiry         String
-  is_read         Boolean @default(false)
-  createdAt       DateTime @default(now())
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  fullname  String
+  email     String
+  inquiry   String
+  is_read   Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+enum NotificationType {
+  APPOINTMENT_UPDATE
+  GENERAL_ANNOUNCEMENT
+  PRESCRIPTION_REMINDER
+  SYSTEM_ALERT
+}
+
+model Notification {
+  id        String           @id @default(auto()) @map("_id") @db.ObjectId
+  userId    String           @db.ObjectId
+  user      User             @relation(fields: [userId], references: [id])
+  type      NotificationType
+  title     String
+  message   String
+  read      Boolean          @default(false)
+  createdAt DateTime         @default(now())
+  link      String?
+  relatedId String?
 }

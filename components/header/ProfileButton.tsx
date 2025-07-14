@@ -1,36 +1,38 @@
-"use client";
+"use client"
+
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "../ui/button";
-import { useActionState, useEffect, useState } from "react";
-import { getCurrentlyAuthenticatedUser, logout } from "@/actions/auth.action";
-import ProfilePicture from "../ProfilePicture";
-import LoadingScreen from "../LoadingScreen";
-import Link from "next/link";
-import { UserType } from "@/lib/definitions";
+} from "@/components/ui/dropdown-menu"
+import { Button } from "@/components/ui/button"
+import { useActionState, useState } from "react"
+import { logout } from "@/actions/auth.action"
+import ProfilePicture from "@/components/ProfilePicture"
+import LoadingScreen from "@/components/LoadingScreen"
+import Link from "next/link"
 
-export default function ProfileButton({ imageUrl }: { imageUrl?: string }) {
-  const [state, action, pending] = useActionState(logout, undefined);
-
-  const [user, setUser] = useState<UserType | undefined>();
-  const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    (async function getUser() {
-      const user = await getCurrentlyAuthenticatedUser();
-      setUser(user);
-    })();
-  }, []);
+export default function ProfileButton({
+  imageUrl,
+  name,
+}: {
+  imageUrl?: string
+  name?: string
+}) {
+  const [state, action, pending] = useActionState(logout, undefined)
+  const [open, setOpen] = useState(false)
 
   const navLinks = [
     {
       title: "Your Profile",
       link: "/profile",
+    },
+    {
+      title: "Your Appointments", // New link
+      link: "/your-appointments",
     },
     {
       title: "Reset Password",
@@ -40,55 +42,40 @@ export default function ProfileButton({ imageUrl }: { imageUrl?: string }) {
     //   title: "Settings",
     //   link: "/settings",
     // },
-  ];
+  ]
 
   return (
     <>
       {pending && <LoadingScreen message="Logging you out..." />}
       <DropdownMenu open={open} onOpenChange={setOpen}>
-        <DropdownMenuTrigger className="rounded-full">
-          <ProfilePicture image={imageUrl} />
+        <DropdownMenuTrigger asChild className="rounded-full">
+          <Button variant="ghost" className="h-auto w-auto p-0 rounded-full">
+            <ProfilePicture image={imageUrl} />
+            <span className="sr-only">Open user menu</span>
+          </Button>
         </DropdownMenuTrigger>
-
-        <DropdownMenuContent className="bg-white dark:bg-dark-2 mt-2 flex flex-col">
-          <DropdownMenuLabel>
-            <Link
-              className="text-lg"
-              href="/profile"
-              onClick={() => setOpen(false)}
-            >
-              {user?.name}
+        <DropdownMenuContent className="bg-white dark:bg-dark-2 mt-2 flex flex-col p-1">
+          <DropdownMenuLabel className="px-2 py-1.5 hover:bg-accent/50 rounded-sm cursor-pointer">
+            <Link className="text-lg block" href="/profile" onClick={() => setOpen(false)}>
+              {name || "User Name"}
             </Link>
           </DropdownMenuLabel>
-
           <DropdownMenuSeparator />
-
           {navLinks.map((ele) => (
-            <Link
-              href={ele.link}
-              key={ele.title}
-              onClick={() => setOpen(false)}
-              className="w-full px-3 py-1 hover:bg-light-4 hover:text-white rounded-sm"
-            >
-              {ele.title}
-            </Link>
+            <DropdownMenuItem key={ele.title} asChild className="cursor-pointer px-2 py-1.5">
+              <Link href={ele.link} onClick={() => setOpen(false)}>
+                {ele.title}
+              </Link>
+            </DropdownMenuItem>
           ))}
-
           <DropdownMenuSeparator />
-
-          <form
-            action={action}
-            onSubmit={() => setOpen(false)} // close on form submit
-          >
-            <Button
-              type="submit"
-              className="bg-light-4 dark:bg-gray-100 font-bold mt-3"
-            >
+          <form action={action} onSubmit={() => setOpen(false)} className="p-1">
+            <Button type="submit" className="w-full bg-light-4 dark:bg-gray-100 font-bold">
               Logout
             </Button>
           </form>
         </DropdownMenuContent>
       </DropdownMenu>
     </>
-  );
+  )
 }

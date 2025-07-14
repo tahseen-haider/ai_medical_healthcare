@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import ProfilePageImage from "./ProfilePageImage";
 import Link from "next/link";
+import AiTokensUsed from "./AiTokensUsed";
 
 export default function UserProfile({ user }: { user: UserType }) {
   const pfp = `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${user.pfp}`;
@@ -150,7 +151,9 @@ export default function UserProfile({ user }: { user: UserType }) {
                     <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
                       {user.name}
                     </h1>
-                    <p className="text-light-4 dark:text-light-4 font-medium">Patient</p>
+                    <p className="text-light-4 dark:text-light-4 font-medium">
+                      Patient
+                    </p>
                     {age && (
                       <p className="text-gray-600 dark:text-gray-400 mt-1">
                         {age} years old
@@ -240,7 +243,9 @@ export default function UserProfile({ user }: { user: UserType }) {
                           <p className="text-sm font-medium text-gray-950 dark:text-gray-300">
                             Email
                           </p>
-                          <p className="text-sm text-light-4 dark:text-light-4">{user.email}</p>
+                          <p className="text-sm text-light-4 dark:text-light-4">
+                            {user.email}
+                          </p>
                         </div>
                       </div>
 
@@ -317,14 +322,7 @@ export default function UserProfile({ user }: { user: UserType }) {
                         </span>
                       </div>
 
-                      <div className="flex justify-between">
-                        <span className="text-sm text-gray-600 dark:text-gray-400">
-                          User ID
-                        </span>
-                        <span className="text-sm text-gray-900 dark:text-gray-100 font-mono">
-                          {user.id.slice(0, 8)}...
-                        </span>
-                      </div>
+                      
 
                       {user.ai_tokens_used !== null && (
                         <div className="flex justify-between">
@@ -332,7 +330,7 @@ export default function UserProfile({ user }: { user: UserType }) {
                             AI Tokens Used
                           </span>
                           <span className="text-sm text-gray-900 dark:text-gray-100">
-                            {user.ai_tokens_used}
+                            <AiTokensUsed userId={user.id}/>
                           </span>
                         </div>
                       )}
@@ -365,7 +363,6 @@ export default function UserProfile({ user }: { user: UserType }) {
                             {user.emailNotifications ? "Enabled" : "Disabled"}
                           </Badge>
                         </div>
-                        
                       </div>
                     </div>
                   </div>
@@ -835,7 +832,7 @@ export default function UserProfile({ user }: { user: UserType }) {
                       </div>
                       <div className="p-3 bg-gray-50 dark:bg-gray-800 rounded">
                         <p className="font-medium text-gray-900 dark:text-gray-100">
-                           Body Mass Index (BMI)
+                          Body Mass Index (BMI)
                         </p>
                         <p className="text-gray-600 dark:text-gray-400">
                           Normal: 18.5-24.9 kg/m²

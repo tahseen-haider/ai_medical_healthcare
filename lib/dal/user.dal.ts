@@ -8,7 +8,6 @@ import { prisma } from "../db/prisma";
 import {
   UserCredentialDTO,
   UserIDandRoleForSessionDTO,
-  UserProfileDTO,
 } from "../dto/user.dto";
 import bcrypt from "bcryptjs";
 import cloudinary from "../cloudinary";
@@ -20,8 +19,9 @@ export const getUserIdnRoleIfAuthenticatedAction = async () => {
 };
 
 export const getUser = async (
-  userId: string
+  userId: string | undefined
 ): Promise<UserType | undefined> => {
+  if (!userId) return;
   try {
     const user = await prisma.user.findUnique({
       where: { id: userId },
