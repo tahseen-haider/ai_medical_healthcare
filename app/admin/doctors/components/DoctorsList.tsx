@@ -67,7 +67,7 @@ export default async function DoctorsList({
                     {doc.doctorProfile?.consultationFee}
                   </td>
                   <td className="px-3">
-                    {new Date(doc.createdAt).toLocaleDateString()}
+                    {doc.createdAt.toLocaleDateString("en-GB")}
                   </td>
                   <td className="px-2">
                     <DeleteDoctorBtn doctorId={doc.id} />

@@ -51,7 +51,7 @@ export const setAppointmentToDB = cache(
     });
 
     // 2. Prepare notification message
-    const message = `A new appointment was created for patient "${fullname}" scheduled on "${date.toLocaleDateString()}" at "${preferredTime}".`;
+    const message = `A new appointment was created for patient "${fullname}" scheduled on "${date.toLocaleDateString("en-GB")}" at "${preferredTime}".`;
 
     // 3. Create notification for doctor
     await prisma.notification.create({
@@ -69,7 +69,7 @@ export const setAppointmentToDB = cache(
         data: {
           userId: patientId,
           title: "Appointment Request Submitted",
-          message: `Your appointment with the doctor has been requested for "${date.toLocaleDateString()}" at "${preferredTime}". Please await confirmation.`,
+          message: `Your appointment with the doctor has been requested for "${date.toLocaleDateString("en-GB")}" at "${preferredTime}". Please await confirmation.`,
           type: "APPOINTMENT_UPDATE",
         },
       });

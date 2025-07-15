@@ -1,6 +1,5 @@
 import { getAllAppointmentsForDoctor } from "@/actions/doctor.action";
 import { getUserIdnRoleIfAuthenticated } from "@/lib/session";
-import EditAppointmentStatus from "./EditAppointmentStatus";
 import {
   Table,
   TableBody,
@@ -11,8 +10,9 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import EditAppointmentStatus from "../../appointments/components/EditAppointmentStatus";
 
-export default async function DoctorAppointmentsList({
+export default async function DoctorOutOfDateAppointmentsList({
   paramPage,
 }: {
   paramPage?: string;

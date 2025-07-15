@@ -41,7 +41,7 @@ export default function UserProfile({ user }: { user: UserType }) {
 
   const formatDate = (dateString: string | Date | null) => {
     if (!dateString) return "Not specified";
-    return new Date(dateString).toLocaleDateString();
+    return new Date(dateString).toLocaleDateString("en-GB");
   };
 
   const formatDateTime = (dateTime: Date | null) => {
@@ -178,7 +178,7 @@ export default function UserProfile({ user }: { user: UserType }) {
                     {/* Member Since */}
                     <p className="text-sm text-gray-500 mt-2">
                       Member since{" "}
-                      {new Date(user.createdAt).toLocaleDateString()}
+                      {user.createdAt.toLocaleDateString("en-GB")}
                     </p>
                   </div>
 
@@ -931,7 +931,7 @@ export default function UserProfile({ user }: { user: UserType }) {
                                   <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
                                     <div className="flex items-center gap-1">
                                       <Calendar className="w-4 h-4" />
-                                      {appointment.preferredDate.toLocaleDateString()}
+                                      {appointment.preferredDate.toLocaleDateString("en-GB")}
                                     </div>
                                     <div className="flex items-center gap-1">
                                       <Clock className="w-4 h-4" />
@@ -949,7 +949,7 @@ export default function UserProfile({ user }: { user: UserType }) {
                                 <p className="text-xs text-gray-500 mt-1">
                                   {new Date(
                                     appointment.createdAt
-                                  ).toLocaleDateString()}
+                                  ).toLocaleDateString("en-GB")}
                                 </p>
                               </div>
                             </div>

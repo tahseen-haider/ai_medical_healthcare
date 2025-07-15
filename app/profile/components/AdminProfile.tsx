@@ -11,7 +11,7 @@ export default function AdminProfile({ user }: { user: UserType }) {
 
   const formatDate = (dateString: string | null) => {
     if (!dateString) return "Not specified";
-    return new Date(dateString).toLocaleDateString();
+    return new Date(dateString).toLocaleDateString("en-GB");
   };
 
   const calculateAge = (dob: string | null | undefined) => {
@@ -78,7 +78,7 @@ export default function AdminProfile({ user }: { user: UserType }) {
                     </div>
                     <p className="text-sm text-gray-500 mt-2">
                       Admin since{" "}
-                      {new Date(user.createdAt).toLocaleDateString()}
+                      {user.createdAt.toLocaleDateString("en-GB")}
                     </p>
                   </div>
                   <div className="flex flex-col gap-2">
@@ -218,7 +218,7 @@ export default function AdminProfile({ user }: { user: UserType }) {
                             if (diffInDays === 0) return "Today";
                             if (diffInDays === 1) return "Yesterday";
                             if (diffInDays < 7) return `${diffInDays} days ago`;
-                            return loginDate.toLocaleDateString(undefined, {
+                            return loginDate.toLocaleDateString("en-GB", {
                               year: "numeric",
                               month: "short",
                               day: "numeric",
@@ -339,7 +339,7 @@ export default function AdminProfile({ user }: { user: UserType }) {
                             if (diffInDays === 0) return "Today";
                             if (diffInDays === 1) return "Yesterday";
                             if (diffInDays < 7) return `${diffInDays} days ago`;
-                            return loginDate.toLocaleDateString(undefined, {
+                            return loginDate.toLocaleDateString("en-GB", {
                               year: "numeric",
                               month: "short",
                               day: "numeric",

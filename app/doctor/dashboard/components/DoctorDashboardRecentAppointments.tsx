@@ -1,6 +1,15 @@
 import {
   getAllAppointmentsForDashboardDoctor,
 } from "@/actions/doctor.action";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Card } from "@/components/ui/card";
 
 export default async function DoctorDashboardRecentAppointments({
   userId,
@@ -10,65 +19,49 @@ export default async function DoctorDashboardRecentAppointments({
   const appointments = await getAllAppointmentsForDashboardDoctor(userId);
 
   return (
-    <div className="w-full py-4 bg-white dark:bg-dark-4 shadow-dark dark:shadow-light rounded-md p-3 min-h-[calc(100vh-170px)] flex flex-col justify-between">
-      <div className="flex-1 flex flex-col">
-        <div className="w-full flex justify-between">
-          <h2 className="font-bold font-ubuntu pb-2">All Appointments:</h2>
+    <Card className="w-full min-h-[calc(100vh-170px)] p-6 bg-white dark:bg-dark-4 flex flex-col justify-between shadow-md">
+      <div className="flex-1 flex flex-col overflow-auto">
+        <div className="flex justify-between items-center mb-4">
+          <h2 className="text-xl font-bold">Recent Appointments</h2>
         </div>
 
-        <div className="overflow-x-auto flex-1">
-          <table className="min-w-full text-sm text-left">
-            <thead className="border-b-2 bg-white dark:bg-dark-4 sticky top-0 z-10">
-              <tr>
-                <th scope="col" className="text-left font-semibold p-3">
-                  #
-                </th>
-                <th scope="col" className="text-left font-semibold px-3">
-                  Patient Name
-                </th>
-                <th scope="col" className="text-left font-semibold px-3">
-                  Patient Email
-                </th>
-                <th scope="col" className="text-left font-semibold px-3">
-                  Phone
-                </th>
-                <th scope="col" className="text-left font-semibold px-3">
-                  Visit Reason
-                </th>
-                <th
-                  scope="col"
-                  className="text-left font-semibold px-3 min-w-[100px]"
-                >
-                  Visit Time
-                </th>
-                <th scope="col" className="text-left font-semibold px-3">
-                  Visit Date
-                </th>
-                <th scope="col" className="text-left font-semibold px-3">
-                  Appointment Status
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y">
+        <div className="overflow-auto max-h-[500px]">
+          <Table>
+            <TableHeader className="sticky top-0 bg-white dark:bg-dark-4 z-10">
+              <TableRow>
+                <TableHead className="w-8">#</TableHead>
+                <TableHead>Patient Name</TableHead>
+                <TableHead>Patient Email</TableHead>
+                <TableHead>Phone</TableHead>
+                <TableHead>Visit Reason</TableHead>
+                <TableHead className="min-w-[100px]">Visit Time</TableHead>
+                <TableHead>Visit Date</TableHead>
+                <TableHead>Status</TableHead>
+              </TableRow>
+            </TableHeader>
+
+            <TableBody>
               {appointments.map((appointment, index) => (
-                <tr
+                <TableRow
                   key={appointment.id}
-                  className="hover:bg-gray-100 dark:hover:bg-gray-950 h-14"
+                  className="hover:bg-muted/50 transition-colors"
                 >
-                  <td className="p-2">{index + 1}</td>
-                  <td className="px-3">{appointment.fullname}</td>
-                  <td className="px-3">{appointment.email}</td>
-                  <td className="px-3">{appointment.phone || "N/A"}</td>
-                  <td className="px-3">{appointment.reasonForVisit}</td>
-                  <td className="px-3">{appointment.preferredTime}</td>
-                  <td className="px-3">{appointment.preferredDate.toLocaleDateString()}</td>
-                  <td className="px-3">{appointment.status}</td>
-                </tr>
+                  <TableCell>{index + 1}</TableCell>
+                  <TableCell>{appointment.fullname}</TableCell>
+                  <TableCell>{appointment.email}</TableCell>
+                  <TableCell>{appointment.phone || "N/A"}</TableCell>
+                  <TableCell>{appointment.reasonForVisit}</TableCell>
+                  <TableCell>{appointment.preferredTime}</TableCell>
+                  <TableCell>
+                    {appointment.preferredDate.toLocaleDateString("en-GB")}
+                  </TableCell>
+                  <TableCell>{appointment.status}</TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
       </div>
-    </div>
+    </Card>
   );
 }

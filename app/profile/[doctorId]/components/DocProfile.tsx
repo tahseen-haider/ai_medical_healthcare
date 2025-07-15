@@ -30,11 +30,6 @@ export default function DoctorProfile({ user }: { user: UserType }) {
     (apt) => apt.status === "COMPLETED"
   ).length;
 
-  const formatDate = (dateString: string | null) => {
-    if (!dateString) return "Not specified";
-    return new Date(dateString).toLocaleDateString();
-  };
-
   const renderStars = (rating: number | null) => {
     if (!rating) return null;
     return (

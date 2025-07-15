@@ -236,25 +236,25 @@ const getStatusMessage = (
 ): string => {
   switch (status) {
     case "PENDING":
-      return `Doctor "${doctorName}" marked the appointment of "${patientName}" (scheduled for "${preferredDate.toLocaleDateString()}") as pending. "${patientName}", please wait for further confirmation.`;
+      return `Doctor "${doctorName}" marked the appointment of "${patientName}" (scheduled for "${preferredDate.toLocaleDateString("en-GB")}") as pending. "${patientName}", please wait for further confirmation.`;
 
     case "CONFIRMED":
-      return `Doctor "${doctorName}" confirmed the appointment of "${patientName}" scheduled for "${preferredDate.toLocaleDateString()}". "${patientName}", please be on time.`;
+      return `Doctor "${doctorName}" confirmed the appointment of "${patientName}" scheduled for "${preferredDate.toLocaleDateString("en-GB")}". "${patientName}", please be on time.`;
 
     case "CANCELLED":
-      return `Doctor "${doctorName}" cancelled the appointment of "${patientName}" which was scheduled for "${preferredDate.toLocaleDateString()}". "${patientName}", you may book a new appointment if needed.`;
+      return `Doctor "${doctorName}" cancelled the appointment of "${patientName}" which was scheduled for "${preferredDate.toLocaleDateString("en-GB")}". "${patientName}", you may book a new appointment if needed.`;
 
     case "COMPLETED":
-      return `Doctor "${doctorName}" marked the appointment of "${patientName}" on "${preferredDate.toLocaleDateString()}" as completed. "${patientName}", we hope you're doing well!`;
+      return `Doctor "${doctorName}" marked the appointment of "${patientName}" on "${preferredDate.toLocaleDateString("en-GB")}" as completed. "${patientName}", we hope you're doing well!`;
 
     case "RESCHEDULED":
-      return `Doctor "${doctorName}" rescheduled the appointment of "${patientName}". The original date was "${preferredDate.toLocaleDateString()}". "${patientName}", please check your updated appointment details.`;
+      return `Doctor "${doctorName}" rescheduled the appointment of "${patientName}". The original date was "${preferredDate.toLocaleDateString("en-GB")}". "${patientName}", please check your updated appointment details.`;
 
     case "PAYMENT_PENDING":
-      return `Doctor "${doctorName}" marked the appointment of "${patientName}" on "${preferredDate.toLocaleDateString()}" as payment pending. "${patientName}", please complete the payment to proceed.`;
+      return `Doctor "${doctorName}" marked the appointment of "${patientName}" on "${preferredDate.toLocaleDateString("en-GB")}" as payment pending. "${patientName}", please complete the payment to proceed.`;
 
     default:
-      return `Doctor "${doctorName}" changed the appointment status of "${patientName}" on "${preferredDate.toLocaleDateString()}" from "${currentStatus}" to "${status}".`;
+      return `Doctor "${doctorName}" changed the appointment status of "${patientName}" on "${preferredDate.toLocaleDateString("en-GB")}" from "${currentStatus}" to "${status}".`;
   }
 };
 

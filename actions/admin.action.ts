@@ -77,7 +77,7 @@ export const getAllVerifiedUsers =
         name: user.name,
         email: user.email,
         role: user.role,
-        createdAt: user.createdAt.toLocaleDateString().split("T")[0],
+        createdAt: user.createdAt.toLocaleDateString(),
       };
     });
 

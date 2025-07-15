@@ -76,7 +76,7 @@ export default async function AppointmentsPage() {
                   {allAppointments.map((appointment) => (
                     <TableRow key={appointment.id}>
                       <TableCell className="font-medium">
-                        {appointment.preferredDate.toLocaleDateString()}
+                        {appointment.preferredDate.toLocaleDateString("en-GB")}
                       </TableCell>
                       <TableCell>{appointment.preferredTime}</TableCell>
                       <TableCell>{appointment.fullname}</TableCell>

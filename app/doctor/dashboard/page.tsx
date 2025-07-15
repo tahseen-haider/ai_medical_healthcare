@@ -17,7 +17,7 @@ export default async function DashboardPage() {
         {/* Graph Info */}
         <div className="w-full flex flex-col gap-4 lg:flex-row ">
           {/* Graph */}
-          <div className="bg-white dark:bg-dark-4 rounded-sm w-full lg:w-2/3 h-80 shadow-dark dark:shadow-light">
+          <div className="bg-white dark:bg-dark-4 rounded-sm w-full lg:w-2/3 h-80 shadow-light dark:shadow-dark">
             <DoctorDashboardGraph />
           </div>
           {/* Info */}

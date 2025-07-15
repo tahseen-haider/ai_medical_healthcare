@@ -32,7 +32,7 @@ export default function DoctorProfile({ user }: { user: UserType }) {
 
   const formatDate = (dateString: string | null) => {
     if (!dateString) return "Not specified";
-    return new Date(dateString).toLocaleDateString();
+    return new Date(dateString).toLocaleDateString("en-GB");
   };
 
   const renderStars = (rating: number | null) => {

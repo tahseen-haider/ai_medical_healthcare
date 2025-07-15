@@ -49,14 +49,14 @@ export default function DashboardSidebarWrapper({
       {/* Seperator */}
       <div
         className={`${
-          isSidebarOpen ? "w-54" : "w-0"
+          isSidebarOpen ? "w-56" : "w-0"
         } absolute lg:relative transition-all`}
       ></div>
 
       {/* Inside the Sidebar */}
       <div
         className={`${
-          isSidebarOpen ? "w-54 border-r-2" : "w-0"
+          isSidebarOpen ? "w-56 border-r-2" : "w-0"
         } absolute overflow-hidden z-20 bg-gray-50 dark:bg-dark-4 transition-all top-14 sm:top-16 `}
       >
         {/* Menu buttons */}
