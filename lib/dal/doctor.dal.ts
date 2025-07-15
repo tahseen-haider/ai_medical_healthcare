@@ -270,6 +270,7 @@ export const changeAppointmentStatusFromDB = async (
       app = await prisma.appointments.update({
         where: { id: appointmentId },
         data: {
+          updatedAt: new Date(Date.now()),
           patient: {
             update: {
               lastCheckUp: new Date(),
@@ -280,7 +281,10 @@ export const changeAppointmentStatusFromDB = async (
     } else {
       app = await prisma.appointments.update({
         where: { id: appointmentId },
-        data: { status },
+        data: {
+          status,
+          updatedAt: new Date(Date.now()),
+        },
       });
     }
 
@@ -310,6 +314,9 @@ export const changeAppointmentStatusFromDB = async (
           title: "Appointment Status Changed By Doctor",
           message,
           type: "APPOINTMENT_UPDATE",
+          ...(status === "PAYMENT_PENDING"
+            ? { link: "/your-appointments" }
+            : {}),
         },
       });
 

@@ -595,7 +595,8 @@ export const changeAppointmentDoctorFromDB = async (
 
     const updatedAppointment = await prisma.appointments.update({
       where: { id: appointmentId },
-      data: { doctorId },
+      data: { doctorId, 
+        updatedAt: new Date(Date.now()) },
     });
 
     // notification for patient

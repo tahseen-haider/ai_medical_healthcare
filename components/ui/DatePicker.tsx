@@ -21,13 +21,18 @@ import {
 } from "@/components/ui/select";
 
 export function DatePickerWithPresets({
+  selectedDate,
   setSelectedDate,
 }: {
+  selectedDate: Date | undefined;
   setSelectedDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
 }) {
-  const [date, setDate] = React.useState<Date>();
+  const [date, setDate] = React.useState<Date | undefined>(selectedDate);
 
-  // ✅ Sync internal date with parent
+  React.useEffect(() => {
+    setDate(selectedDate);
+  }, [selectedDate]);
+
   React.useEffect(() => {
     setSelectedDate(date);
   }, [date, setSelectedDate]);
@@ -45,6 +50,7 @@ export function DatePickerWithPresets({
         className="flex w-auto flex-col space-y-2 p-2"
       >
         <Select
+          required
           onValueChange={(value) => {
             const selected = addDays(new Date(), parseInt(value));
             setDate(selected);
@@ -62,6 +68,7 @@ export function DatePickerWithPresets({
         </Select>
         <div className="rounded-md border">
           <Calendar
+            required
             mode="single"
             selected={date}
             onSelect={setDate}

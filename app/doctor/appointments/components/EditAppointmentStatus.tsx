@@ -51,7 +51,9 @@ export default function EditAppointmentStatus({
 
           <SelectContent>
             <SelectItem value="PENDING">PENDING</SelectItem>
+            <SelectItem value="PAYMENT_PENDING">PAYMENT_PENDING</SelectItem>
             <SelectItem value="CONFIRMED">CONFIRMED</SelectItem>
+            <SelectItem value="RESCHEDULED">RESCHEDULED</SelectItem>
             <SelectItem value="COMPLETED">COMPLETED</SelectItem>
             <SelectItem value="CANCELLED">CANCELLED</SelectItem>
           </SelectContent>

@@ -4,7 +4,7 @@ import { Menu } from "lucide-react";
 import React, { useLayoutEffect, useState } from "react";
 
 export default function DashboardSidebarWrapper({children}: Readonly<{children: React.ReactNode}>) {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   useLayoutEffect(() => {
     const isSmallScreen = window.innerWidth < 1024;
     setIsSidebarOpen(!isSmallScreen)

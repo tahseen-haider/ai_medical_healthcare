@@ -10,6 +10,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getAuthUserWithAppointments } from "@/actions";
+import Link from "next/link";
 
 export default async function AppointmentsPage() {
   const user = await getAuthUserWithAppointments();
@@ -38,9 +39,9 @@ export default async function AppointmentsPage() {
         return "secondary";
     }
   };
-  
+
   return (
-    <main className="container mx-auto px-4 py-8">
+    <main className="max-w-[1500px] mx-auto px-4 py-8">
       <Card className="bg-gray-50 dark:bg-dark-4 min-h-[calc(100vh-160px)]">
         <CardHeader>
           <CardTitle className="text-2xl font-bold">
@@ -49,9 +50,17 @@ export default async function AppointmentsPage() {
         </CardHeader>
         <CardContent>
           {allAppointments.length === 0 ? (
-            <p className="text-center text-muted-foreground py-8">
-              No appointments found.
-            </p>
+            <div className="flex flex-col items-center justify-center py-16 text-center space-y-4">
+              <p className="text-muted-foreground text-lg">
+                No appointments found.
+              </p>
+              <Link
+                href="/appointment"
+                className="inline-flex items-center rounded-md bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 text-sm font-medium transition-colors"
+              >
+                Book an Appointment
+              </Link>
+            </div>
           ) : (
             <div className="overflow-x-auto">
               <Table>

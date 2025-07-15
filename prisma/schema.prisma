@@ -148,6 +148,7 @@ model Appointments {
   preferredTime  String
   status         AppointmentStatus @default(PENDING)
   createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @default(now())
   doctorId       String?
   doctor         User?           @relation("DoctorAppointments", fields: [doctorId], references: [id])
   patientId      String?

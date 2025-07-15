@@ -196,7 +196,10 @@ export default function AppointmentPage({
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                   <div className="space-y-2">
                     <Label htmlFor="preferredDate">Preferred Date</Label>
-                    <DatePickerWithPresets setSelectedDate={setSelectedDate} />
+                    <DatePickerWithPresets
+                      selectedDate={selectedDate}
+                      setSelectedDate={setSelectedDate}
+                    />
                     <input
                       name="preferredDate"
                       hidden

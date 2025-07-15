@@ -219,8 +219,8 @@ export async function getAuthUserWithAppointmentsFromDB() {
   const user = await prisma.user.findUnique({
     where: { id: session?.userId },
     include: {
-      appointmentsAsPatient: true,
-      appointmentsAsDoctor: true,
+      appointmentsAsPatient: { orderBy: { updatedAt: "desc" } },
+      appointmentsAsDoctor: { orderBy: { updatedAt: "desc" } },
     },
   });
   return user;

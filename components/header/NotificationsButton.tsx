@@ -2,7 +2,13 @@
 import { useEffect, useState } from "react";
 import type React from "react";
 
-import { Bell, LucideMail, LucideMailOpen, Trash2 } from "lucide-react";
+import {
+  Bell,
+  ExternalLink,
+  LucideMail,
+  LucideMailOpen,
+  Trash2,
+} from "lucide-react";
 import { type AppointmentStatus, NotificationType } from "@prisma/client/edge";
 import type { NotificationItem, UserType } from "@/lib/definitions";
 import {
@@ -29,6 +35,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import useSWR from "swr";
 
 import { getUserNotifications } from "@/actions";
+import Link from "next/link";
 
 const fetcher = (userId: string) => getUserNotifications(userId);
 
@@ -153,7 +160,7 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
         <Button
           variant="outline"
           size="icon"
-          className="relative bg-transparent"
+          className="relative"
         >
           <Bell className="w-4 h-4" />
           {unreadCount > 0 && (
@@ -230,7 +237,15 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
                             {new Date(n.createdAt).toLocaleString()}
                           </p>
                         </div>
-                        <div className="flex flex-col gap-1 z-20">
+                        <div className="flex flex-col gap-1 z-20 items-center">
+                          {n.link && (
+                            <Link
+                              href={n.link}
+                              className="flex justify-center items-center h-8 w-8 rounded-sm opacity-100 hover:opacity-90"
+                            >
+                              <ExternalLink className="w-4 h-4" />
+                            </Link>
+                          )}
                           {n.read ? (
                             <Button
                               variant="ghost"
@@ -275,9 +290,7 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
                       <div
                         key={n.id}
                         className={`relative p-2 border-b flex items-start gap-3 rounded hover:bg-muted/30 transition ${
-                          n.read
-                            ? "opacity-60"
-                            : "bg-accent text-black dark:text-white"
+                          n.read ? "" : "bg-accent text-black dark:text-white"
                         }`}
                       >
                         <span
@@ -287,14 +300,20 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
                         />
                         <div className="flex-grow">
                           <p className="text-sm font-medium">{n.title}</p>
-                          <p className="text-sm text-gray-800 dark:text-gray-200">
-                            {formatMessage(n.message)}
-                          </p>
+                          <p className="text-sm">{formatMessage(n.message)}</p>
                           <p className="text-xs text-gray-500 dark:text-gray-400">
                             {new Date(n.createdAt).toLocaleString()}
                           </p>
                         </div>
-                        <div className="flex flex-col gap-1">
+                        <div className="flex flex-col gap-1 z-20 items-center">
+                          {n.link && (
+                            <Link
+                              href={n.link}
+                              className="flex justify-center items-center h-8 w-8 rounded-sm opacity-100 hover:opacity-90"
+                            >
+                              <ExternalLink className="w-4 h-4" />
+                            </Link>
+                          )}
                           {n.read ? (
                             <Button
                               variant="ghost"
