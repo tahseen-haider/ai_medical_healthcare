@@ -205,7 +205,7 @@ export default function AppointmentPage({
                       hidden
                       readOnly
                       value={
-                        selectedDate.toLocaleDateString()
+                        selectedDate.toLocaleDateString('en-CA')
                       }
                     />
                     {state?.errors.preferredDate && (

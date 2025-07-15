@@ -31,7 +31,7 @@ export default async function AdminDashboardRecentAppointments() {
                 <td className="px-3">{app.patientName}</td>
                 <td className="px-3">{app.doctorName}</td>
                 <td className="px-3">{app.reasonForVisit}</td>
-                <td className="px-3">{app.dateForVisit}</td>
+                <td className="px-3">{app.dateForVisit.toLocaleDateString()}</td>
                 <td className="px-3">{app.status}</td>
               </tr>
             ))}

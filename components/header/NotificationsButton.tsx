@@ -239,7 +239,7 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
                               : formatMessage(
                                   n.message,
                                   "text-green-800",
-                                  "text-green-500"
+                                  "text-green-200"
                                 )}
                           </p>
                           <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -319,7 +319,7 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
                               : formatMessage(
                                   n.message,
                                   "text-green-800",
-                                  "text-green-500"
+                                  "text-green-200"
                                 )}
                           </p>
                           <p className="text-xs text-gray-500 dark:text-gray-400">
