@@ -7,6 +7,7 @@ import {
   ExternalLink,
   LucideMail,
   LucideMailOpen,
+  MailCheck,
   Trash2,
 } from "lucide-react";
 import { type AppointmentStatus, NotificationType } from "@prisma/client/edge";
@@ -39,7 +40,11 @@ import Link from "next/link";
 
 const fetcher = (userId: string) => getUserNotifications(userId);
 
-function formatMessage(message: string): React.ReactNode[] {
+function formatMessage(
+  message: string,
+  light: string,
+  dark: string
+): React.ReactNode[] {
   const parts: React.ReactNode[] = [];
   let lastIndex = 0;
   const regex = /"([^"]*)"/g;
@@ -51,7 +56,7 @@ function formatMessage(message: string): React.ReactNode[] {
     parts.push(
       <strong
         key={match.index}
-        className="font-semibold text-green-800 dark:text-green-500"
+        className={`font-semibold ${light} dark:${dark}`}
       >
         {match[1]}
       </strong>
@@ -85,6 +90,7 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
       setNotifications(notifications);
     }
   }, [notifications]);
+
   const handleMarkAsRead = async (id: string) => {
     setNotifications((prev) =>
       prev.map((n) => (n.id === id ? { ...n, read: true } : n))
@@ -100,8 +106,8 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
   };
 
   const handleDelete = async (id: string) => {
-    await deleteNotification(id);
     setNotifications((prev) => prev.filter((n) => n.id !== id));
+    await deleteNotification(id);
   };
 
   const unreadCount = notifi.filter((n) => !n.read).length;
@@ -157,11 +163,7 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button
-          variant="outline"
-          size="icon"
-          className="relative"
-        >
+        <Button variant="outline" size="icon" className="relative">
           <Bell className="w-4 h-4" />
           {unreadCount > 0 && (
             <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white">
@@ -198,41 +200,48 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
           <CardContent className="w-full p-0 text-gray-600 dark:text-gray-400">
             <Tabs defaultValue="appointments">
               <TabsList className="grid grid-cols-2 w-full bg-transparent border-b-2 py-0 rounded-none">
-                <TabsTrigger
-                  value="appointments"
-                  className="rounded-xs text-gray-800 dark:text-gray-200"
-                >
+                <TabsTrigger value="appointments" className="rounded-xs">
                   Appointments
                 </TabsTrigger>
-                <TabsTrigger
-                  value="general"
-                  className="rounded-xs text-gray-800 dark:text-gray-200"
-                >
+                <TabsTrigger value="general" className="rounded-xs">
                   General
                 </TabsTrigger>
               </TabsList>
               <TabsContent value="appointments">
                 <ScrollArea className="h-72 px-2 py-2">
                   {filtered("appointments").length === 0 ? (
-                    <p className="text-sm text-black dark:text-white">
+                    <p className="text-sm text-center text-black dark:text-white">
                       No notifications.
                     </p>
                   ) : (
                     filtered("appointments").map((n) => (
                       <div
                         key={n.id}
-                        className={`relative p-2 border-b flex items-start gap-3 rounded hover:bg-muted/30 transition ${
+                        className={`relative p-2 border-b flex items-start gap-3 rounded bg-transparent transition ${
                           n.read ? "" : "bg-accent text-black dark:text-white"
                         }`}
                       >
-                        <span
-                          className={`h-2 w-2 rounded-full mt-2 ${getColor(
-                            n.type
-                          )} bg-current`}
-                        />
+                        {!n.read && (
+                          <div
+                            className={`min-h-2 min-w-2 rounded-full mt-2 bg-light-4 dark:bg-white`}
+                          />
+                        )}
+                        {n.read && <div />}
                         <div className="flex-grow">
                           <p className="text-sm font-medium">{n.title}</p>
-                          <p className="text-sm">{formatMessage(n.message)}</p>
+                          <p className="text-sm">
+                            {n.read
+                              ? formatMessage(
+                                  n.message,
+                                  "text-gray-500",
+                                  "text-gray-400"
+                                )
+                              : formatMessage(
+                                  n.message,
+                                  "text-green-800",
+                                  "text-green-500"
+                                )}
+                          </p>
                           <p className="text-xs text-gray-500 dark:text-gray-400">
                             {new Date(n.createdAt).toLocaleString()}
                           </p>
@@ -241,7 +250,7 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
                           {n.link && (
                             <Link
                               href={n.link}
-                              className="flex justify-center items-center h-8 w-8 rounded-sm opacity-100 hover:opacity-90"
+                              className="flex justify-center items-center h-8 w-8 rounded-sm opacity-100 hover:opacity-90 text-light-4 dark:text-blue-300"
                             >
                               <ExternalLink className="w-4 h-4" />
                             </Link>
@@ -262,7 +271,7 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
                               onClick={() => handleMarkAsRead(n.id)}
                               className="hover:opacity-100"
                             >
-                              <LucideMail className="w-4 h-4" />
+                              <MailCheck className="w-4 h-4" />
                             </Button>
                           )}
                           <Button
@@ -282,7 +291,7 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
               <TabsContent value="general">
                 <ScrollArea className="h-72 px-2 py-2">
                   {filtered("general").length === 0 ? (
-                    <p className="text-sm text-muted-foreground">
+                    <p className="text-sm text-center text-black dark:text-white">
                       No notifications.
                     </p>
                   ) : (
@@ -300,7 +309,19 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
                         />
                         <div className="flex-grow">
                           <p className="text-sm font-medium">{n.title}</p>
-                          <p className="text-sm">{formatMessage(n.message)}</p>
+                          <p className="text-sm">
+                            {n.read
+                              ? formatMessage(
+                                  n.message,
+                                  "text-gray-500",
+                                  "text-gray-400"
+                                )
+                              : formatMessage(
+                                  n.message,
+                                  "text-green-800",
+                                  "text-green-500"
+                                )}
+                          </p>
                           <p className="text-xs text-gray-500 dark:text-gray-400">
                             {new Date(n.createdAt).toLocaleString()}
                           </p>
@@ -330,7 +351,7 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
                               onClick={() => handleMarkAsRead(n.id)}
                               className="hover:opacity-100"
                             >
-                              <LucideMail className="w-4 h-4" />
+                              <MailCheck className="w-4 h-4" />
                             </Button>
                           )}
                           <Button
