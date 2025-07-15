@@ -100,7 +100,7 @@ export type UserType = {
     email: string;
     phone?: string | null;
     reasonForVisit: string;
-    preferredDate: string;
+    preferredDate: Date;
     preferredTime: string;
     status: AppointmentStatus;
     createdAt: Date;
@@ -114,7 +114,7 @@ export type UserType = {
     email: string;
     phone?: string | null;
     reasonForVisit: string;
-    preferredDate: string;
+    preferredDate: Date;
     preferredTime: string;
     status: AppointmentStatus;
     createdAt: Date;
@@ -226,7 +226,7 @@ export type AppointmentFormType =
         fullname: string;
         phone: string | null;
         reasonForVisit: string;
-        preferredDate: string;
+        preferredDate: Date;
         preferredTime: string;
         id: string;
       };
@@ -237,7 +237,7 @@ export type AppointmentFormType =
         email?: string[];
         phone?: string[];
         reasonForVisit?: string[];
-        preferredDate?: string[];
+        preferredDate?: Date[];
         preferredTime?: string[];
       };
     }

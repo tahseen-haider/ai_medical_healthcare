@@ -24,10 +24,10 @@ export function DatePickerWithPresets({
   selectedDate,
   setSelectedDate,
 }: {
-  selectedDate: Date | undefined;
-  setSelectedDate: React.Dispatch<React.SetStateAction<Date | undefined>>;
+  selectedDate: Date;
+  setSelectedDate: React.Dispatch<React.SetStateAction<Date>>;
 }) {
-  const [date, setDate] = React.useState<Date | undefined>(selectedDate);
+  const [date, setDate] = React.useState<Date>(selectedDate);
 
   React.useEffect(() => {
     setDate(selectedDate);

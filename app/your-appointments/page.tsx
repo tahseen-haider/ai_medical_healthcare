@@ -18,10 +18,7 @@ export default async function AppointmentsPage() {
   const allAppointments = [
     ...(user?.appointmentsAsPatient || []),
     ...(user?.appointmentsAsDoctor || []),
-  ].sort(
-    (a, b) =>
-      new Date(a.preferredDate).getTime() - new Date(b.preferredDate).getTime()
-  ); // Sort by date
+  ].sort((a, b) => a.preferredDate.getTime() - b.preferredDate.getTime()); // Sort by date
 
   const getStatusVariant = (status: AppointmentStatus) => {
     switch (status) {
@@ -79,7 +76,7 @@ export default async function AppointmentsPage() {
                   {allAppointments.map((appointment) => (
                     <TableRow key={appointment.id}>
                       <TableCell className="font-medium">
-                        {appointment.preferredDate}
+                        {appointment.preferredDate.toLocaleDateString()}
                       </TableCell>
                       <TableCell>{appointment.preferredTime}</TableCell>
                       <TableCell>{appointment.fullname}</TableCell>

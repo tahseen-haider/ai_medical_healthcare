@@ -306,7 +306,7 @@ export const deleteAppointmentFromDB = async (appId: string) => {
     data: {
       userId: deleted.patientId!,
       title: "Appointment Deleted By Admin",
-      message: `Appointment of patient "${deleted.fullname}" that was set to be on "${deleted.preferredDate}" is deleted by admin.`,
+      message: `Appointment of patient "${deleted.fullname}" that was set to be on "${deleted.preferredDate.toLocaleDateString()}" is deleted by admin.`,
       type: "APPOINTMENT_UPDATE",
     },
   });
@@ -316,7 +316,7 @@ export const deleteAppointmentFromDB = async (appId: string) => {
     data: {
       userId: deleted.doctorId!,
       title: "Appointment Deleted By Admin",
-      message: `Appointment of patient "${deleted.fullname}" that was set to be on "${deleted.preferredDate}" is deleted by admin.`,
+      message: `Appointment of patient "${deleted.fullname}" that was set to be on "${deleted.preferredDate.toLocaleDateString()}" is deleted by admin.`,
       type: "APPOINTMENT_UPDATE",
     },
   });
@@ -604,7 +604,7 @@ export const changeAppointmentDoctorFromDB = async (
       data: {
         userId: updatedAppointment.patientId!,
         title: "Appointment Doctor Changed By Admin",
-        message: `Appointment of patient "${updatedAppointment.fullname}" that was set to be on "${updatedAppointment.preferredDate}" is updated by reassigning your Doctor.`,
+        message: `Appointment of patient "${updatedAppointment.fullname}" that was set to be on "${updatedAppointment.preferredDate.toLocaleDateString()}" is updated by reassigning your Doctor.`,
         type: "APPOINTMENT_UPDATE",
       },
     });
@@ -614,7 +614,7 @@ export const changeAppointmentDoctorFromDB = async (
       data: {
         userId: currentDoctor!,
         title: "Appointment Doctor Changed By Admin",
-        message: `Appointment of patient "${updatedAppointment.fullname}" that was set to be on "${updatedAppointment.preferredDate}" is updated by reassigning their Doctor.`,
+        message: `Appointment of patient "${updatedAppointment.fullname}" that was set to be on "${updatedAppointment.preferredDate.toLocaleDateString()}" is updated by reassigning their Doctor.`,
         type: "APPOINTMENT_UPDATE",
       },
     });
@@ -624,7 +624,7 @@ export const changeAppointmentDoctorFromDB = async (
       data: {
         userId: updatedAppointment.doctorId!,
         title: "New Appointment By Admin",
-        message: `New Appointment of patient "${updatedAppointment.fullname}" that is set to be on "${updatedAppointment.preferredDate}".`,
+        message: `New Appointment of patient "${updatedAppointment.fullname}" that is set to be on "${updatedAppointment.preferredDate.toLocaleDateString()}".`,
         type: "APPOINTMENT_UPDATE",
       },
     });

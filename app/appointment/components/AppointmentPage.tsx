@@ -32,7 +32,7 @@ export default function AppointmentPage({
   patientId: string | undefined;
 }) {
   const [state, action, pending] = useActionState(setAppointment, undefined);
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(() => {
+  const [selectedDate, setSelectedDate] = useState<Date>(() => {
     const tomorrow = new Date();
     tomorrow.setDate(tomorrow.getDate() + 1);
     return tomorrow;
@@ -205,12 +205,12 @@ export default function AppointmentPage({
                       hidden
                       readOnly
                       value={
-                        selectedDate ? selectedDate.toLocaleDateString() : ""
+                        selectedDate.toLocaleDateString()
                       }
                     />
                     {state?.errors.preferredDate && (
                       <p className="text-sm text-red-500">
-                        {state.errors.preferredDate}
+                        {state.errors.preferredDate.toLocaleString()}
                       </p>
                     )}
                   </div>

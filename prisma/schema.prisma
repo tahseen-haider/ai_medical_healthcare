@@ -144,7 +144,7 @@ model Appointments {
   email          String
   phone          String?
   reasonForVisit String
-  preferredDate  String
+  preferredDate  DateTime
   preferredTime  String
   status         AppointmentStatus @default(PENDING)
   createdAt      DateTime        @default(now())

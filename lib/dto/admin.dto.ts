@@ -27,6 +27,6 @@ export type GetAppointmentsForDashboardDTO = {
   patientName: string,
   doctorName?: string,
   reasonForVisit: string,
-  dateForVisit: string,
+  dateForVisit: Date,
   status: string
 }[]|[]

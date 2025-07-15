@@ -931,7 +931,7 @@ export default function UserProfile({ user }: { user: UserType }) {
                                   <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
                                     <div className="flex items-center gap-1">
                                       <Calendar className="w-4 h-4" />
-                                      {appointment.preferredDate}
+                                      {appointment.preferredDate.toLocaleDateString()}
                                     </div>
                                     <div className="flex items-center gap-1">
                                       <Clock className="w-4 h-4" />

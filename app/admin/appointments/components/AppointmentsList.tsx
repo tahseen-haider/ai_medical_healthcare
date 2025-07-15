@@ -69,7 +69,7 @@ export default async function AppointmentsList({
                   </td>
                   <td className="px-3">{appointment.reasonForVisit}</td>
                   <td className="px-3">{appointment.preferredTime}</td>
-                  <td className="px-3">{appointment.preferredDate}</td>
+                  <td className="px-3">{appointment.preferredDate.toLocaleDateString()}</td>
                   <td className="px-3">{appointment.status}</td>
                   <td className="px-1">
                     <DeleteAppointmentBtn appId={appointment.id} />

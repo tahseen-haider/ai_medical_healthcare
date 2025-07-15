@@ -1,14 +1,25 @@
-"use client"
+"use client";
 
 import { Menu } from "lucide-react";
 import React, { useLayoutEffect, useState } from "react";
 
-export default function DashboardSidebarWrapper({children}: Readonly<{children: React.ReactNode}>) {
+export default function DashboardSidebarWrapper({
+  children,
+}: Readonly<{ children: React.ReactNode }>) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [mounted, setMounted] = useState(false);
+
   useLayoutEffect(() => {
     const isSmallScreen = window.innerWidth < 1024;
-    setIsSidebarOpen(!isSmallScreen)
-  }, [])
+    setIsSidebarOpen(!isSmallScreen);
+    setMounted(true);
+  }, []);
+
+  // Optionally show a skeleton or empty div with same structure
+  if (!mounted) {
+    return <div aria-hidden="true" className="w-0" />;
+  }
+
   return (
     <>
       {/* For backdrop blur */}

@@ -28,6 +28,7 @@ export const setAppointmentToDB = cache(
       doctorId,
     } = data;
 
+    const date = new Date(preferredDate);
     // 1. Create the appointment
     const appointment = await prisma.appointments.create({
       data: {
@@ -35,7 +36,7 @@ export const setAppointmentToDB = cache(
         email,
         phone,
         reasonForVisit,
-        preferredDate,
+        preferredDate: date,
         preferredTime,
         doctor: {
           connect: { id: doctorId },
