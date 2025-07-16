@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getAuthUserWithAppointments } from "@/actions";
 import Link from "next/link";
+import AppointmentMessages from "../doctor/appointments/components/AppointmentMessages";
 
 export default async function AppointmentsPage() {
   const user = await getAuthUserWithAppointments();
@@ -70,6 +71,7 @@ export default async function AppointmentsPage() {
                     </TableHead>
                     <TableHead>Reason</TableHead>
                     <TableHead>Status</TableHead>
+                    <TableHead>Messages</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -85,6 +87,14 @@ export default async function AppointmentsPage() {
                         <Badge variant={getStatusVariant(appointment.status)}>
                           {appointment.status.replace(/_/g, " ")}
                         </Badge>
+                      </TableCell>
+                      <TableCell>
+                        <AppointmentMessages
+                          user={{
+                            id: appointment.doctorId!,
+                            name: appointment.fullname,
+                          }}
+                        />
                       </TableCell>
                     </TableRow>
                   ))}

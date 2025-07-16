@@ -80,6 +80,9 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
     {
       refreshInterval: 60000,
       revalidateOnFocus: true,
+      refreshWhenOffline:false,
+      revalidateOnMount:true,
+      shouldRetryOnError:true
     }
   );
 
@@ -111,33 +114,6 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
   };
 
   const unreadCount = notifi.filter((n) => !n.read).length;
-
-  const getColor = (type: NotificationType, status?: AppointmentStatus) => {
-    if (type === NotificationType.APPOINTMENT_UPDATE && status) {
-      switch (status) {
-        case "CONFIRMED":
-          return "text-green-600 dark:text-green-400";
-        case "PENDING":
-          return "text-yellow-600 dark:text-yellow-400";
-        case "CANCELLED":
-          return "text-red-600 dark:text-red-400";
-        case "RESCHEDULED":
-          return "text-blue-600 dark:text-blue-400";
-        case "PAYMENT_PENDING":
-          return "text-orange-600 dark:text-orange-400";
-      }
-    }
-    switch (type) {
-      case "GENERAL_ANNOUNCEMENT":
-        return "text-purple-600 dark:text-purple-400";
-      case "PRESCRIPTION_REMINDER":
-        return "text-teal-600 dark:text-teal-400";
-      case "SYSTEM_ALERT":
-        return "text-red-700 dark:text-red-500";
-      default:
-        return "text-gray-500 dark:text-gray-400";
-    }
-  };
 
   const filtered = (type: string) => {
     const filteredNotifications = notifi.filter((n) => {

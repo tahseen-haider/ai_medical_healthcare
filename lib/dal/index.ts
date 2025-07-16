@@ -51,7 +51,9 @@ export const setAppointmentToDB = cache(
     });
 
     // 2. Prepare notification message
-    const message = `A new appointment was created for patient "${fullname}" scheduled on "${date.toLocaleDateString("en-GB")}" at "${preferredTime}".`;
+    const message = `A new appointment was created for patient "${fullname}" scheduled on "${date.toLocaleDateString(
+      "en-GB"
+    )}" at "${preferredTime}".`;
 
     // 3. Create notification for doctor
     await prisma.notification.create({
@@ -69,7 +71,9 @@ export const setAppointmentToDB = cache(
         data: {
           userId: patientId,
           title: "Appointment Request Submitted",
-          message: `Your appointment with the doctor has been requested for "${date.toLocaleDateString("en-GB")}" at "${preferredTime}". Please await confirmation.`,
+          message: `Your appointment with the doctor has been requested for "${date.toLocaleDateString(
+            "en-GB"
+          )}" at "${preferredTime}". Please await confirmation.`,
           type: "APPOINTMENT_UPDATE",
         },
       });
@@ -232,4 +236,38 @@ export async function deleteNotificationFromDB(id: string) {
   await prisma.notification.delete({
     where: { id },
   });
+}
+
+export async function sendAppointmentMessageToDB({
+  userId,
+  title,
+  message,
+}: {
+  userId: string;
+  title: string;
+  message: string;
+}) {
+  try {
+    await prisma.notification.create({
+      data: {
+        userId,
+        title,
+        message,
+        type: "APPOINTMENT_MESSAGE",
+      },
+    });
+  } catch (error) {
+    console.error("Failed to send message to patient:", error);
+    throw new Error("Could not send message");
+  }
+}
+
+export async function getAppointmentMessagesFromDB(userId: string) {
+  const res = await prisma.notification.findMany({
+    where: {
+      userId,
+      type: "APPOINTMENT_MESSAGE",
+    },
+  });
+  return res;
 }

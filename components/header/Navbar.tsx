@@ -13,7 +13,6 @@ import { UserType } from "@/lib/definitions";
 
 function Navbar({ user }: { user?: UserType }) {
   const role = user?.role;
-  const imageUrl = `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${user?.pfp}`;
   const userNavLinks = [
     {
       title: "Home",
@@ -127,11 +126,7 @@ function Navbar({ user }: { user?: UserType }) {
               onClick={() => setIsNavbarDown(false)}
             />
           )}
-          {role && (
-            <NotificationsButton
-              user={user}
-            />
-          )}
+          {role && <NotificationsButton user={user} />}
           {/* Auth Button */}
           {!role && (
             <Link
@@ -151,7 +146,7 @@ function Navbar({ user }: { user?: UserType }) {
             </Link>
           )}
           {/* Profile Button */}
-          {role && <ProfileButton imageUrl={imageUrl} name={user?.name} />}
+          {role && <ProfileButton user={user} />}
           <div className="hidden sm:block">
             <ThemeToggler />
           </div>

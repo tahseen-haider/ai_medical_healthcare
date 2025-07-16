@@ -1,4 +1,8 @@
-import { AppointmentStatus, DoctorType, NotificationType } from "@prisma/client/edge";
+import {
+  AppointmentStatus,
+  DoctorType,
+  NotificationType,
+} from "@prisma/client/edge";
 import { number, z } from "zod";
 
 export const SignupFormSchema = z.object({
@@ -135,6 +139,22 @@ export const LoginFormSchema = z.object({
     // })
     .trim(),
 });
+
+export type DoctorAppointment = {
+  fullname: string;
+  id: string;
+  email: string;
+  preferredDate: Date;
+  preferredTime: string;
+  reasonForVisit: string;
+  doctorId: string | null;
+  status: AppointmentStatus;
+  doctor: {
+    name: string;
+  } | null;
+  phone: string | null;
+};
+
 
 export const SendForgotPasswordLinkToEmailSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }).trim(),

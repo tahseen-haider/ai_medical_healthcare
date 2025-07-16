@@ -10,12 +10,14 @@ import {
 } from "@/lib/definitions";
 import {
   deleteNotificationFromDB,
+  getAppointmentMessagesFromDB,
   getAuthUserWithAppointmentsFromDB,
   getTokensUsedFromDB,
   getUserNotificationsFromDB,
   markAllNotificationsAsReadInDB,
   markNotificationAsReadInDB,
   markNotificationAsUnreadInDB,
+  sendAppointmentMessageToDB,
   setAppointmentToDB,
   uploadInquiry,
   uploadProfileChanges,
@@ -271,20 +273,34 @@ export async function markNotificationAsRead(
 ): Promise<NotificationItem> {
   return markNotificationAsReadInDB(notificationId);
 }
-export async function markAllNotificationsAsRead(
-  userId: string,
-) {
+export async function markAllNotificationsAsRead(userId: string) {
   await markAllNotificationsAsReadInDB(userId);
 }
 
-export async function getAuthUserWithAppointments(){
-  return getAuthUserWithAppointmentsFromDB()
+export async function getAuthUserWithAppointments() {
+  return getAuthUserWithAppointmentsFromDB();
 }
 
-export async function deleteNotification(id:string){
+export async function deleteNotification(id: string) {
   return await deleteNotificationFromDB(id);
 }
 
-export async function markNotificationAsUnread(id:string){
+export async function markNotificationAsUnread(id: string) {
   return await markNotificationAsUnreadInDB(id);
+}
+
+export async function sendAppointmentMessage({
+  userId,
+  title,
+  message,
+}: {
+  userId: string;
+  title: string;
+  message: string;
+}) {
+  await sendAppointmentMessageToDB({ userId, title, message });
+}
+
+export async function getAppointmentMessages(userId: string) {
+  return await getAppointmentMessagesFromDB(userId);
 }

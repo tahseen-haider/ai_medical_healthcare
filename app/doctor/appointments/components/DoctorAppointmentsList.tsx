@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import AppointmentMessages from "./AppointmentMessages";
 
 export default async function DoctorAppointmentsList({
   paramPage,
@@ -22,11 +23,8 @@ export default async function DoctorAppointmentsList({
 
   const user = await getUserIdnRoleIfAuthenticated();
   const id = user?.userId;
-  const { appointments, totalPages } = await getAllUpcomingAppointmentsForDoctor(
-    page,
-    limit,
-    id!
-  );
+  const { appointments, totalPages } =
+    await getAllUpcomingAppointmentsForDoctor(page, limit, id!);
 
   return (
     <Card className="w-full min-h-[calc(100vh-120px)] p-6 bg-white dark:bg-dark-4 flex flex-col justify-between shadow-md">
@@ -47,6 +45,7 @@ export default async function DoctorAppointmentsList({
                 <TableHead className="min-w-[100px]">Visit Time</TableHead>
                 <TableHead>Visit Date</TableHead>
                 <TableHead>Status</TableHead>
+                <TableHead>Messages</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -70,6 +69,9 @@ export default async function DoctorAppointmentsList({
                       appointmentId={appointment.id}
                       currentStatus={appointment.status}
                     />
+                  </TableCell>
+                  <TableCell className="w-fit">
+                    <AppointmentMessages user={appointment.patient} />
                   </TableCell>
                 </TableRow>
               ))}

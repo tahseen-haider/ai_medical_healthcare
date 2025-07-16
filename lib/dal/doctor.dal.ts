@@ -227,6 +227,210 @@ export const getAllAppointmentsForDoctorFromDB = async (
   }
 };
 
+export const getOutOfDateAppointmentsFromDB = async (
+  page: number,
+  limit: number,
+  doctorId: string
+) => {
+  try {
+    const now = new Date();
+
+    // Get all appointments for doctor (limit + buffer for filtering)
+    const allAppointments = await prisma.appointments.findMany({
+      where: {
+        doctorId,
+        status: {
+          not: "CANCELLED",
+        },
+      },
+      orderBy: {
+        preferredDate: "asc",
+      },
+      skip: (page - 1) * limit,
+      take: limit * 5,
+      select: {
+        id: true,
+        fullname: true,
+        email: true,
+        preferredDate: true,
+        preferredTime: true,
+        reasonForVisit: true,
+        doctorId: true,
+        status: true,
+        phone: true,
+        doctor: {
+          select: {
+            name: true,
+          },
+        },
+        patient: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    const outOfDateAppointments = allAppointments
+      .map((appointment) => {
+        const date = new Date(appointment.preferredDate); // e.g., 2025-07-15
+
+        const [time, modifier] = appointment.preferredTime.split(" ");
+        let [hours, minutes] = time.split(":").map(Number);
+
+        if (modifier === "PM" && hours < 12) hours += 12;
+        if (modifier === "AM" && hours === 12) hours = 0;
+
+        date.setHours(hours, minutes, 0, 0);
+
+        return { ...appointment, fullDateTime: date };
+      })
+      .filter((appointment) => appointment.fullDateTime < now)
+      .slice(0, limit); // apply pagination after filtering
+
+    return {
+      appointments: outOfDateAppointments,
+      count: outOfDateAppointments.length,
+      totalPages: Math.ceil(outOfDateAppointments.length / limit),
+    };
+  } catch (error) {
+    throw new Error(`Failed to get out-of-date appointments: ${error}`);
+  }
+};
+
+export const getAllUpcomingAppointmentsForDoctorFromDB = async (
+  page: number,
+  limit: number,
+  doctorId: string
+) => {
+  try {
+    const now = new Date();
+
+    // Fetch more than needed in case some get filtered out
+    const allAppointments = await prisma.appointments.findMany({
+      where: {
+        doctorId,
+        status: {
+          not: "CANCELLED",
+        },
+      },
+      orderBy: {
+        preferredDate: "asc",
+      },
+      skip: (page - 1) * limit,
+      take: limit * 5, // over-fetch buffer
+      select: {
+        id: true,
+        fullname: true,
+        email: true,
+        preferredDate: true,
+        preferredTime: true,
+        reasonForVisit: true,
+        doctorId: true,
+        status: true,
+        phone: true,
+        doctor: {
+          select: {
+            name: true,
+          },
+        },
+        patient: {
+          select: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+
+    const upcomingAppointments = allAppointments
+      .map((appointment) => {
+        const date = new Date(appointment.preferredDate);
+
+        const [time, modifier] = appointment.preferredTime.split(" ");
+        let [hours, minutes] = time.split(":").map(Number);
+
+        if (modifier === "PM" && hours < 12) hours += 12;
+        if (modifier === "AM" && hours === 12) hours = 0;
+
+        date.setHours(hours, minutes, 0, 0);
+
+        return { ...appointment, fullDateTime: date };
+      })
+      .filter((appointment) => appointment.fullDateTime >= now)
+      .slice(0, limit); // Apply pagination after filtering
+
+    return {
+      appointments: upcomingAppointments,
+      count: upcomingAppointments.length,
+      totalPages: Math.ceil(upcomingAppointments.length / limit),
+    };
+  } catch (error) {
+    throw new Error(`Failed to get upcoming appointments: ${error}`);
+  }
+};
+
+export const getCancelledAppointmentsForDoctorFromDB = async (
+  page: number,
+  limit: number,
+  doctorId: string
+) => {
+  try {
+    const [appointments, count] = await Promise.all([
+      prisma.appointments.findMany({
+        where: {
+          doctorId,
+          status: "CANCELLED",
+        },
+        skip: (page - 1) * limit,
+        take: limit,
+        orderBy: {
+          preferredDate: "asc",
+        },
+        select: {
+          fullname: true,
+          id: true,
+          email: true,
+          preferredDate: true,
+          preferredTime: true,
+          reasonForVisit: true,
+          doctorId: true,
+          status: true,
+          doctor: {
+            select: {
+              name: true,
+            },
+          },
+          patient: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+          phone: true,
+        },
+      }),
+      prisma.appointments.count({
+        where: {
+          doctorId,
+          status: "CANCELLED",
+        },
+      }),
+    ]);
+
+    return {
+      appointments,
+      count,
+      totalPages: Math.ceil(count / limit),
+    };
+  } catch (error) {
+    throw new Error(
+      `Failed to get cancelled appointments for doctor: ${error}`
+    );
+  }
+};
+
 const getStatusMessage = (
   status: AppointmentStatus,
   currentStatus: AppointmentStatus,
@@ -236,25 +440,39 @@ const getStatusMessage = (
 ): string => {
   switch (status) {
     case "PENDING":
-      return `Doctor "${doctorName}" marked the appointment of "${patientName}" (scheduled for "${preferredDate.toLocaleDateString("en-GB")}") as pending. "${patientName}", please wait for further confirmation.`;
+      return `Doctor "${doctorName}" marked the appointment of "${patientName}" (scheduled for "${preferredDate.toLocaleDateString(
+        "en-GB"
+      )}") as pending. "${patientName}", please wait for further confirmation.`;
 
     case "CONFIRMED":
-      return `Doctor "${doctorName}" confirmed the appointment of "${patientName}" scheduled for "${preferredDate.toLocaleDateString("en-GB")}". "${patientName}", please be on time.`;
+      return `Doctor "${doctorName}" confirmed the appointment of "${patientName}" scheduled for "${preferredDate.toLocaleDateString(
+        "en-GB"
+      )}". "${patientName}", please be on time.`;
 
     case "CANCELLED":
-      return `Doctor "${doctorName}" cancelled the appointment of "${patientName}" which was scheduled for "${preferredDate.toLocaleDateString("en-GB")}". "${patientName}", you may book a new appointment if needed.`;
+      return `Doctor "${doctorName}" cancelled the appointment of "${patientName}" which was scheduled for "${preferredDate.toLocaleDateString(
+        "en-GB"
+      )}". "${patientName}", you may book a new appointment if needed.`;
 
     case "COMPLETED":
-      return `Doctor "${doctorName}" marked the appointment of "${patientName}" on "${preferredDate.toLocaleDateString("en-GB")}" as completed. "${patientName}", we hope you're doing well!`;
+      return `Doctor "${doctorName}" marked the appointment of "${patientName}" on "${preferredDate.toLocaleDateString(
+        "en-GB"
+      )}" as completed. "${patientName}", we hope you're doing well!`;
 
     case "RESCHEDULED":
-      return `Doctor "${doctorName}" rescheduled the appointment of "${patientName}". The original date was "${preferredDate.toLocaleDateString("en-GB")}". "${patientName}", please check your updated appointment details.`;
+      return `Doctor "${doctorName}" rescheduled the appointment of "${patientName}". The original date was "${preferredDate.toLocaleDateString(
+        "en-GB"
+      )}". "${patientName}", please check your updated appointment details.`;
 
     case "PAYMENT_PENDING":
-      return `Doctor "${doctorName}" marked the appointment of "${patientName}" on "${preferredDate.toLocaleDateString("en-GB")}" as payment pending. "${patientName}", please complete the payment to proceed.`;
+      return `Doctor "${doctorName}" marked the appointment of "${patientName}" on "${preferredDate.toLocaleDateString(
+        "en-GB"
+      )}" as payment pending. "${patientName}", please complete the payment to proceed.`;
 
     default:
-      return `Doctor "${doctorName}" changed the appointment status of "${patientName}" on "${preferredDate.toLocaleDateString("en-GB")}" from "${currentStatus}" to "${status}".`;
+      return `Doctor "${doctorName}" changed the appointment status of "${patientName}" on "${preferredDate.toLocaleDateString(
+        "en-GB"
+      )}" from "${currentStatus}" to "${status}".`;
   }
 };
 
