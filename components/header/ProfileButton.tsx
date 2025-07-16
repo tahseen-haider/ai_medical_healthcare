@@ -16,15 +16,14 @@ import LoadingScreen from "@/components/LoadingScreen";
 import Link from "next/link";
 import useSWR from "swr";
 import { UserType } from "@/lib/definitions";
-import { getAppointmentMessages } from "@/actions";
-import { $Enums } from "@prisma/client";
+import { getAppointmentMessagesCount } from "@/actions";
 
 export default function ProfileButton({ user }: { user: UserType }) {
   const imageUrl = `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${user?.pfp}`;
 
   const { data } = useSWR(
     user.id ? `/notifications/${user.id}` : null,
-    () => getAppointmentMessages(user.id),
+    () => getAppointmentMessagesCount(user.id),
     {
       refreshInterval: 60000,
       revalidateOnFocus: true,
@@ -34,33 +33,27 @@ export default function ProfileButton({ user }: { user: UserType }) {
     }
   );
 
-  const [notifications, setNotifications] = useState<
-    | {
-        message: string;
-        userId: string;
-        type: $Enums.NotificationType;
-        link: string | null;
-        id: string;
-        title: string;
-        read: boolean;
-        createdAt: Date;
-        relatedId: string | null;
-      }[]
-    | undefined
-  >([]);
+  const [notifications, setNotifications] = useState<number | undefined>(0);
 
   useEffect(() => {
     setNotifications(data);
   }, [data]);
 
-  const unreadCount = notifications?.filter((n) => !n.read)?.length || 0;
+  const hasNewMessages = notifications ? notifications > 0 : false;
 
   const [state, action, pending] = useActionState(logout, undefined);
   const [open, setOpen] = useState(false);
 
-  const navLinks = [
+  const isUser = user.role === "user";
+
+  const navLinks: {
+    title: string;
+    link: string;
+  }[] = [
     { title: "Your Profile", link: "/profile" },
-    { title: "Your Appointments", link: "/your-appointments" },
+    isUser
+      ? { title: "Your Appointments", link: "/your-appointments" }
+      : { title: "", link: "" },
     { title: "Reset Password", link: "/reset-password" },
   ];
 
@@ -71,7 +64,7 @@ export default function ProfileButton({ user }: { user: UserType }) {
         <DropdownMenuTrigger asChild className="relative rounded-full">
           <Button variant="ghost" className="h-auto w-auto p-0 rounded-full">
             {/* Badge */}
-            {unreadCount > 0 && (
+            {hasNewMessages && (
               <span className="absolute top-0 right-0 inline-flex h-2 w-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-gray-900" />
             )}
             <ProfilePicture image={imageUrl} />
@@ -89,26 +82,28 @@ export default function ProfileButton({ user }: { user: UserType }) {
             </Link>
           </DropdownMenuLabel>
           <DropdownMenuSeparator />
-          {navLinks.map((ele) => (
-            <DropdownMenuItem
-              key={ele.title}
-              asChild
-              className="cursor-pointer px-2 py-1.5"
-            >
-              <Link
-                href={ele.link}
-                onClick={() => setOpen(false)}
-                className="flex items-center justify-between w-full"
+          {navLinks
+            .filter((ele) => ele.link !== "")
+            .map((ele) => (
+              <DropdownMenuItem
+                key={ele.title}
+                asChild
+                className="cursor-pointer px-2 py-1.5"
               >
-                {ele.title}
-                {ele.title === "Your Appointments" && unreadCount > 0 && (
-                  <span className="ml-2 w-4 h-4 inline-flex items-center justify-center rounded-full bg-red-500 px-2 py-0.5 text-xs font-bold text-white">
-                    {unreadCount}
-                  </span>
-                )}
-              </Link>
-            </DropdownMenuItem>
-          ))}
+                <Link
+                  href={ele.link}
+                  onClick={() => setOpen(false)}
+                  className="flex items-center justify-between w-full"
+                >
+                  {ele.title}
+                  {ele.title === "Your Appointments" && hasNewMessages && (
+                    <span className="ml-2 w-4 h-4 inline-flex items-center justify-center rounded-full bg-red-500 px-2 py-0.5 text-xs font-bold text-white">
+                      {notifications}
+                    </span>
+                  )}
+                </Link>
+              </DropdownMenuItem>
+            ))}
 
           <DropdownMenuSeparator />
           <form action={action} onSubmit={() => setOpen(false)} className="p-1">

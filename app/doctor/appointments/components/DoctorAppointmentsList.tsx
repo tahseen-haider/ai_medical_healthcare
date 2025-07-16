@@ -12,6 +12,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import AppointmentMessages from "./AppointmentMessages";
+import MessageSectionOfList from "./MessageSectionOfList";
 
 export default async function DoctorAppointmentsList({
   paramPage,
@@ -25,7 +26,6 @@ export default async function DoctorAppointmentsList({
   const id = user?.userId;
   const { appointments, totalPages } =
     await getAllUpcomingAppointmentsForDoctor(page, limit, id!);
-
   return (
     <Card className="w-full min-h-[calc(100vh-120px)] p-6 bg-white dark:bg-dark-4 flex flex-col justify-between shadow-md">
       <div className="flex-1 flex flex-col overflow-auto">
@@ -71,7 +71,7 @@ export default async function DoctorAppointmentsList({
                     />
                   </TableCell>
                   <TableCell className="w-fit">
-                    <AppointmentMessages user={appointment.patient} />
+                    <MessageSectionOfList appointment={appointment} />
                   </TableCell>
                 </TableRow>
               ))}

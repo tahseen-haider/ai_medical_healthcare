@@ -332,6 +332,7 @@ export const getAllUpcomingAppointmentsForDoctorFromDB = async (
         phone: true,
         doctor: {
           select: {
+            id: true,
             name: true,
           },
         },
@@ -339,6 +340,28 @@ export const getAllUpcomingAppointmentsForDoctorFromDB = async (
           select: {
             id: true,
             name: true,
+          },
+        },
+        appointmentMessages: {
+          select: {
+            id: true,
+            content: true,
+            senderId: true,
+            receiverId: true,
+            appointmentId: true,
+            createdAt: true,
+            sender: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
+            receiver: {
+              select: {
+                id: true,
+                name: true,
+              },
+            },
           },
         },
       },

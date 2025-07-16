@@ -1,7 +1,10 @@
+import { cookies } from "next/headers";
 import DashboardLinks from "../admin/dashboard/components/DashboardLinks";
 import DashboardSidebarWrapper from "../assistant/components/DashboardSidebarWrapper";
+import { isUserAuthenticated } from "@/lib/session";
+import { getUser } from "@/lib/dal/user.dal";
 
-export default function DoctorLayout({
+export default async function DoctorLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   const DoctorSidebarLinks = [
@@ -27,12 +30,15 @@ export default function DoctorLayout({
     // },
   ];
 
+  const cookieStore = await cookies();
+  const session = await isUserAuthenticated(cookieStore.get("session")?.value);
+  const user = await getUser(session?.userId);
   return (
     <>
       <section className="w-full h-[calc(100vh-64px)] min-h-52 flex">
         {/* Sidebar */}
         <DashboardSidebarWrapper>
-          <DashboardLinks links={DoctorSidebarLinks} />
+          <DashboardLinks user={user} links={DoctorSidebarLinks} />
         </DashboardSidebarWrapper>
         {/* Chat */}
         <div className="flex-1 h-[calc(100vh-65px)] overflow-auto w-full ">

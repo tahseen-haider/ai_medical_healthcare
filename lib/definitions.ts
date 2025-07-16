@@ -1,4 +1,6 @@
 import {
+  $Enums,
+  AppointmentMessage,
   AppointmentStatus,
   DoctorType,
   NotificationType,
@@ -140,21 +142,41 @@ export const LoginFormSchema = z.object({
     .trim(),
 });
 
-export type DoctorAppointment = {
-  fullname: string;
+export type AppointmentWithRelations = {
   id: string;
+  fullname: string;
   email: string;
+  phone: string | null;
+  reasonForVisit: string;
   preferredDate: Date;
   preferredTime: string;
-  reasonForVisit: string;
-  doctorId: string | null;
   status: AppointmentStatus;
+  doctorId: string | null;
   doctor: {
+    id: string;
     name: string;
   } | null;
-  phone: string | null;
+  patient: {
+    id: string;
+    name: string;
+  } | null;
+  appointmentMessages: {
+    id: string;
+    content: string;
+    senderId: string;
+    receiverId: string;
+    appointmentId: string;
+    createdAt: Date;
+    sender: {
+      id: string;
+      // Add other user fields if needed
+    };
+    receiver: {
+      id: string;
+      // Add other user fields if needed
+    };
+  }[];
 };
-
 
 export const SendForgotPasswordLinkToEmailSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }).trim(),

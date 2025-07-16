@@ -10,7 +10,9 @@ import {
 } from "@/lib/definitions";
 import {
   deleteNotificationFromDB,
-  getAppointmentMessagesFromDB,
+  getAppointmentMessagesCountFromDB,
+  getAppointmentMessagesOfReceiverFromDB,
+  getAppointmentMessagesOfSenderFromDB,
   getAuthUserWithAppointmentsFromDB,
   getTokensUsedFromDB,
   getUserNotificationsFromDB,
@@ -33,6 +35,7 @@ import { redirect } from "next/navigation";
 import { getUserIdnRoleIfAuthenticated } from "@/lib/session";
 import { revalidatePath } from "next/cache";
 import { NotificationType } from "@prisma/client/edge";
+import { ObjectId } from "bson";
 
 export const contactUs = async (
   state: ContactFormState,
@@ -290,17 +293,64 @@ export async function markNotificationAsUnread(id: string) {
 }
 
 export async function sendAppointmentMessage({
-  userId,
+  senderId,
+  receiverId,
+  content,
+  appointmentId,
   title,
-  message,
 }: {
-  userId: string;
   title: string;
-  message: string;
+  senderId: string;
+  receiverId: string;
+  content: string;
+  appointmentId: string;
 }) {
-  await sendAppointmentMessageToDB({ userId, title, message });
+  if (senderId === "" || receiverId === "") return;
+  await sendAppointmentMessageToDB({
+    senderId,
+    receiverId,
+    appointmentId,
+    content,
+    title,
+  });
 }
 
-export async function getAppointmentMessages(userId: string) {
-  return await getAppointmentMessagesFromDB(userId);
+export async function getAppointmentMessagesCount(userId: string | undefined) {
+  if (!userId) return;
+  return await getAppointmentMessagesCountFromDB(userId);
+}
+
+export async function getAppointmentMessagesOfSenderReceiver(
+  senderId: string | undefined,
+  receiverId: string | undefined,
+  appointmentId: string
+) {
+  const receivedMessages = await getAppointmentMessagesOfReceiver(
+    receiverId,
+    appointmentId
+  );
+  const sentMessages = await getAppointmentMessagesOfSender(
+    senderId,
+    appointmentId
+  );
+
+  return {
+    receivedMessages, sentMessages
+  }
+}
+
+export async function getAppointmentMessagesOfSender(
+  userId: string | undefined,
+  appointmentId: string
+) {
+  if (!userId) return;
+  return await getAppointmentMessagesOfSenderFromDB(userId, appointmentId);
+}
+
+export async function getAppointmentMessagesOfReceiver(
+  userId: string | undefined,
+  appointmentId: string
+) {
+  if (!userId) return;
+  return await getAppointmentMessagesOfReceiverFromDB(userId, appointmentId);
 }

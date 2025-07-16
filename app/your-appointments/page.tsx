@@ -12,6 +12,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getAuthUserWithAppointments } from "@/actions";
 import Link from "next/link";
 import AppointmentMessages from "../doctor/appointments/components/AppointmentMessages";
+import MessagesSectionForList from "./components/MessagesSectionForList";
 
 export default async function AppointmentsPage() {
   const user = await getAuthUserWithAppointments();
@@ -19,7 +20,7 @@ export default async function AppointmentsPage() {
   const allAppointments = [
     ...(user?.appointmentsAsPatient || []),
     ...(user?.appointmentsAsDoctor || []),
-  ].sort((a, b) => a.preferredDate.getTime() - b.preferredDate.getTime()); // Sort by date
+  ].sort((a, b) => a.preferredDate.getTime() - b.preferredDate.getTime());
 
   const getStatusVariant = (status: AppointmentStatus) => {
     switch (status) {
@@ -89,12 +90,7 @@ export default async function AppointmentsPage() {
                         </Badge>
                       </TableCell>
                       <TableCell>
-                        <AppointmentMessages
-                          user={{
-                            id: appointment.doctorId!,
-                            name: appointment.fullname,
-                          }}
-                        />
+                        <MessagesSectionForList appointment={appointment}/>
                       </TableCell>
                     </TableRow>
                   ))}

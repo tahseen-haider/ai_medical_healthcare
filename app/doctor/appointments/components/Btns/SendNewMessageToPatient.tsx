@@ -13,21 +13,32 @@ import { Textarea } from "@/components/ui/textarea";
 import { sendAppointmentMessage } from "@/actions";
 
 export default function SendNewAppointmentMessage({
-  userId,
+  data,
 }: {
-  userId: string;
+  data: {
+    senderId: string | undefined;
+    receiverId: string | undefined;
+    appointmentId: string;
+  };
 }) {
-  const [title, setTitle] = useState("");
+  const { senderId, receiverId, appointmentId } = data;
   const [message, setMessage] = useState("");
+  const [title, setTitle] = useState("");
   const [open, setOpen] = useState(false);
   const [sending, setSending] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSending(true)
-    await sendAppointmentMessage({ userId, title, message });
-    setSending(false)
-    setTitle("");
+    if (message.length < 3) return;
+    setSending(true);
+    await sendAppointmentMessage({
+      senderId: senderId ?? "",
+      receiverId: receiverId ?? "",
+      content: message,
+      title,
+      appointmentId,
+    });
+    setSending(false);
     setMessage("");
     setOpen(false);
   };
@@ -43,10 +54,10 @@ export default function SendNewAppointmentMessage({
         <form onSubmit={handleSubmit} className="space-y-3">
           <h3 className="text-lg font-semibold">Send Message</h3>
           <Input
-            placeholder="Title"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Title of Message"
             required
+            onChange={(e) => setTitle(e.target.value)}
           />
           <Textarea
             placeholder="Message"
@@ -55,7 +66,7 @@ export default function SendNewAppointmentMessage({
             required
           />
           <Button type="submit" className="w-full">
-            {sending?<Loader2 className="animate-spin"/>:<div>Send</div>}
+            {sending ? <Loader2 className="animate-spin" /> : <div>Send</div>}
           </Button>
         </form>
       </PopoverContent>

@@ -168,11 +168,14 @@ model Message {
 
 model AppointmentMessage {
   id             String         @id @default(auto()) @map("_id") @db.ObjectId
+  title          String
   content        String
   senderId       String
   receiverId     String
   appointmentId  String         @db.ObjectId
   createdAt      DateTime       @default(now())
+
+  is_read       Boolean @default(false)
 
   // Relations
   sender         User           @relation("SentMessages", fields: [senderId], references: [id])

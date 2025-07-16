@@ -239,21 +239,26 @@ export async function deleteNotificationFromDB(id: string) {
 }
 
 export async function sendAppointmentMessageToDB({
-  userId,
+  senderId,
+  receiverId,
+  appointmentId,
+  content,
   title,
-  message,
 }: {
-  userId: string;
   title: string;
-  message: string;
+  senderId: string;
+  receiverId: string;
+  appointmentId: string;
+  content: string;
 }) {
   try {
-    await prisma.notification.create({
+    await prisma.appointmentMessage.create({
       data: {
-        userId,
+        receiverId,
+        content,
+        senderId,
+        appointmentId,
         title,
-        message,
-        type: "APPOINTMENT_MESSAGE",
       },
     });
   } catch (error) {
@@ -262,11 +267,54 @@ export async function sendAppointmentMessageToDB({
   }
 }
 
-export async function getAppointmentMessagesFromDB(userId: string) {
-  const res = await prisma.notification.findMany({
+export async function getAppointmentMessagesCountFromDB(userId: string) {
+  const res = await prisma.appointmentMessage.count({
     where: {
-      userId,
-      type: "APPOINTMENT_MESSAGE",
+      receiverId: userId,
+      is_read: false,
+      appointment: {
+        NOT: {
+          status: "CANCELLED",
+        },
+      },
+    },
+  });
+  return res;
+}
+
+export async function getAppointmentMessagesOfSenderFromDB(
+  userId: string,
+  appointmentId: string
+) {
+  const res = await prisma.appointmentMessage.findMany({
+    where: {
+      senderId: userId,
+      is_read: false,
+      appointmentId,
+      appointment: {
+        NOT: {
+          status: "CANCELLED",
+        },
+      },
+    },
+  });
+  return res;
+}
+
+export async function getAppointmentMessagesOfReceiverFromDB(
+  userId: string,
+  appointmentId: string
+) {
+  const res = await prisma.appointmentMessage.findMany({
+    where: {
+      receiverId: userId,
+      is_read: false,
+      appointmentId,
+      appointment: {
+        NOT: {
+          status: "CANCELLED",
+        },
+      },
     },
   });
   return res;
