@@ -238,7 +238,7 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
                                 )
                               : formatMessage(
                                   n.message,
-                                  "text-green-800",
+                                  "text-green-700",
                                   "text-green-200"
                                 )}
                           </p>
@@ -298,15 +298,16 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
                     filtered("general").map((n) => (
                       <div
                         key={n.id}
-                        className={`relative p-2 border-b flex items-start gap-3 rounded hover:bg-muted/30 transition ${
+                        className={`relative p-2 border-b flex items-start gap-3 rounded bg-transparent transition ${
                           n.read ? "" : "bg-accent text-black dark:text-white"
                         }`}
                       >
-                        <span
-                          className={`h-2 w-2 rounded-full mt-2 ${getColor(
-                            n.type
-                          )} bg-current`}
-                        />
+                        {!n.read && (
+                          <div
+                            className={`min-h-2 min-w-2 rounded-full mt-2 bg-light-4 dark:bg-white`}
+                          />
+                        )}
+                        {n.read && <div />}
                         <div className="flex-grow">
                           <p className="text-sm font-medium">{n.title}</p>
                           <p className="text-sm">
@@ -318,7 +319,7 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
                                 )
                               : formatMessage(
                                   n.message,
-                                  "text-green-800",
+                                  "text-green-700",
                                   "text-green-200"
                                 )}
                           </p>
@@ -330,7 +331,7 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
                           {n.link && (
                             <Link
                               href={n.link}
-                              className="flex justify-center items-center h-8 w-8 rounded-sm opacity-100 hover:opacity-90"
+                              className="flex justify-center items-center h-8 w-8 rounded-sm opacity-100 hover:opacity-90 text-light-4 dark:text-blue-300"
                             >
                               <ExternalLink className="w-4 h-4" />
                             </Link>

@@ -1,4 +1,4 @@
-import { getOutOfDateAppointmentsForDoctor } from "@/actions/doctor.action";
+import { getCancelledAppointmentsForDoctor } from "@/actions/doctor.action";
 import { getUserIdnRoleIfAuthenticated } from "@/lib/session";
 import {
   Table,
@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import EditAppointmentStatus from "../../appointments/components/EditAppointmentStatus";
 
-export default async function DoctorOutOfDateAppointmentsList({
+export default async function DoctorCancelledAppointmentsList({
   paramPage,
 }: {
   paramPage?: string;
@@ -22,7 +22,7 @@ export default async function DoctorOutOfDateAppointmentsList({
 
   const user = await getUserIdnRoleIfAuthenticated();
   const id = user?.userId;
-  const { appointments, totalPages } = await getOutOfDateAppointmentsForDoctor(
+  const { appointments, totalPages } = await getCancelledAppointmentsForDoctor(
     page,
     limit,
     id!

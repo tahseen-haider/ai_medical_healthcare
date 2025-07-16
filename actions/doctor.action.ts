@@ -22,20 +22,97 @@ export async function getDoctorsForDoctorSection() {
   return await getDoctorsForDoctorSectionFromDB();
 }
 
-export async function getDoctor(doctorId: string){
-return await getDoctorFromDB(doctorId)
+export async function getDoctor(doctorId: string) {
+  return await getDoctorFromDB(doctorId);
 }
 
-export async function getDoctorsForLoadMore(page:number, limit:number){
-  return await getDoctorsForLoadMoreFromDB(page, limit)
+export async function getDoctorsForLoadMore(page: number, limit: number) {
+  return await getDoctorsForLoadMoreFromDB(page, limit);
 }
 
-export const getAllAppointmentsForDoctor = async (
+export const getAllUpcomingAppointmentsForDoctor = async (
   page: number,
   limit: number,
   id: string
 ) => {
-  return await getAllAppointmentsForDoctorFromDB(page, limit, id);
+  const res = await getAllAppointmentsForDoctorFromDB(page, limit, id);
+  const now = new Date();
+
+  const outOfDateAppointments = res.appointments.filter((appointment) => {
+    const date = new Date(appointment.preferredDate); // e.g. "2025-07-15"
+
+    // Parse time (e.g. "09:30 AM")
+    const [time, modifier] = appointment.preferredTime.split(" ");
+    let [hours, minutes] = time.split(":").map(Number);
+
+    // Convert to 24-hour format
+    if (modifier === "PM" && hours < 12) hours += 12;
+    if (modifier === "AM" && hours === 12) hours = 0;
+
+    // Set time on the date object
+    date.setHours(hours, minutes, 0, 0);
+
+    // Compare full datetime to now
+    return date < now && appointment.status !== "CANCELLED";
+  });
+
+  return {
+    appointments: outOfDateAppointments,
+    count: outOfDateAppointments.length,
+    totalPages: Math.ceil(outOfDateAppointments.length / limit),
+  };
+};
+
+export const getOutOfDateAppointmentsForDoctor = async (
+  page: number,
+  limit: number,
+  id: string
+) => {
+  const res = await getAllAppointmentsForDoctorFromDB(page, limit, id);
+  const now = new Date();
+
+  const outOfDateAppointments = res.appointments.filter((appointment) => {
+    const date = new Date(appointment.preferredDate); // e.g. "2025-07-15"
+
+    // Parse time (e.g. "09:30 AM")
+    const [time, modifier] = appointment.preferredTime.split(" ");
+    let [hours, minutes] = time.split(":").map(Number);
+
+    // Convert to 24-hour format
+    if (modifier === "PM" && hours < 12) hours += 12;
+    if (modifier === "AM" && hours === 12) hours = 0;
+
+    // Set time on the date object
+    date.setHours(hours, minutes, 0, 0);
+
+    // Compare full datetime to now
+    return date < now && appointment.status !== "CANCELLED";
+  });
+
+  return {
+    appointments: outOfDateAppointments,
+    count: outOfDateAppointments.length,
+    totalPages: Math.ceil(outOfDateAppointments.length / limit),
+  };
+};
+
+export const getCancelledAppointmentsForDoctor = async (
+  page: number,
+  limit: number,
+  id: string
+) => {
+  const res = await getAllAppointmentsForDoctorFromDB(page, limit, id);
+  const now = new Date();
+
+  const outOfDateAppointments = res.appointments.filter((appointment) => {
+    return appointment.status === "CANCELLED";
+  });
+
+  return {
+    appointments: outOfDateAppointments,
+    count: outOfDateAppointments.length,
+    totalPages: Math.ceil(outOfDateAppointments.length / limit),
+  };
 };
 
 export const changeAppointmentStatus = async (

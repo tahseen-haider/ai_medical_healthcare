@@ -1,5 +1,5 @@
 import React from "react";
-import DoctorOutOfDateAppointmentsList from "./components/DoctorOutOfDateppointmentsList";
+import DoctorCancelledAppointmentsList from "./components/DoctorCancelledAppointments";
 
 export default async function page({
   searchParams,
@@ -12,7 +12,7 @@ export default async function page({
     <main className="w-full flex justify-center">
       <section className="flex flex-col gap-4 p-6 w-full max-w-[1920px]">
         {/* Doctors Pagination List */}
-        <DoctorOutOfDateAppointmentsList paramPage={paramPage} />
+        <DoctorCancelledAppointmentsList paramPage={paramPage} />
       </section>
     </main>
   );

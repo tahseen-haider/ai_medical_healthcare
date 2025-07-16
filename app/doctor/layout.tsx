@@ -17,6 +17,10 @@ export default function DoctorLayout({
       title: "Out of Date Appointments",
       link: "/doctor/out-of-date-appointments",
     },
+    {
+      title: "Cancelled Appointments",
+      link: "/doctor/cancelled-appointments",
+    },
     // {
     //   title: "Admin Inquiries",
     //   link: "/doctor/admin-inquiries",

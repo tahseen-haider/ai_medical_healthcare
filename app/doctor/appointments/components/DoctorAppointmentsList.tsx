@@ -1,4 +1,4 @@
-import { getAllAppointmentsForDoctor } from "@/actions/doctor.action";
+import { getAllUpcomingAppointmentsForDoctor } from "@/actions/doctor.action";
 import { getUserIdnRoleIfAuthenticated } from "@/lib/session";
 import EditAppointmentStatus from "./EditAppointmentStatus";
 import {
@@ -22,7 +22,7 @@ export default async function DoctorAppointmentsList({
 
   const user = await getUserIdnRoleIfAuthenticated();
   const id = user?.userId;
-  const { appointments, totalPages } = await getAllAppointmentsForDoctor(
+  const { appointments, totalPages } = await getAllUpcomingAppointmentsForDoctor(
     page,
     limit,
     id!
@@ -32,7 +32,7 @@ export default async function DoctorAppointmentsList({
     <Card className="w-full min-h-[calc(100vh-120px)] p-6 bg-white dark:bg-dark-4 flex flex-col justify-between shadow-md">
       <div className="flex-1 flex flex-col overflow-auto">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">All Appointments</h2>
+          <h2 className="text-xl font-bold">Upcoming Appointments</h2>
         </div>
 
         <div className="overflow-auto">

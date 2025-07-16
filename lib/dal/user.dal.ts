@@ -5,10 +5,7 @@ import "server-only";
 import { cache } from "react";
 import { deleteSession, getUserIdnRoleIfAuthenticated } from "../session";
 import { prisma } from "../db/prisma";
-import {
-  UserCredentialDTO,
-  UserIDandRoleForSessionDTO,
-} from "../dto/user.dto";
+import { UserCredentialDTO, UserIDandRoleForSessionDTO } from "../dto/user.dto";
 import bcrypt from "bcryptjs";
 import cloudinary from "../cloudinary";
 import { redirect } from "next/navigation";
@@ -111,6 +108,16 @@ export const insertUserToDB = async (
         email,
         password: hashedPassword,
         token: Math.floor(1000 + Math.random() * 900000),
+      },
+    });
+
+    // notification for new user
+    await prisma.notification.create({
+      data: {
+        userId: user.id,
+        title: `Hello ${user.name}, welcome to MediTech!`,
+        message: `"Welcome to MediTech!". We're glad to have you with us, "${user.name}".`,
+        type: "SYSTEM_ALERT",
       },
     });
     return user.token;
