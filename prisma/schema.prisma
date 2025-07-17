@@ -167,21 +167,21 @@ model Message {
 }
 
 model AppointmentMessage {
-  id             String         @id @default(auto()) @map("_id") @db.ObjectId
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
   title          String
   content        String
-  senderId       String
-  receiverId     String
-  appointmentId  String         @db.ObjectId
-  createdAt      DateTime       @default(now())
-
-  is_read       Boolean @default(false)
+  senderId       String       @db.ObjectId
+  receiverId     String       @db.ObjectId
+  appointmentId  String       @db.ObjectId
+  createdAt      DateTime     @default(now())
+  is_read        Boolean      @default(false)
 
   // Relations
-  sender         User           @relation("SentMessages", fields: [senderId], references: [id])
-  receiver       User           @relation("ReceivedMessages", fields: [receiverId], references: [id])
-  appointment    Appointments   @relation(fields: [appointmentId], references: [id])
+  sender         User         @relation("SentMessages", fields: [senderId], references: [id])
+  receiver       User         @relation("ReceivedMessages", fields: [receiverId], references: [id])
+  appointment    Appointments @relation(fields: [appointmentId], references: [id])
 }
+
 
 model Appointments {
   id                   String               @id @default(auto()) @map("_id") @db.ObjectId

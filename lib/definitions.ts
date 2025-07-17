@@ -344,3 +344,16 @@ export type NotificationItem = {
   link?: string | null;
   relatedId?: string | null;
 };
+
+export type AppointmentMessage =
+  | {
+      senderId: string;
+      receiverId: string;
+      appointmentId: string;
+      is_read: boolean;
+      id: string;
+      createdAt: Date;
+      title: string;
+      content: string;
+    }[]
+  | undefined;

@@ -22,6 +22,7 @@ export default function SendNewAppointmentMessage({
   };
 }) {
   const { senderId, receiverId, appointmentId } = data;
+
   const [message, setMessage] = useState("");
   const [title, setTitle] = useState("");
   const [open, setOpen] = useState(false);

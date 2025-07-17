@@ -11,8 +11,8 @@ import {
 import {
   deleteNotificationFromDB,
   getAppointmentMessagesCountFromDB,
-  getAppointmentMessagesOfReceiverFromDB,
-  getAppointmentMessagesOfSenderFromDB,
+  getAppointmentMessagesOfReceivedFromDB,
+  getAppointmentMessagesOfSentFromDB,
   getAuthUserWithAppointmentsFromDB,
   getTokensUsedFromDB,
   getUserNotificationsFromDB,
@@ -334,17 +334,16 @@ export async function getAppointmentMessagesCount(userId: string | undefined) {
   return await getAppointmentMessagesCountFromDB(userId);
 }
 
-export async function getAppointmentMessagesOfSenderReceiver(
-  senderId: string | undefined,
-  receiverId: string | undefined,
+export async function getAppointmentMessagesOfSentReceived(
+  userId: string | undefined,
   appointmentId: string
 ) {
-  const receivedMessages = await getAppointmentMessagesOfReceiver(
-    receiverId,
+  const receivedMessages = await getAppointmentMessagesOfReceived(
+    userId,
     appointmentId
   );
-  const sentMessages = await getAppointmentMessagesOfSender(
-    senderId,
+  const sentMessages = await getAppointmentMessagesOfSent(
+    userId,
     appointmentId
   );
 
@@ -354,18 +353,18 @@ export async function getAppointmentMessagesOfSenderReceiver(
   };
 }
 
-export async function getAppointmentMessagesOfSender(
+export async function getAppointmentMessagesOfSent(
   userId: string | undefined,
   appointmentId: string
 ) {
   if (!userId) return;
-  return await getAppointmentMessagesOfSenderFromDB(userId, appointmentId);
+  return await getAppointmentMessagesOfSentFromDB(userId, appointmentId);
 }
 
-export async function getAppointmentMessagesOfReceiver(
+export async function getAppointmentMessagesOfReceived(
   userId: string | undefined,
   appointmentId: string
 ) {
   if (!userId) return;
-  return await getAppointmentMessagesOfReceiverFromDB(userId, appointmentId);
+  return await getAppointmentMessagesOfReceivedFromDB(userId, appointmentId);
 }

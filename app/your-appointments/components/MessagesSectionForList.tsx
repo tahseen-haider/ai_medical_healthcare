@@ -2,7 +2,7 @@
 import React from "react";
 import SendNewAppointmentMessage from "@/app/doctor/appointments/components/Btns/SendNewMessageToPatient";
 import { $Enums } from "@prisma/client";
-import ChatAppointment from "./ChatAppointment";
+import ChatAppointment from "@/components/ChatAppointment";
 
 export default function MessagesSectionForList({
   appointment,
@@ -22,15 +22,21 @@ export default function MessagesSectionForList({
     patientId: string | null;
   };
 }) {
-  const data = {
+  const SendingData = {
     senderId: appointment.patientId ?? undefined,
     receiverId: appointment.doctorId ?? undefined,
     appointmentId: appointment.id,
   };
+
+  const ReceivingData = {
+    userId: appointment.patientId ?? undefined,
+    appointmentId: appointment.id,
+  };
+  
   return (
     <div className="flex gap-4">
-      <ChatAppointment appData={data}/>
-      <SendNewAppointmentMessage data={data} />
+      <ChatAppointment appData={ReceivingData}/>
+      <SendNewAppointmentMessage data={SendingData} />
     </div>
   );
 }

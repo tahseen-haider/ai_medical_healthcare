@@ -335,7 +335,7 @@ export async function getAppointmentMessagesCountFromDB(userId: string) {
   }
 }
 
-export async function getAppointmentMessagesOfSenderFromDB(
+export async function getAppointmentMessagesOfSentFromDB(
   userId: string,
   appointmentId: string
 ) {
@@ -343,7 +343,6 @@ export async function getAppointmentMessagesOfSenderFromDB(
     const res = await prisma.appointmentMessage.findMany({
       where: {
         senderId: userId,
-        is_read: false,
         appointmentId,
         appointment: {
           NOT: {
@@ -359,15 +358,14 @@ export async function getAppointmentMessagesOfSenderFromDB(
   }
 }
 
-export async function getAppointmentMessagesOfReceiverFromDB(
+export async function getAppointmentMessagesOfReceivedFromDB(
   userId: string,
   appointmentId: string
 ) {
   try {
     const res = await prisma.appointmentMessage.findMany({
       where: {
-        receiverId: userId,
-        is_read: false,
+        receiverId:userId,
         appointmentId,
         appointment: {
           NOT: {
