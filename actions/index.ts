@@ -9,6 +9,7 @@ import {
   SaveProfileChangesState,
 } from "@/lib/definitions";
 import {
+  deleteAppointmentSentMessageFromDB,
   deleteNotificationFromDB,
   getAppointmentMessagesCountFromDB,
   getAppointmentMessagesOfReceivedFromDB,
@@ -19,6 +20,7 @@ import {
   markAllNotificationsAsReadInDB,
   markNotificationAsReadInDB,
   markNotificationAsUnreadInDB,
+  markReadAppointmentMessageInDB,
   sendAppointmentMessageToDB,
   setAppointmentToDB,
   uploadInquiry,
@@ -367,4 +369,11 @@ export async function getAppointmentMessagesOfReceived(
 ) {
   if (!userId) return;
   return await getAppointmentMessagesOfReceivedFromDB(userId, appointmentId);
+}
+
+export async function deleteAppointmentSentMessage(id:string){
+  await deleteAppointmentSentMessageFromDB(id)
+}
+export async function markReadAppointmentMessage(id:string){
+  await markReadAppointmentMessageInDB(id)
 }

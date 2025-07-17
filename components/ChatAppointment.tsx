@@ -61,7 +61,7 @@ export default function userIdChatAppointment({
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-80 bg-gray-50 dark:bg-gray-950">
+      <PopoverContent className="w-80 bg-gray-50 dark:bg-gray-950 p-0">
         <AppointmentChatContent sentMessages={sentMessages} receivedMessages={receivedMessages}/>
       </PopoverContent>
     </Popover>

@@ -125,13 +125,10 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
       ].includes(n.type);
     });
 
-    // Sort by read status (unread first), then by createdAt (newest first)
     return filteredNotifications.sort((a, b) => {
-      // Unread (false) comes before read (true)
       if (a.read !== b.read) {
         return a.read ? 1 : -1;
       }
-      // If read status is the same, sort by createdAt descending (newest first)
       return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
     });
   };
@@ -236,7 +233,6 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
                               variant="ghost"
                               size="icon"
                               onClick={() => handleMarkAsUnread(n.id)}
-                              className="hover:opacity-100"
                             >
                               <LucideMailOpen className="w-4 h-4" />
                             </Button>
@@ -245,7 +241,6 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
                               variant="ghost"
                               size="icon"
                               onClick={() => handleMarkAsRead(n.id)}
-                              className="hover:opacity-100"
                             >
                               <MailCheck className="w-4 h-4" />
                             </Button>
@@ -254,7 +249,6 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
                             variant="ghost"
                             size="icon"
                             onClick={() => handleDelete(n.id)}
-                            className="opacity-70 hover:opacity-100"
                           >
                             <Trash2 className="w-4 h-4 text-destructive" />
                           </Button>
@@ -317,7 +311,6 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
                               variant="ghost"
                               size="icon"
                               onClick={() => handleMarkAsUnread(n.id)}
-                              className="hover:opacity-100"
                             >
                               <LucideMailOpen className="w-4 h-4" />
                             </Button>
@@ -326,7 +319,6 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
                               variant="ghost"
                               size="icon"
                               onClick={() => handleMarkAsRead(n.id)}
-                              className="hover:opacity-100"
                             >
                               <MailCheck className="w-4 h-4" />
                             </Button>
@@ -335,7 +327,6 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
                             variant="ghost"
                             size="icon"
                             onClick={() => handleDelete(n.id)}
-                            className="opacity-70 hover:opacity-100"
                           >
                             <Trash2 className="w-4 h-4 text-destructive" />
                           </Button>

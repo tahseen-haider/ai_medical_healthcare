@@ -380,3 +380,30 @@ export async function getAppointmentMessagesOfReceivedFromDB(
     return [];
   }
 }
+
+export async function deleteAppointmentSentMessageFromDB(id:string){
+  try {
+    await prisma.appointmentMessage.delete({
+      where:{
+        id
+      }
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+export async function markReadAppointmentMessageInDB(id:string){
+  try {
+    await prisma.appointmentMessage.update({
+      where:{
+        id
+      },
+      data:{
+        is_read: true
+      }
+    })
+  } catch (error) {
+    console.log(error)
+  }
+}
