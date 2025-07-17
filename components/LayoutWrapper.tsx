@@ -5,6 +5,7 @@ import Navbar from "@/components/header/Navbar";
 import Footer from "@/components/footer/Footer";
 import { Toaster } from "sonner";
 import { UserType } from "@/lib/definitions";
+import ConnectionStatus from "./ConnectionStatus";
 
 interface LayoutWrapperProps {
   user: UserType | undefined;
@@ -22,6 +23,7 @@ export default function LayoutWrapper({ user, children }: LayoutWrapperProps) {
   return (
     <>
       <Toaster richColors position="top-center" />
+      <ConnectionStatus/>
       <Navbar user={user}/>
       <div className="h-16" />
       <div className="min-h-[60vh]">{children}</div>
