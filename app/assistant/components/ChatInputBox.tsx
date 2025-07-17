@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useRef } from "react";
-import { ArrowUpFromLine, Camera, Loader2 } from "lucide-react";
+import { ArrowUpFromLine, Loader2 } from "lucide-react";
 
 export default function ChatInputBox({
   isNewChat,

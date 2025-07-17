@@ -1,4 +1,4 @@
-import { AppointmentStatus, PrismaClient, UserRole } from "@prisma/client";
+import { AppointmentStatus, UserRole } from "@prisma/client";
 import {
   Table,
   TableBody,
@@ -11,7 +11,6 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { getAuthUserWithAppointments } from "@/actions";
 import Link from "next/link";
-import AppointmentMessages from "../doctor/appointments/components/AppointmentMessages";
 import MessagesSectionForList from "./components/MessagesSectionForList";
 
 export default async function AppointmentsPage() {

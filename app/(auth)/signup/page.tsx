@@ -4,7 +4,6 @@ import { signup } from "@/actions/auth.action";
 import { signInWithOAuth } from "@/lib/oauth-client";
 import FindUsHereSection from "@/components/FindUsHereSection";
 import LoadingScreen from "@/components/LoadingScreen";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 import { useActionState } from "react";
 import Image from "next/image";

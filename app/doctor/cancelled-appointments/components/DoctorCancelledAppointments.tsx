@@ -50,7 +50,7 @@ export default async function DoctorCancelledAppointmentsList({
               </TableRow>
             </TableHeader>
             <TableBody>
-              {appointments.map((appointment, index) => (
+              {appointments?.map((appointment, index) => (
                 <TableRow
                   key={appointment.id}
                   className="hover:bg-muted/50 transition-colors"

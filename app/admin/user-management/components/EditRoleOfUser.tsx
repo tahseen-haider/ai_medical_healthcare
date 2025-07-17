@@ -1,7 +1,6 @@
 "use client";
 
 import { changeUserRole } from "@/actions/admin.action";
-import LoadingScreen from "@/components/LoadingScreen";
 import {
   Select,
   SelectContent,

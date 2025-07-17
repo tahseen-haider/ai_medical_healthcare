@@ -4,7 +4,7 @@ import logo from "@/public/images/LOGO.png";
 import { ThemeToggler } from "./theme-toggler";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { Menu, X } from "lucide-react";
 import Btn from "../Button";
 import ProfileButton from "./ProfileButton";

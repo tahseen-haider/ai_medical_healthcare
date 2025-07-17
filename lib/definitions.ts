@@ -1,11 +1,9 @@
 import {
-  $Enums,
-  AppointmentMessage,
   AppointmentStatus,
   DoctorType,
   NotificationType,
 } from "@prisma/client/edge";
-import { number, z } from "zod";
+import { z } from "zod";
 
 export const SignupFormSchema = z.object({
   name: z

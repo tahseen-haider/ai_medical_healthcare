@@ -5,7 +5,6 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { cookies } from "next/headers";
 import { isUserAuthenticated } from "@/lib/session";
 import LayoutWrapper from "@/components/LayoutWrapper";
-import { getPfp } from "@/actions";
 import { getUser } from "@/lib/dal/user.dal";
 
 const roboto = Roboto({

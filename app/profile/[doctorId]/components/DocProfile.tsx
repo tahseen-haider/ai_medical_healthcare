@@ -14,9 +14,7 @@ import {
   GraduationCap,
   Building,
   DollarSign,
-  Edit3,
 } from "lucide-react";
-import Link from "next/link";
 import ProfilePageImage from "../../components/ProfilePageImage";
 
 export default function DoctorProfile({ user }: { user: UserType }) {

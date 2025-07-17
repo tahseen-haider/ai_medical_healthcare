@@ -1,4 +1,3 @@
-import { getAllDoctors } from "@/actions/admin.action";
 import React from "react";
 import AddNewDoctorBtn from "./Btns/AddNewDoctorBtn";
 import DeleteDoctorBtn from "./Btns/DeleteDoctorBtn";

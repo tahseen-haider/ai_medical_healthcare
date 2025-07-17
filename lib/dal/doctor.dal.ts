@@ -64,8 +64,8 @@ export async function getDoctorsForLoadMoreFromDB(page: number, limit: number) {
 
     return { doctors, totalPages: Math.ceil(totalDoctors / limit) };
   } catch (error) {
-    console.error("Error fetching doctors from DB:", error);
-    throw new Error("Failed to fetch doctors");
+    console.error("Error in getDoctorsForLoadMoreFromDB:", error);
+    return { doctors: [], totalPages: 0 };
   }
 }
 
@@ -112,8 +112,8 @@ export async function getDoctorsForDoctorSectionFromDB() {
 
     return doctors;
   } catch (error) {
-    console.error("Error fetching doctors for doctor section:", error);
-    throw new Error("Failed to fetch doctors for doctor section");
+    console.error("Error in getDoctorsForDoctorSectionFromDB:", error);
+    return [];
   }
 }
 
@@ -129,13 +129,13 @@ export const getDoctorFromDB = async (
         doctorProfile: true,
       },
     });
+
     if (!user) return;
 
-    const { password, token, ...restUser } = user || {};
-
+    const { password, token, ...restUser } = user;
     return restUser;
   } catch (error) {
-    console.log(error);
+    console.error("Error in getDoctorFromDB:", error);
     return;
   }
 };
@@ -173,7 +173,8 @@ export const getNewAppointmentsInfoFromDB = async (doctorId: string) => {
 
     return final;
   } catch (error) {
-    throw new Error(`Failed to get new appointments info: ${error}`);
+    console.error("Error in getNewAppointmentsInfoFromDB:", error);
+    return [];
   }
 };
 
@@ -223,9 +224,15 @@ export const getAllAppointmentsForDoctorFromDB = async (
       totalPages: Math.ceil(count / limit),
     };
   } catch (error) {
-    throw new Error(`Failed to get all appointments for doctor: ${error}`);
+    console.error("Error in getAllAppointmentsForDoctorFromDB:", error);
+    return {
+      appointments: [],
+      count: 0,
+      totalPages: 0,
+    };
   }
 };
+
 
 export const getOutOfDateAppointmentsFromDB = async (
   page: number,
@@ -235,7 +242,6 @@ export const getOutOfDateAppointmentsFromDB = async (
   try {
     const now = new Date();
 
-    // Get all appointments for doctor (limit + buffer for filtering)
     const allAppointments = await prisma.appointments.findMany({
       where: {
         doctorId,
@@ -274,20 +280,24 @@ export const getOutOfDateAppointmentsFromDB = async (
 
     const outOfDateAppointments = allAppointments
       .map((appointment) => {
-        const date = new Date(appointment.preferredDate); // e.g., 2025-07-15
-
-        const [time, modifier] = appointment.preferredTime.split(" ");
-        let [hours, minutes] = time.split(":").map(Number);
-
-        if (modifier === "PM" && hours < 12) hours += 12;
-        if (modifier === "AM" && hours === 12) hours = 0;
-
-        date.setHours(hours, minutes, 0, 0);
-
-        return { ...appointment, fullDateTime: date };
+        try {
+          const date = new Date(appointment.preferredDate);
+          const [time, modifier] = appointment.preferredTime.split(" ");
+          let [hours, minutes] = time.split(":").map(Number);
+          if (modifier === "PM" && hours < 12) hours += 12;
+          if (modifier === "AM" && hours === 12) hours = 0;
+          date.setHours(hours, minutes, 0, 0);
+          return { ...appointment, fullDateTime: date };
+        } catch (innerError) {
+          console.error("Failed to parse appointment date/time:", appointment.id, innerError);
+          return null;
+        }
       })
-      .filter((appointment) => appointment.fullDateTime < now)
-      .slice(0, limit); // apply pagination after filtering
+      .filter(
+        (appointment): appointment is typeof allAppointments[0] & { fullDateTime: Date } =>
+          appointment !== null && appointment.fullDateTime < now
+      )
+      .slice(0, limit);
 
     return {
       appointments: outOfDateAppointments,
@@ -295,9 +305,11 @@ export const getOutOfDateAppointmentsFromDB = async (
       totalPages: Math.ceil(outOfDateAppointments.length / limit),
     };
   } catch (error) {
-    throw new Error(`Failed to get out-of-date appointments: ${error}`);
+    console.error("Error in getOutOfDateAppointmentsFromDB:", error);
+    return;
   }
 };
+
 
 export const getAllUpcomingAppointmentsForDoctorFromDB = async (
   page: number,
@@ -307,7 +319,6 @@ export const getAllUpcomingAppointmentsForDoctorFromDB = async (
   try {
     const now = new Date();
 
-    // Fetch more than needed in case some get filtered out
     const allAppointments = await prisma.appointments.findMany({
       where: {
         doctorId,
@@ -319,7 +330,7 @@ export const getAllUpcomingAppointmentsForDoctorFromDB = async (
         preferredDate: "asc",
       },
       skip: (page - 1) * limit,
-      take: limit * 5, // over-fetch buffer
+      take: limit * 5,
       select: {
         id: true,
         fullname: true,
@@ -369,20 +380,27 @@ export const getAllUpcomingAppointmentsForDoctorFromDB = async (
 
     const upcomingAppointments = allAppointments
       .map((appointment) => {
-        const date = new Date(appointment.preferredDate);
+        try {
+          const date = new Date(appointment.preferredDate);
+          const [time, modifier] = appointment.preferredTime.split(" ");
+          let [hours, minutes] = time.split(":").map(Number);
 
-        const [time, modifier] = appointment.preferredTime.split(" ");
-        let [hours, minutes] = time.split(":").map(Number);
+          if (modifier === "PM" && hours < 12) hours += 12;
+          if (modifier === "AM" && hours === 12) hours = 0;
 
-        if (modifier === "PM" && hours < 12) hours += 12;
-        if (modifier === "AM" && hours === 12) hours = 0;
+          date.setHours(hours, minutes, 0, 0);
 
-        date.setHours(hours, minutes, 0, 0);
-
-        return { ...appointment, fullDateTime: date };
+          return { ...appointment, fullDateTime: date };
+        } catch (innerError) {
+          console.error("Failed to parse appointment:", appointment.id, innerError);
+          return null;
+        }
       })
-      .filter((appointment) => appointment.fullDateTime >= now)
-      .slice(0, limit); // Apply pagination after filtering
+      .filter(
+        (appointment): appointment is typeof allAppointments[0] & { fullDateTime: Date } =>
+          appointment !== null && appointment.fullDateTime >= now
+      )
+      .slice(0, limit);
 
     return {
       appointments: upcomingAppointments,
@@ -390,9 +408,11 @@ export const getAllUpcomingAppointmentsForDoctorFromDB = async (
       totalPages: Math.ceil(upcomingAppointments.length / limit),
     };
   } catch (error) {
-    throw new Error(`Failed to get upcoming appointments: ${error}`);
+    console.error("Error in getAllUpcomingAppointmentsForDoctorFromDB:", error);
+    return;
   }
 };
+
 
 export const getCancelledAppointmentsForDoctorFromDB = async (
   page: number,
@@ -412,14 +432,15 @@ export const getCancelledAppointmentsForDoctorFromDB = async (
           preferredDate: "asc",
         },
         select: {
-          fullname: true,
           id: true,
+          fullname: true,
           email: true,
           preferredDate: true,
           preferredTime: true,
           reasonForVisit: true,
           doctorId: true,
           status: true,
+          phone: true,
           doctor: {
             select: {
               name: true,
@@ -431,7 +452,6 @@ export const getCancelledAppointmentsForDoctorFromDB = async (
               name: true,
             },
           },
-          phone: true,
         },
       }),
       prisma.appointments.count({
@@ -448,11 +468,11 @@ export const getCancelledAppointmentsForDoctorFromDB = async (
       totalPages: Math.ceil(count / limit),
     };
   } catch (error) {
-    throw new Error(
-      `Failed to get cancelled appointments for doctor: ${error}`
-    );
+    console.error("Error in getCancelledAppointmentsForDoctorFromDB:", error);
+    return;
   }
 };
+
 
 const getStatusMessage = (
   status: AppointmentStatus,
@@ -505,13 +525,13 @@ export const changeAppointmentStatusFromDB = async (
   currentStatus: AppointmentStatus
 ) => {
   try {
-    let app = undefined;
+    let app;
 
     if (status === "COMPLETED") {
       app = await prisma.appointments.update({
         where: { id: appointmentId },
         data: {
-          updatedAt: new Date(Date.now()),
+          updatedAt: new Date(),
           patient: {
             update: {
               lastCheckUp: new Date(),
@@ -524,91 +544,82 @@ export const changeAppointmentStatusFromDB = async (
         where: { id: appointmentId },
         data: {
           status,
-          updatedAt: new Date(Date.now()),
+          updatedAt: new Date(),
         },
       });
     }
 
-    if (app) {
-      const admins = await prisma.user.findMany({
-        where: { role: "admin" },
-      });
-
-      const doctor = app.doctorId
-        ? await prisma.user.findUnique({ where: { id: app.doctorId } })
-        : null;
-
-      const doctorName = doctor?.name ?? "Unknown Doctor";
-
-      const message = getStatusMessage(
-        status,
-        currentStatus,
-        doctorName,
-        app.fullname,
-        app.preferredDate
-      );
-
-      // appointments for patient
-      await prisma.notification.create({
-        data: {
-          userId: app.patientId!,
-          title: "Appointment Status Changed By Doctor",
-          message,
-          type: "APPOINTMENT_UPDATE",
-          ...(status === "PAYMENT_PENDING"
-            ? { link: "/your-appointments" }
-            : {}),
-        },
-      });
-
-      // appointments for all admins
-      await Promise.all(
-        admins.map((admin) =>
-          prisma.notification.create({
-            data: {
-              userId: admin.id,
-              title: "Appointment Status Changed By Doctor",
-              message,
-              type: "APPOINTMENT_UPDATE",
-            },
-          })
-        )
-      );
+    if (!app) {
+      return;
     }
+
+    const admins = await prisma.user.findMany({
+      where: { role: "admin" },
+    });
+
+    const doctor = app.doctorId
+      ? await prisma.user.findUnique({ where: { id: app.doctorId } })
+      : null;
+
+    const doctorName = doctor?.name ?? "Unknown Doctor";
+
+    const message = getStatusMessage(
+      status,
+      currentStatus,
+      doctorName,
+      app.fullname,
+      app.preferredDate
+    );
+
+    // Notify patient
+    await prisma.notification.create({
+      data: {
+        userId: app.patientId!,
+        title: "Appointment Status Changed By Doctor",
+        message,
+        type: "APPOINTMENT_UPDATE",
+        ...(status === "PAYMENT_PENDING"
+          ? { link: "/your-appointments" }
+          : {}),
+      },
+    });
+
+    // Notify all admins
+    await Promise.all(
+      admins.map((admin) =>
+        prisma.notification.create({
+          data: {
+            userId: admin.id,
+            title: "Appointment Status Changed By Doctor",
+            message,
+            type: "APPOINTMENT_UPDATE",
+          },
+        })
+      )
+    );
 
     return { success: true };
   } catch (error) {
     console.error("Failed to change appointment status:", error);
-    throw new Error(`Failed to change appointment status`);
+    return;
   }
 };
+
 
 export const getDoctorDashboardNumbersFromDB = async (doctorId: string) => {
   try {
     const [pending, confirmed, completed, cancelled] = await Promise.all([
       prisma.appointments.count({
-        where: {
-          doctorId,
-          status: "PENDING",
-        },
+        where: { doctorId, status: "PENDING" },
       }),
       prisma.appointments.count({
-        where: {
-          doctorId,
-          status: "CONFIRMED",
-        },
+        where: { doctorId, status: "CONFIRMED" },
       }),
       prisma.appointments.count({
-        where: {
-          doctorId,
-          status: "COMPLETED",
-        },
+        where: { doctorId, status: "COMPLETED" },
       }),
       prisma.appointments.count({
-        where: {
-          doctorId,
-          status: "CANCELLED",
-        },
+        where: { doctorId, status: "CANCELLED" },
       }),
     ]);
 
@@ -619,26 +630,28 @@ export const getDoctorDashboardNumbersFromDB = async (doctorId: string) => {
       cancelled,
     };
   } catch (error) {
-    throw new Error(`Failed to get doctor dashboard numbers: ${error}`);
+    console.error("Error fetching dashboard numbers:", error);
+    return;
   }
 };
+
 
 export const getAllAppointmentsForDashboardDoctorFromDB = async (
   doctorId: string
 ) => {
   try {
     return await prisma.appointments.findMany({
-      where: {
-        doctorId,
-      },
+      where: { doctorId },
       orderBy: {
         createdAt: "desc",
       },
     });
   } catch (error) {
-    throw new Error(`Failed to get all dashboard appointments: ${error}`);
+    console.error("Error fetching all doctor dashboard appointments:", error);
+    return;
   }
 };
+
 
 export const getAllApprovedDoctorsFromDB = async () => {
   try {
@@ -659,9 +672,11 @@ export const getAllApprovedDoctorsFromDB = async () => {
       },
     });
   } catch (error) {
-    throw new Error(`Failed to get approved doctors: ${error}`);
+    console.error("Error fetching approved doctors:", error);
+    return;
   }
 };
+
 
 export const updateDoctorProfileInDB = async (data: {
   id: string;
@@ -712,14 +727,17 @@ export const updateDoctorProfileInDB = async (data: {
       select: { pfp: true },
     });
 
+    // Optional: Safely delete old pfp from Cloudinary
     if (existingUser?.pfp && existingUser.pfp !== pfp) {
-      await cloudinary.uploader.destroy(existingUser.pfp);
+      try {
+        await cloudinary.uploader.destroy(existingUser.pfp);
+      } catch (cloudErr) {
+        console.error("Failed to delete old profile picture from Cloudinary:", cloudErr);
+      }
     }
 
     return await prisma.user.update({
-      where: {
-        id,
-      },
+      where: { id },
       data: {
         name,
         email,
@@ -744,6 +762,7 @@ export const updateDoctorProfileInDB = async (data: {
       },
     });
   } catch (error) {
-    throw new Error(`Failed to update doctor profile: ${error}`);
+    console.error("Error updating doctor profile:", error);
+    return;
   }
 };

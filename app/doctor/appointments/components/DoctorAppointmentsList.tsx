@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import AppointmentMessages from "./AppointmentMessages";
 import MessageSectionOfList from "./MessageSectionOfList";
 
 export default async function DoctorAppointmentsList({

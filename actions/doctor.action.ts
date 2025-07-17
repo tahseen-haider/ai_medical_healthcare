@@ -14,6 +14,7 @@ import {
   updateDoctorProfileInDB,
 } from "@/lib/dal/doctor.dal";
 import { AppointmentStatus, DoctorType } from "@prisma/client/edge";
+import { count } from "console";
 import { revalidatePath } from "next/cache";
 
 export const getNewAppointmentsInfo = async (doctorId: string) => {
@@ -39,6 +40,12 @@ export const getAllUpcomingAppointmentsForDoctor = async (
 ) => {
   const res = await getAllUpcomingAppointmentsForDoctorFromDB(page, limit, id);
 
+  if (!res)
+    return {
+      appointments: [],
+      count: 0,
+      totalPages: 0,
+    };
   return {
     appointments: res.appointments,
     count: res.count,
@@ -53,6 +60,12 @@ export const getOutOfDateAppointmentsForDoctor = async (
 ) => {
   const res = await getOutOfDateAppointmentsFromDB(page, limit, id);
 
+  if (!res) return {
+    appointments: [],
+    count: 0,
+    totalPages: 0,
+  };;
+
   return {
     appointments: res.appointments,
     count: res.count,
@@ -66,6 +79,11 @@ export const getCancelledAppointmentsForDoctor = async (
   id: string
 ) => {
   const res = await getCancelledAppointmentsForDoctorFromDB(page, limit, id);
+  if (!res) return{
+    appointment: [],
+    count: 0,
+    totalPages: 0
+  };
   return {
     appointments: res.appointments,
     count: res.count,

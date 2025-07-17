@@ -1,5 +1,4 @@
 import {
-  getInquiries,
   getInquiriesForPagination,
 } from "@/actions/admin.action";
 import MessageReadButton from "./Btns/MessageReadButton";

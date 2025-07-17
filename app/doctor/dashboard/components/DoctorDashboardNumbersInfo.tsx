@@ -1,13 +1,5 @@
-import { getAdminDashboardNumbers } from "@/actions/admin.action";
 import { getDoctorDashboardNumbers } from "@/actions/doctor.action";
-import { getUserIdnRoleIfAuthenticated } from "@/lib/session";
-import {
-  AlarmClock,
-  AlarmClockCheck,
-  Ban,
-  CircleCheckBig,
-  ClockFading,
-} from "lucide-react";
+import { AlarmClock, AlarmClockCheck, Ban, CircleCheckBig } from "lucide-react";
 import React from "react";
 
 export default async function DoctorDashboardNumbersInfo({
@@ -16,10 +8,22 @@ export default async function DoctorDashboardNumbersInfo({
   userId: string;
 }) {
   const info = await getDoctorDashboardNumbers(userId!);
-  const pending = info.pending < 10 ? `0${info.pending}` : info.pending;
-  const confirmed = info.confirmed < 10 ? `0${info.confirmed}` : info.confirmed;
-  const completed = info.completed < 10 ? `0${info.completed}` : info.completed;
-  const cancelled = info.cancelled < 10 ? `0${info.cancelled}` : info.cancelled;
+  const pending =
+    info?.pending != null && info.pending < 10
+      ? `0${info.pending}`
+      : info?.pending ?? "00";
+  const confirmed =
+    info?.confirmed != null && info.confirmed < 10
+      ? `0${info.confirmed}`
+      : info?.confirmed ?? "00";
+  const completed =
+    info?.completed != null && info.completed < 10
+      ? `0${info.completed}`
+      : info?.completed ?? "00";
+  const cancelled =
+    info?.cancelled != null && info.cancelled < 10
+      ? `0${info.cancelled}`
+      : info?.cancelled ?? "00";
   return (
     <>
       <div className="flex gap-4 h-1/2 w-full">

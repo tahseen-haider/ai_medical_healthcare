@@ -1,4 +1,7 @@
-import { getAllAppointments, getAllApprovedDoctors } from "@/actions/admin.action";
+import {
+  getAllAppointments,
+  getAllApprovedDoctors,
+} from "@/actions/admin.action";
 import DeleteAppointmentBtn from "./Btns/DeleteAppointmentBtn";
 import EditAppointmentDoctor from "./EditAppointmentDoctor";
 
@@ -11,7 +14,7 @@ export default async function AppointmentsList({
   const limit = 10;
 
   const { appointments, totalPages } = await getAllAppointments(page, limit);
-  const doctors = await getAllApprovedDoctors();
+  const doctors = (await getAllApprovedDoctors()) ?? [];
 
   return (
     <div className="w-full py-4 bg-white dark:bg-dark-4 shadow-dark dark:shadow-light rounded-md p-3 min-h-[calc(100vh-170px)] flex flex-col justify-between">
@@ -39,7 +42,10 @@ export default async function AppointmentsList({
                 <th scope="col" className="text-left font-semibold px-3">
                   Visit Reason
                 </th>
-                <th scope="col" className="text-left font-semibold px-3 min-w-[100px]">
+                <th
+                  scope="col"
+                  className="text-left font-semibold px-3 min-w-[100px]"
+                >
                   Visit Time
                 </th>
                 <th scope="col" className="text-left font-semibold px-3">
@@ -69,7 +75,9 @@ export default async function AppointmentsList({
                   </td>
                   <td className="px-3">{appointment.reasonForVisit}</td>
                   <td className="px-3">{appointment.preferredTime}</td>
-                  <td className="px-3">{appointment.preferredDate.toLocaleDateString("en-GB")}</td>
+                  <td className="px-3">
+                    {appointment.preferredDate.toLocaleDateString("en-GB")}
+                  </td>
                   <td className="px-3">{appointment.status}</td>
                   <td className="px-1">
                     <DeleteAppointmentBtn appId={appointment.id} />

@@ -58,6 +58,7 @@ export const contactUs = async (
       ...validatedFields.data,
     });
 
+    if (!submitted) return;
     return {
       submitted: {
         fullname: submitted.fullname,
@@ -268,13 +269,26 @@ export async function getTokensUsed(userId: string) {
 export async function getUserNotifications(
   userId: string
 ): Promise<NotificationItem[]> {
-  return getUserNotificationsFromDB(userId);
+  const res = await getUserNotificationsFromDB(userId);
+  if (!(res.length > 0)) return [];
+  return res;
 }
 
 export async function markNotificationAsRead(
   notificationId: string
 ): Promise<NotificationItem> {
-  return markNotificationAsReadInDB(notificationId);
+  const res = await markNotificationAsReadInDB(notificationId);
+  if (!res)
+    return {
+      id: "",
+      userId: "",
+      type: NotificationType.APPOINTMENT_UPDATE,
+      title: "",
+      message: "",
+      read: true,
+      createdAt: new Date(),
+    };
+  return res;
 }
 export async function markAllNotificationsAsRead(userId: string) {
   await markAllNotificationsAsReadInDB(userId);
@@ -335,8 +349,9 @@ export async function getAppointmentMessagesOfSenderReceiver(
   );
 
   return {
-    receivedMessages, sentMessages
-  }
+    receivedMessages,
+    sentMessages,
+  };
 }
 
 export async function getAppointmentMessagesOfSender(

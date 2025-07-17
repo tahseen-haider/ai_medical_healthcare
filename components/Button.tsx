@@ -1,7 +1,7 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import React from "react";
-import clsx from "clsx"; // Optional, for cleaner class merging
+import clsx from "clsx";
 
 export default function Btn({
   children,

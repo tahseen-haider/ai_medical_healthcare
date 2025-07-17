@@ -1,6 +1,5 @@
 "use client";
 import Btn from "./Button";
-import { redirect } from "next/navigation";
 
 export default function LearnMoreBtn() {
   return (

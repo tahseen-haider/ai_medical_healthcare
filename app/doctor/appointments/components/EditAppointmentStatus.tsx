@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { AppointmentStatus, UserRole } from "@prisma/client/edge";
+import { AppointmentStatus } from "@prisma/client/edge";
 import { Check, X } from "lucide-react";
 import { useActionState, useEffect, useState } from "react";
 
