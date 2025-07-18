@@ -5,7 +5,7 @@ import Btn from "@/components/Button";
 import LoadingScreen from "@/components/LoadingScreen";
 import PopUpCard from "@/components/PopUpCard";
 import { DatePickerWithPresets } from "@/components/ui/DatePicker";
-import { VisitReasonPicker } from "@/components/ui/ReasonForVisitPicker";
+import { VisitReasonPicker } from "@/components/ReasonForVisitPicker";
 import { TimePicker } from "@/components/ui/TimePicker";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
