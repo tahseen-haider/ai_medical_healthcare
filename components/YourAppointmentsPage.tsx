@@ -12,7 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Badge } from "./ui/badge";
-import MessagesSectionForList from "@/app/your-appointments/components/MessagesSectionForList";
+import MessagesSectionForList from "@/components/MessagesSectionForList";
 
 export default async function YourAppointmentsPage({
   paramPage,

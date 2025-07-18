@@ -14,7 +14,6 @@ import {
   getAppointmentMessagesCountFromDB,
   getAppointmentMessagesOfReceivedFromDB,
   getAppointmentMessagesOfSentFromDB,
-  getAppointmentReceivedUnreadMessagesCountFromDB,
   getAuthUserWithAppointmentsAndUnreadReceivedMessagesFromDB,
   getTokensUsedFromDB,
   getUserNotificationsFromDB,
@@ -377,13 +376,4 @@ export async function deleteAppointmentSentMessage(id:string){
 }
 export async function markReadAppointmentMessage(id:string){
   await markReadAppointmentMessageInDB(id)
-}
-
-export async function getAppointmentReceivedUnreadMessagesCount(
-  userId: string | undefined,
-  appointmentId: string
-) {
-  if (!userId) return;
-  const count = await getAppointmentReceivedUnreadMessagesCountFromDB(userId, appointmentId);
-  return count;
 }

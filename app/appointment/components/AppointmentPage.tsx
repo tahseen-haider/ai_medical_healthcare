@@ -13,6 +13,7 @@ import { Calendar, User, Mail, Phone, Clock, Stethoscope } from "lucide-react";
 import { useActionState, useEffect, useState } from "react";
 import SelectDoctor from "./SelectDoctor";
 import type { $Enums } from "@prisma/client/edge";
+import { redirect } from "next/navigation";
 
 export default function AppointmentPage({
   patientId,
@@ -204,9 +205,7 @@ export default function AppointmentPage({
                       name="preferredDate"
                       hidden
                       readOnly
-                      value={
-                        selectedDate.toLocaleDateString('en-CA')
-                      }
+                      value={selectedDate.toLocaleDateString("en-CA")}
                     />
                     {state?.errors.preferredDate && (
                       <p className="text-sm text-red-500">
@@ -281,7 +280,13 @@ export default function AppointmentPage({
                 Thank you for your request. Our team will reach out shortly.
               </p>
             </div>
-            <Btn onClick={() => setSubmitted(false)} className="w-full">
+            <Btn
+              onClick={() => {
+                setSubmitted(false);
+                redirect("/your-appointments")
+              }}
+              className="w-full"
+            >
               Close
             </Btn>
           </PopUpCard>

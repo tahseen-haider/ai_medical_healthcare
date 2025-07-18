@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import EditAppointmentStatus from "../../appointments/components/EditAppointmentStatus";
+import EditAppointmentStatus from "../../components/EditAppointmentStatus";
 
 export default async function DoctorCancelledAppointmentsList({
   paramPage,

@@ -423,30 +423,6 @@ export async function getAppointmentMessagesCountFromDB(userId: string) {
   }
 }
 
-export async function getAppointmentReceivedUnreadMessagesCountFromDB(
-  userId: string,
-  appointmentId: string
-) {
-  try {
-    const res = await prisma.appointmentMessage.count({
-      where: {
-        receiverId: userId,
-        appointmentId,
-        is_read: false,
-        appointment: {
-          NOT: {
-            status: "CANCELLED",
-          },
-        },
-      },
-    });
-    return res;
-  } catch (error) {
-    console.error("Failed to count unread received messages:", error);
-    return 0;
-  }
-}
-
 export async function getAppointmentMessagesOfSentFromDB(
   userId: string,
   appointmentId: string
