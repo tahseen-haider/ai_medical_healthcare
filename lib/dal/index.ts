@@ -4,6 +4,7 @@ import { cache } from "react";
 import { prisma } from "../db/prisma";
 import { ContactFormType } from "../definitions";
 import { getUserIdnRoleIfAuthenticated } from "../session";
+import { AppointmentStatus, UserRole } from "@prisma/client";
 
 export const setAppointmentToDB = cache(
   async (data: {
@@ -258,20 +259,107 @@ export async function markAllNotificationsAsReadInDB(userId: string) {
   }
 }
 
-export async function getAuthUserWithAppointmentsFromDB() {
+export type AppointmentWithUnreadFlag = {
+  id: string;
+  updatedAt: Date;
+  email: string;
+  phone: string | null;
+  createdAt: Date;
+  fullname: string;
+  reasonForVisit: string;
+  preferredDate: Date;
+  preferredTime: string;
+  status: string;
+  doctorId: string | null;
+  patientId: string | null;
+  appointmentMessages: { id: string }[];
+  hasUnreadReceivedMessages: boolean;
+};
+
+type AuthUserWithAppointmentsAndMessages = {
+  role: UserRole;
+  appointmentsAsPatient: AppointmentWithUnreadFlag[];
+  appointmentsAsDoctor: AppointmentWithUnreadFlag[];
+  page: number;
+  totalPages: number;
+};
+
+export async function getAuthUserWithAppointmentsAndUnreadReceivedMessagesFromDB(
+  page: number,
+  limit: number
+): Promise<AuthUserWithAppointmentsAndMessages | null> {
+  const skip = (page - 1) * limit;
+
   try {
     const session = await getUserIdnRoleIfAuthenticated();
+    if (!session?.userId) return null;
+
+    // Fetch total counts first
+    const [patientCount, doctorCount] = await Promise.all([
+      prisma.appointments.count({
+        where: { patientId: session.userId },
+      }),
+      prisma.appointments.count({
+        where: { doctorId: session.userId },
+      }),
+    ]);
+
+    const totalCount = patientCount + doctorCount;
+    const totalPages = Math.ceil(totalCount / limit);
+
+    // Fetch paginated appointments
     const user = await prisma.user.findUnique({
-      where: { id: session?.userId },
-      include: {
-        appointmentsAsPatient: { orderBy: { updatedAt: "desc" } },
-        appointmentsAsDoctor: { orderBy: { updatedAt: "desc" } },
+      where: { id: session.userId },
+      select: {
+        role: true,
+        appointmentsAsPatient: {
+          orderBy: { updatedAt: "desc" },
+          skip,
+          take: limit,
+        },
+        appointmentsAsDoctor: {
+          orderBy: { updatedAt: "desc" },
+          skip,
+          take: limit,
+        },
       },
     });
-    return user;
+
+    if (!user) return null;
+
+    const appointmentIds = [
+      ...user.appointmentsAsPatient.map((a) => a.id),
+      ...user.appointmentsAsDoctor.map((a) => a.id),
+    ];
+
+    // Fetch unread messages
+    const unreadMessages = await prisma.appointmentMessage.findMany({
+      where: {
+        appointmentId: { in: appointmentIds },
+        is_read: false,
+        receiverId: session.userId,
+      },
+      select: { appointmentId: true },
+    });
+
+    const unreadMap = new Set(unreadMessages.map((m) => m.appointmentId));
+
+    const processAppointments = (appointments: any[]) =>
+      appointments.map((appointment) => ({
+        ...appointment,
+        hasUnreadReceivedMessages: unreadMap.has(appointment.id),
+      }));
+
+    return {
+      role: user.role,
+      appointmentsAsPatient: processAppointments(user.appointmentsAsPatient),
+      appointmentsAsDoctor: processAppointments(user.appointmentsAsDoctor),
+      page,
+      totalPages,
+    };
   } catch (error) {
     console.error("Failed to get authenticated user with appointments:", error);
-    return;
+    return null;
   }
 }
 
@@ -335,6 +423,30 @@ export async function getAppointmentMessagesCountFromDB(userId: string) {
   }
 }
 
+export async function getAppointmentReceivedUnreadMessagesCountFromDB(
+  userId: string,
+  appointmentId: string
+) {
+  try {
+    const res = await prisma.appointmentMessage.count({
+      where: {
+        receiverId: userId,
+        appointmentId,
+        is_read: false,
+        appointment: {
+          NOT: {
+            status: "CANCELLED",
+          },
+        },
+      },
+    });
+    return res;
+  } catch (error) {
+    console.error("Failed to count unread received messages:", error);
+    return 0;
+  }
+}
+
 export async function getAppointmentMessagesOfSentFromDB(
   userId: string,
   appointmentId: string
@@ -365,7 +477,7 @@ export async function getAppointmentMessagesOfReceivedFromDB(
   try {
     const res = await prisma.appointmentMessage.findMany({
       where: {
-        receiverId:userId,
+        receiverId: userId,
         appointmentId,
         appointment: {
           NOT: {
@@ -381,29 +493,29 @@ export async function getAppointmentMessagesOfReceivedFromDB(
   }
 }
 
-export async function deleteAppointmentSentMessageFromDB(id:string){
+export async function deleteAppointmentSentMessageFromDB(id: string) {
   try {
     await prisma.appointmentMessage.delete({
-      where:{
-        id
-      }
-    })
+      where: {
+        id,
+      },
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 }
 
-export async function markReadAppointmentMessageInDB(id:string){
+export async function markReadAppointmentMessageInDB(id: string) {
   try {
     await prisma.appointmentMessage.update({
-      where:{
-        id
+      where: {
+        id,
       },
-      data:{
-        is_read: true
-      }
-    })
+      data: {
+        is_read: true,
+      },
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 }

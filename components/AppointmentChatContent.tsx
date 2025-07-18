@@ -1,7 +1,7 @@
 "use client";
 
 import type React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { LucideMailOpen, MailCheck, Trash2 } from "lucide-react";
 import { Badge } from "./ui/badge";
 import {
   deleteAppointmentSentMessage,
+  getAppointmentMessagesOfSentReceived,
   markReadAppointmentMessage,
 } from "@/actions";
 
@@ -55,25 +56,46 @@ function formatMessage(
 }
 
 export default function AppointmentChatContent({
-  receivedMessages,
-  sentMessages,
+  appData,
 }: {
-  receivedMessages: AppointmentMessage | undefined;
-  sentMessages: AppointmentMessage | undefined;
+  appData: {
+    userId: string | undefined;
+    appointmentId: string;
+  };
 }) {
+  const { userId, appointmentId } = appData;
+
+  const [isLoading, setIsLoading] = useState(false);
+  
   const [localReceivedMessages, setLocalReceivedMessages] =
-    useState<AppointmentMessage>(receivedMessages || []);
+  useState<AppointmentMessage>([]);
   const [localSentMessages, setLocalSentMessages] =
-    useState<AppointmentMessage>(sentMessages || []);
-
-  // Update local state when props change
+  useState<AppointmentMessage>([]);
+  
   useEffect(() => {
-    setLocalReceivedMessages(receivedMessages || []);
-  }, [receivedMessages]);
+    if (!userId || !appointmentId) return;
 
-  useEffect(() => {
-    setLocalSentMessages(sentMessages || []);
-  }, [sentMessages]);
+    const fetchMessages = async () => {
+      setIsLoading(true);
+      try {
+        const fetchedData = await getAppointmentMessagesOfSentReceived(
+          userId,
+          appointmentId
+        );
+
+        setLocalReceivedMessages(fetchedData.receivedMessages || []);
+        setLocalSentMessages(fetchedData.sentMessages || []);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Failed to fetch appointment messages:", error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchMessages();
+  }, [userId, appointmentId]);
+
 
   // Handlers
 
@@ -98,6 +120,16 @@ export default function AppointmentChatContent({
     messages: AppointmentMessage,
     type: "sent" | "received"
   ) => {
+    if (isLoading) {
+      return (
+        <div className="h-60 flex items-center justify-center">
+          <span className="text-gray-500 dark:text-gray-300 animate-pulse">
+            Loading messages...
+          </span>
+        </div>
+      );
+    }
+
     if (!messages || messages.length === 0) {
       return (
         <div className="p-6 text-center text-gray-500 h-64">
@@ -115,7 +147,7 @@ export default function AppointmentChatContent({
     });
 
     return (
-      <ScrollArea className="h-64 px-2 py-2">
+      <ScrollArea className="h-60 px-2 py-2">
         <div className="grid gap-2 ">
           {sortedMessages.map((message) => (
             <div
@@ -222,10 +254,10 @@ export default function AppointmentChatContent({
           Sent
         </TabsTrigger>
       </TabsList>
-      <TabsContent className="" value="received">
+      <TabsContent value="received">
         {renderMessages(localReceivedMessages, "received")}
       </TabsContent>
-      <TabsContent className="" value="sent">
+      <TabsContent value="sent">
         {renderMessages(localSentMessages, "sent")}
       </TabsContent>
     </Tabs>

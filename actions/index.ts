@@ -14,7 +14,8 @@ import {
   getAppointmentMessagesCountFromDB,
   getAppointmentMessagesOfReceivedFromDB,
   getAppointmentMessagesOfSentFromDB,
-  getAuthUserWithAppointmentsFromDB,
+  getAppointmentReceivedUnreadMessagesCountFromDB,
+  getAuthUserWithAppointmentsAndUnreadReceivedMessagesFromDB,
   getTokensUsedFromDB,
   getUserNotificationsFromDB,
   markAllNotificationsAsReadInDB,
@@ -296,8 +297,8 @@ export async function markAllNotificationsAsRead(userId: string) {
   await markAllNotificationsAsReadInDB(userId);
 }
 
-export async function getAuthUserWithAppointments() {
-  return getAuthUserWithAppointmentsFromDB();
+export async function getAuthUserWithAppointmentsAndUnreadReceivedMessages(page:number, limit:number) {
+  return getAuthUserWithAppointmentsAndUnreadReceivedMessagesFromDB(page, limit);
 }
 
 export async function deleteNotification(id: string) {
@@ -376,4 +377,13 @@ export async function deleteAppointmentSentMessage(id:string){
 }
 export async function markReadAppointmentMessage(id:string){
   await markReadAppointmentMessageInDB(id)
+}
+
+export async function getAppointmentReceivedUnreadMessagesCount(
+  userId: string | undefined,
+  appointmentId: string
+) {
+  if (!userId) return;
+  const count = await getAppointmentReceivedUnreadMessagesCountFromDB(userId, appointmentId);
+  return count;
 }

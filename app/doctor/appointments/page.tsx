@@ -1,5 +1,5 @@
 import React from "react";
-import DoctorAppointmentsList from "./components/DoctorAppointmentsList";
+import YourAppointmentsPage from "@/components/YourAppointmentsPage";
 
 export default async function page({
   searchParams,
@@ -12,7 +12,7 @@ export default async function page({
     <main className="w-full flex justify-center">
       <section className="flex flex-col gap-4 p-6 w-full max-w-[1920px]">
         {/* Doctors Pagination List */}
-        <DoctorAppointmentsList paramPage={paramPage} />
+        <YourAppointmentsPage paramPage={paramPage}/>
       </section>
     </main>
   );

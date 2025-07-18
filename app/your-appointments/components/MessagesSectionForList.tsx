@@ -1,41 +1,40 @@
 "use client";
 import React from "react";
 import SendNewAppointmentMessage from "@/app/doctor/appointments/components/Btns/SendNewMessageToPatient";
-import { $Enums } from "@prisma/client";
 import ChatAppointment from "@/components/ChatAppointment";
+import { AppointmentWithUnreadFlag } from "@/lib/dal";
+import { UserRole } from "@prisma/client";
 
 export default function MessagesSectionForList({
   appointment,
+  userRole,
 }: {
-  appointment: {
-    id: string;
-    updatedAt: Date;
-    email: string;
-    phone: string | null;
-    createdAt: Date;
-    fullname: string;
-    reasonForVisit: string;
-    preferredDate: Date;
-    preferredTime: string;
-    status: $Enums.AppointmentStatus;
-    doctorId: string | null;
-    patientId: string | null;
-  };
+  userRole: UserRole | undefined;
+  appointment: AppointmentWithUnreadFlag;
 }) {
+  const isUser = userRole === "user";
+
   const SendingData = {
-    senderId: appointment.patientId ?? undefined,
-    receiverId: appointment.doctorId ?? undefined,
+    senderId: isUser
+      ? appointment.patientId ?? undefined
+      : appointment.doctorId ?? undefined,
+    receiverId: isUser
+      ? appointment.doctorId ?? undefined
+      : appointment.patientId ?? undefined,
     appointmentId: appointment.id,
   };
 
   const ReceivingData = {
-    userId: appointment.patientId ?? undefined,
+    userId: isUser
+      ? appointment.patientId ?? undefined
+      : appointment.doctorId ?? undefined,
     appointmentId: appointment.id,
+    hasUnread: appointment.hasUnreadReceivedMessages,
   };
-  
+
   return (
     <div className="flex gap-4">
-      <ChatAppointment appData={ReceivingData}/>
+      <ChatAppointment appData={ReceivingData} />
       <SendNewAppointmentMessage data={SendingData} />
     </div>
   );
