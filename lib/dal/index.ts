@@ -274,6 +274,10 @@ export type AppointmentWithUnreadFlag = {
   patientId: string | null;
   appointmentMessages: { id: string }[];
   hasUnreadReceivedMessages: boolean;
+  doctor?:{
+    doctorProfile?:{consultationFee:number}
+    name?:string
+  }
 };
 
 type AuthUserWithAppointmentsAndMessages = {
@@ -316,6 +320,18 @@ export async function getAuthUserWithAppointmentsAndUnreadReceivedMessagesFromDB
           orderBy: { updatedAt: "desc" },
           skip,
           take: limit,
+          include:{
+            doctor:{
+              select:{
+                doctorProfile:{
+                  select:{
+                    consultationFee:true,
+                  }
+                },
+                name:true
+              }
+            }
+          }
         },
         appointmentsAsDoctor: {
           orderBy: { updatedAt: "desc" },
@@ -494,4 +510,16 @@ export async function markReadAppointmentMessageInDB(id: string) {
   } catch (error) {
     console.log(error);
   }
+}
+
+export async function setAppointmentIsPaidTrueInDB(id:string){
+  await prisma.appointments.update({
+    where:{
+      id
+    },
+    data:{
+      is_paid: true,
+      status: "PAID"
+    }
+  })
 }

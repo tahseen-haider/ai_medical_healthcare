@@ -1,21 +1,47 @@
-// components/CheckoutButton.tsx
-'use client';
+"use client";
 
-import { loadStripe } from '@stripe/stripe-js';
-const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
+import { loadStripe } from "@stripe/stripe-js";
+import { Button } from "./ui/button";
 
-export default function CheckoutButton({ items }: { items: any[] }) {
+const stripePromise = loadStripe(
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
+);
+
+export default function CheckoutButton({
+  items,
+  appointmentId,
+}: {
+  appointmentId?: string;
+  items: any[];
+}) {
+  if (!appointmentId) return;
+
   const handleCheckout = async () => {
-    const res = await fetch('/api/checkout', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ items }),
-    });
+    try {
+      const res = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ items, appointmentId }),
+      });
 
-    const data = await res.json();
-    const stripe = await stripePromise;
-    stripe?.redirectToCheckout({ sessionId: data.id });
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Checkout failed");
+      }
+
+      const stripe = await stripePromise;
+      if (!stripe) throw new Error("Stripe failed to initialize");
+
+      await stripe.redirectToCheckout({ sessionId: data.id });
+    } catch (error) {
+      console.error("Checkout error:", error);
+    }
   };
 
-  return <button onClick={handleCheckout}>Pay Now</button>;
+  return (
+    <Button className="w-fit mx-auto" onClick={handleCheckout}>
+      Pay Now
+    </Button>
+  );
 }

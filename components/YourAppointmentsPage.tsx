@@ -13,6 +13,9 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "./ui/badge";
 import MessagesSectionForList from "@/components/MessagesSectionForList";
+import EditAppointmentStatus from "@/app/doctor/components/EditAppointmentStatus";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
+import CheckoutButton from "./CheckoutButton";
 
 export default async function YourAppointmentsPage({
   paramPage,
@@ -55,7 +58,7 @@ export default async function YourAppointmentsPage({
     const isFuture = dateTime > new Date();
 
     if (!isFuture) {
-      return { ...appointment, status: "Outdated" };
+      return { ...appointment, status: "OUTDATED" };
     }
     return appointment;
   });
@@ -72,11 +75,46 @@ export default async function YourAppointmentsPage({
       case AppointmentStatus.COMPLETED:
       case AppointmentStatus.RESCHEDULED:
         return "outline";
-      case "Outdated":
+      case "OUTDATED":
         return "destructive";
       default:
         return "secondary";
     }
+  };
+
+  const appointmentBadge = (
+    status: string,
+    paymentData: {
+      doctorName: string | undefined;
+      fee: number | undefined;
+      appointmentId: string | undefined;
+    }
+  ) => {
+    if (
+      status === "PAYMENT_PENDING" &&
+      paymentData.doctorName &&
+      paymentData.fee
+    )
+      return (
+        <HoverCard openDelay={100}>
+          <HoverCardTrigger>
+            <Badge variant={getStatusVariant(status)}>{status}</Badge>
+          </HoverCardTrigger>
+          <HoverCardContent className="flex justify-center items-center w-fit">
+            <CheckoutButton
+              items={[
+                {
+                  name: `Appointment payment to ${paymentData.doctorName}`,
+                  unit_amount: paymentData.fee,
+                  quantity: 1,
+                },
+              ]}
+              appointmentId={paymentData.appointmentId}
+            />
+          </HoverCardContent>
+        </HoverCard>
+      );
+    return <Badge variant={getStatusVariant(status)}>{status}</Badge>;
   };
 
   return (
@@ -115,43 +153,61 @@ export default async function YourAppointmentsPage({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {appointments?.map((appointment) => (
+                {appointments?.map((appointment, index) => (
                   <TableRow key={appointment.id}>
                     <TableCell
                       className={`${
-                        appointment.status === "Outdated" ? "line-through" : ""
+                        appointment.status === "OUTDATED" ? "line-through" : ""
                       }`}
                     >
                       {appointment.fullname}
                     </TableCell>
                     <TableCell
                       className={`${
-                        appointment.status === "Outdated" ? "line-through" : ""
+                        appointment.status === "OUTDATED" ? "line-through" : ""
                       }`}
                     >
                       {appointment.reasonForVisit}
                     </TableCell>
                     <TableCell
                       className={`${
-                        appointment.status === "Outdated" ? "line-through" : ""
+                        appointment.status === "OUTDATED" ? "line-through" : ""
                       }`}
                     >
                       {appointment.preferredTime}
                     </TableCell>
                     <TableCell
                       className={`${
-                        appointment.status === "Outdated" ? "line-through" : ""
+                        appointment.status === "OUTDATED" ? "line-through" : ""
                       }`}
                     >
                       {appointment.preferredDate.toLocaleDateString("en-GB")}
                     </TableCell>
-                    <TableCell>
-                      <Badge variant={getStatusVariant(appointment.status)}>
-                        {appointment.status}
-                      </Badge>
+                    <TableCell className="cursor-pointer">
+                      {user?.role === "user" ||
+                      appointment.status === "OUTDATED" ? (
+                        appointmentBadge(appointment.status, {
+                          doctorName:
+                            user?.appointmentsAsPatient[index]?.doctor?.name,
+                          fee: user?.appointmentsAsPatient[index]?.doctor
+                            ?.doctorProfile?.consultationFee,
+                          appointmentId: appointment.id,
+                        })
+                      ) : (
+                        <EditAppointmentStatus
+                          appointmentId={appointment.id}
+                          currentPage={page}
+                          currentStatus={
+                            appointment.status as AppointmentStatus
+                          }
+                        />
+                      )}
                     </TableCell>
                     <TableCell>
-                      <MessagesSectionForList userRole={user?.role} appointment={appointment} />
+                      <MessagesSectionForList
+                        userRole={user?.role}
+                        appointment={appointment}
+                      />
                     </TableCell>
                   </TableRow>
                 ))}

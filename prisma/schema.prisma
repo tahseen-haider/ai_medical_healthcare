@@ -39,11 +39,12 @@ enum MessageRole {
 
 enum AppointmentStatus {
   PENDING
+  PAYMENT_PENDING
+  PAID
   CONFIRMED
   CANCELLED
   COMPLETED
   RESCHEDULED
-  PAYMENT_PENDING
 }
 
 enum NotificationType {
@@ -192,6 +193,7 @@ model Appointments {
   preferredDate        DateTime
   preferredTime        String
   status               AppointmentStatus    @default(PENDING)
+  is_paid              Boolean              @default(false)
   createdAt            DateTime             @default(now())
   updatedAt            DateTime             @default(now())
   doctorId             String?

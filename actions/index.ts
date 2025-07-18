@@ -22,6 +22,7 @@ import {
   markNotificationAsUnreadInDB,
   markReadAppointmentMessageInDB,
   sendAppointmentMessageToDB,
+  setAppointmentIsPaidTrueInDB,
   setAppointmentToDB,
   uploadInquiry,
   uploadProfileChanges,
@@ -376,4 +377,8 @@ export async function deleteAppointmentSentMessage(id:string){
 }
 export async function markReadAppointmentMessage(id:string){
   await markReadAppointmentMessageInDB(id)
+}
+
+export async function setAppointmentIsPaidTrue(id:string){
+  await setAppointmentIsPaidTrueInDB(id)
 }
