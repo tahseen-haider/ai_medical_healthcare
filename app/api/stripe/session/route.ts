@@ -14,7 +14,7 @@ export async function GET(req: NextRequest) {
 
   try {
     const session = await stripe.checkout.sessions.retrieve(sessionId);
-    return NextResponse.json(session); // includes metadata
+    return NextResponse.json(session);
   } catch (error) {
     return NextResponse.json({ error: 'Failed to retrieve session' }, { status: 500 });
   }

@@ -274,13 +274,13 @@ export type AppointmentWithUnreadFlag = {
   patientId: string | null;
   appointmentMessages: { id: string }[];
   hasUnreadReceivedMessages: boolean;
-  doctor?:{
-    doctorProfile?:{consultationFee:number}
-    name?:string
-  }
+  doctor?: {
+    doctorProfile?: { consultationFee: number };
+    name?: string;
+  };
 };
 
-type AuthUserWithAppointmentsAndMessages = {
+export type AuthUserWithAppointmentsAndMessages = {
   role: UserRole;
   appointmentsAsPatient: AppointmentWithUnreadFlag[];
   appointmentsAsDoctor: AppointmentWithUnreadFlag[];
@@ -320,18 +320,18 @@ export async function getAuthUserWithAppointmentsAndUnreadReceivedMessagesFromDB
           orderBy: { updatedAt: "desc" },
           skip,
           take: limit,
-          include:{
-            doctor:{
-              select:{
-                doctorProfile:{
-                  select:{
-                    consultationFee:true,
-                  }
+          include: {
+            doctor: {
+              select: {
+                doctorProfile: {
+                  select: {
+                    consultationFee: true,
+                  },
                 },
-                name:true
-              }
-            }
-          }
+                name: true,
+              },
+            },
+          },
         },
         appointmentsAsDoctor: {
           orderBy: { updatedAt: "desc" },
@@ -512,14 +512,41 @@ export async function markReadAppointmentMessageInDB(id: string) {
   }
 }
 
-export async function setAppointmentIsPaidTrueInDB(id:string){
-  await prisma.appointments.update({
-    where:{
-      id
+export async function setAppointmentIsPaidTrueInDB(id: string) {
+  const updated = await prisma.appointments.update({
+    where: {
+      id,
     },
-    data:{
+    data: {
       is_paid: true,
-      status: "PAID"
-    }
-  })
+      status: "PAID",
+    },
+    include: {
+      doctor: {
+        select: {
+          name: true,
+        },
+      },
+    },
+  });
+
+  // notification for patient
+  await prisma.notification.create({
+    data: {
+      userId: updated.patientId!,
+      title: "Payment Successful",
+      message: `"${updated.fullname}'s" appointment's payment is successful to "${updated.doctor?.name}"`,
+      type: "APPOINTMENT_UPDATE",
+    },
+  });
+
+  // notification for doctor
+  await prisma.notification.create({
+    data: {
+      userId: updated.doctorId!,
+      title: "Payment Successful",
+      message: `"${updated.fullname}'s" appointment's payment is successful to "${updated.doctor?.name}"`,
+      type: "APPOINTMENT_UPDATE",
+    },
+  });
 }
