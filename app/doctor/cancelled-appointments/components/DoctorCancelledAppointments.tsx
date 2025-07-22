@@ -36,45 +36,49 @@ export default async function DoctorCancelledAppointmentsList({
         </div>
 
         <div className="overflow-auto">
-          <Table>
-            <TableHeader className="sticky top-0 bg-white dark:bg-dark-4 z-10">
-              <TableRow>
-                <TableHead className="w-8">#</TableHead>
-                <TableHead>Patient Name</TableHead>
-                <TableHead>Patient Email</TableHead>
-                <TableHead>Phone</TableHead>
-                <TableHead>Visit Reason</TableHead>
-                <TableHead className="min-w-[100px]">Visit Time</TableHead>
-                <TableHead>Visit Date</TableHead>
-                <TableHead>Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {appointments?.map((appointment, index) => (
-                <TableRow
-                  key={appointment.id}
-                  className="hover:bg-muted/50 transition-colors"
-                >
-                  <TableCell>{(page - 1) * limit + index + 1}</TableCell>
-                  <TableCell>{appointment.fullname}</TableCell>
-                  <TableCell>{appointment.email}</TableCell>
-                  <TableCell>{appointment.phone || "N/A"}</TableCell>
-                  <TableCell>{appointment.reasonForVisit}</TableCell>
-                  <TableCell>{appointment.preferredTime}</TableCell>
-                  <TableCell>
-                    {appointment.preferredDate.toLocaleDateString("en-GB")}
-                  </TableCell>
-                  <TableCell>
-                    <EditAppointmentStatus
-                      currentPage={page}
-                      appointmentId={appointment.id}
-                      currentStatus={appointment.status}
-                    />
-                  </TableCell>
+          {appointments?.length! < 1 ? (
+            <p className="text-center text-gray-500">No appointments</p>
+          ) : (
+            <Table>
+              <TableHeader className="sticky top-0 bg-white dark:bg-dark-4 z-10">
+                <TableRow>
+                  <TableHead className="w-8">#</TableHead>
+                  <TableHead>Patient Name</TableHead>
+                  <TableHead>Patient Email</TableHead>
+                  <TableHead>Phone</TableHead>
+                  <TableHead>Visit Reason</TableHead>
+                  <TableHead className="min-w-[100px]">Visit Time</TableHead>
+                  <TableHead>Visit Date</TableHead>
+                  <TableHead>Status</TableHead>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+              </TableHeader>
+              <TableBody>
+                {appointments?.map((appointment, index) => (
+                  <TableRow
+                    key={appointment.id}
+                    className="hover:bg-muted/50 transition-colors"
+                  >
+                    <TableCell>{(page - 1) * limit + index + 1}</TableCell>
+                    <TableCell>{appointment.fullname}</TableCell>
+                    <TableCell>{appointment.email}</TableCell>
+                    <TableCell>{appointment.phone || "N/A"}</TableCell>
+                    <TableCell>{appointment.reasonForVisit}</TableCell>
+                    <TableCell>{appointment.preferredTime}</TableCell>
+                    <TableCell>
+                      {appointment.preferredDate.toLocaleDateString("en-GB")}
+                    </TableCell>
+                    <TableCell>
+                      <EditAppointmentStatus
+                        currentPage={page}
+                        appointmentId={appointment.id}
+                        currentStatus={appointment.status}
+                      />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          )}
         </div>
       </div>
 

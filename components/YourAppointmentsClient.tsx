@@ -22,15 +22,19 @@ import { RefreshCw } from "lucide-react";
 import { Button } from "./ui/button";
 import { AuthUserWithAppointmentsAndMessages } from "@/lib/dal";
 import YourAppointmentsSkeleton from "./YourAppointmentsSkeleton";
+import DeleteAppointmentBtn from "@/app/admin/appointments/components/Btns/DeleteAppointmentBtn";
 
 export default function YourAppointmentsClient({
   page,
   limit,
+  userRole,
 }: {
+  userRole?: string;
   page: number;
   limit: number;
 }) {
-  const [user, setUserData] = useState<AuthUserWithAppointmentsAndMessages | null>(null);
+  const [user, setUserData] =
+    useState<AuthUserWithAppointmentsAndMessages | null>(null);
   const [loading, setLoading] = useState(false);
 
   const fetchAppointments = async () => {
@@ -81,7 +85,7 @@ export default function YourAppointmentsClient({
   });
 
   if (loading || !user) {
-    return <YourAppointmentsSkeleton/>;
+    return <YourAppointmentsSkeleton />;
   }
 
   const getStatusVariant = (status: string) => {
@@ -138,6 +142,55 @@ export default function YourAppointmentsClient({
     return <Badge variant={getStatusVariant(status)}>{status}</Badge>;
   };
 
+  function setPaymentStatus(
+    status: string,
+    is_paid: boolean | null | undefined,
+    paymentData: {
+      doctorName: string | undefined;
+      fee: number | undefined;
+      appointmentId: string | undefined;
+    }
+  ): React.ReactNode {
+    const commonBadgeClass = "text-xs";
+
+    if (is_paid) {
+      return (
+        <Badge variant="default" className={commonBadgeClass}>
+          Paid
+        </Badge>
+      );
+    }
+
+    if (!is_paid && status === "PENDING") {
+      return (
+        <Badge variant="default" className={commonBadgeClass}>
+          Pending Confirmation
+        </Badge>
+      );
+    }
+
+    if (!is_paid && status === "PAYMENT_PENDING" && userRole === "user") {
+      return (
+        <CheckoutButton
+          items={[
+            {
+              name: `Appointment payment to ${paymentData.doctorName}`,
+              unit_amount: paymentData.fee,
+              quantity: 1,
+            },
+          ]}
+          appointmentId={paymentData.appointmentId}
+        />
+      );
+    }
+
+    return (
+      <Badge variant="destructive" className={commonBadgeClass}>
+        Unpaid
+      </Badge>
+    );
+  }
+
   return (
     <Card className="bg-gray-50 dark:bg-dark-4 min-h-[calc(100vh-160px)]">
       <CardHeader className="flex items-center justify-between">
@@ -151,7 +204,7 @@ export default function YourAppointmentsClient({
         </Button>
       </CardHeader>
       <CardContent className="flex flex-col justify-between flex-1">
-        {appointments?.length === 0 ? (
+        {appointments?.length === 0 || !userRole ? (
           <div className="flex flex-col items-center justify-center py-16 text-center space-y-4">
             <p className="text-muted-foreground text-lg">
               No appointments found.
@@ -178,6 +231,10 @@ export default function YourAppointmentsClient({
                   <TableHead>Date</TableHead>
                   <TableHead>Status</TableHead>
                   <TableHead>Messages</TableHead>
+                  <TableHead>Payment</TableHead>
+                  {userRole === "user" && (
+                    <TableHead className="min-w-16"></TableHead>
+                  )}
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -237,6 +294,26 @@ export default function YourAppointmentsClient({
                         appointment={appointment}
                       />
                     </TableCell>
+                    <TableCell>
+                      {setPaymentStatus(
+                        appointment.status,
+                        appointment.is_paid,
+                        {
+                          doctorName:
+                            user?.appointmentsAsPatient[index]?.doctor?.name,
+                          fee: user?.appointmentsAsPatient[index]?.doctor
+                            ?.doctorProfile?.consultationFee,
+                          appointmentId: appointment.id,
+                        }
+                      )}
+                    </TableCell>
+                    {userRole === "user" && (
+                      <TableCell>
+                        <div className="w-full flex justify-end">
+                          <DeleteAppointmentBtn appId={appointment.id} />
+                        </div>
+                      </TableCell>
+                    )}
                   </TableRow>
                 ))}
               </TableBody>

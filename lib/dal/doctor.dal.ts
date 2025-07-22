@@ -542,11 +542,21 @@ export const changeAppointmentStatusFromDB = async (
         where: { id: appointmentId },
         data: {
           updatedAt: new Date(),
+          status,
           patient: {
             update: {
               lastCheckUp: new Date(),
             },
           },
+        },
+      });
+    } else if (status === "PAID") {
+      app = await prisma.appointments.update({
+        where: { id: appointmentId },
+        data: {
+          updatedAt: new Date(),
+          is_paid: true,
+          status,
         },
       });
     } else {

@@ -233,7 +233,7 @@ export const deleteAppointment = async (
   const appId = formData.get("appId") as string;
   const res = await deleteAppointmentFromDB(appId);
   if (!res) return;
-  revalidatePath("/admin/appointments");
+  revalidatePath("/your-appointments");
   return {};
 };
 

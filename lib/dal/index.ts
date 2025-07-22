@@ -279,6 +279,7 @@ export type AppointmentWithUnreadFlag = {
     doctorProfile?: { consultationFee: number };
     name?: string;
   };
+  is_paid?: boolean | null
 };
 
 export type AuthUserWithAppointmentsAndMessages = {

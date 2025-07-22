@@ -269,31 +269,33 @@ export const deleteDoctorFromDB = async (userId: string) => {
 
 export const deleteAppointmentFromDB = async (appId: string) => {
   try {
-    await prisma.appointments.delete({ where: { id: appId } })
+    await prisma.appointmentMessage.deleteMany({
+      where: { appointmentId: appId },
+    });
     const deleted = await prisma.appointments.delete({ where: { id: appId } });
 
     await Promise.all([
       prisma.notification.create({
         data: {
           userId: deleted.patientId!,
-          title: "Appointment Deleted By Admin",
+          title: "Appointment Deleted",
           message: `Appointment of patient "${
             deleted.fullname
           }" that was set to be on "${deleted.preferredDate.toLocaleDateString(
             "en-GB"
-          )}" is deleted by admin.`,
+          )}" is deleted.`,
           type: "APPOINTMENT_UPDATE",
         },
       }),
       prisma.notification.create({
         data: {
           userId: deleted.doctorId!,
-          title: "Appointment Deleted By Admin",
+          title: "Appointment Deleted",
           message: `Appointment of patient "${
             deleted.fullname
           }" that was set to be on "${deleted.preferredDate.toLocaleDateString(
             "en-GB"
-          )}" is deleted by admin.`,
+          )}" is deleted.`,
           type: "APPOINTMENT_UPDATE",
         },
       }),

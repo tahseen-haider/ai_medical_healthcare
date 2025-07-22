@@ -64,7 +64,7 @@ export default function ProfileButton({ user }: { user: UserType }) {
         <DropdownMenuTrigger asChild className="relative rounded-full">
           <Button variant="ghost" className="h-auto w-auto p-0 rounded-full">
             {/* Badge */}
-            {hasNewMessages && (
+            {hasNewMessages && isUser && (
               <span className="absolute top-0 right-0 inline-flex h-2 w-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-gray-900" />
             )}
             <ProfilePicture image={imageUrl} />
