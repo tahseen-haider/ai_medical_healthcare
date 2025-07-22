@@ -233,7 +233,6 @@ export const getAllAppointmentsForDoctorFromDB = async (
   }
 };
 
-
 export const getOutOfDateAppointmentsFromDB = async (
   page: number,
   limit: number,
@@ -289,13 +288,20 @@ export const getOutOfDateAppointmentsFromDB = async (
           date.setHours(hours, minutes, 0, 0);
           return { ...appointment, fullDateTime: date };
         } catch (innerError) {
-          console.error("Failed to parse appointment date/time:", appointment.id, innerError);
+          console.error(
+            "Failed to parse appointment date/time:",
+            appointment.id,
+            innerError
+          );
           return null;
         }
       })
       .filter(
-        (appointment): appointment is typeof allAppointments[0] & { fullDateTime: Date } =>
-          appointment !== null && appointment.fullDateTime < now
+        (
+          appointment
+        ): appointment is (typeof allAppointments)[0] & {
+          fullDateTime: Date;
+        } => appointment !== null && appointment.fullDateTime < now
       )
       .slice(0, limit);
 
@@ -309,7 +315,6 @@ export const getOutOfDateAppointmentsFromDB = async (
     return;
   }
 };
-
 
 export const getAllUpcomingAppointmentsForDoctorFromDB = async (
   page: number,
@@ -392,13 +397,20 @@ export const getAllUpcomingAppointmentsForDoctorFromDB = async (
 
           return { ...appointment, fullDateTime: date };
         } catch (innerError) {
-          console.error("Failed to parse appointment:", appointment.id, innerError);
+          console.error(
+            "Failed to parse appointment:",
+            appointment.id,
+            innerError
+          );
           return null;
         }
       })
       .filter(
-        (appointment): appointment is typeof allAppointments[0] & { fullDateTime: Date } =>
-          appointment !== null && appointment.fullDateTime >= now
+        (
+          appointment
+        ): appointment is (typeof allAppointments)[0] & {
+          fullDateTime: Date;
+        } => appointment !== null && appointment.fullDateTime >= now
       )
       .slice(0, limit);
 
@@ -412,7 +424,6 @@ export const getAllUpcomingAppointmentsForDoctorFromDB = async (
     return;
   }
 };
-
 
 export const getCancelledAppointmentsForDoctorFromDB = async (
   page: number,
@@ -472,7 +483,6 @@ export const getCancelledAppointmentsForDoctorFromDB = async (
     return;
   }
 };
-
 
 const getStatusMessage = (
   status: AppointmentStatus,
@@ -574,13 +584,12 @@ export const changeAppointmentStatusFromDB = async (
     // Notify patient
     await prisma.notification.create({
       data: {
+        link: "/your-appointments",
         userId: app.patientId!,
         title: "Appointment Status Changed By Doctor",
         message,
         type: "APPOINTMENT_UPDATE",
-        ...(status === "PAYMENT_PENDING"
-          ? { link: "/your-appointments" }
-          : {}),
+        ...(status === "PAYMENT_PENDING" ? { link: "/your-appointments" } : {}),
       },
     });
 
@@ -604,7 +613,6 @@ export const changeAppointmentStatusFromDB = async (
     return;
   }
 };
-
 
 export const getDoctorDashboardNumbersFromDB = async (doctorId: string) => {
   try {
@@ -635,7 +643,6 @@ export const getDoctorDashboardNumbersFromDB = async (doctorId: string) => {
   }
 };
 
-
 export const getAllAppointmentsForDashboardDoctorFromDB = async (
   doctorId: string
 ) => {
@@ -651,7 +658,6 @@ export const getAllAppointmentsForDashboardDoctorFromDB = async (
     return;
   }
 };
-
 
 export const getAllApprovedDoctorsFromDB = async () => {
   try {
@@ -676,7 +682,6 @@ export const getAllApprovedDoctorsFromDB = async () => {
     return;
   }
 };
-
 
 export const updateDoctorProfileInDB = async (data: {
   id: string;
@@ -732,7 +737,10 @@ export const updateDoctorProfileInDB = async (data: {
       try {
         await cloudinary.uploader.destroy(existingUser.pfp);
       } catch (cloudErr) {
-        console.error("Failed to delete old profile picture from Cloudinary:", cloudErr);
+        console.error(
+          "Failed to delete old profile picture from Cloudinary:",
+          cloudErr
+        );
       }
     }
 

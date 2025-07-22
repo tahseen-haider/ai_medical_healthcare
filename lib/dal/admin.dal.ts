@@ -218,7 +218,6 @@ export const addNewDoctorToDB = async (
   }
 };
 
-
 export const deleteInquiryFromDB = async (inquiryId: string) => {
   try {
     return await prisma.inquiries.delete({
@@ -250,6 +249,9 @@ export const deleteDoctorFromDB = async (userId: string) => {
       prisma.chatSession.deleteMany({ where: { userId } }),
       prisma.account.deleteMany({ where: { userId } }),
       prisma.doctorProfile.deleteMany({ where: { userId } }),
+      prisma.notification.deleteMany({ where: { userId } }),
+      prisma.appointmentMessage.deleteMany({ where: { senderId: userId } }),
+      prisma.appointmentMessage.deleteMany({ where: { receiverId: userId } }),
       prisma.appointments.deleteMany({ where: { patientId: userId } }),
       prisma.user.delete({ where: { id: userId } }),
     ]);
@@ -267,6 +269,7 @@ export const deleteDoctorFromDB = async (userId: string) => {
 
 export const deleteAppointmentFromDB = async (appId: string) => {
   try {
+    await prisma.appointments.delete({ where: { id: appId } })
     const deleted = await prisma.appointments.delete({ where: { id: appId } });
 
     await Promise.all([
@@ -274,7 +277,11 @@ export const deleteAppointmentFromDB = async (appId: string) => {
         data: {
           userId: deleted.patientId!,
           title: "Appointment Deleted By Admin",
-          message: `Appointment of patient "${deleted.fullname}" that was set to be on "${deleted.preferredDate.toLocaleDateString("en-GB")}" is deleted by admin.`,
+          message: `Appointment of patient "${
+            deleted.fullname
+          }" that was set to be on "${deleted.preferredDate.toLocaleDateString(
+            "en-GB"
+          )}" is deleted by admin.`,
           type: "APPOINTMENT_UPDATE",
         },
       }),
@@ -282,7 +289,11 @@ export const deleteAppointmentFromDB = async (appId: string) => {
         data: {
           userId: deleted.doctorId!,
           title: "Appointment Deleted By Admin",
-          message: `Appointment of patient "${deleted.fullname}" that was set to be on "${deleted.preferredDate.toLocaleDateString("en-GB")}" is deleted by admin.`,
+          message: `Appointment of patient "${
+            deleted.fullname
+          }" that was set to be on "${deleted.preferredDate.toLocaleDateString(
+            "en-GB"
+          )}" is deleted by admin.`,
           type: "APPOINTMENT_UPDATE",
         },
       }),
@@ -315,6 +326,9 @@ export const deleteUserFromDB = async (userId: string) => {
       prisma.chatSession.deleteMany({ where: { userId } }),
       prisma.account.deleteMany({ where: { userId } }),
       prisma.doctorProfile.deleteMany({ where: { userId } }),
+      prisma.notification.deleteMany({ where: { userId } }),
+      prisma.appointmentMessage.deleteMany({ where: { senderId: userId } }),
+      prisma.appointmentMessage.deleteMany({ where: { receiverId: userId } }),
       prisma.appointments.deleteMany({ where: { patientId: userId } }),
       prisma.user.delete({ where: { id: userId } }),
     ]);
@@ -343,6 +357,7 @@ export const changeUserRoleFromDB = async (
 
     await prisma.notification.create({
       data: {
+        link: "/your-appointments",
         userId: user.id,
         title: "Role changed by Admin",
         message: `Your profile role is changed by Admin from "${currentRole}" to "${role}".`,
@@ -450,7 +465,6 @@ export const getNewUserInfoFromDB = async () => {
   }
 };
 
-
 export const changeInquiryStatusFromDB = async (id: string) => {
   try {
     const inquiry = await prisma.inquiries.findUnique({
@@ -532,9 +546,14 @@ export const changeAppointmentDoctorFromDB = async (
       notifications.push(
         prisma.notification.create({
           data: {
+            link: "/your-appointments",
             userId: updatedAppointment.patientId,
             title: "Appointment Doctor Changed By Admin",
-            message: `Appointment of patient "${updatedAppointment.fullname}" that was set to be on "${updatedAppointment.preferredDate.toLocaleDateString("en-GB")}" is updated by reassigning your Doctor.`,
+            message: `Appointment of patient "${
+              updatedAppointment.fullname
+            }" that was set to be on "${updatedAppointment.preferredDate.toLocaleDateString(
+              "en-GB"
+            )}" is updated by reassigning your Doctor.`,
             type: "APPOINTMENT_UPDATE",
           },
         })
@@ -547,7 +566,11 @@ export const changeAppointmentDoctorFromDB = async (
           data: {
             userId: currentDoctor,
             title: "Appointment Doctor Changed By Admin",
-            message: `Appointment of patient "${updatedAppointment.fullname}" that was set to be on "${updatedAppointment.preferredDate.toLocaleDateString("en-GB")}" is updated by reassigning their Doctor.`,
+            message: `Appointment of patient "${
+              updatedAppointment.fullname
+            }" that was set to be on "${updatedAppointment.preferredDate.toLocaleDateString(
+              "en-GB"
+            )}" is updated by reassigning their Doctor.`,
             type: "APPOINTMENT_UPDATE",
           },
         })
@@ -558,9 +581,14 @@ export const changeAppointmentDoctorFromDB = async (
       notifications.push(
         prisma.notification.create({
           data: {
+            link: "/your-appointments",
             userId: updatedAppointment.doctorId,
             title: "New Appointment By Admin",
-            message: `New Appointment of patient "${updatedAppointment.fullname}" that is set to be on "${updatedAppointment.preferredDate.toLocaleDateString("en-GB")}".`,
+            message: `New Appointment of patient "${
+              updatedAppointment.fullname
+            }" that is set to be on "${updatedAppointment.preferredDate.toLocaleDateString(
+              "en-GB"
+            )}".`,
             type: "APPOINTMENT_UPDATE",
           },
         })

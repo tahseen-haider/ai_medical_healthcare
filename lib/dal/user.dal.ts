@@ -332,6 +332,23 @@ export const deleteLoggedInUserFromDB = async () => {
         },
       });
 
+      await tx.appointmentMessage.deleteMany({
+        where: {
+          senderId: user?.userId,
+        },
+      });
+      await tx.appointmentMessage.deleteMany({
+        where: {
+          receiverId: user?.userId,
+        },
+      });
+
+      await tx.notification.deleteMany({
+        where: {
+          userId: user?.userId,
+        },
+      });
+
       await tx.appointments.deleteMany({
         where: {
           patientId: user?.userId,

@@ -70,6 +70,7 @@ export const setAppointmentToDB = cache(
       if (patientId) {
         await prisma.notification.create({
           data: {
+            link: "/your-appointments",
             userId: patientId,
             title: "Appointment Request Submitted",
             message: `Your appointment with the doctor has been requested for "${date.toLocaleDateString(
@@ -533,6 +534,7 @@ export async function setAppointmentIsPaidTrueInDB(id: string) {
   // notification for patient
   await prisma.notification.create({
     data: {
+      link: "/your-appointments",
       userId: updated.patientId!,
       title: "Payment Successful",
       message: `"${updated.fullname}'s" appointment's payment is successful to "${updated.doctor?.name}"`,

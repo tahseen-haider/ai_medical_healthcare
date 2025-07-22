@@ -4,7 +4,14 @@ const nextConfig: NextConfig = {
   /* config options here */
   reactStrictMode: false,
   images: {
-    domains: [process.env.CLOUDINARY_DOMAIN || 'res.cloudinary.com'],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: process.env.CLOUDINARY_DOMAIN || 'res.cloudinary.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
   },
   
 };
