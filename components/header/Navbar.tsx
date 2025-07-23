@@ -10,6 +10,7 @@ import Btn from "../Button";
 import ProfileButton from "./ProfileButton";
 import NotificationsButton from "./NotificationsButton";
 import { UserType } from "@/lib/definitions";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 function Navbar({ user }: { user?: UserType }) {
   const role = user?.role;
@@ -73,10 +74,22 @@ function Navbar({ user }: { user?: UserType }) {
           }`}
           className="flex items-center"
         >
-          <Image src={logo} width={52} height={52} alt="Logo of MediTech" />
-          <h3 className={`text-2xl font-bold font-ubuntu text-white`}>
-            MediTech
-          </h3>
+          <Tooltip>
+            <TooltipTrigger>
+              <div className="w-full h-full flex items-center">
+                <Image
+                  src={logo}
+                  width={52}
+                  height={52}
+                  alt="Logo of MediTech"
+                />
+                <h3 className={`text-2xl font-bold font-ubuntu text-white`}>
+                  MediTech
+                </h3>
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>Go To Home</TooltipContent>
+          </Tooltip>
         </Link>
         {/* UserNavLinks */}
         {!hideLinks && (

@@ -1,5 +1,10 @@
 "use client";
 
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { FilePenLine, Menu } from "lucide-react";
 import Link from "next/link";
 import React, { useLayoutEffect, useState } from "react";
@@ -35,16 +40,29 @@ export default function ChatSidebarWrapper({
       <div
         className={`${
           isSidebarOpen ? "-left-42" : "left-0"
-        } absolute top-14 sm:top-16  p-2 bg-white dark:bg-dark-4 opacity-90 hover:opacity-100 backdrop-blur-sm flex flex-col gap-4 rounded-br-lg justify-between items-center border-b-2 border-r-2 z-10 transition-all duration-300`}
+        } absolute top-14 sm:top-16  py-2 bg-white dark:bg-dark-4 opacity-90 hover:opacity-100 backdrop-blur-sm flex flex-col gap-4 rounded-br-lg justify-between items-center border-b-2 border-r-2 z-10 transition-all duration-300`}
       >
         <button
-          className="p-2"
           onClick={() => setIsSidebarOpen((prev) => !prev)}
         >
-          <Menu />
+          <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="p-2">
+                  <Menu />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent side="right">Open Sidebar</TooltipContent>
+            </Tooltip>
         </button>
-        <Link className="p-2" href={"/assistant"}>
-          <FilePenLine />
+        <Link href={"/assistant"}>
+          <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="p-2">
+                  <FilePenLine />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent side="right">New Chat</TooltipContent>
+            </Tooltip>
         </Link>
       </div>
 
@@ -64,13 +82,27 @@ export default function ChatSidebarWrapper({
         {/* Top Buttons */}
         <div className="px-6 flex justify-between h-10 items-center border-b-2 bg-white dark:bg-dark-4">
           <button
-            className="p-2"
+            className=""
             onClick={() => setIsSidebarOpen((prev) => !prev)}
           >
-            <Menu />
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="p-2">
+                  <Menu />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">Open Sidebar</TooltipContent>
+            </Tooltip>
           </button>
-          <Link className="p-2" href={"/assistant"}>
-            <FilePenLine />
+          <Link href={"/assistant"}>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="p-2">
+                  <FilePenLine />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">New Chat</TooltipContent>
+            </Tooltip>
           </Link>
         </div>
 

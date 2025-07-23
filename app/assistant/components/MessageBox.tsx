@@ -1,6 +1,11 @@
 "use client";
 import AssistantPicture from "@/components/AssistantPicture";
 import ProfilePicture from "@/components/ProfilePicture";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { $Enums } from "@prisma/client/edge";
 import Image from "next/image";
 import React, { useState } from "react";
@@ -16,7 +21,7 @@ export default function MessageBox({
     role: $Enums.MessageRole;
     createdAt: Date;
     image: string | null;
-    base64?: string
+    base64?: string;
   };
   pfpUrl?: string;
 }) {
@@ -68,17 +73,22 @@ export default function MessageBox({
 
           {message.image && (
             <>
-              <Image
-                src={image}
-                alt="uploaded image"
-                height={80}
-                width={80}
-                quality={40}
-                className="rounded-sm cursor-pointer w-auto h-auto mb-3"
-                onClick={() => {
-                  setMaximizedImg(true);
-                }}
-              />
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Image
+                    src={image}
+                    alt="uploaded image"
+                    height={80}
+                    width={80}
+                    quality={40}
+                    className="rounded-sm cursor-pointer w-auto h-auto mb-3"
+                    onClick={() => {
+                      setMaximizedImg(true);
+                    }}
+                  />
+                </TooltipTrigger>
+                <TooltipContent side="right">Maximize Image</TooltipContent>
+              </Tooltip>
               {maximizedImg && (
                 <div
                   className="absolute z-40 inset-0 w-full h-full backdrop-blur-xs p-6 flex items-center justify-center"

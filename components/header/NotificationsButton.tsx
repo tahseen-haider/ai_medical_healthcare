@@ -37,6 +37,7 @@ import useSWR from "swr";
 
 import { getUserNotifications } from "@/actions";
 import Link from "next/link";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 const fetcher = (userId: string) => getUserNotifications(userId);
 
@@ -80,9 +81,9 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
     {
       refreshInterval: 10000,
       revalidateOnFocus: true,
-      refreshWhenOffline:false,
-      revalidateOnMount:true,
-      shouldRetryOnError:true
+      refreshWhenOffline: false,
+      revalidateOnMount: true,
+      shouldRetryOnError: true,
     }
   );
 
@@ -136,13 +137,20 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" size="icon" className="relative">
-          <Bell className="w-4 h-4" />
-          {unreadCount > 0 && (
-            <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white">
-              {unreadCount}
-            </span>
-          )}
+        <Button variant="outline" size="icon" className="relative p-0">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <div className="w-full h-full flex justify-center items-center">
+                <Bell className="w-4 h-4" />
+                {unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white">
+                    {unreadCount}
+                  </span>
+                )}
+              </div>
+            </TooltipTrigger>
+            <TooltipContent>Notifications</TooltipContent>
+          </Tooltip>
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-96 p-0">
@@ -157,7 +165,7 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
               </div>
               {notifi.length > 0 && (
                 <div
-                  className="cursor-pointer"
+                  className="cursor-pointer h-fit"
                   onClick={async () => {
                     setNotifications((prev) =>
                       prev.map((n) => ({ ...n, read: true }))
@@ -165,7 +173,16 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
                     await markAllNotificationsAsRead(user!.id);
                   }}
                 >
-                  Mark All as Read
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="w-full h-fit">
+                        <MailCheck size={26} />
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                      Mark All as Read
+                    </TooltipContent>
+                  </Tooltip>
                 </div>
               )}
             </div>

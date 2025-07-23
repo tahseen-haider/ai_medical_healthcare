@@ -41,9 +41,9 @@ export default async function RootLayout({
       >
         <ThemeProvider
           attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
+          defaultTheme="dark"
+          enableSystem={false}
+          disableTransitionOnChange={true}
         >
           <LayoutWrapper user={user}>
             {children}

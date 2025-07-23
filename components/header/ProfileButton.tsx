@@ -17,6 +17,7 @@ import Link from "next/link";
 import useSWR from "swr";
 import { UserType } from "@/lib/definitions";
 import { getAppointmentMessagesCount } from "@/actions";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 export default function ProfileButton({ user }: { user: UserType }) {
   const imageUrl = `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${user?.pfp}`;
@@ -61,14 +62,25 @@ export default function ProfileButton({ user }: { user: UserType }) {
     <>
       {pending && <LoadingScreen message="Logging you out..." />}
       <DropdownMenu open={open} onOpenChange={setOpen}>
-        <DropdownMenuTrigger asChild className="relative rounded-full">
-          <Button variant="ghost" className="h-auto w-auto p-0 rounded-full">
-            {/* Badge */}
-            {hasNewMessages && isUser && (
-              <span className="absolute top-0 right-0 inline-flex h-2 w-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-gray-900" />
-            )}
-            <ProfilePicture image={imageUrl} />
-            <span className="sr-only">Open user menu</span>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="ghost"
+            className="h-auto w-auto p-0 rounded-full relative"
+          >
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div>
+                  {/* Badge */}
+                  {hasNewMessages && isUser && (
+                    <span className="absolute top-0 right-0 inline-flex h-2 w-2 rounded-full bg-red-500 ring-2 ring-white dark:ring-gray-900" />
+                  )}
+                  <ProfilePicture image={imageUrl} />
+                </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Account Options</p>
+              </TooltipContent>
+            </Tooltip>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="bg-white dark:bg-dark-2 mt-2 flex flex-col p-1">

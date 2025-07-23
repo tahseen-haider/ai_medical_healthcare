@@ -1,6 +1,11 @@
 "use client";
 import React, { useEffect, useRef } from "react";
 import { ArrowUpFromLine, Loader2 } from "lucide-react";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function ChatInputBox({
   isNewChat,
@@ -74,16 +79,23 @@ export default function ChatInputBox({
               disabled={(!prompt && !imageBase64) || pending}
               type="submit"
               aria-label="Send message"
-              className="bg-light-4 dark:bg-dark-3 w-9 h-9 flex items-center text-white p-2 rounded-full relative shadow-light dark:shadow-dark"
+              className="bg-light-4 dark:bg-dark-3 w-9 h-9 flex items-center text-white rounded-full relative shadow-light dark:shadow-dark"
               style={
                 pending ? { pointerEvents: "none", cursor: "not-allowed" } : {}
               }
             >
-              {!pending ? (
-                <ArrowUpFromLine size={24} />
-              ) : (
-                <Loader2 className="animate-spin" />
-              )}
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="w-full h-full flex justify-center items-center">
+                    {!pending ? (
+                      <ArrowUpFromLine size={20} />
+                    ) : (
+                      <Loader2 className="animate-spin" />
+                    )}
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">Send Prompt</TooltipContent>
+              </Tooltip>
             </button>
           </div>
         </form>

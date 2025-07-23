@@ -15,6 +15,11 @@ import { v4 as uuidv4 } from "uuid";
 import { deleteImageFromCloudinary } from "@/actions/chat.action";
 import { Camera, X } from "lucide-react";
 import { UserType } from "@/lib/definitions";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function Messages({
   userData,
@@ -158,13 +163,14 @@ export default function Messages({
         onData(parsed.error);
       } catch (e) {
         console.error("Failed to parse event data", e);
-        onData("Something went wrong while generating your response. Kindly contact us for inquiry.");
+        onData(
+          "Something went wrong while generating your response. Kindly contact us for inquiry."
+        );
       }
 
       setIsGenerating(false);
       eventSource.close();
     });
-
   };
 
   // If last message is not answered run this
@@ -292,6 +298,7 @@ export default function Messages({
             <form
               ref={uploadImageFormRef}
               className="absolute right-16 bottom-3 flex gap-4"
+              onSubmit={(e) => e.preventDefault()}
             >
               <input
                 ref={imageUploaderRef}
@@ -318,15 +325,20 @@ export default function Messages({
                 disabled={isGenerating || isUploading || pendingImageDeleting}
               />
               <input type="text" name="chatId" readOnly hidden value={chatId} />
-              <div className="bg-light-4 dark:bg-dark-3 w-9 h-9 flex items-center justify-center text-white p-2 rounded-full relative shadow-light dark:shadow-dark">
-                <label
-                  htmlFor="imageUpload"
-                  aria-label="Upload Report"
-                  className="cursor-pointer"
-                >
-                  <Camera size={24} />
-                </label>
-              </div>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="bg-light-4 dark:bg-dark-3 w-9 h-9 flex items-center justify-center text-white rounded-full relative shadow-light dark:shadow-dark">
+                    <label
+                      htmlFor="imageUpload"
+                      aria-label="Upload Report"
+                      className="cursor-pointer w-9 h-9 flex justify-center items-center"
+                    >
+                      <Camera size={24} />
+                    </label>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">Upload Image</TooltipContent>
+              </Tooltip>
             </form>
             {/* Cancel Image Form */}
             {imageBase64 && (
@@ -352,12 +364,19 @@ export default function Messages({
                   className="relative w-10 h-10 flex items-center object-cover overflow-hidden cursor-pointer"
                   disabled={isGenerating || isUploading || pendingImageDeleting}
                 >
-                  <X className="absolute text-black w-full h-full opacity-0 hover:opacity-50" />
-                  <img
-                    key={imageBase64}
-                    src={imageBase64}
-                    alt="uploaded image"
-                  />
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="w-full h-full">
+                        <X className="absolute text-black w-full h-full opacity-0 hover:opacity-50" />
+                        <img
+                          key={imageBase64}
+                          src={imageBase64}
+                          alt="uploaded image"
+                        />
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">Cancel Image</TooltipContent>
+                  </Tooltip>
                 </button>
               </form>
             )}

@@ -5,6 +5,11 @@ import ChatInputBox from "./ChatInputBox";
 import { Bot, Camera, X } from "lucide-react";
 import MessageBox from "./MessageBox";
 import { MessageRole } from "@prisma/client/edge";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function NewChatSection({ userId }: { userId: string }) {
   const [state, action, pending] = useActionState(startNewChat, undefined);
@@ -122,15 +127,20 @@ export default function NewChatSection({ userId }: { userId: string }) {
               hidden
               onChange={handleFileChange}
             />
-            <div className="absolute right-16 bottom-3 bg-light-4 dark:bg-dark-3 w-9 h-9 flex items-center justify-center text-white p-2 rounded-full shadow-light dark:shadow-dark">
-              <label
-                htmlFor="imageUpload"
-                aria-label="Upload Report"
-                className="cursor-pointer"
-              >
-                <Camera size={24} />
-              </label>
-            </div>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <div className="absolute right-16 bottom-3 bg-light-4 dark:bg-dark-3 w-9 h-9 flex items-center justify-center text-white rounded-full shadow-light dark:shadow-dark">
+                  <label
+                    htmlFor="imageUpload"
+                    aria-label="Upload Report"
+                    className="cursor-pointer w-full h-full flex justify-center items-center"
+                  >
+                    <Camera size={24} />
+                  </label>
+                </div>
+              </TooltipTrigger>
+              <TooltipContent side="bottom">Upload Image</TooltipContent>
+            </Tooltip>
             {imageBase64 && (
               <button
                 disabled={pending}
@@ -140,8 +150,19 @@ export default function NewChatSection({ userId }: { userId: string }) {
                 }}
                 className="absolute bottom-2 right-29 w-10 h-10 flex items-center object-cover overflow-hidden cursor-pointer"
               >
-                <X className="absolute text-black w-full h-full opacity-0 hover:opacity-50" />
-                <img key={imageBase64} src={imageBase64} alt="uploaded image" />
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <div className="w-full h-full">
+                      <X className="absolute text-black w-full h-full opacity-0 hover:opacity-50" />
+                    <img
+                      key={imageBase64}
+                      src={imageBase64}
+                      alt="uploaded image"
+                    />
+                    </div>
+                  </TooltipTrigger>
+                  <TooltipContent side="bottom">Cancel Image</TooltipContent>
+                </Tooltip>
               </button>
             )}
             <input
