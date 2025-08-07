@@ -190,7 +190,7 @@ export default async function OurDoctorsSection() {
           <div className="text-center mt-12">
             <Link
               href="/appointment"
-              className="inline-flex items-center gap-2 px-8 py-4 bg-light-4 dark:bg-dark-1 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-200 shadow-dark dark:shadow-light transform hover:-translate-y-0.5"
+              className="inline-flex items-center gap-2 px-8 py-4 bg-light-4 dark:bg-dark-2 hover:bg-blue-700 text-white font-semibold rounded-lg transition-all duration-200 shadow-dark dark:shadow-light transform hover:-translate-y-0.5"
             >
               <Calendar className="w-5 h-5" />
               Book an Appointment

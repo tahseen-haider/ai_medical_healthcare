@@ -1,5 +1,5 @@
 "use client";
-import Image from "next/image";
+import Image, { StaticImageData } from "next/image";
 import PFP from "@/public/images/PFP.png";
 import { useEffect, useState } from "react";
 
@@ -10,11 +10,21 @@ export default function ProfilePageImage({
   image?: string;
   size?: number;
 }) {
-  const [imgSrc, setImgSrc] = useState(image || PFP);
+  const [imgSrc, setImgSrc] = useState<string | StaticImageData>(PFP);
 
   useEffect(() => {
-    setImgSrc(image || PFP);
-  }, [image]);
+    if (image && image.includes("res.cloudinary.com")) {
+      const transformed = image.replace(
+        "/upload/",
+        `/upload/w_${size},h_${size},c_fill,q_auto,f_auto/`
+      );
+      setImgSrc(transformed);
+    } else if (image) {
+      setImgSrc(image);
+    } else {
+      setImgSrc(PFP);
+    }
+  }, [image, size]);
 
   return (
     <div style={{ width: size, height: size }}>
@@ -24,7 +34,7 @@ export default function ProfilePageImage({
         width={size}
         height={size}
         alt="profile picture"
-        className="object-cover w-full h-full"
+        className="object-cover w-full h-full rounded-full"
         onError={() => setImgSrc(PFP)}
       />
     </div>

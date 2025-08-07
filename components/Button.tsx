@@ -9,7 +9,7 @@ export default function Btn({
   className,
 }: {
   children: React.ReactNode;
-  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
   className?: string;
 }) {
   return (

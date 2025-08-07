@@ -122,9 +122,9 @@ export default function Footer() {
           <div className="lg:w-1/3 w-full">
             <div className="flex flex-col gap-5">
               <div>
-                <h5 className="font-bold font-ubuntu text-2xl leading-7 tracking-tight text-gray-900 dark:text-gray-100">
+                <h4 className="font-bold font-ubuntu text-2xl leading-7 tracking-tight text-gray-900 dark:text-gray-100">
                   Be Our Subscriber
-                </h5>
+                </h4>
                 <p className="text-sm text-gray-800 dark:text-gray-300">
                   to get the latest news about health from our experts
                 </p>

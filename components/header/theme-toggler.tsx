@@ -19,6 +19,7 @@ export function ThemeToggler() {
 
   return (
     <Button
+      aria-label="theme toggler"
       className="rounded-full p-0 overflow-hidden hover:bg-white bg-white w-16 h-8 relative shadow-[inset_0_0px_6px_rgba(0,0,0,0.7)]"
       onClick={() => setTheme(resolvedTheme === "dark" ? "light" : "dark")}
     >
