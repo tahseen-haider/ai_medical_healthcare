@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { useState } from "react";
 
 type Props = {
@@ -28,7 +29,9 @@ export default function LazyYouTubeEmbed({ videoId }: Props) {
         />
       ) : (
         <>
-          <img
+          <Image
+            width={300}
+            height={200}
             src={thumbnail}
             alt="YouTube thumbnail"
             className="w-full h-full object-cover"
