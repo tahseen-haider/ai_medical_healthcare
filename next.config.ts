@@ -1,12 +1,13 @@
-import type { NextConfig } from 'next';
+import type { NextConfig } from "next";
+
 const securityHeaders = [
   {
-    key: 'Content-Security-Policy',
+    key: "Content-Security-Policy",
     value: `
       default-src 'self';
       script-src 'self' 'unsafe-inline' https://your-allowed-scripts.com;
       style-src 'self' 'unsafe-inline';
-      img-src 'self' data: https://res.cloudinary.com;
+      img-src 'self' data: https://res.cloudinary.com https://i.ytimg.com;
       frame-src https://www.google.com;
       connect-src 'self';
       font-src 'self';
@@ -14,15 +15,15 @@ const securityHeaders = [
       base-uri 'self';
       form-action 'self';
       frame-ancestors 'none';
-    `.replace(/\n/g, ''), // remove newlines
+    `.replace(/\n/g, ""), // remove newlines
   },
   {
-    key: 'Cross-Origin-Opener-Policy',
-    value: 'same-origin',
+    key: "Cross-Origin-Opener-Policy",
+    value: "same-origin",
   },
   {
-    key: 'X-Frame-Options',
-    value: 'DENY',
+    key: "X-Frame-Options",
+    value: "DENY",
   },
 ];
 
@@ -32,10 +33,16 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: process.env.CLOUDINARY_DOMAIN || 'res.cloudinary.com',
-        port: '',
-        pathname: '/**',
+        protocol: "https",
+        hostname: process.env.CLOUDINARY_DOMAIN || "res.cloudinary.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "i.ytimg.com",
+        port: "",
+        pathname: "/**",
       },
     ],
   },
@@ -43,7 +50,7 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
-        source: '/(.*)', // applies to all routes
+        source: "/(.*)", // applies to all routes
         headers: securityHeaders,
       },
     ];

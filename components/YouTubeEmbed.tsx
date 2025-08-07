@@ -17,6 +17,7 @@ export default function LazyYouTubeEmbed({ videoId }: Props) {
     >
       {isPlayerVisible ? (
         <iframe
+          loading="lazy"
           referrerPolicy="strict-origin-when-cross-origin"
           sandbox="allow-same-origin allow-scripts allow-presentation"
           title={`YouTube video player: ${videoId}`}
