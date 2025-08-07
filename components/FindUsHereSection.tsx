@@ -35,9 +35,9 @@ export default function FindUsHereSection() {
           >
             <div className="flex-shrink-0">{ele.icon}</div>
             <div>
-              <h5 className="text-lg font-semibold text-white dark:text-white">
+              <h3 className="text-lg font-semibold text-white dark:text-white">
                 {ele.title}
-              </h5>
+              </h3>
               <p className="text-sm text-gray-200 dark:text-muted-foreground">
                 {ele.detail}
               </p>
