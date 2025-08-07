@@ -31,7 +31,7 @@ export default async function Home() {
         {/* Our Services */}
         <ServicesSection />
         <div className="w-full border-b-[1px] " />
-        {/* Find Us */}
+        {/* Contact Section */}
         <FindUsHereSection />
       </div>
     </main>
