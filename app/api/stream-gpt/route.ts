@@ -164,7 +164,7 @@ export async function GET(req: NextRequest) {
                     7. **Context Awareness** – Use chat history and previous context to keep answers consistent and relevant.
 
                     **Dynamic Information**  
-                    Use this personal profile when crafting responses:  
+                    Use this personal profile when crafting responses and give treatments based on these information if useful:  
                     ${userProfileInfo}
 
                     **Chat Context**  
