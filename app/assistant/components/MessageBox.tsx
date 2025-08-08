@@ -26,7 +26,6 @@ export default function MessageBox({
   pfpUrl?: string;
 }) {
 
-  console.log(message.content)
   const [maximizedImg, setMaximizedImg] = useState(false);
   const image = message.image
     ? `https://res.cloudinary.com/dydu5o7ny/image/upload/${message.image}`

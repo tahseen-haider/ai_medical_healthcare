@@ -49,7 +49,7 @@ export const Markdown: React.FC<MarkdownRendererProps> = ({ content }) => {
       let parts: React.ReactNode[] = [line]; // strictly ReactNode[]
 
       // Links [text](url)
-      parts = parts.flatMap((chunk) => {
+      parts = parts.flatMap((chunk): React.ReactNode[] => {
         if (typeof chunk !== "string") return [chunk];
         const result: React.ReactNode[] = [];
         let lastIndex = 0;
@@ -77,17 +77,21 @@ export const Markdown: React.FC<MarkdownRendererProps> = ({ content }) => {
       });
 
       // Bold **text**
-      parts = parts.flatMap((chunk) => {
+      parts = parts.flatMap((chunk): React.ReactNode[] => {
         if (typeof chunk !== "string") return [chunk];
-        return chunk.split(/(\*\*[^\*]+\*\*)/g).map((part, i) =>
-          part.startsWith("**") && part.endsWith("**") ? (
-            <strong key={`b-${i}`} className="font-semibold text-base">
-              {part.slice(2, -2)}
-            </strong>
-          ) : (
-            part
-          )
-        );
+
+        return chunk
+          .split(/(\*\*[^\*]+\*\*)/g)
+          .map<React.ReactNode>((part, i) => {
+            if (part.startsWith("**") && part.endsWith("**")) {
+              return (
+                <strong key={`b-${i}`} className="font-semibold text-base">
+                  {part.slice(2, -2)}
+                </strong>
+              );
+            }
+            return part as React.ReactNode;
+          });
       });
 
       // Italic *text* or _text_

@@ -38,7 +38,6 @@ export default function DashboardLinks({
 
   const hasNewMessages = notifications ? notifications > 0 : false;
 
-  console.log(hasNewMessages);
   return (
     <div className="flex flex-col pl-2">
       {links.map((ele, index) => (

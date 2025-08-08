@@ -8,7 +8,6 @@ export async function middleware(req: NextRequest) {
 
   const sessionToken = req.cookies.get("session")?.value;
 
-  console.log("Middleware running: ", req.url)
   // For Unauthenticated
   if (!sessionToken) {
     if (isRestrictedRoute) return NextResponse.next();
