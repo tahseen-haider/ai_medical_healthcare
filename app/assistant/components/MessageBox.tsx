@@ -40,7 +40,7 @@ export default function MessageBox({
   return (
     <section
       className={`mx-auto flex flex-col my-1 ${
-        !isUser ? "items-start" : "items-end"
+        !isUser ? "items-start w-full" : "items-end w-4/5"
       } gap-2 w-full lg:w-4/5 p-1 sm:p-3`}
     >
       <div
