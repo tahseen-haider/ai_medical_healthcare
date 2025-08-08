@@ -95,21 +95,24 @@ export const Markdown: React.FC<MarkdownRendererProps> = ({ content }) => {
       });
 
       // Italic *text* or _text_
-      parts = parts.flatMap((chunk) => {
+      parts = parts.flatMap((chunk): React.ReactNode[] => {
         if (typeof chunk !== "string") return [chunk];
-        return chunk.split(/(\*[^*]+\*|_[^_]+_)/g).map((part, i) => {
-          if (
-            (part.startsWith("*") && part.endsWith("*")) ||
-            (part.startsWith("_") && part.endsWith("_"))
-          ) {
-            return (
-              <em key={`i-${i}`} className="italic text-base">
-                {part.slice(1, -1)}
-              </em>
-            );
-          }
-          return part;
-        });
+
+        return chunk
+          .split(/(\*[^*]+\*|_[^_]+_)/g)
+          .map<React.ReactNode>((part, i) => {
+            if (
+              (part.startsWith("*") && part.endsWith("*")) ||
+              (part.startsWith("_") && part.endsWith("_"))
+            ) {
+              return (
+                <em key={`i-${i}`} className="italic text-base">
+                  {part.slice(1, -1)}
+                </em>
+              );
+            }
+            return part as React.ReactNode;
+          });
       });
 
       return <span className="text-base leading-snug">{parts}</span>;
