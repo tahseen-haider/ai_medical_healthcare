@@ -9,7 +9,8 @@ import {
 import { $Enums } from "@prisma/client/edge";
 import Image from "next/image";
 import React, { useState } from "react";
-import Markdown from "react-markdown";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 
 export default function MessageBox({
   message,
@@ -110,7 +111,9 @@ export default function MessageBox({
               )}
             </>
           )}
-          <Markdown>{message.content}</Markdown>
+          {/* <Markdown> */}
+            {message.content}
+            {/* </Markdown> */}
         </div>
       </div>
       <div

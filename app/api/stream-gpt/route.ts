@@ -103,24 +103,24 @@ export async function GET(req: NextRequest) {
         - Name: "${username}"
         - Age: "${age}"
         - Gender: "${gender}"
-              - Blood Type: "${bloodType}"
-              - Allergies: "${allergies}"
-              - Chronic Conditions: "${chronicConditions}"
-              - Medications: "${medications}"
-              - Surgeries: "${surgeries}"
-              - Immunizations: "${immunizations}"
-              - Blood Pressure: "${bloodPressure}"
-              - Heart Rate: "${heartRate}"
-              - Respiratory Rate: "${respiratoryRate}"
-              - Temperature: "${temperature}"
-              - Smoker: "${smoker}"
-              - Alcohol Use: "${alcoholUse}"
-              - Exercise Frequency: "${exerciseFrequency}"
-              - Mental Health Concerns: "${mentalHealthConcerns}"
-              - Notes: "${notes}"
-              - Height: "${height}"
-              - Weight: "${weight}"
-              - Last Check-Up: "${lastCheckUp}"`;
+        - Blood Type: "${bloodType}"
+        - Allergies: "${allergies}"
+        - Chronic Conditions: "${chronicConditions}"
+        - Medications: "${medications}"
+        - Surgeries: "${surgeries}"
+        - Immunizations: "${immunizations}"
+        - Blood Pressure: "${bloodPressure}"
+        - Heart Rate: "${heartRate}"
+        - Respiratory Rate: "${respiratoryRate}"
+        - Temperature: "${temperature}"
+        - Smoker: "${smoker}"
+        - Alcohol Use: "${alcoholUse}"
+        - Exercise Frequency: "${exerciseFrequency}"
+        - Mental Health Concerns: "${mentalHealthConcerns}"
+        - Notes: "${notes}"
+        - Height: "${height}"
+        - Weight: "${weight}"
+        - Last Check-Up: "${lastCheckUp}"`;
 
       // For chat history
       const summary = await prisma.chatSession.findFirst({
@@ -135,51 +135,12 @@ export async function GET(req: NextRequest) {
         {
           role: "system",
           content: `
-            You are a compassionate and knowledgeable AI medical assistant, here to support users with their personal health concerns.
-            
-            🎯 **Core Objectives:**
-            - Provide medically accurate, easy-to-understand responses.
-            - Tailor replies using the user's health profile and chat history.
-            - Create a safe, respectful, and supportive environment.
-                    - Keep answers clear, concise (2–4 sentences), and empathetic.
-
-                    👤 **User Profile Access:**
-                    You have access to the following user health information:
-                    - **Basic info:** Name, age, gender.
-                    - **Vitals & metrics:** Height, weight, blood pressure, heart rate, respiratory rate, temperature.
-                    - **Health history:** Allergies, chronic conditions, medications, surgeries, immunizations.
-                    - **Lifestyle:** Smoking, alcohol use, exercise habits.
-                    - **Mental health:** Notes or past concerns.
-                    - **Check-up history:** Last medical visit date.
-
-                    🧠 **Chat Memory Use:**
-                    If a conversation summary is provided, use it to maintain continuity and avoid repeating questions. Be aware of ongoing conditions, symptoms, or treatments mentioned previously.
-                    
-                    🖼️ **Image Handling:**
-                    If a medical image (e.g. skin rash, X-ray) is uploaded and your system supports image analysis, provide helpful observations. If the image is unrelated to health, reply with:
-                    > "The uploaded image does not appear medically relevant. Please share a health-related image or ask a medical question."
-
-                    ⚠️ **Boundaries:**
-                    If a user asks about non-medical topics (e.g. technology, finance, general trivia), politely redirect:
-                    > "I'm here to support your health and wellness. Please ask something related to your health."
-                    
-                    💡 **Best Practices:**
-                    - Greet users warmly, especially in your first message.
-                    - Avoid giving diagnoses. Instead, suggest informed next steps.
-                    - Encourage seeing a licensed healthcare provider when appropriate.
-                    - Use plain, human language — no technical jargon or robotic tone.
-                    - Respect user privacy. Don’t assume details beyond what's shared.
-                    - If key data (e.g. age or vitals) is missing, gently prompt for updates to better personalize advice.
-
-                    ✨ **Tone & Style:**
-                    - Warm, supportive, and non-judgmental.
-                    - Brief and informative (2–4 sentences per reply).
-                    - Written for everyday people without medical backgrounds.
-
-                    🧾 **Dynamic Info:**
-                    User Profile Information: ${userProfileInfo}. 
-                    This is the previous history of this chat only use it to know the context or important information: ${summary?.summary}
-                    `.trim(),
+            You are a compassionate and knowledgeable AI medical assistant, here to support users with their personal health concerns. If user asks anything unrelated try to ask them to ask medical related things. be friendly and commpationate. and give solutions to problems.
+            Make sure to answer in headings and make detailed answer and causes, cure, things to look for, medical prescriptions etc whatever is necessary but don't make answer too long make it readable. and use user's personal information in each response and reference to user's information whenever you can.
+            **Dynamic Info:**
+            User That is giving prompt's Personal Information, use this to make your answer and if user asks about himself answer appropriatly: ${userProfileInfo}. 
+            Next is the previous history of this chat use it to know the context or important information: ${summary?.summary}
+            `.trim(),
         },
       ];
 
@@ -228,11 +189,10 @@ export async function GET(req: NextRequest) {
 
       for await (const chunk of completion) {
         const token = chunk.choices[0]?.delta?.content || "";
-        const cleanedToken = token.replace(/\n+/g, "\n");
 
-        fullResponse += cleanedToken;
+        fullResponse += token;
 
-        const data = JSON.stringify({ token: cleanedToken });
+        const data = JSON.stringify({ token });
         controller.enqueue(encoder.encode(`data: ${data}\n\n`));
       }
 
@@ -294,20 +254,20 @@ export async function GET(req: NextRequest) {
           role: "system",
           content: `Summarize the following medical conversation. Include all important details, such as:
                   - User's name (if provided)
-                          - Symptoms or conditions discussed
-                          - Medications mentioned
-                          - Uploaded images and your interpretations
-                          - Any specific questions the user asked
-                          - Any important personal context (age, gender, history, etc.)
-                          Be concise but preserve all medically relevant and identifying context. This will be reused in future conversations.`,
+                  - Symptoms or conditions discussed
+                  - Medications mentioned
+                  - Uploaded images and your interpretations
+                  - Any specific questions the user asked
+                  - Any important personal context (age, gender, history, etc.)
+                  Be concise but preserve all medically relevant and identifying context. This will be reused in future conversations.`,
         },
         {
           role: "user",
           content: `
                   Previous summary: ${summary?.summary}.
-                          New User Message: ${message}
-                          New Assistant Response: ${fullResponse}
-                          `.trim(),
+                  New User Message: ${message}
+                  New Assistant Response: ${fullResponse}
+                  `.trim(),
         },
       ];
 
@@ -376,7 +336,7 @@ export async function GET(req: NextRequest) {
         secondLLMOutputTokens +
         thirdLLMInputTokens +
         thirdLLMOutputTokens;
-        
+
       await prisma.user.update({
         where: {
           id: user?.user.id,
