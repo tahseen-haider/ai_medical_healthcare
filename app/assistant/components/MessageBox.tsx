@@ -9,8 +9,7 @@ import {
 import { $Enums } from "@prisma/client/edge";
 import Image from "next/image";
 import React, { useState } from "react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import { Markdown } from "./Markdown";
 
 export default function MessageBox({
   message,
@@ -26,6 +25,8 @@ export default function MessageBox({
   };
   pfpUrl?: string;
 }) {
+
+  console.log(message.content)
   const [maximizedImg, setMaximizedImg] = useState(false);
   const image = message.image
     ? `https://res.cloudinary.com/dydu5o7ny/image/upload/${message.image}`
@@ -39,13 +40,13 @@ export default function MessageBox({
   const isUser = message.role === "user";
   return (
     <section
-      className={`flex flex-col my-3 ${
-        !isUser ? "items-start lg:ml-0 -ml-6" : "items-end lg:ml-0 ml-6"
-      } gap-2 w-full`}
+      className={`mx-auto flex flex-col my-1 ${
+        !isUser ? "items-start" : "items-end"
+      } gap-2 w-full lg:w-4/5 p-1 sm:p-3`}
     >
       <div
-        className={`gap-4 flex ${
-          !isUser ? "flex-row w-full" : "flex-row-reverse w-full lg:w-5/6"
+        className={`gap-2 flex ${
+          !isUser ? "flex-row w-full " : "flex-row-reverse w-full lg:w-5/6"
         }`}
       >
         <div>
@@ -54,9 +55,9 @@ export default function MessageBox({
         <div
           className={` ${
             !isUser
-              ? "bg-transparent shadow-none"
-              : "text-white bg-light-4 dark:bg-dark-4 shadow-light dark:shadow-dark"
-          } w-full rounded-sm py-2 px-4 whitespace-pre-line`}
+              ? "bg-transparent shadow-none p-0"
+              : "py-2 px-4 text-white bg-light-4 dark:bg-dark-4 shadow-light dark:shadow-dark"
+          } w-full rounded-sm whitespace-pre-line`}
         >
           {message.base64 && (
             <Image
@@ -111,9 +112,8 @@ export default function MessageBox({
               )}
             </>
           )}
-          {/* <Markdown> */}
-            {message.content}
-            {/* </Markdown> */}
+          {/* {message.content} */}
+          <Markdown content={message.content}/>
         </div>
       </div>
       <div

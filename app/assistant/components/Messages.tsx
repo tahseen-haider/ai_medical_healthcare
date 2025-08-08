@@ -213,8 +213,8 @@ export default function Messages({
   return (
     <section className="flex flex-col items-center">
       <div className="w-full h-[calc(100vh-65px-120px)] overflow-y-auto">
-        <div className=" w-5/6 lg:w-4/6 mx-auto flex flex-col">
-          <div className="w-full flex justify-center mt-4 gap-2 flex-col text-center pb-12">
+        <div className=" w-full mx-auto flex flex-col pb-20">
+          <div className="w-4/5 mx-auto flex justify-center mt-4 gap-2 flex-col text-center pb-12">
             <h1 className="font-bold font-ubuntu text-3xl">MediTech</h1>
             <p className="text-gray-500 leading-4">
               Ask anything about medical or upload your medical report

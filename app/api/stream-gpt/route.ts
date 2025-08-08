@@ -131,17 +131,27 @@ export async function GET(req: NextRequest) {
           summary: true,
         },
       });
+      const history = await prisma.message.findMany({
+        where: { chatId },
+        orderBy: { createdAt: "asc" },
+        take: 6,
+      });
+
       const messages: any[] = [
         {
           role: "system",
           content: `
             You are a compassionate and knowledgeable AI medical assistant, here to support users with their personal health concerns. If user asks anything unrelated try to ask them to ask medical related things. be friendly and commpationate. and give solutions to problems.
-            Make sure to answer in headings and make detailed answer and causes, cure, things to look for, medical prescriptions etc whatever is necessary but don't make answer too long make it readable. and use user's personal information in each response and reference to user's information whenever you can.
+            Make sure to answer in headings, quotes, lists etc, and if you give numbering  to list make sure they are proper and make detailed answer and causes, cure, things to look for, medical prescriptions etc whatever is necessary but don't make answer too long make it readable. and use user's personal information in each response and reference to user's information whenever you can.
             **Dynamic Info:**
             User That is giving prompt's Personal Information, use this to make your answer and if user asks about himself answer appropriatly: ${userProfileInfo}. 
             Next is the previous history of this chat use it to know the context or important information: ${summary?.summary}
             `.trim(),
         },
+        ...history.map((msg) => ({
+          role: msg.role as "user" | "assistant",
+          content: msg.content,
+        })),
       ];
 
       const userContent: any[] = [];
@@ -180,7 +190,7 @@ export async function GET(req: NextRequest) {
 
       // LLM invoke
       const completion = await openai.chat.completions.create({
-        model: "gpt-4o-mini",
+        model: "gpt-4o",
         stream: true,
         messages,
       });
