@@ -33,7 +33,9 @@ export const Markdown: React.FC<MarkdownRendererProps> = ({ content }) => {
       ) : (
         <ul key={key} className="list-disc pl-6 text-base space-y-1">
           {listItems.map((item, i) => (
-            <li key={`${key}-item-${i}`}>{parseInlineMarkdown(item.content)}</li>
+            <li key={`${key}-item-${i}`}>
+              {parseInlineMarkdown(item.content)}
+            </li>
           ))}
         </ul>
       );
@@ -44,20 +46,21 @@ export const Markdown: React.FC<MarkdownRendererProps> = ({ content }) => {
     };
 
     const parseInlineMarkdown = (line: string): React.ReactNode => {
-      let parts: (string | React.ReactNode)[] = [line];
+      let parts: React.ReactNode[] = [line]; // strictly ReactNode[]
 
       // Links [text](url)
       parts = parts.flatMap((chunk) => {
         if (typeof chunk !== "string") return [chunk];
-        const result: (string | React.ReactNode)[] = [];
+        const result: React.ReactNode[] = [];
         let lastIndex = 0;
         const linkRegex = /\[([^\]]+)]\(([^)]+)\)/g;
         let match: RegExpExecArray | null;
+
         while ((match = linkRegex.exec(chunk)) !== null) {
           result.push(chunk.slice(lastIndex, match.index));
           result.push(
             <a
-              key={`a-${Math.random()}`}
+              key={`a-${lastIndex}`}
               href={match[2]}
               target="_blank"
               rel="noopener noreferrer"
@@ -68,43 +71,42 @@ export const Markdown: React.FC<MarkdownRendererProps> = ({ content }) => {
           );
           lastIndex = match.index + match[0].length;
         }
+
         result.push(chunk.slice(lastIndex));
         return result;
       });
 
       // Bold **text**
-      parts = parts.flatMap((chunk) =>
-        typeof chunk === "string"
-          ? chunk.split(/(\*\*[^\*]+\*\*)/g).map((part, i) =>
-              part.startsWith("**") && part.endsWith("**") ? (
-                <strong key={`b-${i}`} className="font-semibold text-base">
-                  {part.slice(2, -2)}
-                </strong>
-              ) : (
-                part
-              )
-            )
-          : [chunk]
-      );
+      parts = parts.flatMap((chunk) => {
+        if (typeof chunk !== "string") return [chunk];
+        return chunk.split(/(\*\*[^\*]+\*\*)/g).map((part, i) =>
+          part.startsWith("**") && part.endsWith("**") ? (
+            <strong key={`b-${i}`} className="font-semibold text-base">
+              {part.slice(2, -2)}
+            </strong>
+          ) : (
+            part
+          )
+        );
+      });
 
       // Italic *text* or _text_
-      parts = parts.flatMap((chunk) =>
-        typeof chunk === "string"
-          ? chunk.split(/(\*[^*]+\*|_[^_]+_)/g).map((part, i) => {
-              if (
-                (part.startsWith("*") && part.endsWith("*")) ||
-                (part.startsWith("_") && part.endsWith("_"))
-              ) {
-                return (
-                  <em key={`i-${i}`} className="italic text-base">
-                    {part.slice(1, -1)}
-                  </em>
-                );
-              }
-              return part;
-            })
-          : [chunk]
-      );
+      parts = parts.flatMap((chunk) => {
+        if (typeof chunk !== "string") return [chunk];
+        return chunk.split(/(\*[^*]+\*|_[^_]+_)/g).map((part, i) => {
+          if (
+            (part.startsWith("*") && part.endsWith("*")) ||
+            (part.startsWith("_") && part.endsWith("_"))
+          ) {
+            return (
+              <em key={`i-${i}`} className="italic text-base">
+                {part.slice(1, -1)}
+              </em>
+            );
+          }
+          return part;
+        });
+      });
 
       return <span className="text-base leading-snug">{parts}</span>;
     };
