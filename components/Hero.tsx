@@ -54,7 +54,7 @@ export default function HeroSection() {
           {/* Image/Graphic Placeholder - Stays large on all screens, prioritized */}
           <div className="w-full min-w-[280px] max-w-[400px] md:max-w-lg lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl flex items-center justify-center ">
             <div className="w-full flex items-center justify-center ">
-              <Image src="/images/Base.webp" width={2000} height={2000} alt="hero-graphics-main"/>
+              <Image src="/images/Base1.webp" width={2000} height={2000} alt="hero-graphics-main"/>
             </div>
           </div>
         </div>
