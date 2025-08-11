@@ -14,7 +14,7 @@ export default function HeroSection() {
         "
       />
       {/* Main Content Container */}
-      <div className="container mx-auto px-4 py-8 lg:py-12 h-full w-full max-w-[1440px] flex flex-col justify-between gap-5">
+      <div className="container mx-auto px-4 py-8 lg:py-12 h-full w-full max-w-[1440px] flex flex-col justify-between gap-20">
         {/* Hero Content */}
         <div className="flex flex-col-reverse lg:flex-row items-center gap-6 lg:gap-12 xl:gap-16 flex-1">
           {/* Text Content - Gets smaller on smaller screens, wraps properly */}

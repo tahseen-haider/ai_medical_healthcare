@@ -105,16 +105,16 @@ function Navbar({ user }: { user?: UserType }) {
         </Link>
         {/* UserNavLinks */}
         {!hideLinks && (
-          <nav>
+          <nav className="">
             <ul
               className={`${
                 isHomePage
-                  ? "bg-transparent text-black dark:text-white"
+                  ? "bg-white/70 dark:bg-dark-4/70 lg:bg-transparent lg:dark:bg-transparent text-black dark:text-white"
                   : "dark:bg-dark-4 bg-light-4 text-white"
               }   lg:relative lg:flex-row lg:w-fit lg:top-0 lg:z-0
                         absolute flex flex-col items-center lg:gap-7 w-screen left-0 ${
-                          isNavbarDown ? "top-14" : "-top-60"
-                        } transition-all duration-300 -z-20`}
+                          isNavbarDown ? "top-14 sm:top-16" : "-top-64"
+                        } transition-all duration-300 -z-20 border-b-2 border-gray-200 lg:border-none`}
             >
               {isAdmin
                 ? emptyLinks
@@ -147,7 +147,7 @@ function Navbar({ user }: { user?: UserType }) {
                   ))}
               {/* Theme toggeler for smaller screens */}
               <div className="sm:hidden p-2 border-t-2 w-full flex justify-center items-center">
-                <div className="text-[18px] text-white  flex gap-4 items-center justify-center font-roboto font-bold leading-[22px] -tracking-[0.5px]">
+                <div className="text-[18px] text-black dark:text-white  flex gap-4 items-center justify-center font-roboto font-bold leading-[22px] -tracking-[0.5px]">
                   Toggle Theme:
                   <ThemeToggler />
                 </div>
