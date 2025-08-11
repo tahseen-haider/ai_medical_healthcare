@@ -4,7 +4,7 @@ import YouTubeEmbed from "./YouTubeEmbed";
 
 export default function WhyChooseUsSection() {
   return (
-    <section className="relative overflow-hidden bg-white dark:bg-dark-4 py-12 sm:py-16 px-4 sm:px-8 lg:px-16">
+    <section className="relative overflow-hidden bg-white dark:bg-dark-4 w-full py-12 sm:py-16 px-4 sm:px-8 lg:px-16">
   <div className="max-w-7xl mx-auto flex flex-col lg:flex-row items-center gap-10">
     {/* TEXT */}
     <div className="w-full lg:w-1/2 space-y-4 sm:space-y-6">

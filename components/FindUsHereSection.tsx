@@ -20,7 +20,7 @@ const contactList = [
 
 export default function FindUsHereSection() {
   return (
-    <section className="flex flex-col px-4 sm:px-6 py-10 sm:py-20 gap-10 max-w-screen-xl mx-auto">
+    <section className="flex flex-col px-4 sm:px-6 py-10 sm:py-20 gap-10 w-full max-w-screen-xl mx-auto">
       {/* Section Title */}
       <h2 className="font-bold text-3xl sm:text-4xl text-foreground tracking-tight">
         Find Us Here

@@ -33,7 +33,7 @@ export default function HeroSection() {
             {/* CTA Section - Buttons scale down on smaller screens */}
             <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 lg:gap-6 justify-center lg:justify-start items-center pt-4 lg:pt-6">
               <Link href="/assistant">
-                <Btn className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-bold text-base sm:text-lg md:text-xl lg:text-2xl px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 xl:px-12 xl:py-6 h-10 sm:h-12 lg:h-14 xl:h-16 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 rounded-md">
+                <Btn className="bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white dark:text-white font-bold text-base sm:text-lg md:text-xl lg:text-2xl px-6 py-3 sm:px-8 sm:py-4 lg:px-10 lg:py-5 xl:px-12 xl:py-6 h-10 sm:h-12 lg:h-14 xl:h-16 transition-all duration-200 shadow-lg hover:shadow-xl hover:scale-105 rounded-md">
                   Chat with AI NOW
                 </Btn>
               </Link>

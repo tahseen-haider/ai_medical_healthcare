@@ -59,8 +59,8 @@ export default async function OurDoctorsSection() {
   }
 
   return (
-    <section className="px-2 sm:px-6 py-14 bg-gray-50 dark:bg-gray-950">
-      <div className="max-w-7xl mx-auto">
+    <section className="flex w-full px-2 sm:px-6 py-14">
+      <div className="w-full max-w-[1440px] mx-auto">
         {/* Header */}
         <div className="text-center mb-12">
           <div className="flex items-center justify-center gap-3 mb-4">
