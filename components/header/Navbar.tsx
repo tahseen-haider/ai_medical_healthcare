@@ -61,12 +61,26 @@ function Navbar({ user }: { user?: UserType }) {
   const isAdmin = role === "admin";
   const isDoctor = role === "doctor";
 
+  const isHomePage = isActiveLink(pathname, "/");
+
   return (
     <header
-      className={`fixed z-30 w-screen h-14 sm:h-16 dark:bg-dark-4 bg-light-4  flex justify-center border-b-2`}
+      className={`${
+        isHomePage
+          ? "bg-transparent backdrop-blur-xs text-black dark:text-white"
+          : "dark:bg-dark-4 bg-light-4 text-white"
+      } fixed z-30 w-screen h-14 sm:h-16 flex justify-center border-b-2`}
     >
-      <div className="max-w-[1920px] w-full flex items-center justify-between h-full px-2 lg:px-6">
-        <div className="absolute -z-10 w-screen h-full left-0 dark:bg-dark-4 bg-light-4" />
+      <div
+        className={`max-w-[1920px] w-full flex items-center justify-between h-full px-2 lg:px-6`}
+      >
+        <div
+          className={`${
+            isHomePage
+              ? "bg-transparent text-black dark:text-white"
+              : "dark:bg-dark-4 bg-light-4 text-white"
+          } absolute -z-10 w-screen h-full left-0`}
+        />
         {/* LOGO */}
         <Link
           href={`${
@@ -83,9 +97,7 @@ function Navbar({ user }: { user?: UserType }) {
                   height={52}
                   alt="Logo of MediTech"
                 />
-                <h3 className={`text-2xl font-bold font-ubuntu text-white`}>
-                  MediTech
-                </h3>
+                <h3 className={`text-2xl font-bold font-ubuntu`}>MediTech</h3>
               </div>
             </TooltipTrigger>
             <TooltipContent>Go To Home</TooltipContent>
@@ -95,8 +107,12 @@ function Navbar({ user }: { user?: UserType }) {
         {!hideLinks && (
           <nav>
             <ul
-              className={`   lg:relative lg:flex-row lg:w-fit lg:top-0 lg:z-0
-                        absolute dark:bg-dark-4 bg-light-4 flex flex-col items-center lg:gap-7 w-screen left-0 ${
+              className={`${
+                isHomePage
+                  ? "bg-transparent text-black dark:text-white"
+                  : "dark:bg-dark-4 bg-light-4 text-white"
+              }   lg:relative lg:flex-row lg:w-fit lg:top-0 lg:z-0
+                        absolute flex flex-col items-center lg:gap-7 w-screen left-0 ${
                           isNavbarDown ? "top-14" : "-top-60"
                         } transition-all duration-300 -z-20`}
             >
@@ -111,11 +127,19 @@ function Navbar({ user }: { user?: UserType }) {
                           setIsNavbarDown(false);
                         }}
                         href={ele.link}
-                        className={`text-[18px] ${
-                          isActiveLink(pathname, ele.link)
-                            ? "text-white dark:text-gray-300 border-b-4 border-white dark:border-gray-300 pb-1 font-bold"
-                            : "text-white hover:border-b-[1px] pb-[6px] border-gray-200 dark:border-gray-300 "
-                        } font-roboto leading-[22px] -tracking-[0.5px]`}
+                        className={`text-[18px] 
+                          ${isHomePage ? "" : ""}
+                          ${
+                            isActiveLink(pathname, ele.link)
+                              ? `dark:text-gray-300 border-b-4 ${
+                                  isHomePage ? "border-black" : "border-white"
+                                }  pb-1 font-bold dark:border-gray-300`
+                              : `${
+                                  isHomePage
+                                    ? "border-black"
+                                    : "border-gray-200"
+                                } hover:border-b-[1px] pb-[6px]  dark:border-gray-300 `
+                          } font-roboto leading-[22px] -tracking-[0.5px]`}
                       >
                         {ele.title}
                       </Link>

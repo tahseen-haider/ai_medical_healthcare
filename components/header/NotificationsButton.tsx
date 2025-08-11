@@ -141,7 +141,7 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
           <Tooltip>
             <TooltipTrigger asChild>
               <div className="w-full h-full flex justify-center items-center">
-                <Bell className="w-4 h-4" />
+                <Bell className="w-4 h-4 text-black dark:text-white" />
                 {unreadCount > 0 && (
                   <span className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white">
                     {unreadCount}

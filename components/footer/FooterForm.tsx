@@ -12,6 +12,7 @@ export default function FooterForm() {
         type="email"
         placeholder="example@email.com"
         className="input-fields w-full outline-0"
+        name="email"
       />
       <Btn
         onClick={(e) => {

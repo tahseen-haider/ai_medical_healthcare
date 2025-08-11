@@ -60,24 +60,40 @@ export default function Messages({
   const [prompt, setPrompt] = useState("");
 
   const uploadImageFormRef = useRef<HTMLFormElement>(null);
+
   const uploadToCloudinary = async (file: File) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append(
-      "upload_preset",
-      process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET as string
-    );
+    try {
+      setIsUploading(true);
 
-    const res = await fetch(
-      "https://api.cloudinary.com/v1_1/dydu5o7ny/image/upload",
-      {
-        method: "POST",
-        body: formData,
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append(
+        "upload_preset",
+        process.env.NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET as string
+      );
+
+      const res = await fetch(
+        "https://api.cloudinary.com/v1_1/dydu5o7ny/image/upload",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
+
+      if (!res.ok) {
+        setIsUploading(false);
       }
-    );
 
-    const data = await res.json();
-    return data.public_id; // Or data.secure_url
+      const data = await res.json();
+      setIsUploading(false);
+
+      // Cloudinary returns `public_id` in JSON
+      return data.public_id;
+    } catch (err) {
+      console.error(err);
+      setIsUploading(false);
+      return null;
+    }
   };
 
   // Refs

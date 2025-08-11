@@ -1,5 +1,5 @@
 import FindUsHereSection from "@/components/FindUsHereSection";
-import HeroSectionImproved from "@/components/Hero";
+import HeroSection from "@/components/Hero";
 import OurDoctorsSection from "@/components/OurDoctorsSection";
 import ServicesSection from "@/components/ServicesSection";
 import WhyChooseUsSection from "@/components/WhyChooseUsSection";
@@ -18,9 +18,9 @@ export default async function Home() {
   }
   return (
     <main className="flex justify-center ">
-      <div className="max-w-[1920px] w-full">
+      <div className="w-full flex flex-col items-center">
         {/* Hero Section */}
-        <HeroSectionImproved />
+        <HeroSection />
         <div className="w-full border-b-[1px] " />
         {/* Our Doctors */}
         <OurDoctorsSection />

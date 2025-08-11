@@ -90,114 +90,116 @@ export default function NewChatSection({ userId }: { userId: string }) {
   ) : (
     <section className="flex flex-col gap-2 w-full h-[calc(100vh-65px)] items-center justify-center">
       {/* Header */}
-      <div className="text-center mb-4">
-        <div className="flex items-center justify-center gap-3 mb-4">
-          <div className="p-3 bg-blue-100 dark:bg-dark-4 rounded-full">
-            <Bot className="w-8 h-8" />
+      <div className="flex flex-col items-center justify-center -mt-28">
+        <div className="text-center mb-4">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="p-3 bg-blue-100 dark:bg-dark-4 rounded-full">
+              <Bot className="w-8 h-8" />
+            </div>
           </div>
+          <h2 className="font-ubuntu font-bold text-3xl sm:text-4xl text-gray-900 dark:text-white mb-1">
+            What can I help with?
+          </h2>
+          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            Ask anything about medical or upload your medical report
+          </p>
         </div>
-        <h2 className="font-ubuntu font-bold text-3xl sm:text-4xl text-gray-900 dark:text-white mb-1">
-          What can I help with?
-        </h2>
-        <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-          Ask anything about medical or upload your medical report
-        </p>
+        <ChatInputBox
+          onSubmit={() => {
+            setUserPrompt(prompt);
+            setPrompt("");
+            setIsSubmitted(true);
+          }}
+          buttonRef={buttonRef}
+          pending={pending}
+          action={action}
+          prompt={prompt}
+          setPrompt={setPrompt}
+          imageBase64={imageBase64}
+          additionalInputElement={
+            <>
+              <input name="userId" type="text" value={userId} readOnly hidden />
+              <input
+                ref={imageUploaderRef}
+                type="file"
+                name="image"
+                id="imageUpload"
+                accept="image/*"
+                hidden
+                onChange={handleFileChange}
+              />
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="absolute right-16 bottom-3 bg-light-4 dark:bg-dark-3 w-9 h-9 flex items-center justify-center text-white rounded-full shadow-light dark:shadow-dark">
+                    <label
+                      htmlFor="imageUpload"
+                      aria-label="Upload Report"
+                      className="cursor-pointer w-full h-full flex justify-center items-center"
+                    >
+                      <Camera size={24} />
+                    </label>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">Upload Image</TooltipContent>
+              </Tooltip>
+              {imageBase64 && (
+                <button
+                  disabled={pending}
+                  onClick={() => {
+                    imageUploaderRef.current!.value = "";
+                    setImageBase64("");
+                  }}
+                  className="absolute bottom-2 right-29 w-10 h-10 flex items-center object-cover overflow-hidden cursor-pointer"
+                >
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <div className="w-full h-full">
+                        <X className="absolute text-black w-full h-full opacity-0 hover:opacity-50" />
+                        <img
+                          key={imageBase64}
+                          src={imageBase64}
+                          alt="uploaded image"
+                        />
+                      </div>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">Cancel Image</TooltipContent>
+                  </Tooltip>
+                </button>
+              )}
+              <input
+                value={imageBase64 || ""}
+                type="text"
+                name="imageBase64"
+                hidden
+                readOnly
+              />
+            </>
+          }
+        />
+        {/* Extra options to choose from */}
+        <div className="w-full md:w-4/6 flex flex-wrap items-center justify-center">
+          {defaultMedicalQuestions.map((ele, index) => (
+            <div
+              key={index}
+              onClick={() => {
+                if (pending) return;
+                submitOnDefaultQuestionsClick.current =
+                  !submitOnDefaultQuestionsClick.current;
+                setUserPrompt(ele);
+                setPrompt(ele);
+              }}
+              className={`bg-white dark:bg-dark-4 shadow-dark dark:shadow-light p-2 py-1 mx-2 my-1 text-sm lg:text-base rounded-lg ${
+                pending
+                  ? "cursor-not-allowed"
+                  : " cursor-pointer hover:bg-light-4 hover:text-white hover:dark:bg-white hover:dark:text-black hover:-translate-y-0.5"
+              }`}
+            >
+              {ele}
+            </div>
+          ))}
+        </div>
+        {state?.message && <p className="text-red-400">{state?.message}</p>}
       </div>
-      <ChatInputBox
-        onSubmit={() => {
-          setUserPrompt(prompt);
-          setPrompt("");
-          setIsSubmitted(true);
-        }}
-        buttonRef={buttonRef}
-        pending={pending}
-        action={action}
-        prompt={prompt}
-        setPrompt={setPrompt}
-        imageBase64={imageBase64}
-        additionalInputElement={
-          <>
-            <input name="userId" type="text" value={userId} readOnly hidden />
-            <input
-              ref={imageUploaderRef}
-              type="file"
-              name="image"
-              id="imageUpload"
-              accept="image/*"
-              hidden
-              onChange={handleFileChange}
-            />
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div className="absolute right-16 bottom-3 bg-light-4 dark:bg-dark-3 w-9 h-9 flex items-center justify-center text-white rounded-full shadow-light dark:shadow-dark">
-                  <label
-                    htmlFor="imageUpload"
-                    aria-label="Upload Report"
-                    className="cursor-pointer w-full h-full flex justify-center items-center"
-                  >
-                    <Camera size={24} />
-                  </label>
-                </div>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">Upload Image</TooltipContent>
-            </Tooltip>
-            {imageBase64 && (
-              <button
-                disabled={pending}
-                onClick={() => {
-                  imageUploaderRef.current!.value = "";
-                  setImageBase64("");
-                }}
-                className="absolute bottom-2 right-29 w-10 h-10 flex items-center object-cover overflow-hidden cursor-pointer"
-              >
-                <Tooltip>
-                  <TooltipTrigger asChild>
-                    <div className="w-full h-full">
-                      <X className="absolute text-black w-full h-full opacity-0 hover:opacity-50" />
-                    <img
-                      key={imageBase64}
-                      src={imageBase64}
-                      alt="uploaded image"
-                    />
-                    </div>
-                  </TooltipTrigger>
-                  <TooltipContent side="bottom">Cancel Image</TooltipContent>
-                </Tooltip>
-              </button>
-            )}
-            <input
-              value={imageBase64 || ""}
-              type="text"
-              name="imageBase64"
-              hidden
-              readOnly
-            />
-          </>
-        }
-      />
-      {/* Extra options to choose from */}
-      <div className="w-full md:w-4/6 flex flex-wrap items-center justify-center">
-        {defaultMedicalQuestions.map((ele, index) => (
-          <div
-            key={index}
-            onClick={() => {
-              if (pending) return;
-              submitOnDefaultQuestionsClick.current =
-                !submitOnDefaultQuestionsClick.current;
-              setUserPrompt(ele);
-              setPrompt(ele);
-            }}
-            className={`bg-white dark:bg-dark-4 shadow-dark dark:shadow-light p-2 py-1 mx-2 my-1 text-sm lg:text-base rounded-lg ${
-              pending
-                ? "cursor-not-allowed"
-                : " cursor-pointer hover:bg-light-4 hover:text-white hover:dark:bg-white hover:dark:text-black hover:-translate-y-0.5"
-            }`}
-          >
-            {ele}
-          </div>
-        ))}
-      </div>
-      {state?.message && <p className="text-red-400">{state?.message}</p>}
     </section>
   );
 }

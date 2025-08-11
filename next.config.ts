@@ -9,7 +9,7 @@ const securityHeaders = [
       style-src 'self' 'unsafe-inline';
       img-src 'self' data: https://res.cloudinary.com https://i.ytimg.com;
       frame-src https://www.google.com;
-      connect-src 'self';
+      connect-src 'self' https://api.cloudinary.com;
       font-src 'self';
       object-src 'none';
       base-uri 'self';
@@ -26,6 +26,7 @@ const securityHeaders = [
     value: "DENY",
   },
 ];
+
 
 const nextConfig: NextConfig = {
   reactStrictMode: false,
