@@ -2,6 +2,7 @@ import { ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import Btn from "./Button"
+import Image from "next/image"
 
 export default function HeroSection() {
   return (
@@ -13,9 +14,9 @@ export default function HeroSection() {
     dark:bg-[linear-gradient(155deg,#000_0%,#061A31_40%)]"
       />
       {/* Main Content Container */}
-      <div className="container mx-auto px-4 pt-2 lg:pt-6 pb-8 lg:py-12 h-full w-full max-w-[1440px] flex flex-col justify-between gap-20">
+      <div className="container mx-auto px-4 pt-2 lg:pt-6 pb-8 lg:py-12 h-full w-full max-w-[1440px] flex flex-col justify-center items-center gap-20">
         {/* Hero Content */}
-        <div className="flex flex-col-reverse lg:flex-row items-center gap-6 lg:gap-12 xl:gap-16 flex-1">
+        <div className="flex flex-col-reverse lg:flex-row items-center gap-12 lg:gap-12 xl:gap-16">
           {/* Text Content - Gets smaller on smaller screens, wraps properly */}
           <div className="lg:flex-1 text-center lg:text-left space-y-4 lg:space-y-6 xl:space-y-8">
             <h1 className="font-ubuntu font-bold -tracking-[0.5px] text-3xl md:text-4xl lg:text-5xl leading-tight">
@@ -51,24 +52,9 @@ export default function HeroSection() {
           </div>
 
           {/* Image/Graphic Placeholder - Stays large on all screens, prioritized */}
-          <div className="flex-1 w-full min-w-[280px] max-w-lg sm:max-w-xl md:max-w-2xl lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl flex items-center justify-center">
-            <div className="w-full aspect-square rounded-2xl xl:rounded-3xl bg-gradient-to-br from-blue-100 to-blue-200 dark:from-blue-900/20 dark:to-blue-800/20 border border-blue-200 dark:border-blue-800 flex items-center justify-center shadow-xl hover:shadow-2xl transition-all duration-300">
-              <div className="text-center space-y-4 lg:space-y-6 xl:space-y-8">
-                {/* Responsive circle sizes - stays prominent */}
-                <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 xl:w-32 xl:h-32 2xl:w-40 2xl:h-40 mx-auto rounded-full bg-blue-500/20 flex items-center justify-center">
-                  <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 lg:w-14 lg:h-14 xl:w-16 xl:h-16 2xl:w-20 2xl:h-20 rounded-full bg-blue-500 shadow-lg"></div>
-                </div>
-                <div className="space-y-2">
-                  <p className="text-blue-600 dark:text-blue-400 font-medium text-xs sm:text-sm md:text-base lg:text-lg xl:text-xl">
-                    AI Healthcare Assistant
-                  </p>
-                  <div className="flex justify-center space-x-1">
-                    <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-500 rounded-full animate-pulse"></div>
-                    <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-500 rounded-full animate-pulse delay-75"></div>
-                    <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 bg-blue-500 rounded-full animate-pulse delay-150"></div>
-                  </div>
-                </div>
-              </div>
+          <div className="w-full min-w-[280px] max-w-[400px] md:max-w-lg lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl flex items-center justify-center ">
+            <div className="w-full flex items-center justify-center ">
+              <Image src="/images/Base.webp" width={2000} height={2000} alt="hero-graphics-main"/>
             </div>
           </div>
         </div>
