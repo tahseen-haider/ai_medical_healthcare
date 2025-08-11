@@ -19,13 +19,13 @@ export default function LayoutWrapper({ user, children }: LayoutWrapperProps) {
     /^\/(assistant(\/.*)?|admin(\/.*)?|doctor(\/.*)?|profile|settings)$/;
 
   const showFooter = !hideFooterRoutes.test(pathname);
-
+  const isHomePage = pathname === "/";
   return (
     <>
       <Toaster richColors position="top-center" />
-      <ConnectionStatus/>
-      <Navbar user={user}/>
-      <div className="h-16" />
+      <ConnectionStatus />
+      <Navbar user={user} />
+      {!isHomePage && <div className="h-16" />}
       <div className="min-h-[60vh]">{children}</div>
       {showFooter && <Footer />}
     </>
