@@ -1,7 +1,8 @@
+import "./styles/hero.css"
 import { ArrowRight } from "lucide-react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import Btn from "./Button"
+import Btn from "../Button"
 import Image from "next/image"
 
 export default function HeroSection() {
@@ -57,7 +58,8 @@ export default function HeroSection() {
               {/* Main Image */}
               <Image src="/images/Base.webp" width={2000} height={2000} alt="hero-graphics-main"/>
               {/* Extra Images */}
-              <Image src="/images/Bot.webp" alt="bot-image" width={900} height={900} className="absolute -bottom-6 left-0 w-2/6"/>
+              <Image src="/images/Bot.webp" alt="bot-image" width={900} height={900} className="absolute -bottom-6 left-10 w-2/6"/>
+              <Image src="/images/Drone.webp" alt="drone-image" width={900} height={900} className="absolute top-6 left-0 w-1/6 floating"/>
             </div>
           </div>
         </div>

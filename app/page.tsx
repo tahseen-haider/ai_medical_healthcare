@@ -1,5 +1,5 @@
 import FindUsHereSection from "@/components/FindUsHereSection";
-import HeroSection from "@/components/Hero";
+import HeroSection from "@/components/homepage/Hero";
 import OurDoctorsSection from "@/components/OurDoctorsSection";
 import ServicesSection from "@/components/ServicesSection";
 import WhyChooseUsSection from "@/components/WhyChooseUsSection";
