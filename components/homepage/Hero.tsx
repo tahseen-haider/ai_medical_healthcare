@@ -56,10 +56,10 @@ export default function HeroSection() {
           <div className="w-full min-w-[280px] max-w-[400px] md:max-w-lg lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl flex items-center justify-center ">
             <div className="relative select-none pointer-events-none w-full flex items-center justify-center ">
               {/* Main Image */}
-              <Image src="/images/Base.webp" width={2000} height={2000} alt="hero-graphics-main"/>
+              <Image priority src="/images/Base.webp" width={2000} height={2000} alt="hero-graphics-main"/>
               {/* Extra Images */}
-              <Image src="/images/Bot.webp" alt="bot-image" width={900} height={900} className="absolute -bottom-6 left-10 w-2/6"/>
-              <Image src="/images/Drone.webp" alt="drone-image" width={900} height={900} className="absolute top-6 left-0 w-1/6 floating"/>
+              <Image src="/images/Bot.webp" alt="bot-image" width={900} height={900} className="absolute -bottom-6 left-10 w-2/6 h-fit"/>
+              <Image src="/images/Drone.webp" alt="drone-image" width={900} height={900} className="absolute top-6 left-0 w-1/6 h-fit floating"/>
             </div>
           </div>
         </div>
