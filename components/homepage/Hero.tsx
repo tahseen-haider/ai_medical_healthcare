@@ -4,9 +4,9 @@ import { Button } from "@/components/ui/button";
 import Btn from "../Button";
 import Image from "next/image";
 import DroneImage from "./DroneImage";
+import BotImage from "./BotImage";
 
 export default function HeroSection() {
-
   return (
     <div className="relative w-full min-h-screen pt-[65px] overflow-hidden">
       {/* Background */}
@@ -66,33 +66,9 @@ export default function HeroSection() {
                 alt="hero-graphics-main"
                 className="pointer-events-none"
               />
-              {/* Extra Images */}
-              <Link
-              draggable={false}
-                href="/assistant"
-                className="absolute cursor-pointer z-20 -bottom-6 left-10 w-2/6 h-fit group"
-              >
-                {/* Default image */}
-                <Image
-                  draggable={false}
-                  src="/images/Bot.webp"
-                  alt="bot-image"
-                  width={900}
-                  height={900}
-                  className="w-full h-full group-hover:hidden"
-                  />
-
-                {/* Hover image */}
-                <Image
-                  draggable={false}
-                  src="/images/Bot-Hello.webp"
-                  alt="bot-image-hover"
-                  width={900}
-                  height={900}
-                  className="w-full h-full hidden group-hover:block"
-                />
-              </Link>
-              <DroneImage/>
+              {/* Bot Images */}
+              <BotImage/>
+              <DroneImage />
             </div>
           </div>
         </div>
