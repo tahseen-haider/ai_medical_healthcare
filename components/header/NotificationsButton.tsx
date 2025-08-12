@@ -137,7 +137,7 @@ export default function NotificationsComponent({ user }: { user: UserType }) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" size="icon" className="relative p-0">
+        <Button aria-label="Notifications" variant="outline" size="icon" className="relative p-0">
           <Tooltip>
             <TooltipTrigger asChild>
               <div className="w-full h-full flex justify-center items-center">
