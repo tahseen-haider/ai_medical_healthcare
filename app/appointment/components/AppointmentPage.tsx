@@ -53,7 +53,7 @@ export default function AppointmentPage({
   }, [state]);
 
   return (
-    <main className="min-h-screen flex flex-col items-center bg-gray-50 dark:bg-gray-950">
+    <main className="min-h-screen flex flex-col items-center bg-gradient-to-b to-light-4 from-gray-50 dark:to-dark-4 dark:from-gray-950">
       <div className="w-full max-w-6xl px-2 md:px-4 py-2 md:py-8">
         {/* Header */}
         <div className="text-center mb-4 md:mb-12">

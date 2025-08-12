@@ -88,7 +88,7 @@ export default function DoctorSection() {
   };
 
   return (
-    <section className="px-2 sm:px-6 py-8 bg-gray-50 dark:bg-gray-950">
+    <section className="px-2 sm:px-6 py-8 bg-gradient-to-b from-light-4 to-gray-50 dark:from-dark-4 dark:to-gray-950">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="text-center mb-12">

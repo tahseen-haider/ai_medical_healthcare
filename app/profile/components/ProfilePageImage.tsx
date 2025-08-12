@@ -34,7 +34,7 @@ export default function ProfilePageImage({
         width={size}
         height={size}
         alt="profile picture"
-        className="object-cover w-full h-full rounded-full"
+        className="object-cover w-full h-full"
         onError={() => setImgSrc(PFP)}
       />
     </div>

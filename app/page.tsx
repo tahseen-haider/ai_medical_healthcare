@@ -25,11 +25,11 @@ export default async function Home() {
         {/* Our Doctors */}
         <OurDoctorsSection />
         <div className="w-full border-b-[1px] " />
-        {/* Why Choose Us */}
-        <WhyChooseUsSection />
-        <div className="w-full border-b-[1px] " />
         {/* Our Services */}
         <ServicesSection />
+        <div className="w-full border-b-[1px] " />
+        {/* Why Choose Us */}
+        <WhyChooseUsSection />
         <div className="w-full border-b-[1px] " />
         {/* Contact Section */}
         <FindUsHereSection />
