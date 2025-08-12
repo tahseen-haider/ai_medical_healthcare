@@ -1,9 +1,9 @@
-import "./styles/hero.css"
-import { ArrowRight } from "lucide-react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import Btn from "../Button"
-import Image from "next/image"
+import "./styles/hero.css";
+import { ArrowRight } from "lucide-react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import Btn from "../Button";
+import Image from "next/image";
 
 export default function HeroSection() {
   return (
@@ -29,7 +29,8 @@ export default function HeroSection() {
               Companion
             </h1>
             <h2 className="font-ubuntu text-base md:text-lg lg:text-xl -tracking-[0.5px] leading-relaxed text-gray-700 dark:text-gray-200 max-w-xl lg:max-w-2xl">
-              Get personalized health insights, symptom checks, and wellness support anytime, anywhere.
+              Get personalized health insights, symptom checks, and wellness
+              support anytime, anywhere.
             </h2>
 
             {/* CTA Section - Buttons scale down on smaller screens */}
@@ -54,16 +55,50 @@ export default function HeroSection() {
 
           {/* Image/Graphic Placeholder - Stays large on all screens, prioritized */}
           <div className="w-full min-w-[280px] max-w-[400px] md:max-w-lg lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl flex items-center justify-center ">
-            <div className="relative select-none pointer-events-none w-full flex items-center justify-center ">
+            <div className="relative select-none w-full flex items-center justify-center ">
               {/* Main Image */}
-              <Image priority src="/images/Base.webp" width={2000} height={2000} alt="hero-graphics-main"/>
+              <Image
+                priority
+                src="/images/Base.webp"
+                width={2000}
+                height={2000}
+                alt="hero-graphics-main"
+                className="pointer-events-none"
+              />
               {/* Extra Images */}
-              <Image src="/images/Bot.webp" alt="bot-image" width={900} height={900} className="absolute -bottom-6 left-10 w-2/6 h-fit"/>
-              <Image src="/images/Drone.webp" alt="drone-image" width={900} height={900} className="absolute top-6 left-0 w-1/6 h-fit floating"/>
+              <Link
+                href="/assistant"
+                className="absolute cursor-pointer -bottom-6 left-10 w-2/6 h-fit group"
+              >
+                {/* Default image */}
+                <Image
+                  src="/images/Bot.webp"
+                  alt="bot-image"
+                  width={900}
+                  height={900}
+                  className="w-full h-full group-hover:hidden"
+                />
+
+                {/* Hover image */}
+                <Image
+                  src="/images/Bot-Hello.webp"
+                  alt="bot-image-hover"
+                  width={900}
+                  height={900}
+                  className="w-full h-full hidden group-hover:block"
+                />
+              </Link>
+              <Image
+                src="/images/Drone.webp"
+                alt="drone-image"
+                width={900}
+                height={900}
+                className="absolute top-6 left-0 w-1/6 h-fit floating pointer-events-none"
+              />
             </div>
           </div>
         </div>
       </div>
     </div>
-  )
+  );
 }

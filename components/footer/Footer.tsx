@@ -54,8 +54,8 @@ const contactList = [
 
 const links = [
   {
-    title: "About Us",
-    link: "/about-us",
+    title: "HomePage",
+    link: "/",
   },
   {
     title: "Appointment",
@@ -70,9 +70,13 @@ const links = [
     link: "/assistant",
   },
   {
-    title: "Terms and Condition",
-    link: "/terms-&-conditions",
+    title: "Your Profile",
+    link: "/profile",
   },
+  // {
+  //   title: "Terms and Condition",
+  //   link: "/terms-&-conditions",
+  // },
 ];
 
 export default function Footer() {
