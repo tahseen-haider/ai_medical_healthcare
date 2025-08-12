@@ -26,7 +26,7 @@ export default function ProfileButton({ user }: { user: UserType }) {
     user.id ? `/notifications/${user.id}` : null,
     () => getAppointmentMessagesCount(user.id),
     {
-      refreshInterval: 10000,
+      refreshInterval: 15000,
       revalidateOnFocus: true,
       refreshWhenOffline: false,
       revalidateOnMount: true,

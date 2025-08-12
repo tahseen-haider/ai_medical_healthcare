@@ -1,11 +1,12 @@
-import "./styles/hero.css";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import Btn from "../Button";
 import Image from "next/image";
+import DroneImage from "./DroneImage";
 
 export default function HeroSection() {
+
   return (
     <div className="relative w-full min-h-screen pt-[65px] overflow-hidden">
       {/* Background */}
@@ -55,7 +56,7 @@ export default function HeroSection() {
 
           {/* Image/Graphic Placeholder - Stays large on all screens, prioritized */}
           <div className="w-full min-w-[280px] max-w-[400px] md:max-w-lg lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl flex items-center justify-center ">
-            <div className="relative select-none w-full flex items-center justify-center ">
+            <div className="relative select-none w-full flex items-center justify-center">
               {/* Main Image */}
               <Image
                 priority
@@ -67,20 +68,23 @@ export default function HeroSection() {
               />
               {/* Extra Images */}
               <Link
+              draggable={false}
                 href="/assistant"
-                className="absolute cursor-pointer -bottom-6 left-10 w-2/6 h-fit group"
+                className="absolute cursor-pointer z-20 -bottom-6 left-10 w-2/6 h-fit group"
               >
                 {/* Default image */}
                 <Image
+                  draggable={false}
                   src="/images/Bot.webp"
                   alt="bot-image"
                   width={900}
                   height={900}
                   className="w-full h-full group-hover:hidden"
-                />
+                  />
 
                 {/* Hover image */}
                 <Image
+                  draggable={false}
                   src="/images/Bot-Hello.webp"
                   alt="bot-image-hover"
                   width={900}
@@ -88,13 +92,7 @@ export default function HeroSection() {
                   className="w-full h-full hidden group-hover:block"
                 />
               </Link>
-              <Image
-                src="/images/Drone.webp"
-                alt="drone-image"
-                width={900}
-                height={900}
-                className="absolute top-6 left-0 w-1/6 h-fit floating pointer-events-none"
-              />
+              <DroneImage/>
             </div>
           </div>
         </div>

@@ -7,7 +7,7 @@ export default function AiTokensUsed({ userId }: { userId: string }) {
   const fetcher = () => getTokensUsed(userId);
 
   const { data: tokensUsed, isLoading } = useSWR("tokens-" + userId, fetcher, {
-    refreshInterval: 5000,
+    refreshInterval: 10000,
     shouldRetryOnError: true,
   });
   return (

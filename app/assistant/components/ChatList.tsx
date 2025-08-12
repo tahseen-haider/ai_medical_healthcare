@@ -11,7 +11,7 @@ const fetcher = () => getChatList();
 
 export default function ChatListWrapper() {
   const { data: chatsList, isLoading } = useSWR("chat-list", fetcher, {
-    refreshInterval: 5000,
+    refreshInterval: 15000,
   });
 
   const pathname = usePathname();
