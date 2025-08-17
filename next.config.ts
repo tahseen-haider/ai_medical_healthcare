@@ -5,17 +5,17 @@ const securityHeaders = [
     key: "Content-Security-Policy",
     value: `
       default-src 'self';
-      script-src 'self' 'unsafe-inline' https://your-allowed-scripts.com;
+      script-src 'self' 'unsafe-inline' https://js.stripe.com https://your-allowed-scripts.com;
       style-src 'self' 'unsafe-inline';
-      img-src 'self' data: https://res.cloudinary.com https://i.ytimg.com;
-      frame-src https://www.google.com;
-      connect-src 'self' https://api.cloudinary.com;
+      img-src 'self' data: https://res.cloudinary.com https://i.ytimg.com https://*.stripe.com;
+      frame-src https://www.google.com https://js.stripe.com;
+      connect-src 'self' https://api.cloudinary.com https://api.stripe.com;
       font-src 'self';
       object-src 'none';
       base-uri 'self';
       form-action 'self';
       frame-ancestors 'none';
-    `.replace(/\n/g, ""), // remove newlines
+    `.replace(/\s{2,}/g, " "), // clean up extra spaces
   },
   {
     key: "Cross-Origin-Opener-Policy",
@@ -26,6 +26,7 @@ const securityHeaders = [
     value: "DENY",
   },
 ];
+
 
 
 const nextConfig: NextConfig = {
