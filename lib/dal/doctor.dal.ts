@@ -624,34 +624,47 @@ export const changeAppointmentStatusFromDB = async (
   }
 };
 
+
 export const getDoctorDashboardNumbersFromDB = async (doctorId: string) => {
   try {
-    const [pending, confirmed, completed, cancelled] = await Promise.all([
-      prisma.appointments.count({
-        where: { doctorId, status: "PENDING" },
-      }),
-      prisma.appointments.count({
-        where: { doctorId, status: "CONFIRMED" },
-      }),
-      prisma.appointments.count({
-        where: { doctorId, status: "COMPLETED" },
-      }),
-      prisma.appointments.count({
-        where: { doctorId, status: "CANCELLED" },
-      }),
-    ]);
+    // group by status (one query)
+    const counts = await prisma.appointments.groupBy({
+      by: ["status"],
+      where: { doctorId },
+      _count: { status: true },
+    });
+
+    // convert into { STATUS: count }
+    const statusCounts = counts.reduce((acc, curr) => {
+      acc[curr.status] = curr._count.status;
+      return acc;
+    }, {} as Record<string, number>);
 
     return {
-      pending,
-      confirmed,
-      completed,
-      cancelled,
+      pending:
+        (statusCounts["PENDING"] ?? 0) +
+        (statusCounts["PAYMENT_PENDING"] ?? 0),
+
+      confirmed:
+        (statusCounts["PAID"] ?? 0) +
+        (statusCounts["CONFIRMED"] ?? 0) +
+        (statusCounts["RESCHEDULED"] ?? 0),
+
+      cancelled: statusCounts["CANCELLED"] ?? 0,
+
+      completed: statusCounts["COMPLETED"] ?? 0,
     };
   } catch (error) {
     console.error("Error fetching dashboard numbers:", error);
-    return;
+    return {
+      pending: 0,
+      confirmed: 0,
+      cancelled: 0,
+      completed: 0,
+    };
   }
 };
+
 
 export const getAllAppointmentsForDashboardDoctorFromDB = async (
   doctorId: string
