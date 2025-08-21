@@ -50,30 +50,32 @@ export default function NewChatSection({ userId }: { userId: string }) {
   return isSubmitted ? (
     <section className="flex flex-col items-center w-full">
       <div className="w-full h-[calc(100vh-65px-120px)] overflow-y-auto">
-        <div className=" w-5/6 lg:w-4/6 mx-auto flex flex-col">
-          <div className="w-full flex justify-center mt-4 gap-2 flex-col text-center pb-12">
+        <div className="w-full mx-auto flex flex-col pb-20">
+          {/* Header */}
+          <div className="w-4/5 mx-auto flex justify-center mt-4 gap-2 flex-col text-center pb-12">
             <h1 className="font-bold font-ubuntu text-3xl">MediTech</h1>
             <p className="text-gray-500 leading-4">
               Ask anything about medical or upload your medical report
             </p>
           </div>
-          {/* Messages */}
+
+          {/* Initial messages */}
           {[
             {
               content: userPrompt || "Image Uploaded",
               role: "user" as MessageRole,
-              createdAt: new Date(Date.now()),
+              createdAt: new Date(),
               image: "",
               base64: imageBase64,
             },
             {
               content: "...",
               role: "assistant" as MessageRole,
-              createdAt: new Date(Date.now()),
+              createdAt: new Date(),
               image: "",
             },
           ].map((ele, i) => (
-            <MessageBox key={i} index={i} message={ele} pfpUrl={""} />
+            <MessageBox key={i} index={i} message={ele} pfpUrl="" />
           ))}
         </div>
       </div>
