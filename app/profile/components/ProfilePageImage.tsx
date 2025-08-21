@@ -1,6 +1,6 @@
 "use client";
 import Image, { StaticImageData } from "next/image";
-import PFP from "@/public/images/PFP.png";
+import PFP from "@/public/images/PFP.webp";
 import { useEffect, useState } from "react";
 
 export default function ProfilePageImage({
