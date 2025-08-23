@@ -25,7 +25,7 @@ export default function GlobalError({
 
   return (
     <div className="flex items-center justify-center min-h-[calc(100vh-64px)] bg-gray-50 dark:bg-gray-950 p-4">
-      <Card className="max-w-md w-full shadow-lg border border-red-200">
+      <Card className="max-w-md w-full shadow-lg border border-red-900 bg-light-2 dark:bg-dark-4">
         <CardContent className="p-6 py-1 text-center">
           <div className="flex justify-center text-red-500 mb-4">
             <AlertTriangle className="w-12 h-12" />
