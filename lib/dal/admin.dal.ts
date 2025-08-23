@@ -3,7 +3,7 @@ import "server-only";
 import { prisma } from "../db/prisma";
 import { DoctorType, UserRole } from "@prisma/client/edge";
 import cloudinary from "../cloudinary";
-import { getUserIdnRoleIfAuthenticated } from "../session";
+import { getUserIdnRoleIfAuthenticated } from "./session.dal";
 import { subDays, format, eachDayOfInterval } from "date-fns";
 
 export const getAllVerifiedUsersFromDB = async () => {

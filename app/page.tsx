@@ -3,7 +3,7 @@ import HeroSection from "@/components/homepage/Hero";
 import OurDoctorsSection from "@/components/OurDoctorsSection";
 import ServicesSection from "@/components/ServicesSection";
 import WhyChooseUsSection from "@/components/WhyChooseUsSection";
-import { isUserAuthenticated } from "@/lib/session";
+import { isUserAuthenticated } from "@/lib/dal/session.dal";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 

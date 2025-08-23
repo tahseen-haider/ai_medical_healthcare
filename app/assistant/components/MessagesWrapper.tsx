@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { ObjectId } from "bson";
 import { getPfp } from "@/actions";
 import { getUser } from "@/lib/dal/user.dal";
-import { getUserIdnRoleIfAuthenticated } from "@/lib/session";
+import { getUserIdnRoleIfAuthenticated } from "@/lib/dal/session.dal";
 
 export default async function MessagesWrapper({ chatId }: { chatId: string }) {
   if (!ObjectId.isValid(chatId)) redirect("/assistant");

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { cookies } from "next/headers";
-import { isUserAuthenticated } from "@/lib/session";
+import { isUserAuthenticated } from "@/lib/dal/session.dal";
 import LayoutWrapper from "@/components/LayoutWrapper";
 import { getUser } from "@/lib/dal/user.dal";
 import { ubuntu, roboto } from "@/lib/fonts"

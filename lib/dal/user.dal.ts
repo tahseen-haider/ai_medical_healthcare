@@ -3,7 +3,7 @@
 import "server-only";
 
 import { cache } from "react";
-import { deleteSession, getUserIdnRoleIfAuthenticated } from "../session";
+import { deleteSession, getUserIdnRoleIfAuthenticated } from "./session.dal";
 import { prisma } from "../db/prisma";
 import { UserCredentialDTO, UserIDandRoleForSessionDTO } from "../dto/user.dto";
 import bcrypt from "bcryptjs";

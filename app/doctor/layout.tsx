@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import DashboardLinks from "../admin/dashboard/components/DashboardLinks";
 import DashboardSidebarWrapper from "../assistant/components/DashboardSidebarWrapper";
-import { isUserAuthenticated } from "@/lib/session";
+import { isUserAuthenticated } from "@/lib/dal/session.dal";
 import { getUser } from "@/lib/dal/user.dal";
 
 export default async function DoctorLayout({

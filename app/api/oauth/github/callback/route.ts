@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/db/prisma";
-import { createSession } from "@/lib/session";
+import { createSession } from "@/lib/dal/session.dal";
 
 export async function GET(req: Request) {
   const url = new URL(req.url);

@@ -1,5 +1,5 @@
 import { getOutOfDateAppointmentsForDoctor } from "@/actions/doctor.action";
-import { getUserIdnRoleIfAuthenticated } from "@/lib/session";
+import { getUserIdnRoleIfAuthenticated } from "@/lib/dal/session.dal";
 import {
   Table,
   TableBody,

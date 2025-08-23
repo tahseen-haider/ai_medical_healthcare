@@ -1,7 +1,7 @@
 import { cookies } from "next/headers";
 import DashboardSidebarWrapper from "../assistant/components/DashboardSidebarWrapper";
 import DashboardLinks from "./dashboard/components/DashboardLinks";
-import { isUserAuthenticated } from "@/lib/session";
+import { isUserAuthenticated } from "@/lib/dal/session.dal";
 import { getUser } from "@/lib/dal/user.dal";
 
 export default async function AdminLayout({

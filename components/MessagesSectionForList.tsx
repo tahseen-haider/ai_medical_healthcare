@@ -2,7 +2,7 @@
 import React from "react";
 import SendNewAppointmentMessage from "@/app/doctor/appointments/components/Btns/SendNewMessageToPatient";
 import ChatAppointment from "@/components/ChatAppointment";
-import { AppointmentWithUnreadFlag } from "@/lib/dal";
+import { AppointmentWithUnreadFlag } from "@/lib/dal/index.dal";
 import { UserRole } from "@prisma/client";
 
 export default function MessagesSectionForList({

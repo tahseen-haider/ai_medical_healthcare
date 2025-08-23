@@ -1,6 +1,6 @@
 import React from "react";
 import YourAppointmentsPage from "@/components/YourAppointmentsPage";
-import { getUserIdnRoleIfAuthenticated } from "@/lib/session";
+import { getUserIdnRoleIfAuthenticated } from "@/lib/dal/session.dal";
 
 export default async function page({
   searchParams,

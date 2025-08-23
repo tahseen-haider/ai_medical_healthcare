@@ -30,7 +30,7 @@ import {
   createSession,
   deleteSession,
   getUserIdnRoleIfAuthenticated,
-} from "@/lib/session";
+} from "@/lib/dal/session.dal";
 import bcrypt from "bcryptjs";
 import { redirect } from "next/navigation";
 import nodemailer from "nodemailer";

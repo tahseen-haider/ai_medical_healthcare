@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/db/prisma";
-import { createSession } from "@/lib/session";
+import { createSession } from "@/lib/dal/session.dal";
 import { SignJWT } from "jose";
 import { cookies } from "next/headers";
 

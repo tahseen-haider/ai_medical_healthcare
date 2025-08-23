@@ -2,7 +2,7 @@ import RecentInquiriesFallback from "@/app/admin/dashboard/components/suspense/D
 import React, { Suspense } from "react";
 import DoctorDashboardGraph from "./components/DoctorDashboardGraph";
 import DoctorDashboardNumbersInfo from "./components/DoctorDashboardNumbersInfo";
-import { getUserIdnRoleIfAuthenticated } from "@/lib/session";
+import { getUserIdnRoleIfAuthenticated } from "@/lib/dal/session.dal";
 import DoctorDashboardRecentAppointments from "./components/DoctorDashboardRecentAppointments";
 
 export default async function DashboardPage() {

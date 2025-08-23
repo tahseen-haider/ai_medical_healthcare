@@ -20,7 +20,7 @@ import { HoverCard, HoverCardContent, HoverCardTrigger } from "./ui/hover-card";
 import CheckoutButton from "./CheckoutButton";
 import { RefreshCw } from "lucide-react";
 import { Button } from "./ui/button";
-import { AuthUserWithAppointmentsAndMessages } from "@/lib/dal";
+import { AuthUserWithAppointmentsAndMessages } from "@/lib/dal/index.dal";
 import YourAppointmentsSkeleton from "./YourAppointmentsSkeleton";
 import DeleteAppointmentBtn from "@/app/admin/appointments/components/Btns/DeleteAppointmentBtn";
 

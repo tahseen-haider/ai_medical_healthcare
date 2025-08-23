@@ -3,7 +3,7 @@ import "server-only";
 import { cache } from "react";
 import { prisma } from "../db/prisma";
 import { ContactFormType } from "../definitions";
-import { getUserIdnRoleIfAuthenticated } from "../session";
+import { getUserIdnRoleIfAuthenticated } from "./session.dal";
 import { AppointmentStatus, UserRole } from "@prisma/client";
 
 export const setAppointmentToDB = cache(

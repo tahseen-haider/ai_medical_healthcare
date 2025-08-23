@@ -26,7 +26,7 @@ import {
   setAppointmentToDB,
   uploadInquiry,
   uploadProfileChanges,
-} from "@/lib/dal";
+} from "@/lib/dal/index.dal";
 import cloudinary from "@/lib/cloudinary";
 import {
   getUser,
@@ -35,7 +35,7 @@ import {
 } from "@/lib/dal/user.dal";
 import { v4 as uuidv4 } from "uuid";
 import { redirect } from "next/navigation";
-import { getUserIdnRoleIfAuthenticated } from "@/lib/session";
+import { getUserIdnRoleIfAuthenticated } from "@/lib/dal/session.dal";
 import { revalidatePath } from "next/cache";
 import { NotificationType } from "@prisma/client/edge";
 import { ObjectId } from "bson";

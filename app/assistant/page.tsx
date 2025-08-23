@@ -1,5 +1,5 @@
 import NewChatSection from "@/app/assistant/components/NewChatSection";
-import { getAuthenticateUserIdnRole } from "@/lib/session";
+import { getAuthenticateUserIdnRole } from "@/lib/dal/session.dal";
 
 export default async function AssistantPage() {
   const user = await getAuthenticateUserIdnRole();

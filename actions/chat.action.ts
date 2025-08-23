@@ -12,7 +12,7 @@ import {
   DeleteChatSchema,
   NewChatInputSchema,
 } from "@/lib/definitions";
-import { getAuthenticateUserIdnRole } from "@/lib/session";
+import { getAuthenticateUserIdnRole } from "@/lib/dal/session.dal";
 import { redirect } from "next/navigation";
 
 export async function startNewChat(state: ChatState, formData: FormData) {

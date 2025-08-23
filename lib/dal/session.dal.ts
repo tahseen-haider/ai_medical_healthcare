@@ -1,10 +1,10 @@
 import "server-only";
 import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
-import { SessionPayload } from "./definitions";
+import { SessionPayload } from "../definitions";
 import { cache } from "react";
 import { redirect } from "next/navigation";
-import { prisma } from "./db/prisma";
+import { prisma } from "../db/prisma";
 import { UserRole } from "@prisma/client/edge";
 
 const secretKey = process.env.SESSION_SECRET;

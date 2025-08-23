@@ -82,7 +82,7 @@ export default function PaymentSuccessPage() {
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground mb-6">
-            Your payment was successfully processed. Redirecting shortly...
+            Your payment was successfully processed.
           </p>
           <Button asChild className="w-full">
             <a href="/your-appointments">Go to Appointments</a>
