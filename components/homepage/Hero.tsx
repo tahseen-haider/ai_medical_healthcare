@@ -12,7 +12,7 @@ export default function HeroSection() {
       {/* Background */}
       <div
         className="absolute top-0 left-0 w-full h-[calc(100%+65px)] -z-10 transition-colors duration-500 
-    bg-[linear-gradient(155deg,#fff_10%,#3CA4FF_50%)] 
+    bg-[linear-gradient(180deg,#3CA4FF_0%,#e5e7eb_8%,#3CA4FF_100%)] 
     dark:bg-[linear-gradient(155deg,#000_0%,#061A31_40%)]"
       />
       {/* Main Content Container */}
