@@ -5,6 +5,7 @@ import ProfilePicture from "@/components/ProfilePicture";
 import EditRoleOfUser from "./EditRoleOfUser";
 import EditVerification from "./EditVerification";
 import AddNewUserBtn from "./Btns/AddNewUserBtn";
+import Link from "next/link";
 
 export default async function UsersList({ paramPage }: { paramPage?: string }) {
   const page = parseInt(paramPage || "1", 10);
@@ -43,21 +44,44 @@ export default async function UsersList({ paramPage }: { paramPage?: string }) {
                 >
                   <td className="p-2">{(page - 1) * limit + index + 1}</td>
                   <td className="px-3">
-                    <ProfilePicture
-                      size={30}
-                      image={
-                        user.pfp
-                          ? `${`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${user.pfp}`}`
-                          : undefined
-                      }
-                    />
+                    <Link
+                      href={`${
+                        user.role === "doctor"
+                          ? `/profile/doctor/${user.id}`
+                          : `/profile/${user.id}`
+                      }`}
+                      target="_blank"
+                    >
+                      <ProfilePicture
+                        size={30}
+                        image={
+                          user.pfp
+                            ? `${`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${user.pfp}`}`
+                            : undefined
+                        }
+                      />
+                    </Link>
                   </td>
                   <td className="px-3">{user.name}</td>
                   <td className="px-3">{user.email}</td>
-                  <td className="px-3"><EditRoleOfUser userId={user.id} currentPage={page} currentRole={user.role}/></td>
-                  <td className="px-3"><EditVerification userId={user.id} currentPage={page} currStatus={user.is_verified}/></td>
+                  <td className="px-3">
+                    <EditRoleOfUser
+                      userId={user.id}
+                      currentPage={page}
+                      currentRole={user.role}
+                    />
+                  </td>
+                  <td className="px-3">
+                    <EditVerification
+                      userId={user.id}
+                      currentPage={page}
+                      currStatus={user.is_verified}
+                    />
+                  </td>
                   <td className="px-3">{user.ai_tokens_used || 0}</td>
-                  <td className="px-3">{user.createdAt.toLocaleDateString("en-GB")}</td>
+                  <td className="px-3">
+                    {user.createdAt.toLocaleDateString("en-GB")}
+                  </td>
                   <td className="px-2">
                     <DeleteUserBtn userId={user.id} />
                   </td>

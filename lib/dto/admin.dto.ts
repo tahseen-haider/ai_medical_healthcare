@@ -1,4 +1,5 @@
 export type GetAllVerifiedUsersDTO = {
+  id?: string | null;
   pfp: string | null;
   name: string;
   role: string;

@@ -73,6 +73,7 @@ export const getAllVerifiedUsers =
 
     const usersToReturn = users.map((user) => {
       return {
+        id: user.id,
         pfp: user.pfp,
         name: user.name,
         email: user.email,

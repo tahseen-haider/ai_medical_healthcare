@@ -3,6 +3,7 @@ import AddNewDoctorBtn from "./Btns/AddNewDoctorBtn";
 import DeleteDoctorBtn from "./Btns/DeleteDoctorBtn";
 import ProfilePicture from "@/components/ProfilePicture";
 import { getDoctorsForLoadMore } from "@/actions/doctor.action";
+import Link from "next/link";
 
 export default async function DoctorsList({
   paramPage,
@@ -45,14 +46,14 @@ export default async function DoctorsList({
                 >
                   <td className="p-2">{(page - 1) * limit + index + 1}</td>
                   <td className="px-3">
-                    <ProfilePicture
+                    <Link target="_blank" href={`/profile/doctor/${doc.id}`}><ProfilePicture
                       size={30}
                       image={
                         doc.pfp
                           ? `${`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${doc.pfp}`}`
                           : undefined
                       }
-                    />
+                    /></Link>
                   </td>
                   <td className="px-3">{doc.name}</td>
                   <td className="px-3">{doc.email}</td>

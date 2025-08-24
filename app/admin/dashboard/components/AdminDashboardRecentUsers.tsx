@@ -1,6 +1,7 @@
 import { getAllVerifiedUsers } from "@/actions/admin.action";
 import ProfilePicture from "@/components/ProfilePicture";
 import DashManageUsersBtn from "./Btns/DashManageUsersBtn";
+import Link from "next/link";
 
 export default async function AdminDashboardRecentUsers() {
   const verifiedUsers = await getAllVerifiedUsers();
@@ -30,14 +31,23 @@ export default async function AdminDashboardRecentUsers() {
               >
                 <td className="p-2 py-4 font-bold">{index + 1}</td>
                 <td className="px-3">
-                  <ProfilePicture
-                    size={30}
-                    image={
-                      user.pfp
-                        ? `${`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${user.pfp}`}`
-                        : undefined
-                    }
-                  />
+                  <Link
+                    href={`${
+                      user.role === "doctor"
+                        ? `/profile/doctor/${user.id}`
+                        : `/profile/${user.id}`
+                    }`}
+                    target="_blank"
+                  >
+                    <ProfilePicture
+                      size={30}
+                      image={
+                        user.pfp
+                          ? `${`https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${user.pfp}`}`
+                          : undefined
+                      }
+                    />
+                  </Link>
                 </td>
                 <td className="px-3">{user.name}</td>
                 <td className="px-3">{user.role}</td>

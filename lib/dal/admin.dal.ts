@@ -11,6 +11,7 @@ export const getAllVerifiedUsersFromDB = async () => {
     const users = await prisma.user.findMany({
       where: { is_verified: true },
       select: {
+        id: true,
         pfp: true,
         name: true,
         email: true,
