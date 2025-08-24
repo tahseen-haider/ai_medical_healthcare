@@ -23,6 +23,7 @@ import { Button } from "./ui/button";
 import { AuthUserWithAppointmentsAndMessages } from "@/lib/dal/index.dal";
 import YourAppointmentsSkeleton from "./YourAppointmentsSkeleton";
 import DeleteAppointmentBtn from "@/app/admin/appointments/components/Btns/DeleteAppointmentBtn";
+import ProfilePicture from "./ProfilePicture";
 
 export default function YourAppointmentsClient({
   page,
@@ -78,7 +79,12 @@ export default function YourAppointmentsClient({
 
     const isFuture = dateTime > new Date();
 
-    if (!isFuture) {
+    if (
+      !isFuture &&
+      appointment.status !== AppointmentStatus.PAID &&
+      appointment.status !== AppointmentStatus.COMPLETED &&
+      appointment.status !== AppointmentStatus.CONFIRMED
+    ) {
       return { ...appointment, status: "OUTDATED" };
     }
     return appointment;
@@ -153,6 +159,14 @@ export default function YourAppointmentsClient({
   ): React.ReactNode {
     const commonBadgeClass = "text-xs";
 
+    if (status === AppointmentStatus.COMPLETED) {
+      return (
+        <Badge variant="outline" className={commonBadgeClass}>
+          Completed
+        </Badge>
+      );
+    }
+
     if (is_paid) {
       return (
         <Badge variant="default" className={commonBadgeClass}>
@@ -161,7 +175,7 @@ export default function YourAppointmentsClient({
       );
     }
 
-    if (!is_paid && status === "PENDING") {
+    if (!is_paid && status === AppointmentStatus.PENDING) {
       return (
         <Badge variant="default" className={commonBadgeClass}>
           Pending Confirmation
@@ -169,7 +183,11 @@ export default function YourAppointmentsClient({
       );
     }
 
-    if (!is_paid && status === "PAYMENT_PENDING" && userRole === "user") {
+    if (
+      !is_paid &&
+      status === AppointmentStatus.PAYMENT_PENDING &&
+      userRole === "user"
+    ) {
       return (
         <CheckoutButton
           items={[
@@ -223,9 +241,9 @@ export default function YourAppointmentsClient({
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>
-                    {user?.role === UserRole.user ? "Patient" : "Doctor"} Name
-                  </TableHead>
+                  <TableHead>Avatar</TableHead>
+                  <TableHead>Patient Name</TableHead>
+                  {user?.role === "user" && <TableHead>Doctor Name</TableHead>}
                   <TableHead>Reason</TableHead>
                   <TableHead>Time</TableHead>
                   <TableHead>Date</TableHead>
@@ -240,6 +258,39 @@ export default function YourAppointmentsClient({
               <TableBody>
                 {appointments?.map((appointment, index) => (
                   <TableRow key={appointment.id}>
+                    <TableCell>
+                      {user.role === "user" ? (
+                        // Show doctor's profile when user is viewing
+                        <Link
+                          target="_blank"
+                          href={`/profile/doctor/${appointment.doctorId}`}
+                        >
+                          <ProfilePicture
+                            image={
+                              appointment.doctor?.pfp
+                                ? `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${appointment.doctor?.pfp}`
+                                : undefined
+                            }
+                          />
+                        </Link>
+                      ) : user.role === "doctor" ? (
+                        // Show patient's profile when doctor is viewing
+                        <Link
+                          target="_blank"
+                          href={`/profile/${appointment.patientId}`}
+                        >
+                          <ProfilePicture
+                            image={
+                              appointment.patient?.pfp
+                                ? `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${appointment.patient?.pfp}`
+                                : undefined
+                            }
+                          />
+                        </Link>
+                      ) : (
+                        <ProfilePicture />
+                      )}
+                    </TableCell>
                     <TableCell
                       className={`${
                         appointment.status === "OUTDATED" ? "line-through" : ""
@@ -247,6 +298,17 @@ export default function YourAppointmentsClient({
                     >
                       {appointment.fullname}
                     </TableCell>
+                    {user?.role === "user" && (
+                      <TableCell
+                        className={`${
+                          appointment.status === "OUTDATED"
+                            ? "line-through"
+                            : ""
+                        }`}
+                      >
+                        {appointment.doctor?.name}
+                      </TableCell>
+                    )}
                     <TableCell
                       className={`${
                         appointment.status === "OUTDATED" ? "line-through" : ""
@@ -278,6 +340,10 @@ export default function YourAppointmentsClient({
                             ?.doctorProfile?.consultationFee,
                           appointmentId: appointment.id,
                         })
+                      ) : appointment.status === AppointmentStatus.COMPLETED ? (
+                        <Badge className="bg-green-500 text-white hover:bg-green-600">
+                          {appointment.status}
+                        </Badge>
                       ) : (
                         <EditAppointmentStatus
                           appointmentId={appointment.id}
@@ -288,6 +354,7 @@ export default function YourAppointmentsClient({
                         />
                       )}
                     </TableCell>
+
                     <TableCell>
                       <MessagesSectionForList
                         userRole={user?.role}

@@ -1,6 +1,7 @@
 "use server";
 
 import {
+  addDoctorRemarkInDB,
   changeAppointmentStatusFromDB,
   getAllAppointmentsForDashboardDoctorFromDB,
   getAllUpcomingAppointmentsForDoctorFromDB,
@@ -11,10 +12,11 @@ import {
   getDoctorsForLoadMoreFromDB,
   getNewAppointmentsInfoFromDB,
   getOutOfDateAppointmentsFromDB,
+  getPatientProfileFromDB,
+  getPatientRemarksInDB,
   updateDoctorProfileInDB,
 } from "@/lib/dal/doctor.dal";
 import { AppointmentStatus, DoctorType } from "@prisma/client/edge";
-import { count } from "console";
 import { revalidatePath } from "next/cache";
 
 export const getNewAppointmentsInfo = async (doctorId: string) => {
@@ -23,6 +25,10 @@ export const getNewAppointmentsInfo = async (doctorId: string) => {
 
 export async function getDoctorsForDoctorSection() {
   return await getDoctorsForDoctorSectionFromDB();
+}
+
+export async function getPatientProfile(patientId: string) {
+  return await getPatientProfileFromDB(patientId);
 }
 
 export async function getDoctor(doctorId: string) {
@@ -144,4 +150,16 @@ export async function updateDoctorProfile(_prevState: any, formData: FormData) {
 
   revalidatePath("/profile");
   return { success: true };
+}
+
+export async function addDoctorRemark(
+  patientId: string,
+  doctorId: string,
+  content: string,
+) {
+  return await addDoctorRemarkInDB(patientId, doctorId, content)
+}
+
+export async function getPatientRemarks(patientId: string) {
+  return await getPatientRemarksInDB(patientId);
 }

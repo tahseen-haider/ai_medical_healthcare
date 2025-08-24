@@ -4,7 +4,8 @@ import { eachDayOfInterval, format, subDays } from "date-fns";
 import { prisma } from "../db/prisma";
 import { AppointmentStatus, DoctorType } from "@prisma/client/edge";
 import cloudinary from "../cloudinary";
-import { UserType } from "../definitions";
+import { DoctorRemark, UserType } from "../definitions";
+import { revalidatePath } from "next/cache";
 
 export async function getDoctorsForLoadMoreFromDB(page: number, limit: number) {
   try {
@@ -136,6 +137,28 @@ export const getDoctorFromDB = async (
     return restUser;
   } catch (error) {
     console.error("Error in getDoctorFromDB:", error);
+    return;
+  }
+};
+
+export const getPatientProfileFromDB = async (
+  userId: string
+): Promise<UserType | undefined> => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      include: {
+        appointmentsAsDoctor: true,
+        appointmentsAsPatient: true,
+      },
+    });
+
+    if (!user) return;
+
+    const { password, token, ...restUser } = user;
+    return restUser;
+  } catch (error) {
+    console.error("Error in getPatientProfileFromDB:", error);
     return;
   }
 };
@@ -797,3 +820,62 @@ export const updateDoctorProfileInDB = async (data: {
     return;
   }
 };
+
+export async function addDoctorRemarkInDB(
+  patientId: string,
+  doctorId: string,
+  content: string,
+): Promise<{ success: boolean; error?: string }> {
+  try {
+    if (!content.trim()) {
+      return { success: false, error: "Remark content cannot be empty" }
+    }
+
+    await prisma.doctorRemark.create({
+      data: {
+        content: content.trim(),
+        patientId,
+        doctorId,
+      },
+    })
+
+    revalidatePath(`/patient/${patientId}`)
+    return { success: true }
+  } catch (error) {
+    console.error("Error adding doctor remark:", error)
+    return { success: false, error: "Failed to add remark" }
+  }
+}
+
+export async function getPatientRemarksInDB(patientId: string): Promise<DoctorRemark[]> {
+  try {
+    const remarks = await prisma.doctorRemark.findMany({
+      where: {
+        patientId,
+      },
+      include: {
+        doctor: {
+          select: {
+            id: true,
+            name: true,
+            pfp: true,
+            doctorProfile: {
+              select: {
+                specialization: true,
+                doctorType: true,
+              },
+            },
+          },
+        },
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    })
+
+    return remarks
+  } catch (error) {
+    console.error("Error fetching patient remarks:", error)
+    return []
+  }
+}

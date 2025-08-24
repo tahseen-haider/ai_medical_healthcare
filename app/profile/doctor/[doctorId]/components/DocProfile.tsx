@@ -15,7 +15,7 @@ import {
   Building,
   DollarSign,
 } from "lucide-react";
-import ProfilePageImage from "../../components/ProfilePageImage";
+import ProfilePageImage from "@/app/profile/components/ProfilePageImage";
 
 export default function DoctorProfile({ user }: { user: UserType }) {
   const pfp = `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${user.pfp}`;

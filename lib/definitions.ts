@@ -39,93 +39,107 @@ export const AppointmentFormSchema = z.object({
   preferredTime: z.string(),
 });
 
+export type DoctorRemark = {
+  id: string
+  content: string
+  doctorId: string
+  patientId: string
+  createdAt: Date
+  updatedAt: Date
+  doctor: {
+    id: string
+    name: string
+    pfp?: string | null
+    doctorProfile?: {
+      specialization?: string | null
+      doctorType: string
+    } | null
+  }
+}
+
 export type UserType = {
-  id: string;
-  email: string;
-  phone?: string | null;
-  name: string;
-  dob?: string | null;
-  gender?: string | null;
-  pfp?: string | null;
-  createdAt: Date;
-  role: UserRole;
-  is_verified: boolean;
-  ai_tokens_used?: number | null;
-  bloodType?: string | null;
-  allergies?: string[];
-  chronicConditions?: string[] | null;
-  medications?: string[];
-  surgeries?: string[];
-  immunizations?: string[];
-  bloodPressure?: string | null;
-  heartRate?: number | null;
-  mentalHealthConcerns?: string[]; // default: []
-  notes?: string | null;
+  id: string
+  email: string
+  phone?: string | null
+  name: string
+  dob?: string | null
+  gender?: string | null
+  pfp?: string | null
+  createdAt: Date
+  role: UserRole
+  is_verified: boolean
+  ai_tokens_used?: number | null
+  bloodType?: string | null
+  allergies?: string[]
+  chronicConditions?: string[] | null
+  medications?: string[]
+  surgeries?: string[]
+  immunizations?: string[]
+  bloodPressure?: string | null
+  heartRate?: number | null
+  mentalHealthConcerns?: string[]
+  notes?: string | null
+  respiratoryRate?: number | null
+  temperature?: number | null
+  height?: number | null
+  weight?: number | null
+  smoker?: boolean | null
+  alcoholUse?: boolean | null
+  exerciseFrequency?: string | null
+  emailNotifications?: boolean | null
+  smsReminders?: boolean | null
+  twoFactorEnabled?: boolean | null
+  lastLogin?: Date | null
+  lastCheckUp?: Date | null
 
-  respiratoryRate?: number | null;
-  temperature?: number | null;
-  height?: number | null; // in cm or inches
-  weight?: number | null; // in kg
-  smoker?: boolean | null;
-  alcoholUse?: boolean | null;
-  exerciseFrequency?: string | null; // e.g., "Daily", "Weekly", "Rarely"
-
-  // Preferences
-  emailNotifications?: Boolean | null;
-  smsReminders?: Boolean | null;
-  twoFactorEnabled?: Boolean | null;
-  lastLogin?: Date | null;
-  lastCheckUp?: Date | null;
-
-  // Included relations
   doctorProfile?: {
-    id: string;
-    userId: string;
-    doctorType: DoctorType;
-    specialization?: string | null;
-    qualifications?: string | null;
-    experience?: number | null;
-    bio?: string | null;
-    clinicName?: string | null;
-    clinicAddress?: string | null;
-    consultationFee?: number | null;
-    availableDays: string[];
-    availableTimes?: string | null;
-    isApproved: boolean;
-    ratings?: number | null;
-    totalReviews?: number | null;
-    createdAt: Date;
-    updatedAt: Date;
-  } | null;
+    id: string
+    userId: string
+    doctorType: DoctorType
+    specialization?: string | null
+    qualifications?: string | null
+    experience?: number | null
+    bio?: string | null
+    clinicName?: string | null
+    clinicAddress?: string | null
+    consultationFee?: number | null
+    availableDays: string[]
+    availableTimes?: string | null
+    isApproved: boolean
+    ratings?: number | null
+    totalReviews?: number | null
+    createdAt: Date
+    updatedAt: Date
+  } | null
 
   appointmentsAsDoctor: {
-    id: string;
-    fullname: string;
-    email: string;
-    phone?: string | null;
-    reasonForVisit: string;
-    preferredDate: Date;
-    preferredTime: string;
-    status: AppointmentStatus;
-    createdAt: Date;
-    doctorId?: string | null;
-    patientId?: string | null;
-  }[];
+    id: string
+    fullname: string
+    email: string
+    phone?: string | null
+    reasonForVisit: string
+    preferredDate: Date
+    preferredTime: string
+    status: AppointmentStatus
+    createdAt: Date
+    doctorId?: string | null
+    patientId?: string | null
+  }[]
 
   appointmentsAsPatient: {
-    id: string;
-    fullname: string;
-    email: string;
-    phone?: string | null;
-    reasonForVisit: string;
-    preferredDate: Date;
-    preferredTime: string;
-    status: AppointmentStatus;
-    createdAt: Date;
-    doctorId?: string | null;
-    patientId?: string | null;
-  }[];
-};
+    id: string
+    fullname: string
+    email: string
+    phone?: string | null
+    reasonForVisit: string
+    preferredDate: Date
+    preferredTime: string
+    status: AppointmentStatus
+    createdAt: Date
+    doctorId?: string | null
+    patientId?: string | null
+  }[]
+}
 
 export const LoginFormSchema = z.object({
   email: z.string().email({ message: "Please enter a valid email." }).trim(),

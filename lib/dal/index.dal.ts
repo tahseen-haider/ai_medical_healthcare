@@ -278,8 +278,12 @@ export type AppointmentWithUnreadFlag = {
   doctor?: {
     doctorProfile?: { consultationFee: number };
     name?: string;
+    pfp?: true
   };
-  is_paid?: boolean | null
+  patient?: {
+    pfp?: string
+  }
+  is_paid?: boolean | null;
 };
 
 export type AuthUserWithAppointmentsAndMessages = {
@@ -313,7 +317,7 @@ export async function getAuthUserWithAppointmentsAndUnreadReceivedMessagesFromDB
     const totalCount = patientCount + doctorCount;
     const totalPages = Math.ceil(totalCount / limit);
 
-    // Fetch paginated appointments
+    // Fetch paginated appointments with required relations
     const user = await prisma.user.findUnique({
       where: { id: session.userId },
       select: {
@@ -323,14 +327,22 @@ export async function getAuthUserWithAppointmentsAndUnreadReceivedMessagesFromDB
           skip,
           take: limit,
           include: {
+            patient: {
+              select: {
+                id: true,
+                name: true,
+                pfp: true,
+              },
+            },
             doctor: {
               select: {
+                name: true,
+                pfp: true,
                 doctorProfile: {
                   select: {
                     consultationFee: true,
                   },
                 },
-                name: true,
               },
             },
           },
@@ -339,6 +351,15 @@ export async function getAuthUserWithAppointmentsAndUnreadReceivedMessagesFromDB
           orderBy: { updatedAt: "desc" },
           skip,
           take: limit,
+          include: {
+            patient: {
+              select: {
+                id: true,
+                name: true,
+                pfp: true,
+              },
+            },
+          },
         },
       },
     });
@@ -380,6 +401,7 @@ export async function getAuthUserWithAppointmentsAndUnreadReceivedMessagesFromDB
     return null;
   }
 }
+
 
 export async function deleteNotificationFromDB(id: string) {
   try {

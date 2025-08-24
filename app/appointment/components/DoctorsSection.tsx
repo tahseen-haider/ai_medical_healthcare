@@ -111,7 +111,7 @@ export default function DoctorSection() {
           {loadedDoctors.map((doctor) => (
             <Link
               key={doctor.id}
-              href={`/profile/${doctor.id}`}
+              href={`/profile/doctor/${doctor.id}`}
               className="group"
             >
               <Card className="h-full transition-all duration-300 dark:shadow-dark hover:-translate-y-1 bg-white dark:bg-dark-4 border-[1px] border-gray-300 dark:border-none">

@@ -106,6 +106,22 @@ model User {
   notifications        Notification[]
   sentMessages         AppointmentMessage[] @relation("SentMessages")
   receivedMessages     AppointmentMessage[] @relation("ReceivedMessages")
+  
+  doctorRemarksGiven   DoctorRemark[]       @relation("DoctorRemarksGiven")
+  doctorRemarksReceived DoctorRemark[]      @relation("DoctorRemarksReceived")
+}
+
+model DoctorRemark {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  content     String
+  doctorId    String   @db.ObjectId
+  patientId   String   @db.ObjectId
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relations
+  doctor      User     @relation("DoctorRemarksGiven", fields: [doctorId], references: [id])
+  patient     User     @relation("DoctorRemarksReceived", fields: [patientId], references: [id])
 }
 
 model DoctorProfile {
