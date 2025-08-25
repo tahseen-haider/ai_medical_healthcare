@@ -18,10 +18,6 @@ export default function DeleteAccountConfirmation({
     undefined
   );
 
-  React.useEffect(() => {
-    setIsDeleting(isPending);
-  }, [isPending, setIsDeleting]);
-
   return (
     <div
       className="fixed top-0 z-50 flex justify-center items-center w-full h-full backdrop-blur-xs"
@@ -49,6 +45,9 @@ export default function DeleteAccountConfirmation({
               type="submit"
               className="bg-red-500 py-2 px-4 rounded-lg text-white"
               disabled={isPending}
+              onClick={() => {
+                setIsDeleting(true);
+              }}
             >
               {isPending ? "Deleting..." : "Delete Your Account"}
             </button>

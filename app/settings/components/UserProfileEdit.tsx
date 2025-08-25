@@ -51,7 +51,7 @@ export default function UserProfileEdit({ user }: EditUserProfileProps) {
   const [isPending, startTransition] = useTransition();
   const [uploading, setUploading] = useState(false);
   const [isDeletingAccount, setisDeletingAccount] = useState(false);
-  
+
   const pfp = `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${user.pfp}`;
 
   const initialFormData = {
@@ -405,8 +405,8 @@ export default function UserProfileEdit({ user }: EditUserProfileProps) {
     <div className="min-h-screen p-4">
       {isPending && <LoadingScreen message="Updating your profile..." />}
       {isDeletingAccount && (
-              <LoadingScreen message="Deleting your profile..." />
-            )}
+        <LoadingScreen message="Deleting your profile..." />
+      )}
       <div className="max-w-4xl mx-auto">
         <Card className="overflow-hidden rounded-sm bg-white dark:bg-dark-4">
           <CardHeader>
@@ -1148,7 +1148,7 @@ export default function UserProfileEdit({ user }: EditUserProfileProps) {
                 }}
                 className="bg-red-500 w-full sm:w-fit order-last sm:order-first font-bold text-white"
               >
-                Delete Account
+                {isDeletingAccount ? "Deleting..." : "Delete Account"}
               </Button>
               <div className="flex justify-end gap-4 items-center">
                 <Button onClick={onCancel} variant="outline">
@@ -1169,7 +1169,7 @@ export default function UserProfileEdit({ user }: EditUserProfileProps) {
       </div>
       {showDeleteAccountPopUp && (
         <DeleteAccountConfirmation
-        setIsDeleting={setisDeletingAccount}
+          setIsDeleting={setisDeletingAccount}
           onClose={() => setShowDeleteAccountPopUp(false)}
         />
       )}

@@ -354,7 +354,7 @@ export default function AdminProfileEdit({ user }: EditAdminProfileProps) {
                 }}
                 className="bg-red-500 w-full sm:w-fit order-last sm:order-first font-bold text-white"
               >
-                Delete Account
+                {isDeletingAccount ? "Deleting..." : "Delete Account"}
               </Button>
               <div className="flex justify-end gap-4 items-center">
                 <Button onClick={onCancel} variant="outline">

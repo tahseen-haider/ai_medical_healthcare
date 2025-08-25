@@ -37,6 +37,7 @@ export async function startNewChat(state: ChatState, formData: FormData) {
 
 export async function getChatList() {
   const user = await getAuthenticateUserIdnRole();
+  if (!user?.userId) redirect("/login");
   const chatList = await getChatListOfUser(user.userId);
 
   if (chatList?.length === 0) return [];

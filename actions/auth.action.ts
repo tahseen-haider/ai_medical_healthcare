@@ -418,5 +418,6 @@ export async function deleteUserAccount(
     console.log("error");
     return { message: "Error while deleting account" };
   }
+  redirect("/")
   return { message: "User Deleted" };
 }

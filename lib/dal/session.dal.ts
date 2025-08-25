@@ -3,7 +3,6 @@ import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { SessionPayload } from "../definitions";
 import { cache } from "react";
-import { redirect } from "next/navigation";
 import { prisma } from "../db/prisma";
 import { UserRole } from "@prisma/client/edge";
 
@@ -92,12 +91,12 @@ export const getAuthenticateUserIdnRole = cache(async () => {
   try {
     const cookieStore = await cookies();
     const sessionToken = cookieStore.get("session")?.value;
-    if (!sessionToken) redirect("/login");
+    if (!sessionToken) return;
 
     const session = await decrypt(sessionToken);
 
     if (!session?.userId) {
-      redirect("/login");
+      return;
     }
 
     const user = await prisma.user.findUnique({
@@ -108,10 +107,10 @@ export const getAuthenticateUserIdnRole = cache(async () => {
     if (user) {
       return { role: session.role, userId: session.userId };
     } else {
-      redirect("/login");
+      return;
     }
   } catch {
-    redirect("/login");
+    return;
   }
 });
 

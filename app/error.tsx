@@ -24,7 +24,7 @@ export default function GlobalError({
   };
 
   return (
-    <div className="flex items-center justify-center min-h-[calc(100vh-64px)] bg-gray-50 dark:bg-gray-950 p-4">
+    <div className="flex items-center justify-center min-h-[calc(100vh-64px)] overflow-hidden bg-gray-50 dark:bg-gray-950 p-4">
       <Card className="max-w-md w-full shadow-lg border border-red-900 bg-light-2 dark:bg-dark-4">
         <CardContent className="p-6 py-1 text-center">
           <div className="flex justify-center text-red-500 mb-4">
@@ -35,7 +35,7 @@ export default function GlobalError({
             {"Check your internet connection and try again."}
           </p>
           <Separator className="my-4" />
-          <p className="text-muted-foreground mb-4">
+          <p className="text-muted-foreground mb-4 w-full overflow-x-scroll">
             {error.message || "An unexpected error occurred."}
           </p>
           <Button variant="destructive" onClick={refreshPage}>

@@ -8,7 +8,6 @@ import { prisma } from "../db/prisma";
 import { UserCredentialDTO, UserIDandRoleForSessionDTO } from "../dto/user.dto";
 import bcrypt from "bcryptjs";
 import cloudinary from "../cloudinary";
-import { redirect } from "next/navigation";
 import { UserType } from "../definitions";
 
 export const getUserIdnRoleIfAuthenticatedAction = async () => {
@@ -373,7 +372,6 @@ export const deleteLoggedInUserFromDB = async () => {
     }
 
     deleteSession();
-    redirect("/");
     return 1;
   } catch (error) {
     console.error("Error deleting logged-in user:", error);
