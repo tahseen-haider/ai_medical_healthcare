@@ -48,6 +48,7 @@ export default function DoctorProfileEdit({ user }: EditProfileProps) {
   const [showDeleteAccountPopUp, setShowDeleteAccountPopUp] = useState(false);
   const [isPending, startTransition] = useTransition();
   const [uploading, setUploading] = useState(false);
+  const [isDeletingAccount, setisDeletingAccount] = useState(false);
 
   const pfp = `https://res.cloudinary.com/${process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload/${user.pfp}`;
 
@@ -260,6 +261,9 @@ export default function DoctorProfileEdit({ user }: EditProfileProps) {
   return (
     <div className="min-h-screen p-4">
       {isPending && <LoadingScreen message="Updating your profile..." />}
+      {isDeletingAccount && (
+        <LoadingScreen message="Deleting your profile..." />
+      )}
       <div className="max-w-4xl mx-auto">
         <Card className="overflow-hidden rounded-sm bg-white dark:bg-dark-4">
           <CardHeader>
@@ -702,6 +706,7 @@ export default function DoctorProfileEdit({ user }: EditProfileProps) {
       </div>
       {showDeleteAccountPopUp && (
         <DeleteAccountConfirmation
+          setIsDeleting={setisDeletingAccount}
           onClose={() => setShowDeleteAccountPopUp(false)}
         />
       )}

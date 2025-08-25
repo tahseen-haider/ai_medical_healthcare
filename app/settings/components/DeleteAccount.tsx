@@ -5,13 +5,22 @@ import { deleteUserAccount } from "@/actions/auth.action";
 import { useActionState } from "react";
 
 interface DeleteAccountConfirmationProps {
+  setIsDeleting: React.Dispatch<React.SetStateAction<boolean>>;
   onClose: () => void;
 }
 
 export default function DeleteAccountConfirmation({
+  setIsDeleting,
   onClose,
 }: DeleteAccountConfirmationProps) {
-  const [state, formAction, isPending] = useActionState(deleteUserAccount, undefined);
+  const [state, formAction, isPending] = useActionState(
+    deleteUserAccount,
+    undefined
+  );
+
+  React.useEffect(() => {
+    setIsDeleting(isPending);
+  }, [isPending, setIsDeleting]);
 
   return (
     <div
@@ -27,9 +36,7 @@ export default function DeleteAccountConfirmation({
           <h3 className="font-bold font-ubuntu text-lg">
             Do You Really Want To Delete Your Account?
           </h3>
-          <p className="text-black dark:text-gray-200">
-            This is irreversible
-          </p>
+          <p className="text-black dark:text-gray-200">This is irreversible</p>
         </div>
         <div className="flex gap-4">
           <form

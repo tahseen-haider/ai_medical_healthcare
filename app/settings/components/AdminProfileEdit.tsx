@@ -81,6 +81,7 @@ export default function AdminProfileEdit({ user }: EditAdminProfileProps) {
   const [state, formAction] = useActionState(updateAdminProfile, initialState);
   const [profileImage, setProfileImage] = useState<string | undefined>(pfp);
   const [uploadedPublicId, setUploadedPublicId] = useState<string | null>(null);
+  const [isDeletingAccount, setisDeletingAccount] = useState(false);
 
   const handleInputChange = (field: string, value: string | boolean) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -180,6 +181,9 @@ export default function AdminProfileEdit({ user }: EditAdminProfileProps) {
   return (
     <div className="min-h-screen p-4">
       {isPending && <LoadingScreen message="Updating admin profile..." />}
+      {isDeletingAccount && (
+        <LoadingScreen message="Deleting your profile..." />
+      )}
       <div className="max-w-4xl mx-auto">
         <Card className="overflow-hidden rounded-sm bg-white dark:bg-dark-4">
           <CardHeader>
@@ -371,6 +375,7 @@ export default function AdminProfileEdit({ user }: EditAdminProfileProps) {
       </div>
       {showDeleteAccountPopUp && (
         <DeleteAccountConfirmation
+          setIsDeleting={setisDeletingAccount}
           onClose={() => setShowDeleteAccountPopUp(false)}
         />
       )}

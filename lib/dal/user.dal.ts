@@ -355,6 +355,12 @@ export const deleteLoggedInUserFromDB = async () => {
         },
       });
 
+      await tx.doctorRemark.deleteMany({
+        where: {
+          OR: [{ doctorId: user?.userId }, { patientId: user?.userId }],
+        },
+      });
+
       await tx.user.delete({
         where: {
           id: user?.userId,
@@ -367,12 +373,11 @@ export const deleteLoggedInUserFromDB = async () => {
     }
 
     deleteSession();
+    redirect("/");
     return 1;
   } catch (error) {
     console.error("Error deleting logged-in user:", error);
     return 0;
-  } finally {
-    redirect("/");
   }
 };
 
