@@ -6,7 +6,7 @@ export default async function AssistantPage() {
   return (
     <main className="flex flex-col items-center">
       {/* New Chat Section */}
-      <NewChatSection userId={user.userId}/>
+      <NewChatSection userId={user?.userId}/>
     </main>
   );
 }

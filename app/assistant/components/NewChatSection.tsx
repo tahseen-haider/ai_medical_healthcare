@@ -11,7 +11,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-export default function NewChatSection({ userId }: { userId: string }) {
+export default function NewChatSection({ userId }: { userId?: string }) {
   const [state, action, pending] = useActionState(startNewChat, undefined);
   const [prompt, setPrompt] = useState("");
   const [userPrompt, setUserPrompt] = useState("");
