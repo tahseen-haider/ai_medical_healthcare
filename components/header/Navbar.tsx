@@ -11,6 +11,7 @@ import ProfileButton from "./ProfileButton";
 import NotificationsButton from "./NotificationsButton";
 import { UserType } from "@/lib/definitions";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { clearCookieAction } from "@/actions";
 
 function Navbar({ user }: { user?: UserType }) {
   const role = user?.role;
@@ -166,21 +167,16 @@ function Navbar({ user }: { user?: UserType }) {
           {role && <NotificationsButton user={user} />}
           {/* Auth Button */}
           {!role && (
-            <Link
-              href="/login"
-              className={`${
+            <Btn
+              onClick={clearCookieAction}
+              className={` bg-light-1 hover:text-white text-black ${
                 pathname === "/login" || pathname === "/signup"
                   ? "hidden"
-                  : "block"
+                  : "flex"
               }`}
             >
-              <Btn
-                onClick={() => {}}
-                className="bg-light-1 hover:text-white text-black"
-              >
-                Get Started
-              </Btn>
-            </Link>
+              Get Started
+            </Btn>
           )}
           {/* Profile Button */}
           {role && <ProfileButton user={user} />}

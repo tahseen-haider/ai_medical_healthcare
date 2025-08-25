@@ -35,7 +35,10 @@ import {
 } from "@/lib/dal/user.dal";
 import { v4 as uuidv4 } from "uuid";
 import { redirect } from "next/navigation";
-import { getUserIdnRoleIfAuthenticated } from "@/lib/dal/session.dal";
+import {
+  deleteSession,
+  getUserIdnRoleIfAuthenticated,
+} from "@/lib/dal/session.dal";
 import { revalidatePath } from "next/cache";
 import { NotificationType } from "@prisma/client/edge";
 import { ObjectId } from "bson";
@@ -297,8 +300,14 @@ export async function markAllNotificationsAsRead(userId: string) {
   await markAllNotificationsAsReadInDB(userId);
 }
 
-export async function getAuthUserWithAppointmentsAndUnreadReceivedMessages(page:number, limit:number) {
-  return getAuthUserWithAppointmentsAndUnreadReceivedMessagesFromDB(page, limit);
+export async function getAuthUserWithAppointmentsAndUnreadReceivedMessages(
+  page: number,
+  limit: number
+) {
+  return getAuthUserWithAppointmentsAndUnreadReceivedMessagesFromDB(
+    page,
+    limit
+  );
 }
 
 export async function deleteNotification(id: string) {
@@ -372,13 +381,19 @@ export async function getAppointmentMessagesOfReceived(
   return await getAppointmentMessagesOfReceivedFromDB(userId, appointmentId);
 }
 
-export async function deleteAppointmentSentMessage(id:string){
-  await deleteAppointmentSentMessageFromDB(id)
+export async function deleteAppointmentSentMessage(id: string) {
+  await deleteAppointmentSentMessageFromDB(id);
 }
-export async function markReadAppointmentMessage(id:string){
-  await markReadAppointmentMessageInDB(id)
+export async function markReadAppointmentMessage(id: string) {
+  await markReadAppointmentMessageInDB(id);
 }
 
-export async function setAppointmentIsPaidTrue(id:string){
-  await setAppointmentIsPaidTrueInDB(id)
+export async function setAppointmentIsPaidTrue(id: string) {
+  await setAppointmentIsPaidTrueInDB(id);
+}
+
+export async function clearCookieAction() {
+  await deleteSession().then(() => {
+    redirect("/login");
+  });
 }
