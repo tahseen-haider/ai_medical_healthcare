@@ -38,7 +38,14 @@ export async function GET(req: NextRequest) {
   const userId = searchParams.get("userId") as string;
 
   // Checking rate limit if exceeded send limit response
-  const { success } = await ratelimit.limit(`chat:${userId}`);
+  let success = true;
+  try {
+    const res = await ratelimit.limit(`chat:${userId}`);
+    success = res.success;
+  } catch (err) {
+    console.error("Rate limit check failed:", err);
+  }
+
   if (!success) {
     const encoder = new TextEncoder();
     const stream = new ReadableStream({
@@ -186,7 +193,7 @@ export async function GET(req: NextRequest) {
                     ${summary?.summary}
                       `.trim(),
         },
-        ...history.map((msg) => ({
+        ...history.map((msg: any) => ({
           role: msg.role as "user" | "assistant",
           content: msg.content,
         })),
