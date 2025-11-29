@@ -23,8 +23,8 @@ const chartConfig = {
   visitors: {
     label: "Visitors",
   },
-  user:{
-    label:"Users",
+  user: {
+    label: "Users",
     color: "var(--chart-1)",
   },
 } satisfies ChartConfig;
@@ -33,7 +33,7 @@ export default function Chart({
   name,
   chartData,
 }: {
-  name:string,
+  name: string;
   chartData: {
     date: string;
     number: number;
@@ -79,7 +79,7 @@ export default function Chart({
     <div className="p-2 flex flex-col justify-between h-full overflow-hidden">
       <div className="w-full flex items-center justify-between">
         <div>
-          <h3 className="font-bold">New Coming Users:</h3>
+          <h3 className="font-bold">Your Appointments:</h3>
         </div>
         <Select value={timeRange} onValueChange={setTimeRange}>
           <SelectTrigger className="hidden w-[160px] rounded-lg sm:ml-auto sm:flex">
