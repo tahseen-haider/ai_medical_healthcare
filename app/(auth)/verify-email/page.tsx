@@ -29,8 +29,10 @@ export default function VerifyEmailPage() {
       <section className="px-4 sm:px-6 py-8 flex items-center flex-col gap-8 max-w-[500px] w-full">
         {/* Header with Login Button */}
         <div className="flex justify-between w-full gap-5 items-start">
-          <div className="flex flex-col gap-2">
-            <h1 className="font-bold text-4xl text-foreground">Email Verification</h1>
+          <div className="flex flex-col gap-2 max-w-8/12">
+            <h1 className="font-bold text-4xl text-foreground">
+              Email Verification
+            </h1>
             <p className="text-muted-foreground text-sm">
               Enter your email and password to verify your email address
             </p>
@@ -40,7 +42,7 @@ export default function VerifyEmailPage() {
             <Button
               variant="outline"
               onClick={() => redirect("/login")}
-              className="whitespace-nowrap bg-light-4 text-white dark:text-black dark:bg-white"
+              className="whitespace-nowrap bg-light-4 text-white dark:text-black dark:bg-white hover:dark:text-white"
             >
               Log In
             </Button>

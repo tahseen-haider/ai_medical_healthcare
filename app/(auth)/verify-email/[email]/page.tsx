@@ -48,7 +48,7 @@ export default function VerifyEmailTokenPage({
             <Button
               variant="outline"
               onClick={() => redirect("/login")}
-              className="whitespace-nowrap bg-light-4 text-white dark:text-black dark:bg-white"
+              className="whitespace-nowrap bg-light-4 text-white dark:text-black dark:bg-white hover:dark:text-white"
             >
               Log In
             </Button>

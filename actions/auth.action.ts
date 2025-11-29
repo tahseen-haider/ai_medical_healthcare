@@ -353,7 +353,7 @@ export async function login(state: LoginFormState, formData: FormData) {
     return { success: false, message: "Email or password is incorrect" };
 
   await setLoginDate(user.id);
-  
+
   await createSession(user.id, user.role);
   if (user.role === "user") {
     return redirect("/");
@@ -418,6 +418,6 @@ export async function deleteUserAccount(
     console.log("error");
     return { message: "Error while deleting account" };
   }
-  redirect("/")
+  redirect("/");
   return { message: "User Deleted" };
 }

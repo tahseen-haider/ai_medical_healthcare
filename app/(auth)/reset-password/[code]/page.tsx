@@ -41,17 +41,21 @@ export default function ResetPasswordPage({
         {/* Header */}
         <div className="flex justify-between w-full gap-5 items-start">
           <div className="flex flex-col gap-2">
-            <h1 className="font-bold text-4xl text-foreground">Reset Password</h1>
+            <h1 className="font-bold text-4xl text-foreground">
+              Reset Password
+            </h1>
             <p className="text-muted-foreground text-sm">
               Enter your new password to reset your account
             </p>
           </div>
           <div className="flex flex-col gap-2 items-end">
-            <p className="text-sm text-muted-foreground">Password not resetting?</p>
+            <p className="text-sm text-muted-foreground">
+              Password not resetting?
+            </p>
             <Button
               variant="outline"
               onClick={() => redirect("/reset-password")}
-              className="whitespace-nowrap bg-light-4 text-white dark:text-black dark:bg-white"
+              className="whitespace-nowrap bg-light-4 text-white dark:text-black dark:bg-white hover:dark:text-white"
             >
               Send Link Again
             </Button>
@@ -61,7 +65,9 @@ export default function ResetPasswordPage({
         {/* Reset Password Card */}
         <Card className="w-full bg-white dark:bg-dark-4">
           <CardHeader>
-            <CardTitle className="text-2xl text-center">Set New Password</CardTitle>
+            <CardTitle className="text-2xl text-center">
+              Set New Password
+            </CardTitle>
             <CardDescription className="text-center">
               Choose a strong password
             </CardDescription>
@@ -92,7 +98,10 @@ export default function ResetPasswordPage({
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="repeatNewPassword" className="text-sm font-medium">
+                <Label
+                  htmlFor="repeatNewPassword"
+                  className="text-sm font-medium"
+                >
                   Repeat New Password
                 </Label>
                 <div className="relative">

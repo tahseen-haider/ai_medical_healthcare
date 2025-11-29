@@ -47,7 +47,7 @@ export default function LoginPage() {
             <Button
               variant="outline"
               onClick={() => redirect("/signup")}
-              className="whitespace-nowrap bg-light-4 text-white dark:text-black dark:bg-white "
+              className="whitespace-nowrap bg-light-4 text-white dark:text-black dark:bg-white hover:dark:text-white"
             >
               Create Account
             </Button>
