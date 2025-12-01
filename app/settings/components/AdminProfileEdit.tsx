@@ -41,8 +41,7 @@ export default function AdminProfileEdit({ user }: EditAdminProfileProps) {
     gender: user.gender || "",
     emailNotifications: user.emailNotifications ?? true,
     smsReminders: user.smsReminders ?? true,
-    twoFactorEnabled: user.twoFactorEnabled ?? true, // Required for admins
-    // Admin-specific settings
+    twoFactorEnabled: user.twoFactorEnabled ?? true,
     systemNotifications: true,
     auditLogAccess: true,
     dataExportAccess: true,
@@ -191,19 +190,6 @@ export default function AdminProfileEdit({ user }: EditAdminProfileProps) {
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
                 Edit Admin Profile
               </h1>
-              <div className="flex gap-2">
-                <Button
-                  onClick={handleSave}
-                  className="bg-light-4 dark:bg-white hover:dark:bg-gray-300 hover:bg-light-4/70"
-                >
-                  <Save className="w-4 h-4 mr-2" />
-                  Save Changes
-                </Button>
-                <Button onClick={onCancel} variant="outline">
-                  <X className="w-4 h-4 mr-2" />
-                  Cancel
-                </Button>
-              </div>
             </div>
           </CardHeader>
 

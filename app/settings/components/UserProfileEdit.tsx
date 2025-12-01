@@ -414,19 +414,6 @@ export default function UserProfileEdit({ user }: EditUserProfileProps) {
               <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
                 Edit Profile
               </h1>
-              <div className="flex gap-2">
-                <Button
-                  onClick={handleSave}
-                  className="bg-blue-600 hover:bg-blue-700 text-white"
-                >
-                  <Save className="w-4 h-4 mr-2" />
-                  Save Changes
-                </Button>
-                <Button onClick={onCancel} variant="outline">
-                  <X className="w-4 h-4 mr-2" />
-                  Cancel
-                </Button>
-              </div>
             </div>
           </CardHeader>
 
