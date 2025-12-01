@@ -33,7 +33,7 @@ export default function LoginPage() {
       {/* Login Section */}
       <section className="px-4 sm:px-6 py-8 flex items-center flex-col gap-8 max-w-[500px] w-full">
         {/* Header */}
-        <div className="flex justify-between w-full gap-5 items-start">
+        {/* <div className="flex justify-between w-full gap-5 items-start">
           <div className="flex flex-col gap-2">
             <h1 className="font-bold text-4xl text-foreground">Welcome Back</h1>
             <p className="text-muted-foreground">
@@ -52,7 +52,7 @@ export default function LoginPage() {
               Create Account
             </Button>
           </div>
-        </div>
+        </div> */}
 
         {/* Login Card */}
         <Card className="w-full bg-white dark:bg-dark-4">
@@ -166,6 +166,16 @@ export default function LoginPage() {
                 {pending ? "Signing In..." : "Sign In"}
               </Button>
             </form>
+
+            {/* Link */}
+            <div className="flex justify-center gap-2 w-full">
+              <p className="text-sm text-muted-foreground">
+                Don't have an account?
+              </p>
+              <Button variant="link" asChild className="h-auto p-0">
+                <Link href="/signup">SignUp</Link>
+              </Button>
+            </div>
 
             {/* Additional Links */}
             <div className="flex flex-col sm:flex-row gap-2 justify-center text-sm">

@@ -20,6 +20,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { AlertCircle, Mail, Lock, User } from "lucide-react";
+import Link from "next/link";
 
 export default function SignupPage() {
   const [state, action, pending] = useActionState(signup, undefined);
@@ -31,30 +32,6 @@ export default function SignupPage() {
 
       {/* Signup Section */}
       <section className="px-4 sm:px-6 py-8 flex items-center flex-col gap-8 max-w-[500px] w-full">
-        {/* Header */}
-        <div className="flex justify-between w-full gap-5 items-start">
-          <div className="flex flex-col gap-2">
-            <h1 className="font-bold text-4xl text-foreground">
-              Create Account
-            </h1>
-            <p className="text-muted-foreground">
-              Make an account to save your chats
-            </p>
-          </div>
-          <div className="flex flex-col gap-3 items-end">
-            <p className="text-sm text-muted-foreground">
-              Already have an account?
-            </p>
-            <Button
-              variant="outline"
-              onClick={() => redirect("/login")}
-              className="whitespace-nowrap bg-light-4 text-white dark:text-black dark:bg-white hover:dark:text-white"
-            >
-              Log In
-            </Button>
-          </div>
-        </div>
-
         {/* Signup Card */}
         <Card className="w-full bg-white dark:bg-dark-4">
           <CardHeader className="space-y-1">
@@ -202,17 +179,15 @@ export default function SignupPage() {
               </Button>
             </form>
 
-            {/* Terms and Privacy */}
-            {/* <p className="text-xs text-center text-muted-foreground">
-              By creating an account, you agree to our{" "}
-              <Button variant="link" asChild className="h-auto p-0 text-xs">
-                <Link href="#">Terms of Service</Link>
-              </Button>{" "}
-              and{" "}
-              <Button variant="link" asChild className="h-auto p-0 text-xs">
-                <Link href="#">Privacy Policy</Link>
+            {/* Link */}
+            <div className="flex justify-center gap-2 w-full">
+              <p className="text-sm text-muted-foreground">
+                Already have an account?
+              </p>
+              <Button variant="link" asChild className="h-auto p-0">
+                <Link href="/login">Login</Link>
               </Button>
-            </p> */}
+            </div>
           </CardContent>
         </Card>
       </section>
