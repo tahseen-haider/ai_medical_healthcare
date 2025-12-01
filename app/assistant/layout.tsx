@@ -4,22 +4,22 @@ import ChatListSuspenseFallback from "./components/fallback/ChatListSuspenseFall
 import ChatsList from "@/app/assistant/components/ChatsList";
 import { Metadata } from "next";
 
-export const metadata:Metadata = {
+export const metadata: Metadata = {
   title: "Medical Assistant",
-  description: "An ai powered medical assistant for your medical related questions."
-}
+  description:
+    "An ai powered medical assistant for your medical related questions.",
+};
 
-function AssistantLayout({
+async function AssistantLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
-  
   return (
     <>
       <section className="w-full max-w-[1920px] h-[calc(100vh-64px)] min-h-52 flex">
         {/* Sidebar */}
         <ChatSidebarWrapper>
-          <Suspense fallback={<ChatListSuspenseFallback/>}>
-            <ChatsList/>
+          <Suspense fallback={<ChatListSuspenseFallback />}>
+            <ChatsList />
           </Suspense>
         </ChatSidebarWrapper>
         {/* Chat */}
