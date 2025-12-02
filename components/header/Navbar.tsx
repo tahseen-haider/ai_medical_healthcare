@@ -69,7 +69,7 @@ function Navbar({ user }: { user?: UserType }) {
       } fixed z-30 w-screen h-14 sm:h-16 flex justify-center border-b-2 min-w-[240px]`}
     >
       <div
-        className={`max-w-[1920px] w-full flex items-center justify-between h-full px-2 lg:px-6`}
+        className={`max-w-[1920px] w-full flex items-center justify-between h-full px-3 md:px-8`}
       >
         <div
           className={`${
@@ -90,8 +90,8 @@ function Navbar({ user }: { user?: UserType }) {
               <div className="w-full h-full flex items-center">
                 <Image
                   src={logo}
-                  width={52}
-                  height={52}
+                  width={40}
+                  height={40}
                   alt="Logo of MediTech"
                 />
                 <h3
