@@ -2,7 +2,7 @@
 
 import { sendVerifyEmail } from "@/actions/auth.action";
 import LoadingScreen from "@/components/LoadingScreen";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import {
   Card,
   CardHeader,
@@ -14,12 +14,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle, Mail, Lock } from "lucide-react";
+import { AlertCircle, Mail, Lock, EyeOff, Eye } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 
 export default function VerifyEmailPage() {
   const [state, action, pending] = useActionState(sendVerifyEmail, undefined);
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <main className="flex flex-col items-center min-h-[600px] bg-gray-50 dark:bg-gray-950">
@@ -41,8 +42,8 @@ export default function VerifyEmailPage() {
                 <Label htmlFor="email" className="text-sm font-medium">
                   Email Address
                 </Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <div className="relative flex items-center">
+                  <Mail className="absolute left-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="email"
                     type="email"
@@ -59,18 +60,33 @@ export default function VerifyEmailPage() {
                 <Label htmlFor="password" className="text-sm font-medium">
                   Password
                 </Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+
+                <div className="relative flex items-center">
+                  <Lock className="absolute left-3 h-4 w-4 text-muted-foreground" />
+
                   <Input
                     id="password"
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     name="password"
-                    placeholder="********"
+                    placeholder="Enter your password"
                     required
-                    minLength={6}
+                    minLength={8}
                     disabled={pending}
-                    className="pl-10"
+                    className="pl-10 pr-10"
                   />
+
+                  <Button
+                    type="button"
+                    size="icon"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-0 top-1/2 -translate-y-1/2 bg-transparent hover:bg-black/10"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4 text-muted-foreground" />
+                    ) : (
+                      <Eye className="h-4 w-4 text-muted-foreground" />
+                    )}
+                  </Button>
                 </div>
               </div>
 

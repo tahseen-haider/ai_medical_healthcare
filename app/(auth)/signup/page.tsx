@@ -5,7 +5,7 @@ import { signInWithOAuth } from "@/lib/oauth-client";
 import FindUsHereSection from "@/components/FindUsHereSection";
 import LoadingScreen from "@/components/LoadingScreen";
 import { redirect } from "next/navigation";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,11 +19,12 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle, Mail, Lock, User } from "lucide-react";
+import { AlertCircle, Mail, Lock, User, EyeOff, Eye } from "lucide-react";
 import Link from "next/link";
 
 export default function SignupPage() {
   const [state, action, pending] = useActionState(signup, undefined);
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <main className="flex flex-col items-center min-h-screen bg-gray-50 dark:bg-gray-950">
@@ -93,8 +94,8 @@ export default function SignupPage() {
                 <Label htmlFor="username" className="text-sm font-medium">
                   Username
                 </Label>
-                <div className="relative">
-                  <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <div className="relative  flex items-center">
+                  <User className="absolute left-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="username"
                     type="text"
@@ -111,8 +112,8 @@ export default function SignupPage() {
                 <Label htmlFor="email" className="text-sm font-medium">
                   Email Address
                 </Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <div className="relative  flex items-center">
+                  <Mail className="absolute left-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="email"
                     type="email"
@@ -129,19 +130,33 @@ export default function SignupPage() {
                 <Label htmlFor="password" className="text-sm font-medium">
                   Password
                 </Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+
+                <div className="relative flex items-center">
+                  <Lock className="absolute left-3 h-4 w-4 text-muted-foreground" />
+
                   <Input
                     id="password"
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     name="password"
                     placeholder="Enter your password"
                     required
                     minLength={8}
-                    maxLength={15}
                     disabled={pending}
-                    className="pl-10"
+                    className="pl-10 pr-10"
                   />
+
+                  <Button
+                    type="button"
+                    size="icon"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-0 top-1/2 -translate-y-1/2 bg-transparent hover:bg-black/10"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4 text-muted-foreground" />
+                    ) : (
+                      <Eye className="h-4 w-4 text-muted-foreground" />
+                    )}
+                  </Button>
                 </div>
               </div>
 

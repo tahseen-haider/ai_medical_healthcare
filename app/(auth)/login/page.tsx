@@ -5,8 +5,7 @@ import { signInWithOAuth } from "@/lib/oauth-client";
 import FindUsHereSection from "@/components/FindUsHereSection";
 import LoadingScreen from "@/components/LoadingScreen";
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,10 +19,11 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle, Mail, Lock } from "lucide-react";
+import { AlertCircle, Mail, Lock, EyeOff, Eye } from "lucide-react";
 
 export default function LoginPage() {
   const [state, action, pending] = useActionState(login, undefined);
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <main className="flex flex-col items-center min-h-screen bg-gray-50 dark:bg-gray-950">
@@ -32,28 +32,6 @@ export default function LoginPage() {
 
       {/* Login Section */}
       <section className="px-4 sm:px-6 py-8 flex items-center flex-col gap-8 max-w-[500px] w-full">
-        {/* Header */}
-        {/* <div className="flex justify-between w-full gap-5 items-start">
-          <div className="flex flex-col gap-2">
-            <h1 className="font-bold text-4xl text-foreground">Welcome Back</h1>
-            <p className="text-muted-foreground">
-              Sign in to access your profile
-            </p>
-          </div>
-          <div className="flex flex-col gap-3 items-end">
-            <p className="text-sm text-muted-foreground">
-              Don't have an account?
-            </p>
-            <Button
-              variant="outline"
-              onClick={() => redirect("/signup")}
-              className="whitespace-nowrap bg-light-4 text-white dark:text-black dark:bg-white hover:dark:text-white"
-            >
-              Create Account
-            </Button>
-          </div>
-        </div> */}
-
         {/* Login Card */}
         <Card className="w-full bg-white dark:bg-dark-4">
           <CardHeader className="space-y-1">
@@ -115,8 +93,8 @@ export default function LoginPage() {
                 <Label htmlFor="email" className="text-sm font-medium">
                   Email Address
                 </Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <div className="relative flex items-center">
+                  <Mail className="absolute left-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="email"
                     type="email"
@@ -133,20 +111,36 @@ export default function LoginPage() {
                 <Label htmlFor="password" className="text-sm font-medium">
                   Password
                 </Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+
+                <div className="relative flex items-center">
+                  <Lock className="absolute left-3 h-4 w-4 text-muted-foreground" />
+
                   <Input
                     id="password"
-                    type="password"
+                    type={showPassword ? "text" : "password"}
                     name="password"
                     placeholder="Enter your password"
                     required
                     minLength={8}
                     disabled={pending}
-                    className="pl-10"
+                    className="pl-10 pr-10"
                   />
+
+                  <Button
+                    type="button"
+                    size="icon"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-0 top-1/2 -translate-y-1/2 bg-transparent hover:bg-black/10"
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-4 w-4 text-muted-foreground" />
+                    ) : (
+                      <Eye className="h-4 w-4 text-muted-foreground" />
+                    )}
+                  </Button>
                 </div>
               </div>
+
               <Separator />
               {/* Error Messages */}
               {(state?.errors?.email ||

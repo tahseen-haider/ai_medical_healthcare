@@ -3,7 +3,7 @@
 import { resetPassword } from "@/actions/auth.action";
 import LoadingScreen from "@/components/LoadingScreen";
 import { redirect } from "next/navigation";
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import {
   Card,
   CardHeader,
@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { AlertCircle, Lock } from "lucide-react";
+import { AlertCircle, Eye, EyeOff, Lock } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import React from "react";
 import Link from "next/link";
@@ -32,6 +32,8 @@ export default function ResetPasswordPage({
   const email = decodeURIComponent(emailEncoded);
 
   const [state, action, pending] = useActionState(resetPassword, undefined);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showRepeatPassword, setShowRepeatPassword] = useState(false);
 
   return (
     <main className="flex flex-col items-center min-h-[600px] bg-gray-50 dark:bg-gray-950">
@@ -55,25 +57,40 @@ export default function ResetPasswordPage({
               <input type="hidden" name="email" value={email} readOnly />
               <input type="hidden" name="code" value={code} readOnly />
 
+              {/* New Password */}
               <div className="space-y-2">
                 <Label htmlFor="newPassword" className="text-sm font-medium">
                   New Password
                 </Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <div className="relative flex items-center">
+                  <Lock className="absolute left-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="newPassword"
                     name="newPassword"
-                    type="password"
+                    type={showNewPassword ? "text" : "password"}
                     placeholder="********"
                     required
                     minLength={6}
                     disabled={pending}
-                    className="pl-10"
+                    className="pl-10 pr-10"
                   />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setShowNewPassword(!showNewPassword)}
+                    className="absolute right-0 top-1/2 -translate-y-1/2"
+                  >
+                    {showNewPassword ? (
+                      <EyeOff className="h-4 w-4 text-muted-foreground" />
+                    ) : (
+                      <Eye className="h-4 w-4 text-muted-foreground" />
+                    )}
+                  </Button>
                 </div>
               </div>
 
+              {/* Repeat New Password */}
               <div className="space-y-2">
                 <Label
                   htmlFor="repeatNewPassword"
@@ -81,18 +98,31 @@ export default function ResetPasswordPage({
                 >
                   Repeat New Password
                 </Label>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <div className="relative flex items-center">
+                  <Lock className="absolute left-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="repeatNewPassword"
                     name="repeatNewPassword"
-                    type="password"
+                    type={showRepeatPassword ? "text" : "password"}
                     placeholder="********"
                     required
                     minLength={6}
                     disabled={pending}
-                    className="pl-10"
+                    className="pl-10 pr-10"
                   />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon"
+                    onClick={() => setShowRepeatPassword(!showRepeatPassword)}
+                    className="absolute right-0 top-1/2 -translate-y-1/2"
+                  >
+                    {showRepeatPassword ? (
+                      <EyeOff className="h-4 w-4 text-muted-foreground" />
+                    ) : (
+                      <Eye className="h-4 w-4 text-muted-foreground" />
+                    )}
+                  </Button>
                 </div>
               </div>
 

@@ -48,8 +48,8 @@ export default function VerifyEmailTokenPage({
                 <Label htmlFor="email" className="text-sm font-medium">
                   Email Address
                 </Label>
-                <div className="relative">
-                  <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <div className="relative flex items-center">
+                  <Mail className="absolute left-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="email"
                     name="email"
@@ -65,16 +65,17 @@ export default function VerifyEmailTokenPage({
                 <Label htmlFor="token" className="text-sm font-medium">
                   Verification Token
                 </Label>
-                <div className="relative">
-                  <ShieldCheck className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <div className="relative flex items-center">
+                  <ShieldCheck className="absolute left-3 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="token"
-                    type="number"
+                    type="text"
                     name="token"
                     placeholder="6-digit code"
                     required
-                    minLength={6}
+                    pattern="\d{6}"
                     maxLength={6}
+                    inputMode="numeric"
                     disabled={pending}
                     className="pl-10"
                   />
