@@ -21,13 +21,13 @@ export default function LayoutWrapper({ user, children }: LayoutWrapperProps) {
   const showFooter = !hideFooterRoutes.test(pathname);
   const isHomePage = pathname === "/";
   return (
-    <>
+    <main className="min-w-[240px]">
       <Toaster richColors position="top-center" />
       <ConnectionStatus />
       <Navbar user={user} />
       {!isHomePage && <div className="h-16" />}
       <div className="min-h-[60vh]">{children}</div>
       {showFooter && <Footer />}
-    </>
+    </main>
   );
 }

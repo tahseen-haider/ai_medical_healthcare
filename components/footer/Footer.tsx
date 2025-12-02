@@ -81,7 +81,7 @@ const links = [
 
 export default function Footer() {
   return (
-    <footer className="relative z-0 border-t bg-gray-100 dark:bg-gray-950 text-gray-950 dark:text-gray-100 flex flex-col items-center">
+    <footer className="min-w-[240px] relative z-0 border-t bg-gray-100 dark:bg-gray-950 text-gray-950 dark:text-gray-100 flex flex-col items-center">
       <div className="max-w-[1920px] w-full">
         {/* Top Section */}
         <div className="px-4 sm:px-6 flex flex-wrap justify-between py-10">
@@ -142,10 +142,8 @@ export default function Footer() {
       {/* Bottom Section */}
       <div className="w-full bg-light-4 dark:bg-dark-4 border-t">
         <div className="max-w-[1920px] w-full flex md:gap-9 gap-4 items-center py-4 justify-center px-6 md:flex-row flex-col">
-          <div className="flex gap-4 items-center">
-            <p className="text-sm text-gray-200">
-              Follow Us
-            </p>
+          <div className="flex flex-col sm:flex-row gap-4 items-center">
+            <p className="text-sm text-gray-200">Follow Us</p>
             <div className="flex gap-3 items-center">
               {FollowLinks.map((ele) => (
                 <Link

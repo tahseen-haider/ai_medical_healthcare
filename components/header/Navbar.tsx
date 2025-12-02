@@ -5,7 +5,7 @@ import { ThemeToggler } from "./theme-toggler";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useLayoutEffect, useState } from "react";
-import { Menu, X } from "lucide-react";
+import { ArrowDownLeftFromSquare, Menu, X } from "lucide-react";
 import Btn from "../Button";
 import ProfileButton from "./ProfileButton";
 import NotificationsButton from "./NotificationsButton";
@@ -28,10 +28,6 @@ function Navbar({ user }: { user?: UserType }) {
       title: "Find Real Doctor",
       link: "/appointment",
     },
-    // {
-    //   title: "About Us",
-    //   link: "/about-us",
-    // },
     {
       title: "Contact Us",
       link: "/contact-us",
@@ -70,7 +66,7 @@ function Navbar({ user }: { user?: UserType }) {
         isHomePage
           ? "bg-transparent backdrop-blur-xs text-black dark:text-white"
           : "dark:bg-dark-4 bg-light-4 text-white"
-      } fixed z-30 w-screen h-14 sm:h-16 flex justify-center border-b-2`}
+      } fixed z-30 w-screen h-14 sm:h-16 flex justify-center border-b-2 min-w-[240px]`}
     >
       <div
         className={`max-w-[1920px] w-full flex items-center justify-between h-full px-2 lg:px-6`}
@@ -98,7 +94,11 @@ function Navbar({ user }: { user?: UserType }) {
                   height={52}
                   alt="Logo of MediTech"
                 />
-                <h3 className={`text-2xl font-bold font-ubuntu`}>MediTech</h3>
+                <h3
+                  className={`text-2xl font-bold font-ubuntu hidden sm:inline`}
+                >
+                  MediTech
+                </h3>
               </div>
             </TooltipTrigger>
             <TooltipContent>Go To Home</TooltipContent>
@@ -175,12 +175,12 @@ function Navbar({ user }: { user?: UserType }) {
                   : "flex"
               }`}
             >
-              Get Started
+              <span>Get Started</span>
             </Btn>
           )}
           {/* Profile Button */}
           {role && <ProfileButton user={user} />}
-          <div className="hidden sm:block">
+          <div className="hidden sm:flex sm:items-center">
             <ThemeToggler />
           </div>
           {/* Menu Button for smaller screens */}
